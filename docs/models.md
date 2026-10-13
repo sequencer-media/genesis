@@ -46,25 +46,26 @@ Score at least ten shared scenarios, run each three times for two minutes, and p
 
 ## Low-latency LLMs
 
-Viva LLM means the built-in direction service in a Viva Worldstream. It turns accepted world actions into video prompts and is included with the stream. Arbitrary structured calls through `tool.llm.generate` are a separate service, currently $0.01/request by default.
+Viva includes its world-direction LLM. For custom moves, dialogue and structured replies, compare Gemini 3.8 Flash and DeepSeek V4.1 Flash.
 
 <p class="comparison-hint">Scroll the table horizontally to compare all LLM details.</p>
 
 <!-- LLM_MODEL_TABLE -->
 
-Token rates are **USD per one million input / output tokens** for standard text requests. Planned token-priced routes show estimated Sequencer prices. The available structured LLM endpoint retains its current per-request rate. Caching, reasoning tokens, tools and provider minimums can affect the final quote.
+Token rates are estimated **Sequencer prices per one million input / output tokens**, checked October 13, 2026. Gemini's introductory rate runs through December 31, 2026. DeepSeek shows peak pricing for uncached input; off-peak rates are half. Caching, reasoning and tools can affect the final quote. Both Sequencer routes are planned.
+
+The existing `tool.llm.generate` service is separately billed, currently $0.01/request by default. It is separate from Viva's included world direction.
 
 ### Latency and moderation
 
-**First-token latency** measures the wait before the first token arrives. **Generation speed** measures tokens produced per second after generation begins. Structured JSON usually needs to finish and pass validation before GENESIS can apply it. None of the listed services has a matched GENESIS end-to-end latency benchmark.
+Gemini 3.8 Flash supports a low thinking level. DeepSeek V4.1 Flash supports non-thinking mode. Response time depends on the prompt, settings and route. Structured JSON needs to finish and pass validation before GENESIS can apply it. Neither model has a matched GENESIS latency benchmark.
 
-The moderation column describes the controls we can verify. Google exposes adjustable filters alongside persistent core protections. Groq documents a separate moderation workflow. Open-weight models can have learned refusals, and hosted providers still apply their policies. A self-hosted app can choose whether to add a moderation layer; that does not remove refusals built into its chosen model.
+Google exposes adjustable safety filters alongside persistent core protections. DeepSeek's moderation controls have not been verified for this comparison. Your host's content policy also applies.
 
-- [Google Gemini pricing](https://ai.google.dev/gemini-api/docs/pricing) and [Flash-Lite model details](https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash-lite) support the token rates and low-latency design. [Safety settings](https://ai.google.dev/gemini-api/docs/safety-settings) describe adjustable filters and core protections.
-- [Groq model catalog](https://console.groq.com/docs/models) lists GPT OSS 20B at about 1,000 tokens/second. [Content moderation](https://console.groq.com/docs/content-moderation) describes an app moderation workflow.
-- [Cerebras pricing](https://www.cerebras.ai/pricing) documents provider billing. Its [model catalog](https://inference-docs.cerebras.ai/models/overview) lists about 3,000 tokens/second. Model and capacity availability can change.
+- [Gemini 3.8 Flash model details](https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash), [pricing](https://ai.google.dev/gemini-api/docs/pricing) and [safety settings](https://ai.google.dev/gemini-api/docs/safety-settings).
+- [DeepSeek model details and pricing](https://api-docs.deepseek.com/quick_start/pricing/) confirm the V4.1 Flash version, non-thinking mode and peak/off-peak billing. The API model name is `deepseek-flash`.
 
-Provider speeds are published throughput claims, not measured GENESIS latency guarantees. [Connect through Sequencer](integration.md#model-routing) or [bring your own adapter](providers.md).
+[Connect through Sequencer](integration.md#model-routing) or [bring your own adapter](providers.md).
 
 ## Sources and model details
 

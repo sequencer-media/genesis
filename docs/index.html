@@ -207,26 +207,23 @@
 <p>Third-party prices are estimates for planned Sequencer routes. Viva keeps its current $40/hour rate. Availability is shown per row; use the live session quote when starting a stream. Provider billing units, minimums and extra services still apply.</p>
 <p>Quality ratings use a shared five-point rubric. Models remain <strong>unrated</strong> until they have been tested with the same prompts and conditions. <a href="models.html">See the sources, billing details and rating method</a>.</p>
 <h2 id="low-latency-llms">Low-latency LLMs</h2>
-<p>An LLM turns player choices and world memory into the next prompt, move set or dialogue. Viva includes its world-direction LLM. Use structured LLM tools for custom game logic, or connect your own provider.</p>
+<p>Viva includes its world-direction LLM. For custom moves, dialogue and structured replies, start with Gemini 3.8 Flash or DeepSeek V4.1 Flash. You can also <a href="providers.html">connect your own LLM</a>.</p>
 <p class="comparison-hint">Scroll the table horizontally to compare all LLM details.</p>
 
 <div class="comparison-scroll" role="region" aria-label="Compare low-latency LLM pricing and moderation" tabindex="0">
 <table class="llm-comparison">
-<caption>LLM prices in USD. Token prices are per one million tokens, input / output.</caption>
+<caption>Selected LLMs. Estimated Sequencer token prices in USD per 1M tokens, input / output.</caption>
 <thead><tr><th scope="col">LLM</th><th scope="col">Sequencer price</th><th scope="col">Latency / generation speed</th><th scope="col">Moderated / unmoderated</th></tr></thead>
 <tbody>
 <tr><th scope="row"><a href="integration.html#model-routing">Viva LLM</a><span class="table-detail">Built-in world direction</span></th><td><strong>Included with Viva</strong><span class="table-detail">Viva stream: $40 / active hour</span></td><td>Runs in the stream loop<span class="table-detail">Measured response latency not published</span></td><td>Provider safety protections<span class="table-detail">Hosted world rules also apply</span></td></tr>
-<tr><th scope="row"><a href="integration.html#model-routing">Sequencer structured LLM</a><span class="table-detail">Custom moves, choices and JSON</span></th><td><strong>$0.01 / request</strong><span class="table-detail">Current default. Separate from built-in direction.</span></td><td>Measured response latency not published<span class="table-detail">Response timing depends on the request</span></td><td>Provider safety protections<span class="table-detail">Validated structured responses</span></td></tr>
-<tr><th scope="row">Gemini 3.5 Flash-Lite<span class="table-detail">Google</span></th><td><strong>$0.345 / $2.875</strong><span class="table-detail">Planned token route. Estimate.</span></td><td>Designed for low latency<span class="table-detail">Numeric first-token latency not published</span></td><td>Adjustable filters<span class="table-detail">Core protections remain enabled</span></td></tr>
-<tr><th scope="row">GPT OSS 20B<span class="table-detail">Groq</span></th><td><strong>$0.08625 / $0.345</strong><span class="table-detail">Planned token route. Estimate.</span></td><td>About 1,000 tokens / second<span class="table-detail">Throughput, not first-token latency</span></td><td>App moderation available<span class="table-detail">Provider policies and model refusals apply</span></td></tr>
-<tr><th scope="row">GPT OSS 120B<span class="table-detail">Cerebras</span></th><td><strong>$0.4025 / $0.8625</strong><span class="table-detail">Planned token route. Estimate.</span></td><td>About 3,000 tokens / second<span class="table-detail">Throughput, not first-token latency</span></td><td>Provider policies apply<span class="table-detail">Host filtering details not published</span></td></tr>
-<tr><th scope="row"><a href="providers.html">Your self-hosted LLM</a><span class="table-detail">Choose your model and hardware</span></th><td><strong>Your infrastructure cost</strong><span class="table-detail">No universal token rate</span></td><td>Depends on model and hardware<span class="table-detail">Measure your own deployment</span></td><td>Moderated or unmoderated by your app<span class="table-detail">The selected model may still refuse requests</span></td></tr>
+<tr><th scope="row"><a href="integration.html#model-routing">Gemini 3.8 Flash</a><span class="table-detail">Google. Sequencer route planned.</span></th><td><strong>$0.8625 / $4.3125</strong><span class="table-detail">Introductory estimate through Dec 31, 2026.</span></td><td>Low thinking level available<span class="table-detail">GENESIS response time not benchmarked</span></td><td>Adjustable safety filters<span class="table-detail">Core protections remain enabled</span></td></tr>
+<tr><th scope="row"><a href="integration.html#model-routing">DeepSeek V4.1 Flash</a><span class="table-detail">DeepSeek. Sequencer route planned.</span></th><td><strong>$0.345 / $1.38</strong><span class="table-detail">Peak, uncached estimate. Off-peak is half.</span></td><td>Non-thinking mode available<span class="table-detail">GENESIS response time not benchmarked</span></td><td>Controls not verified<span class="table-detail">Check the selected route's policy</span></td></tr>
 </tbody>
 </table>
 </div>
 
 
-<p>Token generation speed and time to the first reply measure different things. Moderation depends on the model, provider and your app&#39;s configuration. <a href="models.html#low-latency-llms">Read the LLM pricing and moderation notes</a>.</p>
+<p>Gemini and DeepSeek are planned Sequencer routes. Custom structured LLM calls are billed separately from Viva&#39;s included world direction. <a href="models.html#low-latency-llms">Pricing, timing and safety details</a>.</p>
 <p>The source is <strong>Apache 2.0 licensed</strong>. Version 0.1 is a source preview, with npm publication and the wider launch being prepared. <a href="https://github.com/sequencer-media/genesis">Browse the repository</a>, <a href="license.html">read the license</a>, <a href="contributing.html">contribute</a> or <a href="api.html">explore the SDK API</a>.</p>
 </article>
       <footer class="site-footer">

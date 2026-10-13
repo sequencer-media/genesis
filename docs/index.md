@@ -147,12 +147,12 @@ Quality ratings use a shared five-point rubric. Models remain **unrated** until 
 
 ## Low-latency LLMs
 
-An LLM turns player choices and world memory into the next prompt, move set or dialogue. Viva includes its world-direction LLM. Use structured LLM tools for custom game logic, or connect your own provider.
+Viva includes its world-direction LLM. For custom moves, dialogue and structured replies, start with Gemini 3.8 Flash or DeepSeek V4.1 Flash. You can also [connect your own LLM](providers.html).
 
 <p class="comparison-hint">Scroll the table horizontally to compare all LLM details.</p>
 
 <!-- LLM_MODEL_TABLE -->
 
-Token generation speed and time to the first reply measure different things. Moderation depends on the model, provider and your app's configuration. [Read the LLM pricing and moderation notes](models.html#low-latency-llms).
+Gemini and DeepSeek are planned Sequencer routes. Custom structured LLM calls are billed separately from Viva's included world direction. [Pricing, timing and safety details](models.html#low-latency-llms).
 
 The source is **Apache 2.0 licensed**. Version 0.1 is a source preview, with npm publication and the wider launch being prepared. [Browse the repository](https://github.com/sequencer-media/genesis), [read the license](license.html), [contribute](contributing.html) or [explore the SDK API](api.html).

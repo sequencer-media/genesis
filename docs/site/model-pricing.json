@@ -7,8 +7,7 @@
     "orbis-dynamic": { "usdPerSecond": 0.024035 }
   },
   "llms": {
-    "gemini-flash-lite": { "usdPerMillionInput": 0.345, "usdPerMillionOutput": 2.875 },
-    "groq-gpt-oss-20b": { "usdPerMillionInput": 0.08625, "usdPerMillionOutput": 0.345 },
-    "cerebras-gpt-oss-120b": { "usdPerMillionInput": 0.4025, "usdPerMillionOutput": 0.8625 }
+    "gemini-3-8-flash": { "usdPerMillionInput": 0.8625, "usdPerMillionOutput": 4.3125 },
+    "deepseek-v4-1-flash": { "usdPerMillionInput": 0.345, "usdPerMillionOutput": 1.38 }
   }
 }
