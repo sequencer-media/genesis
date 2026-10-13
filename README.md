@@ -1,46 +1,77 @@
+```text
+  _____ ______ _   _ ______  _____ _____  _____
+ / ____|  ____| \ | |  ____|/ ____|_   _|/ ____|
+| |  __| |__  |  \| | |__  | (___   | | | (___
+| | |_ |  __| | . \ |  __|  \___ \  | |  \___ \
+| |__| | |____| |\  | |____ ____) |_| |_ ____) |
+ \_____|______|_| \_|______|_____/|_____|_____/
+```
+
 # GENESIS · Open Source World Model Game Engine
 
-**Create infinite worlds, in minutes.**
+**Create infinite experiences, in minutes.**
 
-![Three connected pixel worlds, a floating forest, a castle arena and a lunar outpost](docs/assets/genesis-worlds.svg)
+Give your World Model a memory, an inventory and a playable interface.
 
-Turn an idea into a playable AI world. Genesis connects generated video, LLM decisions and player actions into a game with persistent state, shared rules and a custom interface.
+GENESIS is an open source SDK for building worldstreams: evolving experiences where player actions, shared rules and generated scenes move together. Describe your world to a coding agent, play the local prototype, then connect your World Model.
 
-Describe your world to a coding agent. The bundled authoring skill builds the project, runs a local preview and prepares a portable bundle. Connect Sequencer to generate live media, or bring your own providers.
+[Watch the demos](#worldstreams-in-action) · [Build from a prompt](#one-prompt-an-infinite-experience) · [Start locally](#play-your-first-world) · [Connect your models](#connect-your-own-world-models) · [Worldstreams API](#worldstreams-api-instant-setup)
 
-[Start building](#play-your-first-world) · [Create from a prompt](#one-prompt-a-playable-world) · [Connect Sequencer](#one-key-to-sequencer) · [Read the API](docs/api.md)
+## Your World Model needs a dungeon master.
 
-## The model makes the scene. Genesis makes it playable.
+In a tabletop roleplaying game, the dungeon master remembers your inventory, knows the characters and locations, applies the rules and describes what happens next. An infinite experience needs the same foundation.
 
-A video model can show a dragon. A playable world also needs to know whose turn it is, which spell was chosen, how much health remains and when players can act again. Genesis gives those pieces one shared lifecycle.
+GENESIS fills that role for your World Model. It keeps the world in structured state, resolves player actions and passes the committed outcome to the LLM and scene generator. Your interface reflects the same shared reality.
 
-| The engine handles | What you can build |
+Pick up a key, and it stays in your inventory. Unlock a door, and that location changes. Meet a character, and your controller can remember the relationship. The next scene receives that context, and every player sees the accepted result.
+
+| GENESIS handles | Your world remembers |
 | --- | --- |
-| **State management** | Persistent inventory, health, progress and separate public, private and server state. |
-| **Game rules and multiplayer** | Authoritative turns, player seats, crowd votes and validated actions. |
-| **LLM context and prompt workflows** | Send committed outcomes and scene context to backend tools. Validate structured replies for generated moves, characters and choices. |
-| **Generation jobs** | Track asynchronous requests, handle failures and reject results from an old encounter. |
-| **Scene continuity and playback** | Carry the actual end frame into the next scene and reopen actions when playback finishes. |
-| **Custom game interfaces** | Build controls, overlays and animations with HTML, CSS and JavaScript. |
-| **Portable assets and projects** | Package declared images, audio and video with the world, then attach them through the host. |
-| **Provider connections** | Use Sequencer's managed APIs or connect your own LLM and media providers. |
+| **World memory** | Progress, previous choices and persistent public, private and server state. |
+| **Inventory and variables** | Items, health, scores, resources, quest flags and the values your rules depend on. |
+| **Scenes, locations and characters** | Define places, characters, relationships and scene facts in structured state, then carry them into generation requests. |
+| **LLM orchestration and prompts** | Supply world context and committed outcomes; validate structured replies for new moves, dialogue and choices. |
+| **Playable interfaces** | Custom controls, inventory panels, overlays and animations in HTML, CSS and JavaScript. |
+| **Shared rules and multiplayer** | Authoritative turns, player seats, crowd votes and validated actions. |
+| **Generation and scene continuity** | Track jobs, reject stale results, carry the actual end frame forward and reopen actions after playback. |
+| **Portable worlds and media** | Export the world's source and declared images, audio and video as one bundle. |
 
-Genesis is the SDK and runtime. Connected models generate the media; your controller defines what happens in the world.
+You define the world and its rules. GENESIS runs the state and interaction loop; connected World Models and LLMs generate the media and structured responses.
 
-## One prompt. A playable world.
+## Worldstreams in action
 
-The repository includes a [create-world-stream agent skill](skills/create-world-stream/SKILL.md). Give a coding agent this checkout and an idea:
+### Rick and Morty · Interdimensional Chaos Trip
+
+A World Model adventure across ten connected scenes, with a preview interface for the audience's next choice. Click the image to watch the video.
+
+[![Watch the Rick and Morty Worldstream example video](docs/assets/rick-morty-worldstream.webp)](https://sequencer.media/demo/infinite-tv/rick-morty-720p-4e729b8d4107.mp4)
+
+[Watch video](https://sequencer.media/demo/infinite-tv/rick-morty-720p-4e729b8d4107.mp4) · [Try the preview player](https://sequencer.media/demo/infinite-tv)
+
+| Adventure Time · Land of Ooo | Multiplayer Worldstreams |
+| --- | --- |
+| [![Watch the Adventure Time Worldstream](docs/assets/adventure-time-worldstream.webp)](https://sequencer.media/demo/worldstreams/adventure-time/adventure-time-720p-0bfe8c425454.mp4) | [![Watch the multiplayer Worldstreams demo](docs/assets/multiplayer-worldstream.webp)](https://sequencer.media/demo/about/media/worldstreams-multiplayer.mp4) |
+| A connected fantasy journey with audience-choice controls. [Watch video](https://sequencer.media/demo/worldstreams/adventure-time/adventure-time-720p-0bfe8c425454.mp4) · [Try the preview](https://sequencer.media/demo/worldstreams/adventure-time) | See two players directing their own characters in a shared experience. [Watch video](https://sequencer.media/demo/about/media/worldstreams-multiplayer.mp4) |
+
+These are recorded Worldstreams demos. Preview choices illustrate the interaction flow around prepared World Model output. Live generation uses a connected provider. Open the [local video gallery](docs/demos.html) in a browser to play all three videos.
+
+## One prompt. An infinite experience.
+
+The bundled [create-world-stream agent skill](skills/create-world-stream/SKILL.md) turns an idea into world settings, a custom interface, controller rules and a portable project.
+
+Give a coding agent this checkout and a prompt:
 
 ```text
 Use the create-world-stream skill to build Mosslight, a forest battle
-game with a cream pixel interface. Let two players take turns and have
-the backend LLM create four moves for each encounter. Track shared health
-and inventory. Give me a working local preview and an exportable world.
+worldstream with a cream pixel interface. Let two players take turns
+and have the backend LLM create four moves for each encounter.
+Remember their inventory, health and progress. Give me a working
+local preview and an exportable world.
 ```
 
-The skill turns the idea into world settings, a custom interface and controller rules. It wires LLM requests, declares assets, validates the bundle and exercises the player flow. [AGENTS.md](AGENTS.md) points repo-aware agents to the skill; other skill-capable agents can load its SKILL.md directly.
+The skill wires backend requests, declares assets, validates the bundle and exercises the player flow. [AGENTS.md](AGENTS.md) points repo-aware agents to it; other skill-capable agents can load its SKILL.md directly.
 
-Start with the included local fixtures. With a configured provider and budget, the agent can create and attach images, audio and video. The local preview clearly labels prepared media and LLM data so you can try the game loop before paying for generation.
+Start with labeled local fixtures. With a configured provider and budget, the agent can create and attach images, audio and video for your worldstream.
 
 ## Play your first world
 
@@ -53,9 +84,9 @@ node dist/cli.js init ./my-world --template arena-llm
 node dist/cli.js dev ./my-world
 ```
 
-Open the printed local URL. Try the vintage pixel battle, switch preview players and play a turn. This starter uses four structured move definitions, shared health and authoritative turns. Local moves and video use prepared fixtures; a connected Sequencer host requests real backend LLM results.
+Open the printed local URL. Play the vintage pixel battle, switch preview players and take a turn. The starter uses four structured move definitions, shared health and authoritative turns. Local moves and video use prepared fixtures; a connected Worldstreams host requests real backend LLM results.
 
-| Starter | Make it yours |
+| Starter | Create your experience |
 | --- | --- |
 | `arena-llm` | A vintage battle with LLM-created moves and shared player seats. |
 | `exploration` | An evolving world where each completed scene becomes the next starting point. |
@@ -77,64 +108,72 @@ Choose another starter with `--template`. Edit the project files, then restart t
 ```text
 my-world/
 ├── genesis.json      World settings, actions, tools and asset registry
-├── interface.html    Your game's interface and browser behavior
-├── controller.js     Shared rules, state transitions and backend requests
+├── interface.html    Your interface, controls and browser behavior
+├── controller.js     World memory, shared rules and backend requests
 └── assets/           Images, audio and video that travel with the project
 ```
 
-The interface sends actions and renders accepted state. The controller resolves the outcome and requests generation. The host supplies identity, credentials, storage and spending policy.
+The interface sends actions and renders accepted state. The controller updates inventory, variables, characters and locations according to your rules, then requests the next scene. The host supplies identity, credentials, storage and spending policy.
 
 ```sh
 node dist/cli.js validate ./my-world
 node dist/cli.js export ./my-world --out ./my-world.zip
 ```
 
-The ZIP includes the three entry files, the JSON Schema and complete declared assets. Safe relative paths make media portable; hosting adapters copy assets and provide runtime URLs. Keep provider keys, wallets and commercial settings in the host. See [the project boundary](docs/project-boundary.md).
+The ZIP includes the three entry files, the JSON Schema and complete declared assets. Safe relative paths make media portable; hosting adapters copy assets and provide runtime URLs. Keep provider keys, wallets and commercial settings in the host. [Read the project boundary](docs/project-boundary.md).
 
-## One key to Sequencer
+## Development preview
 
-Connect one server-side `SEQUENCER_API_KEY` for structured LLM calls, image/audio/video generation, asset uploads, versioned world drafts and private Worldstreams.
-
-Set the key in your server environment, then save your world:
-
-```sh
-node dist/cli.js save ./my-world --workspace YOUR_WORKSPACE_ID
-```
-
-The command uploads the declared assets and returns a saved draft. Use [SequencerClient](docs/integration.md) to discover models, quote generation, read completed media and control a private stream. `createSequencerLlmProvider` connects structured LLM tools to the same account.
-
-| Capability | Genesis + Sequencer | Genesis + your own providers |
-| --- | --- | --- |
-| World rules, custom UI and portable bundles | Included | Included |
-| LLM, images, audio, video and private stream APIs | One Sequencer server key | Connect adapters and credentials |
-| Assets and versioned world drafts | Managed integration | Choose storage and publishing |
-| Shared backend job polling | Managed by Sequencer hosting | Run your worker |
-| Hosted viewer identity and billing | Worldstreams accounts, gems and viewer leases | Implement your policies |
-| Audience and monetization in your own app | Yours to manage | Yours to manage |
-
-Genesis is Apache 2.0 licensed and works without a Sequencer account. Choose your own LLM with `createLlmProvider`, and connect media through the [provider contract](docs/providers.md). The SDK includes prepared-media and Replicate adapters. Live providers also need readiness, prompt control, playback, cancellation and reconnect support.
-
-Private Sequencer API streams currently cost $40/hour of active streaming and support 30–600 seconds per session. The API quotes and reserves the maximum cost, then refunds unused credit on teardown. Startup is excluded; generation and LLM requests are priced separately. Always use the returned quote. See [integration](docs/integration.md) for spending limits, stream leases and hosting responsibilities.
-
-## Build your own host
-
-Use `GenesisHost` on a Node server and `mountGenesisPlayer` in the browser. Connect them through authenticated server routes. The framework-independent player fits your app; host adapters provide authorization, moderation, metering and verified commerce.
-
-Controllers run in a bounded QuickJS sandbox. The host validates actions, filters private state and grants tool access. Generation results return as events to the controller, which updates accepted state and the interface. Game outcomes are committed before a scene request; playback completion advances visual turns. [See the architecture](docs/architecture.md).
-
-Memory and atomic file storage support a single host process. Distributed deployments need transactional storage, job admission and durable scheduling. The local runner is for authoring; production uses an authenticated host. Live paid access also requires viewer revocation in the chosen transport. [Read host authority](docs/host-authority.md).
-
-## Preview status and development
-
-Version 0.1 is an unpublished development preview. This local repository is being polished for launch. The source is Apache 2.0 licensed; npm publication and a public GitHub release are pending.
-
-The standalone preview verifies bounded clips, prepared media and structured tool data. Continuous streams and avatar/audio sessions require a deployment-specific presentation adapter. The Replicate adapter has protocol-fixture coverage; live paid predictions still need validation. Current reference limits include 100 participants, 32 actions, 200 KB session state and 2–10 second clips.
-
-Portable continuous-stream settings accept 2–30 second chunk intervals. Sequencer's current deployment accepts 14 seconds, with approximately 14.375 seconds of provider output. Hosts validate supported intervals. See [compatibility](docs/compatibility.md) and [private launch preparation](docs/launch.md) for versioning and release checks.
+Version 0.1 is an unpublished development preview, licensed under Apache 2.0. This repository is being polished for launch.
 
 ```sh
 npm test
 npm pack --dry-run
 ```
 
-[API reference](docs/api.md) · [Provider adapters](docs/providers.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Apache 2.0 license](LICENSE)
+<details>
+<summary>Current runtime and provider limits</summary>
+
+The standalone preview verifies bounded clips, prepared media and structured tool data. Continuous worldstreams and avatar/audio sessions require a deployment-specific presentation adapter. The Replicate adapter has protocol-fixture coverage; live paid predictions still need validation. Current reference limits include 100 participants, 32 actions, 200 KB session state and 2–10 second clips.
+
+Portable continuous-stream settings accept 2–30 second chunk intervals. The current Worldstreams deployment accepts 14 seconds, with approximately 14.375 seconds of provider output. Hosts validate supported intervals.
+
+Private Worldstreams API sessions currently support 30–600 seconds and cost $40/hour of active streaming. The API quotes and reserves the maximum cost, then refunds unused credit on teardown. Startup is excluded; generation and LLM requests are priced separately. Always use the returned quote.
+
+See [compatibility](docs/compatibility.md), [integration](docs/integration.md) and [launch preparation](docs/launch.md) for versioning, stream leases and release checks.
+
+</details>
+
+## Connect your own World Models
+
+GENESIS works with the providers you choose. Keep your LLM and World Model adapters separate so either can evolve independently.
+
+1. **Connect your LLM.** Use `createLlmProvider` with a server-side `generate(request, context)` callback. Map the prompt, world context, response schema and budget to your provider's API. GENESIS validates the returned data before sending it to the controller.
+2. **Connect your World Model.** Implement the [provider contract](docs/providers.md) for submission, status and cancellation. Persist generated media and supply the video's actual end-frame checkpoint. The SDK includes prepared-media and Replicate adapters.
+3. **Connect your app.** Run `GenesisHost` on your server and `mountGenesisPlayer` in the browser, joined by authenticated routes. Your host controls identity, credentials, permissions and billing.
+
+Use durable result storage for paid requests. Memory and atomic file adapters support one host process; distributed deployments need transactional storage, admission control and durable scheduling. Live worldstreams also need readiness, prompt delivery, playback acknowledgments, reconnects and viewer revocation. [Read the API](docs/api.md), [architecture](docs/architecture.md) and [host authority](docs/host-authority.md).
+
+## Worldstreams API: instant setup
+
+Use the included Sequencer integration to connect the [Worldstreams](https://worldstreams.ai) API. One server-side `SEQUENCER_API_KEY` connects LLM tools, World Model streams, image/audio/video generation, assets and versioned world drafts.
+
+Set your key in the server environment, choose your workspace and save the project:
+
+```sh
+export SEQUENCER_API_KEY="YOUR_SERVER_API_KEY"
+node dist/cli.js save ./my-world --workspace YOUR_WORKSPACE_ID
+```
+
+The command uploads the declared assets and returns a saved draft and preview URL. Use `SequencerClient` to discover models, quote generation and control a private worldstream. `createSequencerLlmProvider` connects structured LLM tools to the same account. [Follow the integration guide](docs/integration.md).
+
+| Capability | GENESIS + Worldstreams API | GENESIS + your own models |
+| --- | --- | --- |
+| World memory, rules, custom UI and portable bundles | Included | Included |
+| LLM, images, audio, video and World Model stream APIs | One Sequencer server key | Connect adapters and credentials |
+| Assets and versioned world drafts | Managed integration | Choose storage and publishing |
+| Shared backend job polling | Managed by Worldstreams hosting | Run your worker |
+| Hosted viewer identity and billing | Worldstreams accounts, gems and viewer leases | Implement your policies |
+| Audience and monetization in your own app | Yours to manage | Yours to manage |
+
+[Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Apache 2.0 license](LICENSE)

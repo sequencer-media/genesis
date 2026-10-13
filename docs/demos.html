@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GENESIS · Worldstreams in action</title>
+  <meta name="description" content="Watch Rick and Morty, Adventure Time and multiplayer Worldstreams demos. Build infinite experiences with the GENESIS World Model game engine.">
+  <style>
+    :root { color-scheme: light; --paper: #f5f0e4; --ink: #34372f; --border: #d9cfba; --accent: #536c56; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: var(--paper); font: 16px/1.6 ui-monospace, SFMono-Regular, Consolas, monospace; }
+    main { width: min(1120px, 100%); margin: auto; padding: 40px 24px 64px; }
+    .wordmark { overflow-x: auto; font-size: clamp(9px, 1.5vw, 15px); line-height: 1.2; margin: 0 0 28px; }
+    h1 { font-size: clamp(26px, 4vw, 42px); line-height: 1.2; margin: 0 0 16px; letter-spacing: -1px; }
+    .intro { max-width: 780px; margin: 0 0 24px; }
+    a { color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+    a:focus-visible, video:focus-visible { outline: 3px solid #c2784c; outline-offset: 5px; }
+    .navigation { display: flex; gap: 12px 24px; flex-wrap: wrap; margin-bottom: 32px; }
+    .gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
+    article { min-width: 0; border: 2px solid var(--ink); background: #fffaf0; box-shadow: 6px 6px 0 var(--border); }
+    article:first-child { grid-column: 1 / -1; }
+    video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: contain; background: #171c19; border-bottom: 2px solid var(--ink); }
+    .caption { padding: 20px; }
+    h2 { margin: 0 0 10px; font-size: 20px; line-height: 1.35; }
+    p { margin: 0 0 16px; }
+    .links { display: flex; gap: 12px 24px; flex-wrap: wrap; margin: 0; font-size: 14px; }
+    footer { margin-top: 32px; padding-top: 24px; border-top: 2px solid var(--border); max-width: 860px; font-size: 14px; }
+    @media (max-width: 680px) { main { padding: 28px 16px 48px; } .gallery { grid-template-columns: minmax(0, 1fr); } .caption { padding: 16px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <pre class="wordmark" aria-hidden="true">  _____ ______ _   _ ______  _____ _____  _____
+ / ____|  ____| \ | |  ____|/ ____|_   _|/ ____|
+| |  __| |__  |  \| | |__  | (___   | | | (___
+| | |_ |  __| | . \ |  __|  \___ \  | |  \___ \
+| |__| | |____| |\  | |____ ____) |_| |_ ____) |
+ \_____|______|_| \_|______|_____/|_____|_____/</pre>
+    <h1>Worldstreams in action</h1>
+    <p class="intro">Infinite experiences need memory, rules and a playable interface. GENESIS is the dungeon master for your World Model. Watch these recorded Worldstreams examples, then build your own world.</p>
+    <nav class="navigation" aria-label="Genesis resources">
+      <a href="../README.md">Explore GENESIS</a>
+      <a href="integration.md">Connect the Worldstreams API</a>
+      <a href="providers.md">Connect your own models</a>
+    </nav>
+    <section class="gallery" aria-label="Worldstreams example videos">
+      <article>
+        <video controls playsinline preload="none" poster="assets/rick-morty-worldstream.webp" aria-label="Rick and Morty Worldstream, Interdimensional Chaos Trip">
+          <source src="https://sequencer.media/demo/infinite-tv/rick-morty-720p-4e729b8d4107.mp4" type="video/mp4">
+          <a href="https://sequencer.media/demo/infinite-tv/rick-morty-720p-4e729b8d4107.mp4">Watch the Rick and Morty video</a>
+        </video>
+        <div class="caption">
+          <h2>Rick and Morty · Interdimensional Chaos Trip</h2>
+          <p>Ten connected World Model scenes, from a forbidden portal to a chaotic journey home. The preview player adds audience-choice controls around the recorded adventure.</p>
+          <p class="links"><a href="https://sequencer.media/demo/infinite-tv">Try the preview player</a><a href="https://sequencer.media/demo/infinite-tv/rick-morty-720p-4e729b8d4107.mp4">Open video</a></p>
+        </div>
+      </article>
+      <article>
+        <video controls playsinline preload="none" poster="assets/adventure-time-worldstream.webp" aria-label="Adventure Time Worldstream, Land of Ooo">
+          <source src="https://sequencer.media/demo/worldstreams/adventure-time/adventure-time-720p-0bfe8c425454.mp4" type="video/mp4">
+          <a href="https://sequencer.media/demo/worldstreams/adventure-time/adventure-time-720p-0bfe8c425454.mp4">Watch the Adventure Time video</a>
+        </video>
+        <div class="caption">
+          <h2>Adventure Time · Land of Ooo</h2>
+          <p>A connected fantasy adventure through the Land of Ooo, with audience-choice controls in the preview player.</p>
+          <p class="links"><a href="https://sequencer.media/demo/worldstreams/adventure-time">Try the preview player</a><a href="https://sequencer.media/demo/worldstreams/adventure-time/adventure-time-720p-0bfe8c425454.mp4">Open video</a></p>
+        </div>
+      </article>
+      <article>
+        <video controls playsinline preload="none" poster="assets/multiplayer-worldstream.webp" aria-label="Multiplayer Worldstreams, two players directing their characters">
+          <source src="https://sequencer.media/demo/about/media/worldstreams-multiplayer.mp4" type="video/mp4">
+          <a href="https://sequencer.media/demo/about/media/worldstreams-multiplayer.mp4">Watch the multiplayer video</a>
+        </video>
+        <div class="caption">
+          <h2>Multiplayer Worldstreams</h2>
+          <p>Two players direct their own characters inside a shared experience. See the interface, player actions and generated world together.</p>
+          <p class="links"><a href="https://sequencer.media/demo/about/media/worldstreams-multiplayer.mp4">Open video</a></p>
+        </div>
+      </article>
+    </section>
+    <footer>These videos show recorded Worldstreams output. Preview choices demonstrate the interaction flow. Live generation uses a connected provider; the portable GENESIS starter projects are included in the repository.</footer>
+  </main>
+</body>
+</html>

@@ -1,12 +1,13 @@
 {
   "name": "@genesis-worlds/runtime",
   "version": "0.1.0",
-  "description": "Open source world model game engine. Build playable AI worlds with shared state, LLM tools and generated media.",
+  "description": "Open source World Model game engine. Build infinite experiences and worldstreams with memory, inventory, shared rules and custom interfaces.",
   "keywords": [
     "world-models",
     "game-engine",
     "generative-video",
     "ai-worlds",
+    "worldstreams",
     "llm",
     "sdk",
     "multiplayer",

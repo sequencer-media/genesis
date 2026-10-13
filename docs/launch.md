@@ -6,13 +6,13 @@ Status: local and unpublished. The independent local repository lives alongside 
 
 **GENESIS · Open Source World Model Game Engine**
 
-**Create infinite worlds, in minutes.**
+**Create infinite experiences, in minutes.**
 
-The creator promise is a short path from an idea to a playable prototype: describe the world, let the bundled agent skill build its interface and rules, then connect generation. Genesis handles state, actions, structured LLM tools, asynchronous jobs and scene continuity. Sequencer supplies the managed model and hosting APIs through one server key.
+The creator promise is a short path from an idea to a playable worldstream: describe the world, let the bundled agent skill build its interface and rules, then connect a World Model. GENESIS acts as the dungeon master: it persists world memory, inventory and variables, runs shared rules and passes structured scene, location and character context to backend tools. The Worldstreams API supplies managed model and hosting APIs through one Sequencer server key.
 
-Repository description: Open source world model game engine. Build playable AI worlds with shared state, LLM tools and generated media.
+Repository description: Open source World Model game engine. Build infinite experiences and worldstreams with memory, inventory, shared rules and custom interfaces.
 
-The strongest audience is developers turning generated video into interactive games and shared experiences. Lead with a working world and a remixable project. Show provider choice, portable assets and the Apache 2.0 license next to the managed Sequencer path.
+The strongest audience is developers turning World Models into infinite experiences. Lead with the ASCII wordmark, the dungeon-master role and the Rick and Morty Worldstream video. Add Adventure Time and multiplayer demos, then show a remixable project. Label recorded demos and prepared preview output. Show provider choice, portable assets and the Apache 2.0 license next to the managed Worldstreams API path.
 
 ## Launch demonstration
 
