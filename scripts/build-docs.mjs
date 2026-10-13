@@ -32,7 +32,6 @@ sourceRoutes.set(resolve(root, 'skills/create-world-stream/SKILL.md'), 'agent-sk
 const template = await readFile(resolve(root, 'docs/site/template.html'), 'utf8');
 const version = JSON.parse(await readFile(resolve(root, 'package.json'), 'utf8')).version;
 const escape = value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
-const brandNames = html => html.replace(/(^|>)([^<]+)(?=<|$)/g, (_all, start, text) => start + text.replace(/\b(GENESIS|Worldstreams|Sequencer)\b/g, '<span class="brand-name">$1</span>'));
 const entities = {amp:'&', lt:'<', gt:'>', quot:'"', apos:"'"};
 const plain = value => value.replace(/<[^>]*>/g, ' ').replace(/&(#x[\da-f]+|#\d+|amp|lt|gt|quot|apos);/gi, (_all, entity) => {
   if (!entity.startsWith('#')) return entities[entity.toLowerCase()];
@@ -62,7 +61,7 @@ function navigation(current) {
     const heading = page.group === group ? '' : '<p class="nav-group">' + escape(page.group) + '</p>';
     group = page.group;
     const active = page.file === current ? ' aria-current="page" class="active"' : '';
-    return heading + '<a href="' + page.file + '"' + active + '>' + brandNames(escape(page.label || page.title)) + '</a>';
+    return heading + '<a href="' + page.file + '"' + active + '>' + escape(page.label || page.title) + '</a>';
   }).join('\n');
 }
 
@@ -73,7 +72,7 @@ for (const page of pages) {
   const markdown = new Marked({gfm:true, async:false});
   markdown.use({useNewRenderer:true, renderer:{
     heading({tokens, depth}) {
-      const label = brandNames(this.parser.parseInline(tokens));
+      const label = this.parser.parseInline(tokens);
       const base = slug(label) || 'section';
       const count = usedIds.get(base) || 0;
       usedIds.set(base, count + 1);
@@ -103,7 +102,7 @@ for (const page of pages) {
     const base = slug(label) || 'section';
     const count = usedIds.get(base) || 0;
     usedIds.set(base, count + 1);
-    return '<h' + depth + ' id="' + base + (count ? '-' + count : '') + '">' + brandNames(label) + '</h' + depth + '>';
+    return '<h' + depth + ' id="' + base + (count ? '-' + count : '') + '">' + label + '</h' + depth + '>';
   });
   const toc = page.file === 'index.html' || page.file === 'demos.html' || !headings.length ? '' :
     '<details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections">' +

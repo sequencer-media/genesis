@@ -5,14 +5,13 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Project README. GENESIS open source World Model game engine documentation.">
   <title>Project README · GENESIS</title>
-  <link rel="preload" href="assets/sequencer-display-regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="site/site.css">
   <script src="site/site.js" defer></script>
 </head>
 <body class="guide-page">
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
-    <a class="brand" href="index.html" aria-label="GENESIS home"><img class="brand-mark" src="assets/sequencer-mark-color.svg" alt="" width="36" height="36"><span>GENESIS</span></a>
+    <a class="brand" href="index.html" aria-label="GENESIS home"><span class="brand-mark" aria-hidden="true">G</span>GENESIS</a>
     <a class="license-badge" href="license.html">Open source · Apache 2.0</a>
     <form class="search" role="search">
       <label class="sr-only" for="docs-search">Search Genesis documentation</label>
@@ -24,8 +23,8 @@
 <a href="getting-started.html">Build your first world</a>
 <a href="world-memory.html">World memory</a>
 <a href="agent-skill.html">Build from one prompt</a>
-<a href="demos.html"><span class="brand-name">Worldstreams</span> demos</a>
-<p class="nav-group">Connect</p><a href="integration.html"><span class="brand-name">Worldstreams</span> API</a>
+<a href="demos.html">Worldstreams demos</a>
+<p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
 <a href="providers.html">Your own models</a>
 <p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
 <a href="architecture.html">Architecture</a>
@@ -42,8 +41,8 @@
 <a href="getting-started.html">Build your first world</a>
 <a href="world-memory.html">World memory</a>
 <a href="agent-skill.html">Build from one prompt</a>
-<a href="demos.html"><span class="brand-name">Worldstreams</span> demos</a>
-<p class="nav-group">Connect</p><a href="integration.html"><span class="brand-name">Worldstreams</span> API</a>
+<a href="demos.html">Worldstreams demos</a>
+<p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
 <a href="providers.html">Your own models</a>
 <p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
 <a href="architecture.html">Architecture</a>
@@ -62,7 +61,7 @@
 | | |_ |  __| | . \ |  __|  \___ \  | |  \___ \
 | |__| | |____| |\  | |____ ____) |_| |_ ____) |
  \_____|______|_| \_|______|_____/|_____|_____/</code></pre></div>
-<h1 id="genesis--open-source-world-model-game-engine"><span class="brand-name">GENESIS</span> · Open Source World Model Game Engine</h1>
+<h1 id="genesis--open-source-world-model-game-engine">GENESIS · Open Source World Model Game Engine</h1>
 <p><strong>Create infinite experiences, in minutes.</strong></p>
 <p>Give your World Model a memory, an inventory and a playable interface.</p>
 <p>GENESIS is an open source SDK for building worldstreams: evolving experiences where player actions, shared rules and generated scenes move together. Describe your world to a coding agent, play the local prototype, then connect your World Model.</p>
@@ -112,7 +111,7 @@
 </tr>
 </tbody></table>
 <p>You define the world and its rules. GENESIS runs the state and interaction loop; connected World Models and LLMs generate the media and structured responses.</p>
-<h2 id="worldstreams-in-action"><span class="brand-name">Worldstreams</span> in action</h2>
+<h2 id="worldstreams-in-action">Worldstreams in action</h2>
 <h3 id="rick-and-morty--multiplayer-worldstream">Rick and Morty · Multiplayer Worldstream</h3>
 <p>Two players direct Rick and Morty through their own character controls. Both actions feed the shared Worldstream. Click the image to watch the multiplayer recording.</p>
 <p><a href="https://sequencer.media/demo/worlds/multiplayer-demo-cropped-v2.mp4"><img src="assets/rick-morty-multiplayer.webp" alt="Watch the multiplayer Rick and Morty Worldstream" loading="lazy"></a></p>
@@ -218,7 +217,7 @@ npm pack --dry-run</code></pre></div>
 <li><strong>Connect your app.</strong> Run <code>GenesisHost</code> on your server and <code>mountGenesisPlayer</code> in the browser, joined by authenticated routes. Your host controls identity, credentials, permissions and billing.</li>
 </ol>
 <p>Use durable result storage for paid requests. Memory and atomic file adapters support one host process; distributed deployments need transactional storage, admission control and durable scheduling. Live worldstreams also need readiness, prompt delivery, playback acknowledgments, reconnects and viewer revocation. <a href="api.html">Read the API</a>, <a href="architecture.html">architecture</a> and <a href="host-authority.html">host authority</a>.</p>
-<h2 id="worldstreams-api-instant-setup"><span class="brand-name">Worldstreams</span> API: instant setup</h2>
+<h2 id="worldstreams-api-instant-setup">Worldstreams API: instant setup</h2>
 <p>Use the included Sequencer integration to connect the <a href="https://worldstreams.ai">Worldstreams</a> API. One server-side <code>SEQUENCER_API_KEY</code> connects LLM tools, World Model streams, image/audio/video generation, assets and versioned world drafts.</p>
 <p>Set your key in the server environment, choose your workspace and save the project:</p>
 <div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-sh">export SEQUENCER_API_KEY=&quot;YOUR_SERVER_API_KEY&quot;
@@ -266,7 +265,7 @@ node dist/cli.js save ./my-world --workspace YOUR_WORKSPACE_ID</code></pre></div
 <p><a href="contributing.html">Contributing</a> · <a href="security.html">Security</a> · <a href="license.html">Apache 2.0 license</a></p>
 </article>
       <footer class="site-footer">
-        <p><span class="brand-name">GENESIS</span> 0.1.0 · Open source World Model game engine</p>
+        <p>GENESIS 0.1.0 · Open source World Model game engine</p>
         <nav aria-label="Footer resources"><a href="license.html">Apache 2.0</a><a href="agent-skill.html">World-building skill</a><a href="contributing.html">Contribute</a><a href="compatibility.html">Development preview</a></nav>
         <p class="release-note">Local launch preparation. Public repository and package release are pending.</p>
       </footer>
