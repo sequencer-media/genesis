@@ -7,7 +7,7 @@
  \_____|______|_| \_|______|_____/|_____|_____/
 ```
 
-# GENESIS · Open Source World Model Engine
+# Open Source World Model Engine
 
 [![CI: Node 20 and 22](https://img.shields.io/badge/CI-Node_20_%2B_22-f46aa6?style=flat-square&logo=githubactions&logoColor=white)](https://github.com/sequencer-media/genesis/actions/workflows/ci.yml)
 [![Apache 2.0 license](https://img.shields.io/badge/license-Apache_2.0-ff9b55?style=flat-square)](LICENSE)
