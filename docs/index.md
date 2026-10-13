@@ -8,16 +8,12 @@
 
 GENESIS gives generated worlds memory, rules and controls. It tracks your inventory, characters and locations, then connects each player action to what happens next.
 
-<div class="hero-actions"><a class="button primary" href="#worldstreams-in-action">Watch the demos</a><a class="button" href="#quickstart-with-the-genesis-skill">Build your first world</a></div>
-<p class="hero-note">Run locally with the included examples. Connect your models when you're ready.</p>
 </div>
 </section>
 
-## Worldstreams in action
-
 Rick and Morty have their own character controls, and both actions feed the shared experience. Watch the multiplayer Worldstream.
 
-<figure class="demo-feature">
+<figure class="demo-feature" id="worldstreams-in-action">
 <video controls playsinline preload="none" poster="assets/rick-morty-multiplayer.webp" aria-label="Rick and Morty multiplayer Worldstream">
 <source src="https://sequencer.media/demo/worlds/multiplayer-demo-cropped-v2.mp4" type="video/mp4">
 <a href="https://sequencer.media/demo/worlds/multiplayer-demo-cropped-v2.mp4">Watch the multiplayer Rick and Morty video</a>
