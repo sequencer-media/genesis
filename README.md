@@ -46,9 +46,9 @@ These are recorded Worldstreams examples. Preview choices illustrate the interac
 
 The GENESIS Context Engine combines character memory, scenes, inventory, multiplayer rules and world settings into model context. An external LLM creates prompts and structured replies, and the World Model generates the next scene. Streaming delivery brings the video back to your interactive UI.
 
-![GENESIS Context Engine connects memory, settings and player actions to external models. An optional image model takes LLM prompts and supplies images to the World Model. Streaming delivery returns scenes to the UI.](docs/assets/genesis-world-context.svg)
+![GENESIS Context Engine connects memory, settings and player actions to a World Model. Optional Visual Context sits inside GENESIS and supplies image context directly alongside text context. Streaming delivery returns scenes to the UI.](docs/assets/genesis-world-context.svg)
 
-**Optional image generation:** your world settings and controller can trigger a connected image model. It takes prompts from the LLM and creates starting or reference images for the World Model.
+**Visual Context** is an optional part of the GENESIS Context Engine. World settings and LLM prompts guide its starting or reference images, which connect directly to the World Model alongside text context.
 
 Connect the modules your experience needs. GENESIS defines the contract for world state, player actions and model requests. LLMs, World Models and streaming delivery use replaceable adapters; your host supplies their credentials and infrastructure. [Explore the architecture](docs/architecture.md).
 
@@ -87,7 +87,7 @@ Pick up a key, and it stays in your inventory. Unlock a door, and that location 
 | **Inventory and variables** | Items, health, scores, resources, quest flags and the values your rules depend on. |
 | **Scenes, locations and characters** | Define places, characters, relationships and scene facts in structured state, then carry them into generation requests. |
 | **LLM orchestration and prompts** | Supply world context and committed outcomes; validate structured replies for new moves, dialogue and choices. |
-| **Optional image generation** | Trigger image requests from world settings and controller rules, then pass accepted starting or reference images to a compatible World Model. |
+| **Visual Context** | Optionally create starting or reference images from world settings and LLM prompts, then supply image context directly to a compatible World Model. |
 | **Playable interfaces** | Custom controls, inventory panels, overlays and animations in HTML, CSS and JavaScript. |
 | **Shared rules and multiplayer** | Authoritative turns, player seats, crowd votes and validated actions. |
 | **Generation and scene continuity** | Track jobs, reject stale results, carry the actual end frame forward and reopen actions after playback. |

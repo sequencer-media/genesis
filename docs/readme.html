@@ -115,8 +115,8 @@
 <p>These are recorded Worldstreams examples. Preview choices illustrate the interaction flow around prepared World Model output. Live generation uses a connected provider. Read the <a href="api.html">SDK reference</a> and <a href="agent-skill.html">world-building skill guide</a>, or run <code>npm run docs:dev</code> to open the searchable documentation site and video gallery locally.</p>
 <h2 id="how-genesis-works">How GENESIS works</h2>
 <p>The GENESIS Context Engine combines character memory, scenes, inventory, multiplayer rules and world settings into model context. An external LLM creates prompts and structured replies, and the World Model generates the next scene. Streaming delivery brings the video back to your interactive UI.</p>
-<p><img src="assets/genesis-world-context.svg" alt="GENESIS Context Engine connects memory, settings and player actions to external models. An optional image model takes LLM prompts and supplies images to the World Model. Streaming delivery returns scenes to the UI." loading="lazy"></p>
-<p><strong>Optional image generation:</strong> your world settings and controller can trigger a connected image model. It takes prompts from the LLM and creates starting or reference images for the World Model.</p>
+<p><img src="assets/genesis-world-context.svg" alt="GENESIS Context Engine connects memory, settings and player actions to a World Model. Optional Visual Context sits inside GENESIS and supplies image context directly alongside text context. Streaming delivery returns scenes to the UI." loading="lazy"></p>
+<p><strong>Visual Context</strong> is an optional part of the GENESIS Context Engine. World settings and LLM prompts guide its starting or reference images, which connect directly to the World Model alongside text context.</p>
 <p>Connect the modules your experience needs. GENESIS defines the contract for world state, player actions and model requests. LLMs, World Models and streaming delivery use replaceable adapters; your host supplies their credentials and infrastructure. <a href="architecture.html">Explore the architecture</a>.</p>
 <h2 id="what-can-you-build">What can you build?</h2>
 <p>Build worlds people can play, watch, explore, learn from and shape together.</p>
@@ -219,8 +219,8 @@
 <td>Supply world context and committed outcomes; validate structured replies for new moves, dialogue and choices.</td>
 </tr>
 <tr>
-<td><strong>Optional image generation</strong></td>
-<td>Trigger image requests from world settings and controller rules, then pass accepted starting or reference images to a compatible World Model.</td>
+<td><strong>Visual Context</strong></td>
+<td>Optionally create starting or reference images from world settings and LLM prompts, then supply image context directly to a compatible World Model.</td>
 </tr>
 <tr>
 <td><strong>Playable interfaces</strong></td>

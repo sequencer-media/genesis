@@ -4,19 +4,19 @@ Genesis is a portable runtime and project format. A world has a browser interfac
 
 ## A universal World Model Context Protocol
 
-The GENESIS Context Engine connects structured world state, settings and player actions to your World Model. It defines the shared contract for model requests and accepted results. The tinted LLM, World Model and optional image model are external services connected through host adapters. Streaming delivery returns generated video to the player's interface.
+The GENESIS Context Engine connects structured world state, settings and player actions to your World Model. Its optional Visual Context component prepares starting and reference images, supplying image context directly alongside text context. The tinted LLM and World Model are external services connected through host adapters. Streaming delivery returns generated video to the player's interface.
 
 <p class="diagram-hint">Scroll the diagram horizontally to explore the full loop.</p>
 <figure class="world-flow">
-<div class="world-flow-scroll" role="region" aria-label="GENESIS modular World Model flow diagram" tabindex="0"><img src="assets/genesis-world-context.svg" alt="Memory, scenes, inventory, multiplayer and settings feed the GENESIS Context Engine, which connects to an external World Model and LLM. An optional image model takes LLM prompts and supplies image inputs to the World Model. Streaming delivery returns generated video to the UI." width="960" height="760" loading="lazy"></div>
+<div class="world-flow-scroll" role="region" aria-label="GENESIS modular World Model flow diagram" tabindex="0"><img src="assets/genesis-world-context.svg" alt="Memory, scenes, inventory, multiplayer and settings feed the GENESIS Context Engine. Optional Visual Context is inside GENESIS and sends image context directly to the World Model alongside text. The external LLM creates prompts, and streaming delivery returns video to the UI." width="960" height="760" loading="lazy"></div>
 <figcaption>Use the GENESIS modules your project needs. Connect external models through host adapters.</figcaption>
 </figure>
 
-### Optional image generation
+### Visual Context
 
-A project can declare a boolean setting in `definition.genesis.configSchema`, then read it through `context.config.settings` to decide when its controller emits `image.request`. Declare the capability in the project and grant it on the host. The host adapter connects the image provider and enforces permissions and spending limits.
+Visual Context is the image-generation and reference-image flow inside the GENESIS Context Engine. A project can declare a boolean setting in `definition.genesis.configSchema`, then read it through `context.config.settings` to decide when its controller emits `image.request`. Declare the capability in the project and grant it on the host. The host adapter connects the image provider and enforces permissions and spending limits.
 
-The LLM can supply a bounded image prompt. Validate that reply, request the image and wait for `job.ready` before using its accepted image or anchor in the next scene request. This makes image generation a settings-controlled branch of the context loop. The World Model adapter must support the image input your project uses.
+The LLM can supply a bounded image prompt. Validate that reply, request the image and wait for `job.ready` before using its accepted image or anchor in the next scene request. Visual and text context then reach the World Model through its adapter. The adapter must support the image input your project uses.
 
 ## The action and generation loop
 

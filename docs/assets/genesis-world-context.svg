@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="960" height="760" viewBox="0 0 960 760" role="img" aria-labelledby="title description">
   <title id="title">GENESIS, a universal World Model Context Protocol</title>
-  <desc id="description">GENESIS has a Context Engine that connects character memory, scenes, inventory, multiplayer, world settings and player actions to an external World Model. An external LLM creates prompts and structured replies. An optional external image model takes prompts from the LLM and supplies reference or starting images to the World Model when enabled by world settings. Models sit outside the GENESIS boundary and connect through adapters. Generated scenes pass through streaming delivery to the interactive UI, continuing the loop.</desc>
+  <desc id="description">GENESIS has a Context Engine that connects character memory, scenes, inventory, multiplayer, world settings and player actions to a World Model. Visual Context is an optional component inside GENESIS. It receives LLM prompts and world settings, then supplies reference or starting images directly to the World Model alongside text context. The external LLM and World Model connect through adapters. Generated scenes pass through streaming delivery to the interactive UI, continuing the loop.</desc>
   <defs>
     <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path d="M1 1L7 4L1 7" fill="none" stroke="#a53861" stroke-width="1.4"/></marker>
   </defs>
@@ -19,7 +19,7 @@
     .context{fill:none;stroke:#bba49c;stroke-width:1.2}
   </style>
   <rect width="960" height="760" fill="#f5f0e4"/>
-  <path d="M24 20H936V208H334V454H936V592H24Z" fill="none" stroke="#382b32" stroke-width="1.5"/>
+  <path d="M24 20H936V208H334V336H936V592H24Z" fill="none" stroke="#382b32" stroke-width="1.5"/>
   <text x="52" y="56" class="title">GENESIS</text>
   <text x="52" y="81" class="detail">A universal World Model Context Protocol</text>
   <text x="918" y="58" text-anchor="end" class="caption">[ modular by design ]</text>
@@ -56,26 +56,27 @@
     <text x="470" y="306" class="detail">Connected through an adapter</text>
     <rect x="648" y="222" width="270" height="98" class="external world"/>
     <text x="783" y="258" class="label">External World Model</text>
-    <text x="783" y="284" class="detail">Generate the next scene</text>
+    <text x="783" y="284" class="detail">Text + image context into scenes</text>
     <text x="783" y="306" class="detail">Connected through an adapter</text>
   </g>
   <path class="flow" marker-start="url(#arrow)" d="M306 276H346"/>
-  <text x="257" y="345" text-anchor="middle" class="caption">Context / replies</text>
   <path class="flow" d="M594 276H644"/>
+  <text x="636" y="351" text-anchor="middle" class="caption">Text context</text>
 
   <path class="flow" d="M470 324V354"/>
-  <text x="488" y="345" class="caption">Image prompt</text>
-  <rect x="350" y="358" width="240" height="88" class="external world"/>
-  <text x="470" y="390" text-anchor="middle" class="label">External image model</text>
+  <text x="488" y="351" class="caption">Image prompt</text>
+  <rect x="350" y="358" width="240" height="88" class="node"/>
+  <text x="470" y="390" text-anchor="middle" class="label">Visual Context</text>
   <text x="470" y="415" text-anchor="middle" class="detail">Optional, enabled in settings</text>
   <text x="470" y="437" text-anchor="middle" class="detail">Reference / starting images</text>
   <path class="flow" d="M594 402H720V324"/>
-  <text x="650" y="424" text-anchor="middle" class="caption">Image input</text>
+  <text x="650" y="424" text-anchor="middle" class="caption">Image context</text>
+  <path class="flow" d="M279 324V402H346"/>
   <path class="flow" d="M177 324V464H795V324"/>
   <text x="619" y="478" text-anchor="middle" class="caption">World context + accepted outcome</text>
 
   <path class="flow" marker-start="url(#arrow)" d="M177 324V476"/>
-  <text x="197" y="384" class="caption">Player actions</text>
+  <text x="197" y="434" class="caption">Player actions</text>
   <rect x="52" y="480" width="352" height="82" class="node"/>
   <text x="228" y="509" text-anchor="middle" class="label">Interactive UI</text>
   <text x="228" y="533" text-anchor="middle" class="detail">Point and click + player controls</text>
