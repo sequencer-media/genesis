@@ -2,6 +2,7 @@ import {readFile, writeFile, mkdir, cp, access, readdir} from 'node:fs/promises'
 import {resolve, dirname, relative, sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {Marked} from 'marked';
+import {renderModelPricing} from './model-pricing.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
@@ -19,6 +20,7 @@ const pages = [
   {source:'docs/getting-started.md', file:'getting-started.html', title:'Run a starter locally', group:'Start here'},
   {source:'docs/world-memory.md', file:'world-memory.html', title:'World memory', group:'Start here'},
   {source:'docs/demos.md', file:'demos.html', title:'Worldstreams demos', group:'Start here'},
+  {source:'docs/examples.md', file:'examples.html', title:'Example projects', group:'Start here'},
   {source:'docs/integration.md', file:'integration.html', title:'Worldstreams API', group:'Connect'},
   {source:'docs/providers.md', file:'providers.html', title:'Your own models', group:'Connect'},
   {source:'docs/models.md', file:'models.html', title:'Models and pricing', group:'Connect'},
@@ -36,6 +38,9 @@ const pages = [
 const sourceRoutes = new Map(pages.map(page => [resolve(root, page.source), page.file]));
 sourceRoutes.set(resolve(root, 'skills/create-world-stream/SKILL.md'), 'agent-skill.html');
 const template = await readFile(resolve(root, 'docs/site/template.html'), 'utf8');
+const pricing = JSON.parse(await readFile(resolve(root, 'docs/site/model-pricing.json'), 'utf8'));
+const modelTable = renderModelPricing(await readFile(resolve(root, 'docs/site/model-comparison.html'), 'utf8'), pricing);
+const llmTable = renderModelPricing(await readFile(resolve(root, 'docs/site/llm-comparison.html'), 'utf8'), pricing);
 const version = JSON.parse(await readFile(resolve(root, 'package.json'), 'utf8')).version;
 const escape = value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 const entities = {amp:'&', lt:'<', gt:'>', quot:'"', apos:"'"};
@@ -99,7 +104,10 @@ for (const page of pages) {
   }});
   let input = source;
   if (input.includes('<!-- WORLDSTREAM_MODEL_TABLE -->')) {
-    input = input.replace('<!-- WORLDSTREAM_MODEL_TABLE -->', await readFile(resolve(root, 'docs/site/model-comparison.html'), 'utf8'));
+    input = input.replace('<!-- WORLDSTREAM_MODEL_TABLE -->', modelTable);
+  }
+  if (input.includes('<!-- LLM_MODEL_TABLE -->')) {
+    input = input.replace('<!-- LLM_MODEL_TABLE -->', llmTable);
   }
   if (page.source === 'docs/agent-skill.md') {
     const skill = await readFile(resolve(root, 'skills/create-world-stream/SKILL.md'), 'utf8');

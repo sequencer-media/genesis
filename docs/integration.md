@@ -1,5 +1,15 @@
 # Integration
 
+## Model routing
+
+Use one server-side Sequencer key for Worldstreams, structured LLM tools and media generation. Sequencer holds upstream credentials and returns the stream connection details to your app.
+
+**Available now:** Viva Worldstreams with built-in LLM world direction, plus separately metered structured LLM requests ($0.01/request by default) and image/audio/video generation.
+
+**Planned routes:** H3 Max Director, Reactor FastH3 and Orbis. Their comparison prices use **provider cost × 1.15**, including a 15% Sequencer markup. These routes are estimates until their connectors, metering and live session quotes are available. Viva keeps its existing $40/hour retail price.
+
+Start with the current [Worldstreams API](https://sequencer.media/worldstream-api) and use its returned quote. [Compare models and pricing](models.md).
+
 ## Publish your world on Sequencer
 
 [Open My Worlds](https://sequencer.media/worldstreams#my-worlds) with your Sequencer account. Create a world and import your GENESIS project in the editor, or ask Spark to build it from a prompt. Preview the world, save it and publish it to Worldstreams. The hosted editor uses your existing identity, workspace, media library and gems.

@@ -4,6 +4,8 @@
 
 [Skill quickstart](agent-skill.md) · [Run a starter](getting-started.md) · [Read the license](license.html)
 
+For a playable project with shared turns, items and persistent battle state, [explore Pokémon Stadium](examples.md#pokémon-stadium).
+
 <div class="demo-gallery">
 <section class="demo-card featured">
 <video controls playsinline preload="none" poster="assets/rick-morty-multiplayer.webp" aria-label="Rick and Morty multiplayer Worldstream">

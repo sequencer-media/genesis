@@ -1,0 +1,15 @@
+{
+  "checkedAt": "October 13, 2026",
+  "sequencerMarkupPercent": 15,
+  "worldstreams": {
+    "h3-max-director": { "providerUsdPerSecond": 0.08 },
+    "fasth3": { "providerUsdPerSecond": 0.035 },
+    "orbis-stable": { "providerUsdPerSecond": 0.0097 },
+    "orbis-dynamic": { "providerUsdPerSecond": 0.0209 }
+  },
+  "llms": {
+    "gemini-flash-lite": { "providerUsdPerMillionInput": 0.30, "providerUsdPerMillionOutput": 2.50 },
+    "groq-gpt-oss-20b": { "providerUsdPerMillionInput": 0.075, "providerUsdPerMillionOutput": 0.30 },
+    "cerebras-gpt-oss-120b": { "providerUsdPerMillionInput": 0.35, "providerUsdPerMillionOutput": 0.75 }
+  }
+}

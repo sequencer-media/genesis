@@ -39,6 +39,7 @@
 <a href="getting-started.html">Run a starter locally</a>
 <a href="world-memory.html">World memory</a>
 <a href="demos.html">Worldstreams demos</a>
+<a href="examples.html">Example projects</a>
 <p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
 <a href="providers.html">Your own models</a>
 <a href="models.html">Models and pricing</a>
@@ -58,6 +59,7 @@
 <a href="getting-started.html">Run a starter locally</a>
 <a href="world-memory.html">World memory</a>
 <a href="demos.html">Worldstreams demos</a>
+<a href="examples.html">Example projects</a>
 <p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
 <a href="providers.html">Your own models</a>
 <a href="models.html">Models and pricing</a>
@@ -72,7 +74,7 @@
 <a href="license.html">Apache 2.0 license</a>
 <a href="readme.html" aria-current="page" class="active">Project README</a></nav></aside>
     <main id="main" tabindex="-1">
-      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#your-world-model-needs-an-engine">Your World Model needs an engine.</a><a href="#worldstreams-in-action">Worldstreams in action</a><a href="#rick-and-morty--multiplayer-worldstream">Rick and Morty · Multiplayer Worldstream</a><a href="#what-can-you-build">What can you build?</a><a href="#what-genesis-handles">What GENESIS handles</a><a href="#one-prompt-an-infinite-experience">One prompt. An infinite experience.</a><a href="#play-your-first-world">Play your first world</a><a href="#three-files-your-whole-world">Three files. Your whole world.</a><a href="#development-preview">Development preview</a><a href="#connect-your-own-world-models">Connect your own World Models</a><a href="#worldstreams-api-instant-setup">Worldstreams API: instant setup</a><a href="#build-with-us">Build with us</a></nav></details><p><img src="assets/genesis-wordmark.svg" alt="GENESIS ASCII wordmark" loading="lazy"></p>
+      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#your-world-model-needs-an-engine">Your World Model needs an engine.</a><a href="#worldstreams-in-action">Worldstreams in action</a><a href="#rick-and-morty--multiplayer-worldstream">Rick and Morty · Multiplayer Worldstream</a><a href="#what-can-you-build">What can you build?</a><a href="#what-genesis-handles">What GENESIS handles</a><a href="#one-prompt-an-infinite-experience">One prompt. An infinite experience.</a><a href="#play-your-first-world">Play your first world</a><a href="#three-files-your-whole-world">Three files. Your whole world.</a><a href="#development-preview">Development preview</a><a href="#example-projects">Example projects</a><a href="#connect-your-own-world-models">Connect your own World Models</a><a href="#worldstreams-api-instant-setup">Worldstreams API: instant setup</a><a href="#build-with-us">Build with us</a></nav></details><p><img src="assets/genesis-wordmark.svg" alt="GENESIS ASCII wordmark" loading="lazy"></p>
 <h1 id="world-model-engine">World Model Engine</h1>
 <p><a href="https://github.com/sequencer-media/genesis/actions/workflows/ci.yml"><img src="assets/badges/ci.svg" alt="CI: Node 20 and 22" loading="lazy"></a>
 <a href="license.html"><img src="assets/badges/license.svg" alt="Apache 2.0 license" loading="lazy"></a>
@@ -297,10 +299,12 @@ npm pack --dry-run</code></pre></div>
 
 <p>The standalone preview verifies bounded clips, prepared media and structured tool data. Continuous worldstreams and avatar/audio sessions require a deployment-specific presentation adapter. The Replicate adapter has protocol-fixture coverage; live paid predictions still need validation. Current reference limits include 100 participants, 32 actions, 200 KB session state and 2–10 second clips.</p>
 <p>Portable continuous-stream settings accept 2–30 second chunk intervals. The current Worldstreams deployment accepts 14 seconds, with approximately 14.375 seconds of provider output. Hosts validate supported intervals.</p>
-<p>Private Worldstreams API sessions currently support 30–600 seconds and cost $40/hour of active streaming. The API quotes and reserves the maximum cost, then refunds unused credit on teardown. Startup is excluded; generation and LLM requests are priced separately. Always use the returned quote.</p>
+<p>Private Worldstreams API sessions currently support 30–600 seconds and cost $40/hour of active streaming. The API quotes and reserves the maximum cost, then refunds unused credit on teardown. Startup is excluded. Viva includes built-in LLM direction; custom structured LLM requests and extra assets are priced separately. Always use the returned quote.</p>
 <p>See <a href="compatibility.html">compatibility</a> and <a href="integration.html">integration</a> for versioning, stream leases and release checks.</p>
 </details>
 
+<h2 id="example-projects">Example projects</h2>
+<p><a href="https://sequencer.media/worldstreams/S_R5xijO8Pjv"><strong>Pokémon Stadium</strong></a> brings two trainers into a shared battle Worldstream, with Pokémon selection, turns, type effects, status conditions, items, EXP and a challenger queue. <a href="https://sequencer.media/genesis/examples">Explore the project</a>.</p>
 <h2 id="connect-your-own-world-models">Connect your own World Models</h2>
 <p>GENESIS works with the providers you choose. Keep your LLM and World Model adapters separate so either can evolve independently.</p>
 <ol>
@@ -372,8 +376,14 @@ node dist/cli.js save ./my-world --workspace YOUR_WORKSPACE_ID</code></pre></div
 <td>Your app&#39;s audience experience</td>
 <td>Sequencer provides</td>
 </tr>
+<tr>
+<td>Price</td>
+<td>Free engine; provider and infrastructure costs</td>
+<td>Viva $40/hour; planned third-party routes at provider cost + 15%</td>
+<td>Viva cost shared in gems; paid actions can cost extra</td>
+</tr>
 </tbody></table>
-<p>Custom LLM calls and additional media generation have separate usage charges. Compare the <a href="index.html#choose-your-connection">setup options</a> and <a href="models.html">Worldstream models, prices and quality rating method</a>.</p>
+<p>Viva includes built-in LLM direction. Custom structured calls and extra media have separate usage charges. Compare the <a href="index.html#choose-your-connection">setup options</a> and <a href="https://sequencer.media/genesis/models">World Models and low-latency LLMs</a>, including prices, response timing and moderation controls. Planned third-party routes use provider cost plus 15% markup; live quotes determine billing.</p>
 <h2 id="build-with-us">Build with us</h2>
 <p>Found an issue or have an idea? <a href="https://github.com/sequencer-media/genesis/issues">Open an issue</a>. Read the <a href="contributing.html">contribution guide</a> before making a pull request. If GENESIS is useful to you, star the repository and share what you build.</p>
 <p><a href="contributing.html">Contributing</a> · <a href="security.html">Security</a> · <a href="license.html">Apache 2.0 license</a> · <a href="https://sequencer.media">Sequencer</a> · <a href="https://worldstreams.ai">Worldstreams</a></p>

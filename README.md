@@ -167,11 +167,15 @@ The standalone preview verifies bounded clips, prepared media and structured too
 
 Portable continuous-stream settings accept 2–30 second chunk intervals. The current Worldstreams deployment accepts 14 seconds, with approximately 14.375 seconds of provider output. Hosts validate supported intervals.
 
-Private Worldstreams API sessions currently support 30–600 seconds and cost $40/hour of active streaming. The API quotes and reserves the maximum cost, then refunds unused credit on teardown. Startup is excluded; generation and LLM requests are priced separately. Always use the returned quote.
+Private Worldstreams API sessions currently support 30–600 seconds and cost $40/hour of active streaming. The API quotes and reserves the maximum cost, then refunds unused credit on teardown. Startup is excluded. Viva includes built-in LLM direction; custom structured LLM requests and extra assets are priced separately. Always use the returned quote.
 
 See [compatibility](docs/compatibility.md) and [integration](docs/integration.md) for versioning, stream leases and release checks.
 
 </details>
+
+## Example projects
+
+[**Pokémon Stadium**](https://sequencer.media/worldstreams/S_R5xijO8Pjv) brings two trainers into a shared battle Worldstream, with Pokémon selection, turns, type effects, status conditions, items, EXP and a challenger queue. [Explore the project](https://sequencer.media/genesis/examples).
 
 ## Connect your own World Models
 
@@ -206,8 +210,9 @@ The command uploads the declared assets and returns a saved draft and preview UR
 | Assets and world drafts | Choose storage | Sequencer workspace assets | Workspace media library |
 | Audience billing | You build | You manage; your account pays API usage | Gems and shared viewer billing |
 | Publishing, chat and voting UI | You build | Your app's audience experience | Sequencer provides |
+| Price | Free engine; provider and infrastructure costs | Viva $40/hour; planned third-party routes at provider cost + 15% | Viva cost shared in gems; paid actions can cost extra |
 
-Custom LLM calls and additional media generation have separate usage charges. Compare the [setup options](docs/index.md#choose-your-connection) and [Worldstream models, prices and quality rating method](docs/models.md).
+Viva includes built-in LLM direction. Custom structured calls and extra media have separate usage charges. Compare the [setup options](docs/index.md#choose-your-connection) and [World Models and low-latency LLMs](https://sequencer.media/genesis/models), including prices, response timing and moderation controls. Planned third-party routes use provider cost plus 15% markup; live quotes determine billing.
 
 ## Build with us
 

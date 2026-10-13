@@ -42,6 +42,15 @@ Rick and Morty have their own character controls, and both actions feed the shar
 </section>
 </div>
 
+## Example projects
+
+Explore worlds built with GENESIS. Start with Pokémon Stadium, a shared battle experience with persistent game state and its own player interface.
+
+<article class="project-example">
+<img src="https://firebasestorage.googleapis.com/v0/b/smoothieeditor.firebasestorage.app/o/workspaces%2F279ad71b-7b8c-41d8-9ea5-497450ef5a3e%2Fmedia%2Fspark-74b43ed06569195da84f027b028edcb420f8e715484fc4f1%2Fv1.png?alt=media&amp;token=c4f6ec2c-078b-4273-8dae-9a8df9df00f5" alt="Pokémon Stadium project cover" loading="lazy" width="640" height="480">
+<div><h3>Pokémon Stadium</h3><p>Two trainers choose their Pokémon, ready up and battle in the same Worldstream.</p><ul><li>Shared turns and a challenger queue</li><li>Type effects, status conditions and items</li><li>Health, EXP and battle progress</li><li>Player controls around generated video</li></ul><a class="button primary" href="https://sequencer.media/worldstreams/S_R5xijO8Pjv">Open Pokémon Stadium</a> <a href="examples.html">Project walkthrough</a></div>
+</article>
+
 ## What GENESIS handles
 
 You define the experience. GENESIS runs the state and interaction loop around your connected models.
@@ -122,26 +131,37 @@ To run a live world, you need hosting, persistent state, user access, billing co
 <tr><th scope="row">Assets, images and audio</th><td>Your storage, CDN and generation providers</td><td>Sequencer workspace assets and media APIs</td><td>Workspace media library and generation tools</td></tr>
 <tr><th scope="row">Audience billing</th><td>You build payments and usage controls</td><td>You pay API usage and manage your audience's payments</td><td>Sequencer gems and shared viewer billing</td></tr>
 <tr><th scope="row">Publishing and community</th><td>You build discovery, chat and voting UI</td><td>You build your app's audience experience</td><td>Publishing, discovery, chat, voting and moderation</td></tr>
+<tr><th scope="row">Price</th><td>GENESIS is free. Pay your providers and infrastructure costs</td><td>Viva: $40 / active stream hour. Planned third-party models: provider cost + 15%</td><td>Viva stream cost shared across viewers in gems. Paid actions can cost extra</td></tr>
 </tbody>
 </table>
 </div>
 
 Choose **BYO** for full control over your stack, **Sequencer API** for managed generation inside your app, or **Sequencer hosted** to create and publish using an existing account and workspace.
 
-LLM and media services are available through the same Sequencer key. Custom LLM calls, images and audio have their own usage charges. Your own app remains responsible for its audience's authentication, database and monetization.
+Viva includes its built-in LLM world direction. Custom structured LLM calls, images and audio have their own usage charges through the same Sequencer key. Your own app handles audience authentication, database and monetization.
 
 [Bring your own providers](providers.html) · [Connect the Sequencer API](integration.html) · [Create or import in My Worlds](https://sequencer.media/worldstreams#my-worlds)
 
 ## Compare Worldstream models
 
-Compare native video, published pricing and how quickly a model can respond. The hourly figures use the provider's billing unit, so they show model cost rather than the total cost of running your app.
+Choose your model through Sequencer. Compare the managed Viva service with planned third-party routes, including their provider costs and Sequencer's 15% markup.
 
 <p class="comparison-hint">Scroll the table horizontally to compare all model details.</p>
 
 <!-- WORLDSTREAM_MODEL_TABLE -->
 
-Rates checked **October 13, 2026**. Reactor bills time holding a GPU, including idle time. fal Director bills generated video with a 60-second minimum. Sequencer advertises active stream time; use its session quote for the current rate. LLM tools, extra assets and your app infrastructure can add costs.
+Third-party prices are estimates calculated as **provider cost × 1.15**. Viva keeps its current $40/hour rate. Availability is shown per row; use the live session quote when starting a stream. Provider billing units, minimums and extra services still apply.
 
 Quality ratings use a shared five-point rubric. Models remain **unrated** until they have been tested with the same prompts and conditions. [See the sources, billing details and rating method](models.html).
+
+## Low-latency LLMs
+
+An LLM turns player choices and world memory into the next prompt, move set or dialogue. Viva includes its world-direction LLM. Use structured LLM tools for custom game logic, or connect your own provider.
+
+<p class="comparison-hint">Scroll the table horizontally to compare all LLM details.</p>
+
+<!-- LLM_MODEL_TABLE -->
+
+Token generation speed and time to the first reply measure different things. Moderation depends on the model, provider and your app's configuration. [Read the LLM pricing and moderation notes](models.html#low-latency-llms).
 
 The source is **Apache 2.0 licensed**. Version 0.1 is a source preview, with npm publication and the wider launch being prepared. [Browse the repository](https://github.com/sequencer-media/genesis), [read the license](license.html), [contribute](contributing.html) or [explore the SDK API](api.html).

@@ -39,6 +39,7 @@
 <a href="getting-started.html">Run a starter locally</a>
 <a href="world-memory.html">World memory</a>
 <a href="demos.html">Worldstreams demos</a>
+<a href="examples.html">Example projects</a>
 <p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
 <a href="providers.html">Your own models</a>
 <a href="models.html">Models and pricing</a>
@@ -58,6 +59,7 @@
 <a href="getting-started.html">Run a starter locally</a>
 <a href="world-memory.html">World memory</a>
 <a href="demos.html">Worldstreams demos</a>
+<a href="examples.html">Example projects</a>
 <p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
 <a href="providers.html">Your own models</a>
 <a href="models.html">Models and pricing</a>
@@ -110,6 +112,13 @@
 <div class="demo-caption"><h3 id="world-model-games">World Model games</h3><p>Explore playable World Model experiences in this recorded product demo.</p><a href="https://sequencer.media/landing/product-demos/world-games-v03-720p.mp4">Open video</a></div>
 </section>
 </div>
+
+<h2 id="example-projects">Example projects</h2>
+<p>Explore worlds built with GENESIS. Start with Pokémon Stadium, a shared battle experience with persistent game state and its own player interface.</p>
+<article class="project-example">
+<img src="https://firebasestorage.googleapis.com/v0/b/smoothieeditor.firebasestorage.app/o/workspaces%2F279ad71b-7b8c-41d8-9ea5-497450ef5a3e%2Fmedia%2Fspark-74b43ed06569195da84f027b028edcb420f8e715484fc4f1%2Fv1.png?alt=media&amp;token=c4f6ec2c-078b-4273-8dae-9a8df9df00f5" alt="Pokémon Stadium project cover" loading="lazy" width="640" height="480">
+<div><h3 id="pokémon-stadium">Pokémon Stadium</h3><p>Two trainers choose their Pokémon, ready up and battle in the same Worldstream.</p><ul><li>Shared turns and a challenger queue</li><li>Type effects, status conditions and items</li><li>Health, EXP and battle progress</li><li>Player controls around generated video</li></ul><a class="button primary" href="https://sequencer.media/worldstreams/S_R5xijO8Pjv">Open Pokémon Stadium</a> <a href="examples.html">Project walkthrough</a></div>
+</article>
 
 <h2 id="what-genesis-handles">What GENESIS handles</h2>
 <p>You define the experience. GENESIS runs the state and interaction loop around your connected models.</p>
@@ -175,34 +184,56 @@
 <tr><th scope="row">Assets, images and audio</th><td>Your storage, CDN and generation providers</td><td>Sequencer workspace assets and media APIs</td><td>Workspace media library and generation tools</td></tr>
 <tr><th scope="row">Audience billing</th><td>You build payments and usage controls</td><td>You pay API usage and manage your audience's payments</td><td>Sequencer gems and shared viewer billing</td></tr>
 <tr><th scope="row">Publishing and community</th><td>You build discovery, chat and voting UI</td><td>You build your app's audience experience</td><td>Publishing, discovery, chat, voting and moderation</td></tr>
+<tr><th scope="row">Price</th><td>GENESIS is free. Pay your providers and infrastructure costs</td><td>Viva: $40 / active stream hour. Planned third-party models: provider cost + 15%</td><td>Viva stream cost shared across viewers in gems. Paid actions can cost extra</td></tr>
 </tbody>
 </table>
 </div>
 
 <p>Choose <strong>BYO</strong> for full control over your stack, <strong>Sequencer API</strong> for managed generation inside your app, or <strong>Sequencer hosted</strong> to create and publish using an existing account and workspace.</p>
-<p>LLM and media services are available through the same Sequencer key. Custom LLM calls, images and audio have their own usage charges. Your own app remains responsible for its audience&#39;s authentication, database and monetization.</p>
+<p>Viva includes its built-in LLM world direction. Custom structured LLM calls, images and audio have their own usage charges through the same Sequencer key. Your own app handles audience authentication, database and monetization.</p>
 <p><a href="providers.html">Bring your own providers</a> · <a href="integration.html">Connect the Sequencer API</a> · <a href="https://sequencer.media/worldstreams#my-worlds">Create or import in My Worlds</a></p>
 <h2 id="compare-worldstream-models">Compare Worldstream models</h2>
-<p>Compare native video, published pricing and how quickly a model can respond. The hourly figures use the provider&#39;s billing unit, so they show model cost rather than the total cost of running your app.</p>
+<p>Choose your model through Sequencer. Compare the managed Viva service with planned third-party routes, including their provider costs and Sequencer&#39;s 15% markup.</p>
 <p class="comparison-hint">Scroll the table horizontally to compare all model details.</p>
 
-<div class="comparison-scroll" role="region" aria-label="Compare Worldstream models and API pricing" tabindex="0">
+<div class="comparison-scroll" role="region" aria-label="Compare Worldstream models and Sequencer prices" tabindex="0">
 <table class="model-comparison">
-<caption>Published model specifications and rates, checked October 13, 2026</caption>
-<thead><tr><th scope="col">Model / API</th><th scope="col">Video and audio</th><th scope="col">Published price</th><th scope="col">Response timing</th><th scope="col">Quality / 5</th></tr></thead>
+<caption>Sequencer model pricing. Third-party routes are planned; prices include 15% markup.</caption>
+<thead><tr><th scope="col">World Model</th><th scope="col">Sequencer price</th><th scope="col">Provider cost</th><th scope="col">Video and audio</th><th scope="col">Response timing</th><th scope="col">Quality / 5</th></tr></thead>
 <tbody>
-<tr><th scope="row"><a href="https://sequencer.media/worldstream-api">Sequencer Viva</a><span class="table-detail">Managed Worldstreams</span></th><td>768p, 24 fps<span class="table-detail">Generated video and audio</span></td><td><a href="https://sequencer.media/worldstream-api">$40 / active stream hour</a><span class="table-detail">About $0.67 / minute</span></td><td>Continuous stream<span class="table-detail">Measured startup latency not published</span></td><td><a class="quality-status" href="models.html#quality-ratings">Unrated</a></td></tr>
-<tr><th scope="row"><a href="https://fal.ai/h3-max-director">H3 Max Director</a><span class="table-detail">fal</span></th><td>480p or 768p, 24 fps<span class="table-detail">Stereo audio</span></td><td>$0.08 / generated second<span class="table-detail">$288 / generated hour</span></td><td>5–15s segments<span class="table-detail">First-frame latency not specified</span></td><td><a class="quality-status" href="models.html#quality-ratings">Unrated</a></td></tr>
-<tr><th scope="row"><a href="https://www.reactor.inc/models/fast-h3/info">MiniMax FastH3</a><span class="table-detail">Reactor</span></th><td>1344 × 768, 24 fps<span class="table-detail">Generated audio</span></td><td>$0.035 / session second<span class="table-detail">$126 / session hour</span></td><td>About 1× real-time generation<span class="table-detail">Clips queued before playback</span></td><td><a class="quality-status" href="models.html#quality-ratings">Unrated</a></td></tr>
-<tr><th scope="row"><a href="https://www.reactor.inc/models/visko-orbis-stable/info">Visko Orbis Stable</a><span class="table-detail">Reactor</span></th><td>832 × 480, 18 fps<span class="table-detail">Upscaled delivery up to 4K; audio</span></td><td>$0.0097 / session second<span class="table-detail">$34.92 / session hour</span></td><td>About 1.8s chunks<span class="table-detail">Prompt changes at chunk boundaries</span></td><td><a class="quality-status" href="models.html#quality-ratings">Unrated</a></td></tr>
-<tr><th scope="row"><a href="https://www.reactor.inc/models/visko-orbis-dynamic/info">Visko Orbis Dynamic</a><span class="table-detail">Reactor</span></th><td>640 × 368, 18 fps<span class="table-detail">Upscaled delivery up to 4K; audio</span></td><td>$0.0209 / session second<span class="table-detail">$75.24 / session hour</span></td><td>About 1.8s chunks<span class="table-detail">Live delivery resolution changes</span></td><td><a class="quality-status" href="models.html#quality-ratings">Unrated</a></td></tr>
+<tr><th scope="row"><a href="integration.html#model-routing">Sequencer Viva</a><span class="table-detail">Available through Sequencer</span></th><td><strong>$40 / active stream hour</strong><span class="table-detail">About $0.67 / minute. Viva LLM direction included.</span></td><td>Sequencer managed model<span class="table-detail">Existing retail rate</span></td><td>768p, 24 fps<span class="table-detail">Generated video and audio</span></td><td>Continuous stream<span class="table-detail">Measured startup latency not published</span></td><td><a class="quality-status" href="models.html#quality-ratings">Unrated</a></td></tr>
+<tr><th scope="row"><a href="integration.html#model-routing">H3 Max Director</a><span class="table-detail">fal model. Sequencer route planned.</span></th><td><strong>$331.20 / generated hour</strong><span class="table-detail">$0.092 / second. Estimate.</span></td><td>$288.00 / generated hour<span class="table-detail">$0.08 / second</span></td><td>480p or 768p, 24 fps<span class="table-detail">Stereo audio</span></td><td>5–15s segments<span class="table-detail">First-frame latency not specified</span></td><td><a class="quality-status" href="models.html#quality-ratings">Unrated</a></td></tr>
+<tr><th scope="row"><a href="integration.html#model-routing">MiniMax FastH3</a><span class="table-detail">Reactor model. Sequencer route planned.</span></th><td><strong>$144.90 / session hour</strong><span class="table-detail">$0.04025 / second. Estimate.</span></td><td>$126.00 / session hour<span class="table-detail">$0.035 / second</span></td><td>1344 × 768, 24 fps<span class="table-detail">Generated audio</span></td><td>About 1× real-time generation<span class="table-detail">Clips queued before playback</span></td><td><a class="quality-status" href="models.html#quality-ratings">Unrated</a></td></tr>
+<tr><th scope="row"><a href="integration.html#model-routing">Visko Orbis Stable</a><span class="table-detail">Reactor model. Sequencer route planned.</span></th><td><strong>$40.16 / session hour</strong><span class="table-detail">$0.011155 / second. Estimate.</span></td><td>$34.92 / session hour<span class="table-detail">$0.0097 / second</span></td><td>832 × 480, 18 fps<span class="table-detail">Upscaled delivery up to 4K; audio</span></td><td>About 1.8s chunks<span class="table-detail">Prompt changes at chunk boundaries</span></td><td><a class="quality-status" href="models.html#quality-ratings">Unrated</a></td></tr>
+<tr><th scope="row"><a href="integration.html#model-routing">Visko Orbis Dynamic</a><span class="table-detail">Reactor model. Sequencer route planned.</span></th><td><strong>$86.53 / session hour</strong><span class="table-detail">$0.024035 / second. Estimate.</span></td><td>$75.24 / session hour<span class="table-detail">$0.0209 / second</span></td><td>640 × 368, 18 fps<span class="table-detail">Upscaled delivery up to 4K; audio</span></td><td>About 1.8s chunks<span class="table-detail">Live delivery resolution changes</span></td><td><a class="quality-status" href="models.html#quality-ratings">Unrated</a></td></tr>
 </tbody>
 </table>
 </div>
 
 
-<p>Rates checked <strong>October 13, 2026</strong>. Reactor bills time holding a GPU, including idle time. fal Director bills generated video with a 60-second minimum. Sequencer advertises active stream time; use its session quote for the current rate. LLM tools, extra assets and your app infrastructure can add costs.</p>
+<p>Third-party prices are estimates calculated as <strong>provider cost × 1.15</strong>. Viva keeps its current $40/hour rate. Availability is shown per row; use the live session quote when starting a stream. Provider billing units, minimums and extra services still apply.</p>
 <p>Quality ratings use a shared five-point rubric. Models remain <strong>unrated</strong> until they have been tested with the same prompts and conditions. <a href="models.html">See the sources, billing details and rating method</a>.</p>
+<h2 id="low-latency-llms">Low-latency LLMs</h2>
+<p>An LLM turns player choices and world memory into the next prompt, move set or dialogue. Viva includes its world-direction LLM. Use structured LLM tools for custom game logic, or connect your own provider.</p>
+<p class="comparison-hint">Scroll the table horizontally to compare all LLM details.</p>
+
+<div class="comparison-scroll" role="region" aria-label="Compare low-latency LLM pricing and moderation" tabindex="0">
+<table class="llm-comparison">
+<caption>LLM prices in USD. Token prices are per one million tokens, input / output.</caption>
+<thead><tr><th scope="col">LLM</th><th scope="col">Sequencer price</th><th scope="col">Provider price</th><th scope="col">Latency / generation speed</th><th scope="col">Moderated / unmoderated</th></tr></thead>
+<tbody>
+<tr><th scope="row"><a href="integration.html#model-routing">Viva LLM</a><span class="table-detail">Built-in world direction</span></th><td><strong>Included with Viva</strong><span class="table-detail">Viva stream: $40 / active hour</span></td><td>Bundled world direction</td><td>Runs in the stream loop<span class="table-detail">Measured response latency not published</span></td><td>Provider safety protections<span class="table-detail">Hosted world rules also apply</span></td></tr>
+<tr><th scope="row"><a href="integration.html#model-routing">Sequencer structured LLM</a><span class="table-detail">Custom moves, choices and JSON</span></th><td><strong>$0.01 / request</strong><span class="table-detail">Current default. Separate from built-in direction.</span></td><td>Managed request price</td><td>Measured response latency not published<span class="table-detail">Default backend: Gemini 3.5 Flash-Lite</span></td><td>Provider safety protections<span class="table-detail">Validated structured responses</span></td></tr>
+<tr><th scope="row">Gemini 3.5 Flash-Lite<span class="table-detail">Google</span></th><td><strong>$0.345 / $2.875</strong><span class="table-detail">Planned token route. Includes 15% markup.</span></td><td><strong>$0.30 / $2.50</strong><span class="table-detail">Published token rate</span></td><td>Designed for low latency<span class="table-detail">Numeric first-token latency not published</span></td><td>Adjustable filters<span class="table-detail">Core protections remain enabled</span></td></tr>
+<tr><th scope="row">GPT OSS 20B<span class="table-detail">Groq</span></th><td><strong>$0.08625 / $0.345</strong><span class="table-detail">Planned token route. Includes 15% markup.</span></td><td><strong>$0.075 / $0.30</strong><span class="table-detail">Published token rate</span></td><td>About 1,000 tokens / second<span class="table-detail">Throughput, not first-token latency</span></td><td>App moderation available<span class="table-detail">Provider policies and model refusals apply</span></td></tr>
+<tr><th scope="row">GPT OSS 120B<span class="table-detail">Cerebras</span></th><td><strong>$0.4025 / $0.8625</strong><span class="table-detail">Planned token route. Includes 15% markup.</span></td><td><strong>$0.35 / $0.75</strong><span class="table-detail">Published token rate</span></td><td>About 3,000 tokens / second<span class="table-detail">Throughput, not first-token latency</span></td><td>Provider policies apply<span class="table-detail">Host filtering details not published</span></td></tr>
+<tr><th scope="row"><a href="providers.html">Your self-hosted LLM</a><span class="table-detail">Choose your model and hardware</span></th><td><strong>Your infrastructure cost</strong><span class="table-detail">No universal token rate</span></td><td>Your infrastructure cost</td><td>Depends on model and hardware<span class="table-detail">Measure your own deployment</span></td><td>Moderated or unmoderated by your app<span class="table-detail">The selected model may still refuse requests</span></td></tr>
+</tbody>
+</table>
+</div>
+
+
+<p>Token generation speed and time to the first reply measure different things. Moderation depends on the model, provider and your app&#39;s configuration. <a href="models.html#low-latency-llms">Read the LLM pricing and moderation notes</a>.</p>
 <p>The source is <strong>Apache 2.0 licensed</strong>. Version 0.1 is a source preview, with npm publication and the wider launch being prepared. <a href="https://github.com/sequencer-media/genesis">Browse the repository</a>, <a href="license.html">read the license</a>, <a href="contributing.html">contribute</a> or <a href="api.html">explore the SDK API</a>.</p>
 </article>
       <footer class="site-footer">
