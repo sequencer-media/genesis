@@ -1,7 +1,17 @@
 {
   "name": "@genesis-worlds/runtime",
   "version": "0.1.0",
-  "description": "Portable JavaScript runtime for interactive AI worlds",
+  "description": "Open source world model game engine. Build playable AI worlds with shared state, LLM tools and generated media.",
+  "keywords": [
+    "world-models",
+    "game-engine",
+    "generative-video",
+    "ai-worlds",
+    "llm",
+    "sdk",
+    "multiplayer",
+    "sequencer"
+  ],
   "type": "module",
   "license": "Apache-2.0",
   "engines": {
