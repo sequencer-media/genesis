@@ -8,7 +8,7 @@ const args = process.argv.slice(2);
 const index = args.indexOf('--port');
 const port = index >= 0 ? Number(args[index + 1]) : 4202;
 if (!Number.isInteger(port) || port < 0 || port > 65535) throw new Error('Use a valid documentation port.');
-const types = {'.html':'text/html; charset=utf-8', '.css':'text/css; charset=utf-8', '.js':'text/javascript; charset=utf-8', '.json':'application/json; charset=utf-8', '.md':'text/plain; charset=utf-8', '.svg':'image/svg+xml', '.webp':'image/webp', '.jpg':'image/jpeg', '.png':'image/png'};
+const types = {'.html':'text/html; charset=utf-8', '.css':'text/css; charset=utf-8', '.js':'text/javascript; charset=utf-8', '.json':'application/json; charset=utf-8', '.md':'text/plain; charset=utf-8', '.svg':'image/svg+xml', '.webp':'image/webp', '.jpg':'image/jpeg', '.png':'image/png', '.woff2':'font/woff2'};
 const server = createServer(async (request, response) => {
   if (!['GET','HEAD'].includes(request.method)) {response.writeHead(405); response.end(); return;}
   try {

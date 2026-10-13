@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="80 90 430 414" role="img" aria-labelledby="logo-title">
+  <title id="logo-title">Sequencer</title>
+  <defs>
+    <linearGradient id="mark-top" x1="178" y1="148" x2="491" y2="194" gradientUnits="userSpaceOnUse"><stop stop-color="#5f354d"/><stop offset=".52" stop-color="#c76085"/><stop offset="1" stop-color="#ff8795"/></linearGradient>
+    <linearGradient id="mark-upper" x1="96" y1="175" x2="490" y2="336" gradientUnits="userSpaceOnUse"><stop stop-color="#f34769"/><stop offset=".58" stop-color="#ff697e"/><stop offset="1" stop-color="#f87eb2"/></linearGradient>
+    <linearGradient id="mark-lower" x1="97" y1="285" x2="472" y2="420" gradientUnits="userSpaceOnUse"><stop stop-color="#e81779"/><stop offset=".48" stop-color="#c75cb1"/><stop offset=".78" stop-color="#a5add5"/><stop offset="1" stop-color="#63b9df"/></linearGradient>
+    <linearGradient id="mark-bottom" x1="100" y1="390" x2="400" y2="470" gradientUnits="userSpaceOnUse"><stop stop-color="#535c7c"/><stop offset=".58" stop-color="#628ec4"/><stop offset="1" stop-color="#5aafe0"/></linearGradient>
+  </defs>
+  <g fill-rule="evenodd">
+    <path d="M468 213 446 224 425 224 305 165 287 167 250 184 238 184 178 152 282 106 311 104 487 188 490 203Z" fill="url(#mark-top)"/>
+    <path d="M300 220 484 308 491 321 456 341 430 347 109 195 101 190 104 185 158 163 177 161Z" fill="url(#mark-upper)"/>
+    <path d="M358 357 473 412 416 438 401 438 105 299 96 292 95 282 136 261 156 259Z" fill="url(#mark-lower)"/>
+    <path d="M297 488 269 483 104 404 98 391 134 372 157 369 288 432 306 434 344 419 394 441 400 447 393 452 312 487Z" fill="url(#mark-bottom)"/>
+  </g>
+</svg>
