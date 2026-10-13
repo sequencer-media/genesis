@@ -79,7 +79,7 @@ video{display:block;width:100%;aspect-ratio:16/9;object-fit:contain;background:#
 .demo-card.featured{grid-column:1/-1}
 .demo-card.featured video{aspect-ratio:1338/1030}
 .demo-caption{padding:18px}
-.demo-caption h2{font-size:21px;margin:0 0 10px}
+.demo-caption h2,.demo-caption h3{font-size:21px;margin:0 0 10px}
 .demo-caption p{font-size:14px;line-height:1.6}
 .demo-caption a{font-size:14px}
 .license-text{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--card);border:1px solid var(--line)}

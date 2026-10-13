@@ -18,32 +18,13 @@
 
 **Create infinite experiences, in minutes.**
 
-Give your World Model a memory, an inventory and a playable interface.
-
-GENESIS is an open source SDK for building worldstreams: evolving experiences where player actions, shared rules and generated scenes move together. Describe your world to a coding agent, play the local prototype, then connect your World Model.
-
-[Documentation](docs/getting-started.md) · [Watch the demos](#worldstreams-in-action) · [Build from a prompt](#one-prompt-an-infinite-experience) · [SDK API](docs/api.md) · [Connect your models](#connect-your-own-world-models) · [Worldstreams API](#worldstreams-api-instant-setup)
-
 ## Your World Model needs a dungeon master.
 
-In a tabletop roleplaying game, the dungeon master remembers your inventory, knows the characters and locations, applies the rules and describes what happens next. An infinite experience needs the same foundation.
+Like a tabletop dungeon master, GENESIS remembers your inventory, characters and locations, applies the rules and describes what happens next. It gives your World Model the memory, shared state and playable interface an infinite experience needs.
 
-GENESIS fills that role for your World Model. It keeps the world in structured state, resolves player actions and passes the committed outcome to the LLM and scene generator. Your interface reflects the same shared reality.
+Player actions change the world. GENESIS commits the outcome, gives the LLM and scene generator the context, and keeps every player's interface in sync.
 
-Pick up a key, and it stays in your inventory. Unlock a door, and that location changes. Meet a character, and your controller can remember the relationship. The next scene receives that context, and every player sees the accepted result.
-
-| GENESIS handles | Your world remembers |
-| --- | --- |
-| **World memory** | Progress, previous choices and persistent public, private and server state. |
-| **Inventory and variables** | Items, health, scores, resources, quest flags and the values your rules depend on. |
-| **Scenes, locations and characters** | Define places, characters, relationships and scene facts in structured state, then carry them into generation requests. |
-| **LLM orchestration and prompts** | Supply world context and committed outcomes; validate structured replies for new moves, dialogue and choices. |
-| **Playable interfaces** | Custom controls, inventory panels, overlays and animations in HTML, CSS and JavaScript. |
-| **Shared rules and multiplayer** | Authoritative turns, player seats, crowd votes and validated actions. |
-| **Generation and scene continuity** | Track jobs, reject stale results, carry the actual end frame forward and reopen actions after playback. |
-| **Portable worlds and media** | Export the world's source and declared images, audio and video as one bundle. |
-
-You define the world and its rules. GENESIS runs the state and interaction loop; connected World Models and LLMs generate the media and structured responses.
+[Watch the demos](#worldstreams-in-action) · [What can you build?](#what-can-you-build) · [Build from a prompt](#one-prompt-an-infinite-experience) · [Documentation](docs/getting-started.md) · [SDK API](docs/api.md) · [Connect your models](#connect-your-own-world-models) · [Worldstreams API](#worldstreams-api-instant-setup)
 
 ## Worldstreams in action
 
@@ -61,6 +42,47 @@ Two players direct Rick and Morty through their own character controls. Both act
 | A connected fantasy journey with audience-choice controls. [Watch video](https://sequencer.media/demo/worldstreams/adventure-time/adventure-time-720p-0bfe8c425454.mp4) · [Try the preview](https://sequencer.media/demo/worldstreams/adventure-time) | Explore the visual presentation of World Model game experiences. [Watch video](https://sequencer.media/landing/product-demos/world-games-v03-720p.mp4) |
 
 These are recorded Worldstreams examples. Preview choices illustrate the interaction flow around prepared World Model output. Live generation uses a connected provider. Read the [SDK reference](docs/api.md) and [world-building skill guide](docs/agent-skill.md), or run `npm run docs:dev` to open the searchable documentation site and video gallery locally.
+
+## What can you build?
+
+Build worlds people can play, watch, explore, learn from and shape together.
+
+| Experience | Imagine your worldstream |
+| --- | --- |
+| **Games** | Roleplaying adventures, puzzles, quests and battles that remember each choice. |
+| **Multiplayer games** | Cooperative journeys, competitive arenas and shared worlds with individual player controls. |
+| **Infinite TV** | Ongoing shows with recurring characters, evolving storylines and audience-directed plots. |
+| **Learning experiences** | Explore science, practice languages and solve problems inside interactive worlds. |
+| **Travel experiences** | Wander cities, landmarks and imagined destinations, choosing where to go next. |
+| **Interactive history lessons** | Step into another era, meet its characters and explore how decisions shape events. |
+| **Robotics training simulations** | Connect simulation tools to rehearse navigation, object interactions and changing environments. |
+| **Therapy and wellbeing** | Practitioner-led roleplay, guided reflection and calming environments. |
+| **Coaching** | Rehearse interviews, leadership and public speaking with scenarios that remember progress. |
+| **Training and rehearsal** | Practice customer service, workplace scenarios and complex decisions in guided simulations. |
+| **Interactive stories** | Branching mysteries, character relationships and adventures shaped by the audience. |
+| **Social worlds** | Shared hangouts, community characters and places that grow with their participants. |
+| **Creative sandboxes** | Design spaces, invent characters and direct scenes inside a world you can keep changing. |
+| **Live events** | Audience-led performances, collective challenges and interactive broadcasts. |
+| **Virtual showrooms** | Explore products, interiors and spaces through guided tours and custom interactions. |
+
+These are directions for your next experience. You supply the domain content and rules, then connect the models or specialist tools it needs.
+
+## What GENESIS handles
+
+Pick up a key, and it stays in your inventory. Unlock a door, and that location changes. Meet a character, and your controller can remember the relationship. The next scene receives that context, and every player sees the accepted result.
+
+| GENESIS handles | Your world remembers |
+| --- | --- |
+| **World memory** | Progress, previous choices and persistent public, private and server state. |
+| **Inventory and variables** | Items, health, scores, resources, quest flags and the values your rules depend on. |
+| **Scenes, locations and characters** | Define places, characters, relationships and scene facts in structured state, then carry them into generation requests. |
+| **LLM orchestration and prompts** | Supply world context and committed outcomes; validate structured replies for new moves, dialogue and choices. |
+| **Playable interfaces** | Custom controls, inventory panels, overlays and animations in HTML, CSS and JavaScript. |
+| **Shared rules and multiplayer** | Authoritative turns, player seats, crowd votes and validated actions. |
+| **Generation and scene continuity** | Track jobs, reject stale results, carry the actual end frame forward and reopen actions after playback. |
+| **Portable worlds and media** | Export the world's source and declared images, audio and video as one bundle. |
+
+You define the world and its rules. GENESIS runs the state and interaction loop; connected World Models and LLMs generate the media and structured responses.
 
 ## One prompt. An infinite experience.
 

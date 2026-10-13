@@ -4,17 +4,71 @@
 
 # Create infinite experiences, in minutes.
 
-Give your World Model a memory, an inventory and a playable interface. GENESIS is the dungeon master for your worldstream: it remembers the world, applies the rules and connects player actions to generated scenes.
-
-<div class="hero-actions"><a class="button primary" href="getting-started.html">Build your first world</a><a class="button" href="agent-skill.html">Create from one prompt</a></div>
-<p class="hero-note">Apache 2.0 licensed. Bring your own models, or connect the Worldstreams API with one server key.</p>
-</div>
-<img src="assets/genesis-worlds.svg" alt="Three pixel worlds: a floating forest, a castle arena and a lunar outpost" width="1280" height="360">
-</section>
-
 ## Your World Model needs a dungeon master.
 
-In a tabletop game, the dungeon master remembers what you carry, who you met and what changed. GENESIS gives infinite experiences that same foundation. Your controller owns the facts; your LLM and World Model receive the context for what happens next.
+Like a tabletop dungeon master, GENESIS remembers your inventory, characters and locations, applies the rules and connects player actions to generated scenes. It gives your World Model the memory, shared state and playable interface an infinite experience needs.
+
+<div class="hero-actions"><a class="button primary" href="#worldstreams-in-action">Watch the demos</a><a class="button" href="agent-skill.html">Create from one prompt</a></div>
+<p class="hero-note">Apache 2.0 licensed. Bring your own models, or connect the Worldstreams API with one server key.</p>
+</div>
+</section>
+
+## Worldstreams in action
+
+Rick and Morty have their own character controls, and both actions feed the shared experience. Watch the multiplayer Worldstream.
+
+<figure class="demo-feature">
+<video controls playsinline preload="none" poster="assets/rick-morty-multiplayer.webp" aria-label="Rick and Morty multiplayer Worldstream">
+<source src="https://sequencer.media/demo/worlds/multiplayer-demo-cropped-v2.mp4" type="video/mp4">
+<a href="https://sequencer.media/demo/worlds/multiplayer-demo-cropped-v2.mp4">Watch the multiplayer Rick and Morty video</a>
+</video>
+<figcaption>Recorded Worldstreams example. <a href="demos.html">Explore all demos</a>.</figcaption>
+</figure>
+
+<div class="demo-gallery">
+<section class="demo-card">
+<video controls playsinline preload="none" poster="assets/adventure-time-worldstream.webp" aria-label="Adventure Time Worldstream, Land of Ooo">
+<source src="https://sequencer.media/demo/worldstreams/adventure-time/adventure-time-720p-0bfe8c425454.mp4" type="video/mp4">
+<a href="https://sequencer.media/demo/worldstreams/adventure-time/adventure-time-720p-0bfe8c425454.mp4">Watch the Adventure Time video</a>
+</video>
+<div class="demo-caption"><h3>Adventure Time · Land of Ooo</h3><p>A fantasy journey with audience-choice controls around prepared World Model scenes.</p><a href="https://sequencer.media/demo/worldstreams/adventure-time">Try the preview player</a></div>
+</section>
+<section class="demo-card">
+<video controls playsinline preload="none" poster="assets/world-model-games.webp" aria-label="World Model games example">
+<source src="https://sequencer.media/landing/product-demos/world-games-v03-720p.mp4" type="video/mp4">
+<a href="https://sequencer.media/landing/product-demos/world-games-v03-720p.mp4">Watch the World Model games video</a>
+</video>
+<div class="demo-caption"><h3>World Model games</h3><p>Explore playable World Model experiences in this recorded product demo.</p><a href="https://sequencer.media/landing/product-demos/world-games-v03-720p.mp4">Open video</a></div>
+</section>
+</div>
+
+## What can you build?
+
+Build worlds people can play, watch, explore, learn from and shape together.
+
+| Experience | Imagine your worldstream |
+| --- | --- |
+| **Games** | Roleplaying adventures, puzzles, quests and battles that remember each choice. |
+| **Multiplayer games** | Cooperative journeys, competitive arenas and shared worlds with individual player controls. |
+| **Infinite TV** | Ongoing shows with recurring characters, evolving storylines and audience-directed plots. |
+| **Learning experiences** | Explore science, practice languages and solve problems inside interactive worlds. |
+| **Travel experiences** | Wander cities, landmarks and imagined destinations, choosing where to go next. |
+| **Interactive history lessons** | Step into another era, meet its characters and explore how decisions shape events. |
+| **Robotics training simulations** | Connect simulation tools to rehearse navigation, object interactions and changing environments. |
+| **Therapy and wellbeing** | Practitioner-led roleplay, guided reflection and calming environments. |
+| **Coaching** | Rehearse interviews, leadership and public speaking with scenarios that remember progress. |
+| **Training and rehearsal** | Practice customer service, workplace scenarios and complex decisions in guided simulations. |
+| **Interactive stories** | Branching mysteries, character relationships and adventures shaped by the audience. |
+| **Social worlds** | Shared hangouts, community characters and places that grow with their participants. |
+| **Creative sandboxes** | Design spaces, invent characters and direct scenes inside a world you can keep changing. |
+| **Live events** | Audience-led performances, collective challenges and interactive broadcasts. |
+| **Virtual showrooms** | Explore products, interiors and spaces through guided tours and custom interactions. |
+
+These are directions for your next experience. You supply the domain content and rules, then connect the models or specialist tools it needs.
+
+## What GENESIS handles
+
+Your controller owns the world's facts. Your LLM and World Model receive the context for what happens next, and every player's interface reflects the accepted result.
 
 <div class="feature-grid">
 <section><h3>World memory</h3><p>Persist inventory, health, quest flags, locations and character relationships in structured state.</p></section>
@@ -36,18 +90,6 @@ working local preview and an exportable world.</code></pre>
 </div>
 
 Start with labeled fixtures for a local prototype. Connect your chosen models and a generation budget for live media. [Learn the agent workflow](agent-skill.html).
-
-## Rick and Morty, together in one worldstream
-
-Watch the multiplayer example: Rick and Morty have their own character controls, and both actions feed the shared experience.
-
-<figure class="demo-feature">
-<video controls playsinline preload="none" poster="assets/rick-morty-multiplayer.webp" aria-label="Rick and Morty multiplayer Worldstream">
-<source src="https://sequencer.media/demo/worlds/multiplayer-demo-cropped-v2.mp4" type="video/mp4">
-<a href="https://sequencer.media/demo/worlds/multiplayer-demo-cropped-v2.mp4">Watch the multiplayer Rick and Morty video</a>
-</video>
-<figcaption>Recorded Worldstreams example. <a href="demos.html">Explore all demos</a>.</figcaption>
-</figure>
 
 ## Three files. Your whole world.
 

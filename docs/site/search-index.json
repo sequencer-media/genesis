@@ -3,25 +3,37 @@
     "title": "GENESIS",
     "heading": "Create infinite experiences, in minutes.",
     "url": "index.html",
-    "text": "Open source World Model engine Create infinite experiences, in minutes. Give your World Model a memory, an inventory and a playable interface. GENESIS is the dungeon master for your worldstream: it remembers the world, applies the rules and connects player actions to generated scenes. Build your first world Create from one prompt Apache 2.0 licensed. Bring your own models, or connect the Worldstreams API with one server key. Your World Model needs a dungeon master. In a tabletop game, the dungeon master remembers what you carry, who you met and what changed. GENESIS gives infinite experiences that same foundation. Your controller owns the facts; your LLM and World Model receive the context for what happens next. World memory Persist inventory, health, quest flags, locations and character relationships in structured state. Playable worlds Build custom interfaces, authoritative turns, player seats and crowd decisions around generated scenes. Connected generation Validate LLM replies, track asynchronous jobs and carry real scene checkpoints into the next moment. Describe any world. Start with one prompt. The included create-world-stream skill helps a coding agent turn your idea into a working prototype: world settings, a custom interface, controller rules, assets and an exportable bundle. Use the create-world-stream skill to build Mosslight, a forest battle worldstream with a crea"
+    "text": "Open source World Model engine Create infinite experiences, in minutes. Your World Model needs a dungeon master. Like a tabletop dungeon master, GENESIS remembers your inventory, characters and locations, applies the rules and connects player actions to generated scenes. It gives your World Model the memory, shared state and playable interface an infinite experience needs. Watch the demos Create from one prompt Apache 2.0 licensed. Bring your own models, or connect the Worldstreams API with one server key. Worldstreams in action Rick and Morty have their own character controls, and both actions feed the shared experience. Watch the multiplayer Worldstream. Watch the multiplayer Rick and Morty video Recorded Worldstreams example. Explore all demos . Watch the Adventure Time video Adventure Time · Land of Ooo A fantasy journey with audience-choice controls around prepared World Model scenes. Try the preview player Watch the World Model games video World Model games Explore playable World Model experiences in this recorded product demo. Open video What can you build? Build worlds people can play, watch, explore, learn from and shape together. Experience Imagine your worldstream Games Roleplaying adventures, puzzles, quests and battles that remember each choice. Multiplayer games Cooperative journeys, competitive arenas and shared worlds with individual player controls. Infinite TV"
   },
   {
     "title": "GENESIS / Your World Model needs a dungeon master.",
     "heading": "Your World Model needs a dungeon master.",
     "url": "index.html#your-world-model-needs-a-dungeon-master",
-    "text": "Your World Model needs a dungeon master. In a tabletop game, the dungeon master remembers what you carry, who you met and what changed. GENESIS gives infinite experiences that same foundation. Your controller owns the facts; your LLM and World Model receive the context for what happens next."
+    "text": "Your World Model needs a dungeon master. Like a tabletop dungeon master, GENESIS remembers your inventory, characters and locations, applies the rules and connects player actions to generated scenes. It gives your World Model the memory, shared state and playable interface an infinite experience needs. Watch the demos Create from one prompt Apache 2.0 licensed. Bring your own models, or connect the Worldstreams API with one server key."
+  },
+  {
+    "title": "GENESIS / Worldstreams in action",
+    "heading": "Worldstreams in action",
+    "url": "index.html#worldstreams-in-action",
+    "text": "Worldstreams in action Rick and Morty have their own character controls, and both actions feed the shared experience. Watch the multiplayer Worldstream. Watch the multiplayer Rick and Morty video Recorded Worldstreams example. Explore all demos . Watch the Adventure Time video"
+  },
+  {
+    "title": "GENESIS / What can you build?",
+    "heading": "What can you build?",
+    "url": "index.html#what-can-you-build",
+    "text": "What can you build? Build worlds people can play, watch, explore, learn from and shape together. Experience Imagine your worldstream Games Roleplaying adventures, puzzles, quests and battles that remember each choice. Multiplayer games Cooperative journeys, competitive arenas and shared worlds with individual player controls. Infinite TV Ongoing shows with recurring characters, evolving storylines and audience-directed plots. Learning experiences Explore science, practice languages and solve problems inside interactive worlds. Travel experiences Wander cities, landmarks and imagined destinations, choosing where to go next. Interactive history lessons Step into another era, meet its characters and explore how decisions shape events. Robotics training simulations Connect simulation tools to rehearse navigation, object interactions and changing environments. Therapy and wellbeing Practitioner-led roleplay, guided reflection and calming environments. Coaching Rehearse interviews, leadership and public speaking with scenarios that remember progress. Training and rehearsal Practice customer service, workplace scenarios and complex decisions in guided simulations. Interactive stories Branching mysteries, character relationships and adventures shaped by the audience. Social worlds Shared hangouts, community characters and places that grow with their participants. Creative sandboxes Design spaces, invent characters and direct scenes inside a world you can keep changing. Live events Audience-led performances, collective challenges and interactive broadcasts. Virtual showrooms Explore"
+  },
+  {
+    "title": "GENESIS / What GENESIS handles",
+    "heading": "What GENESIS handles",
+    "url": "index.html#what-genesis-handles",
+    "text": "What GENESIS handles Your controller owns the world's facts. Your LLM and World Model receive the context for what happens next, and every player's interface reflects the accepted result."
   },
   {
     "title": "GENESIS / Describe any world. Start with one prompt.",
     "heading": "Describe any world. Start with one prompt.",
     "url": "index.html#describe-any-world-start-with-one-prompt",
     "text": "Describe any world. Start with one prompt. The included create-world-stream skill helps a coding agent turn your idea into a working prototype: world settings, a custom interface, controller rules, assets and an exportable bundle. Use the create-world-stream skill to build Mosslight, a forest battle worldstream with a cream pixel interface. Let two players take turns, ask the backend LLM for four moves per encounter, and remember their inventory, health and progress. Give me a working local preview and an exportable world. Copy world-building prompt Start with labeled fixtures for a local prototype. Connect your chosen models and a generation budget for live media. Learn the agent workflow ."
-  },
-  {
-    "title": "GENESIS / Rick and Morty, together in one worldstream",
-    "heading": "Rick and Morty, together in one worldstream",
-    "url": "index.html#rick-and-morty-together-in-one-worldstream",
-    "text": "Rick and Morty, together in one worldstream Watch the multiplayer example: Rick and Morty have their own character controls, and both actions feed the shared experience. Watch the multiplayer Rick and Morty video Recorded Worldstreams example. Explore all demos ."
   },
   {
     "title": "GENESIS / Three files. Your whole world.",
