@@ -1,0 +1,180 @@
+{
+  "$schema": "./genesis.schema.json",
+  "format": "genesis-project",
+  "version": 1,
+  "title": "Shared multiplayer arena",
+  "startImageUrl": "/assets/start.svg",
+  "definition": {
+    "schemaVersion": 2,
+    "presetId": "open_world",
+    "genesis": {
+      "version": 1,
+      "packageVersion": "",
+      "controller": "custom",
+      "capabilities": [
+        "scene.request"
+      ],
+      "actions": [
+        {
+          "id": "choose",
+          "inputBindingId": "game_controls",
+          "label": "Choose",
+          "fields": {
+            "optionId": {
+              "type": "string",
+              "required": true,
+              "maxLength": 80
+            }
+          }
+        }
+      ],
+      "initialState": {},
+      "configSchema": {
+        "animate": {
+          "type": "boolean",
+          "label": "Animate battle outcomes",
+          "default": false
+        },
+        "rejoinSeconds": {
+          "type": "number",
+          "label": "Defeat cooldown",
+          "default": 5,
+          "min": 0,
+          "max": 60
+        }
+      },
+      "config": {
+        "animate": false,
+        "rejoinSeconds": 5
+      },
+      "limits": {
+        "maxJobs": 2,
+        "maxSessionCostUsd": 5,
+        "maxActionCostUsd": 0.5
+      },
+      "playbackCompletion": "first_player"
+    },
+    "contentPolicy": {
+      "violence": "mild",
+      "nudity": "none",
+      "sexualThemes": "none",
+      "language": "mild",
+      "substances": "none",
+      "frighteningContent": "mild"
+    },
+    "participation": {
+      "mode": "multiplayer",
+      "minPlayers": 2,
+      "maxPlayers": 2,
+      "spectators": true,
+      "turnPolicy": "sequential",
+      "joinPolicy": "drop_in",
+      "room": "shared",
+      "seats": {
+        "version": 1,
+        "slots": [
+          {
+            "id": "left",
+            "label": "Player 1"
+          },
+          {
+            "id": "right",
+            "label": "Player 2"
+          }
+        ],
+        "queue": true,
+        "maxSeatsPerIdentity": 1
+      }
+    },
+    "worldVideo": {
+      "chunkIntervalSeconds": 14,
+      "enabled": false,
+      "pacing": "input_gated",
+      "source": "generated",
+      "idlePresentation": "hold_frame",
+      "continuity": "continue_scene",
+      "modelId": "prunaai-p-video-2-pro",
+      "maxCostUsd": 0.5
+    },
+    "inputs": [
+      {
+        "id": "game_controls",
+        "kind": "game",
+        "purpose": "game_command",
+        "scope": "player",
+        "lifetime": "one_action",
+        "activePhases": [
+          "action"
+        ],
+        "required": false,
+        "maxLength": 1200,
+        "advanceBehavior": "submit_readiness"
+      }
+    ],
+    "characters": {
+      "selectionEnabled": true,
+      "display": "grid",
+      "allowPhoto": false,
+      "appearanceLifetime": "session",
+      "conversationHistory": "persistent"
+    },
+    "interface": {
+      "mode": "custom",
+      "layout": "stage",
+      "theme": {
+        "primaryColor": "#FAFAFA",
+        "backgroundColor": "#09090B",
+        "textColor": "#FAFAFA"
+      },
+      "placement": "overlay",
+      "controls": [
+        {
+          "id": "control_game_controls",
+          "inputBindingId": "game_controls",
+          "component": "auto",
+          "label": ""
+        }
+      ],
+      "packageVersion": "",
+      "fallback": "default",
+      "handledInputBindingIds": [
+        "game_controls"
+      ],
+      "overlayRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1
+      }
+    },
+    "rules": {
+      "resolver": "narrative",
+      "roundSeconds": 20,
+      "voteOptions": [
+        "Explore further",
+        "Meet a character",
+        "Follow the unexpected"
+      ],
+      "tieBreak": "first",
+      "shotsPerPlayer": 5
+    },
+    "flow": {
+      "entryPhase": "action",
+      "phases": [
+        {
+          "id": "action",
+          "title": "Interact",
+          "inputBindingIds": [
+            "game_controls"
+          ],
+          "next": "action",
+          "completion": "manual"
+        }
+      ]
+    },
+    "scenes": [],
+    "gameBindings": []
+  },
+  "interfaceFile": "interface.html",
+  "controllerFile": "controller.js"
+}

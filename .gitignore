@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.genesis/
+.env
+.env.*
+*.tgz
+.cache/

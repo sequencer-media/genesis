@@ -1,0 +1,156 @@
+{
+  "format": "genesis-project",
+  "version": 1,
+  "title": "Turn based choices and group voting",
+  "definition": {
+    "schemaVersion": 2,
+    "presetId": "open_world",
+    "genesis": {
+      "version": 1,
+      "packageVersion": "",
+      "controller": "custom",
+      "capabilities": [],
+      "actions": [
+        {
+          "id": "choose",
+          "inputBindingId": "audience_choice",
+          "label": "Choose",
+          "fields": {
+            "optionId": {
+              "type": "string",
+              "required": true,
+              "maxLength": 80
+            }
+          }
+        }
+      ],
+      "initialState": {},
+      "configSchema": {
+        "voteSeconds": {
+          "type": "number",
+          "label": "Voting duration",
+          "description": "Seconds available for each group decision.",
+          "default": 20,
+          "min": 5,
+          "max": 120
+        }
+      },
+      "config": {
+        "voteSeconds": 20
+      },
+      "limits": {
+        "maxJobs": 2,
+        "maxSessionCostUsd": 5,
+        "maxActionCostUsd": 0.5
+      },
+      "playbackCompletion": "first_player"
+    },
+    "contentPolicy": {
+      "violence": "mild",
+      "nudity": "none",
+      "sexualThemes": "none",
+      "language": "mild",
+      "substances": "none",
+      "frighteningContent": "mild"
+    },
+    "participation": {
+      "mode": "multiplayer",
+      "minPlayers": 2,
+      "maxPlayers": 2,
+      "spectators": true,
+      "turnPolicy": "sequential",
+      "joinPolicy": "round_boundary"
+    },
+    "worldVideo": {
+      "enabled": false,
+      "pacing": "input_gated",
+      "source": "generated",
+      "idlePresentation": "hold_frame",
+      "continuity": "continue_scene",
+      "modelId": "prunaai-p-video-2-pro",
+      "maxCostUsd": 0.5,
+      "chunkIntervalSeconds": 14
+    },
+    "inputs": [
+      {
+        "id": "audience_choice",
+        "kind": "vote",
+        "purpose": "vote",
+        "scope": "world",
+        "lifetime": "one_action",
+        "activePhases": [
+          "action"
+        ],
+        "required": false,
+        "maxLength": 1200,
+        "advanceBehavior": "submit_readiness"
+      }
+    ],
+    "characters": {
+      "selectionEnabled": true,
+      "display": "grid",
+      "allowPhoto": false,
+      "appearanceLifetime": "session",
+      "conversationHistory": "persistent"
+    },
+    "interface": {
+      "mode": "custom",
+      "layout": "stage",
+      "theme": {
+        "primaryColor": "#FAFAFA",
+        "backgroundColor": "#09090B",
+        "textColor": "#FAFAFA"
+      },
+      "placement": "panel",
+      "controls": [
+        {
+          "id": "control_audience_choice",
+          "inputBindingId": "audience_choice",
+          "component": "auto",
+          "label": ""
+        }
+      ],
+      "packageVersion": "",
+      "fallback": "default",
+      "handledInputBindingIds": [
+        "audience_choice"
+      ],
+      "overlayRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1
+      }
+    },
+    "rules": {
+      "resolver": "narrative",
+      "roundSeconds": 20,
+      "voteOptions": [
+        "Explore further",
+        "Meet a character",
+        "Follow the unexpected"
+      ],
+      "tieBreak": "first",
+      "shotsPerPlayer": 5
+    },
+    "flow": {
+      "entryPhase": "action",
+      "phases": [
+        {
+          "id": "action",
+          "title": "Interact",
+          "inputBindingIds": [
+            "audience_choice"
+          ],
+          "next": "action",
+          "completion": "manual"
+        }
+      ]
+    },
+    "scenes": [],
+    "gameBindings": []
+  },
+  "startImageUrl": "/assets/start.svg",
+  "interfaceFile": "interface.html",
+  "controllerFile": "controller.js"
+}

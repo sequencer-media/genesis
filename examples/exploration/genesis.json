@@ -1,0 +1,167 @@
+{
+  "format": "genesis-project",
+  "version": 1,
+  "title": "Point and click exploration",
+  "definition": {
+    "schemaVersion": 2,
+    "presetId": "open_world",
+    "genesis": {
+      "version": 1,
+      "packageVersion": "",
+      "controller": "custom",
+      "capabilities": [
+        "scene.request"
+      ],
+      "actions": [
+        {
+          "id": "explore",
+          "inputBindingId": "exploration_target",
+          "label": "Explore",
+          "fields": {
+            "x": {
+              "type": "number",
+              "required": true,
+              "min": 0,
+              "max": 1,
+              "maxLength": 1200
+            },
+            "y": {
+              "type": "number",
+              "required": true,
+              "min": 0,
+              "max": 1,
+              "maxLength": 1200
+            },
+            "anchorId": {
+              "type": "string",
+              "required": true,
+              "maxLength": 1200
+            },
+            "sceneRevision": {
+              "type": "number",
+              "required": true,
+              "min": 0,
+              "maxLength": 1200
+            }
+          }
+        }
+      ],
+      "initialState": {},
+      "configSchema": {},
+      "config": {},
+      "limits": {
+        "maxJobs": 2,
+        "maxSessionCostUsd": 5,
+        "maxActionCostUsd": 0.5
+      },
+      "playbackCompletion": "first_player"
+    },
+    "contentPolicy": {
+      "violence": "mild",
+      "nudity": "none",
+      "sexualThemes": "none",
+      "language": "mild",
+      "substances": "none",
+      "frighteningContent": "mild"
+    },
+    "participation": {
+      "mode": "single",
+      "minPlayers": 1,
+      "maxPlayers": 1,
+      "spectators": true,
+      "turnPolicy": "sequential",
+      "joinPolicy": "round_boundary"
+    },
+    "worldVideo": {
+      "enabled": true,
+      "pacing": "input_gated",
+      "source": "generated",
+      "idlePresentation": "hold_frame",
+      "continuity": "continue_scene",
+      "modelId": "prunaai-p-video-2-pro",
+      "maxCostUsd": 0.5,
+      "chunkIntervalSeconds": 14
+    },
+    "inputs": [
+      {
+        "id": "exploration_target",
+        "kind": "click",
+        "purpose": "navigation",
+        "scope": "player",
+        "lifetime": "one_action",
+        "activePhases": [
+          "action"
+        ],
+        "required": false,
+        "maxLength": 1200,
+        "advanceBehavior": "submit_readiness"
+      }
+    ],
+    "characters": {
+      "selectionEnabled": true,
+      "display": "grid",
+      "allowPhoto": false,
+      "appearanceLifetime": "session",
+      "conversationHistory": "persistent"
+    },
+    "interface": {
+      "mode": "custom",
+      "layout": "stage",
+      "theme": {
+        "primaryColor": "#FAFAFA",
+        "backgroundColor": "#09090B",
+        "textColor": "#FAFAFA"
+      },
+      "placement": "overlay",
+      "controls": [
+        {
+          "id": "control_exploration_target",
+          "inputBindingId": "exploration_target",
+          "component": "auto",
+          "label": ""
+        }
+      ],
+      "packageVersion": "",
+      "fallback": "default",
+      "handledInputBindingIds": [
+        "exploration_target"
+      ],
+      "overlayRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1
+      }
+    },
+    "rules": {
+      "resolver": "narrative",
+      "roundSeconds": 20,
+      "voteOptions": [
+        "Explore further",
+        "Meet a character",
+        "Follow the unexpected"
+      ],
+      "tieBreak": "first",
+      "shotsPerPlayer": 5
+    },
+    "flow": {
+      "entryPhase": "action",
+      "phases": [
+        {
+          "id": "action",
+          "title": "Interact",
+          "inputBindingIds": [
+            "exploration_target"
+          ],
+          "next": "action",
+          "completion": "manual"
+        }
+      ]
+    },
+    "scenes": [],
+    "gameBindings": []
+  },
+  "startImageUrl": "/assets/start.svg",
+  "interfaceFile": "interface.html",
+  "controllerFile": "controller.js"
+}

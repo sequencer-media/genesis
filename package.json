@@ -1,0 +1,64 @@
+{
+  "name": "@genesis-worlds/runtime",
+  "version": "0.1.0",
+  "description": "Portable JavaScript runtime for interactive AI worlds",
+  "type": "module",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "dist",
+    "examples",
+    "docs",
+    "README.md",
+    "LICENSE",
+    "NOTICE",
+    "AGENTS.md",
+    "CONTRIBUTING.md",
+    "CHANGELOG.md",
+    "schema",
+    "skills",
+    "SECURITY.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./browser": {
+      "types": "./dist/browser/index.d.ts",
+      "import": "./dist/browser/index.js"
+    },
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.js"
+    }
+  },
+  "bin": {
+    "genesis": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc && node scripts/write-schema.mjs",
+    "test": "npm run build && node --test --test-concurrency=1 test/*.test.mjs",
+    "dev": "npm run build && node dist/cli.js dev examples/exploration",
+    "check": "npm test && npm pack --dry-run"
+  },
+  "dependencies": {
+    "ajv": "8.17.1",
+    "fflate": "0.8.2",
+    "quickjs-emscripten": "0.31.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/*"
+      ]
+    }
+  },
+  "private": true
+}

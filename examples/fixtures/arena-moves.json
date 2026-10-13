@@ -1,0 +1,8 @@
+{
+  "moves": [
+    { "name": "Ember flash", "damage": 25, "heal": 0, "guard": false },
+    { "name": "Stone shelter", "damage": 0, "heal": 0, "guard": true },
+    { "name": "Tide burst", "damage": 35, "heal": 0, "guard": false },
+    { "name": "Moss renewal", "damage": 0, "heal": 15, "guard": false }
+  ]
+}

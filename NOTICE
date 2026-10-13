@@ -1,0 +1,6 @@
+Genesis runtime
+Copyright 2026 Genesis contributors.
+
+Distributed under the Apache License, Version 2.0.
+The controller sandbox uses quickjs-emscripten and its QuickJS dependencies,
+which retain their own license notices in installed dependency packages.
