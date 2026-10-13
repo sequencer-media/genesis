@@ -8,6 +8,8 @@
   },
   "llms": {
     "gemini-3-8-flash": { "usdPerMillionInput": 0.8625, "usdPerMillionOutput": 4.3125 },
-    "deepseek-v4-1-flash": { "usdPerMillionInput": 0.345, "usdPerMillionOutput": 1.38 }
+    "deepseek-v4-1-flash": { "usdPerMillionInput": 0.345, "usdPerMillionOutput": 1.38 },
+    "claude-haiku-5-5": { "usdPerMillionInput": 0.115, "usdPerMillionOutput": 0.575 },
+    "claude-haiku-5-5-long": { "usdPerMillionInput": 0.575, "usdPerMillionOutput": 2.875 }
   }
 }

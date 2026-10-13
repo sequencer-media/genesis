@@ -46,24 +46,25 @@ Score at least ten shared scenarios, run each three times for two minutes, and p
 
 ## Low-latency LLMs
 
-Viva includes its world-direction LLM. For custom moves, dialogue and structured replies, compare Gemini 3.8 Flash and DeepSeek V4.1 Flash.
+Viva includes its world-direction LLM. For custom moves, dialogue and structured replies, compare Gemini 3.8 Flash, DeepSeek V4.1 Flash and Claude Haiku 5.5.
 
 <p class="comparison-hint">Scroll the table horizontally to compare all LLM details.</p>
 
 <!-- LLM_MODEL_TABLE -->
 
-Token rates are estimated **Sequencer prices per one million input / output tokens**, checked October 13, 2026. Gemini's introductory rate runs through December 31, 2026. DeepSeek shows peak pricing for uncached input; off-peak rates are half. Caching, reasoning and tools can affect the final quote. Both Sequencer routes are planned.
+Token rates are estimated **Sequencer prices per one million input / output tokens**, checked October 13, 2026. Gemini's introductory rate runs through December 31, 2026. DeepSeek shows peak pricing for uncached input; off-peak rates are half. Haiku's prices depend on whether the prompt exceeds 100K tokens. Caching, reasoning and tools can affect the final quote. These external Sequencer routes are planned.
 
 The existing `tool.llm.generate` service is separately billed, currently $0.01/request by default. It is separate from Viva's included world direction.
 
 ### Latency and moderation
 
-Gemini 3.8 Flash supports a low thinking level. DeepSeek V4.1 Flash supports non-thinking mode. Response time depends on the prompt, settings and route. Structured JSON needs to finish and pass validation before GENESIS can apply it. Neither model has a matched GENESIS latency benchmark.
+Gemini 3.8 Flash supports a low thinking level. DeepSeek V4.1 Flash supports non-thinking mode. Claude Haiku 5.5 supports adaptive thinking and is designed for latency-sensitive tasks. Response time depends on the prompt, settings and route. Structured JSON needs to finish and pass validation before GENESIS can apply it. None of these models has a matched GENESIS latency benchmark.
 
 Google exposes adjustable safety filters alongside persistent core protections. DeepSeek's moderation controls have not been verified for this comparison. Your host's content policy also applies.
 
 - [Gemini 3.8 Flash model details](https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash), [pricing](https://ai.google.dev/gemini-api/docs/pricing) and [safety settings](https://ai.google.dev/gemini-api/docs/safety-settings).
 - [DeepSeek model details and pricing](https://api-docs.deepseek.com/quick_start/pricing/) confirm the V4.1 Flash version, non-thinking mode and peak/off-peak billing. The API model name is `deepseek-flash`.
+- [Claude Haiku 5.5 model details and pricing](https://platform.claude.com/docs/en/models/haiku-5-5/overview) confirm its adaptive thinking and prompt-length price tiers. The API model name is `claude-haiku-5-5`. [Claude stop reasons](https://platform.claude.com/docs/en/build-with-claude/handling-stop-reasons) describe safety refusals.
 
 [Connect through Sequencer](integration.md#model-routing) or [bring your own adapter](providers.md).
 

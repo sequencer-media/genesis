@@ -147,12 +147,12 @@ Quality ratings use a shared five-point rubric. Models remain **unrated** until 
 
 ## Low-latency LLMs
 
-Viva includes its world-direction LLM. For custom moves, dialogue and structured replies, start with Gemini 3.8 Flash or DeepSeek V4.1 Flash. You can also [connect your own LLM](providers.html).
+Viva includes its world-direction LLM. For custom moves, dialogue and structured replies, choose Gemini 3.8 Flash, DeepSeek V4.1 Flash or Claude Haiku 5.5. You can also [connect your own LLM](providers.html).
 
 <p class="comparison-hint">Scroll the table horizontally to compare all LLM details.</p>
 
 <!-- LLM_MODEL_TABLE -->
 
-Gemini and DeepSeek are planned Sequencer routes. Custom structured LLM calls are billed separately from Viva's included world direction. [Pricing, timing and safety details](models.html#low-latency-llms).
+External LLMs are planned Sequencer routes. Custom structured LLM calls are billed separately from Viva's included world direction. [Pricing, timing and safety details](models.html#low-latency-llms).
 
 The source is **Apache 2.0 licensed**. Version 0.1 is a source preview, with npm publication and the wider launch being prepared. [Browse the repository](https://github.com/sequencer-media/genesis), [read the license](license.html), [contribute](contributing.html) or [explore the SDK API](api.html).

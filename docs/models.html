@@ -141,7 +141,7 @@
 <p>Score at least ten shared scenarios, run each three times for two minutes, and publish the prompts, model/version, resolution, settings, date and recordings. Include the same character, inventory and scene-transition challenges for every model. Have at least two reviewers score recordings without provider labels.</p>
 <p><strong>No matched GENESIS benchmark has been completed.</strong> Every model is currently <strong>unrated</strong>, including Sequencer. A provider&#39;s demo or a clip-generation leaderboard does not establish its score for a persistent interactive world.</p>
 <h2 id="low-latency-llms">Low-latency LLMs</h2>
-<p>Viva includes its world-direction LLM. For custom moves, dialogue and structured replies, compare Gemini 3.8 Flash and DeepSeek V4.1 Flash.</p>
+<p>Viva includes its world-direction LLM. For custom moves, dialogue and structured replies, compare Gemini 3.8 Flash, DeepSeek V4.1 Flash and Claude Haiku 5.5.</p>
 <p class="comparison-hint">Scroll the table horizontally to compare all LLM details.</p>
 
 <div class="comparison-scroll" role="region" aria-label="Compare low-latency LLM pricing and moderation" tabindex="0">
@@ -152,19 +152,21 @@
 <tr><th scope="row"><a href="integration.html#model-routing">Viva LLM</a><span class="table-detail">Built-in world direction</span></th><td><strong>Included with Viva</strong><span class="table-detail">Viva stream: $40 / active hour</span></td><td>Runs in the stream loop<span class="table-detail">Measured response latency not published</span></td><td>Provider safety protections<span class="table-detail">Hosted world rules also apply</span></td></tr>
 <tr><th scope="row"><a href="integration.html#model-routing">Gemini 3.8 Flash</a><span class="table-detail">Google. Sequencer route planned.</span></th><td><strong>$0.8625 / $4.3125</strong><span class="table-detail">Introductory estimate through Dec 31, 2026.</span></td><td>Low thinking level available<span class="table-detail">GENESIS response time not benchmarked</span></td><td>Adjustable safety filters<span class="table-detail">Core protections remain enabled</span></td></tr>
 <tr><th scope="row"><a href="integration.html#model-routing">DeepSeek V4.1 Flash</a><span class="table-detail">DeepSeek. Sequencer route planned.</span></th><td><strong>$0.345 / $1.38</strong><span class="table-detail">Peak, uncached estimate. Off-peak is half.</span></td><td>Non-thinking mode available<span class="table-detail">GENESIS response time not benchmarked</span></td><td>Controls not verified<span class="table-detail">Check the selected route's policy</span></td></tr>
+<tr><th scope="row"><a href="integration.html#model-routing">Claude Haiku 5.5</a><span class="table-detail">Anthropic. Sequencer route planned.</span></th><td><strong>$0.115 / $0.575</strong><span class="table-detail">Prompts up to 100K tokens. Above 100K: $0.575 / $2.875.</span></td><td>Built for low latency<span class="table-detail">GENESIS response time not benchmarked</span></td><td>Provider safety protections<span class="table-detail">Host policy also applies</span></td></tr>
 </tbody>
 </table>
 </div>
 
 
-<p>Token rates are estimated <strong>Sequencer prices per one million input / output tokens</strong>, checked October 13, 2026. Gemini&#39;s introductory rate runs through December 31, 2026. DeepSeek shows peak pricing for uncached input; off-peak rates are half. Caching, reasoning and tools can affect the final quote. Both Sequencer routes are planned.</p>
+<p>Token rates are estimated <strong>Sequencer prices per one million input / output tokens</strong>, checked October 13, 2026. Gemini&#39;s introductory rate runs through December 31, 2026. DeepSeek shows peak pricing for uncached input; off-peak rates are half. Haiku&#39;s prices depend on whether the prompt exceeds 100K tokens. Caching, reasoning and tools can affect the final quote. These external Sequencer routes are planned.</p>
 <p>The existing <code>tool.llm.generate</code> service is separately billed, currently $0.01/request by default. It is separate from Viva&#39;s included world direction.</p>
 <h3 id="latency-and-moderation">Latency and moderation</h3>
-<p>Gemini 3.8 Flash supports a low thinking level. DeepSeek V4.1 Flash supports non-thinking mode. Response time depends on the prompt, settings and route. Structured JSON needs to finish and pass validation before GENESIS can apply it. Neither model has a matched GENESIS latency benchmark.</p>
+<p>Gemini 3.8 Flash supports a low thinking level. DeepSeek V4.1 Flash supports non-thinking mode. Claude Haiku 5.5 supports adaptive thinking and is designed for latency-sensitive tasks. Response time depends on the prompt, settings and route. Structured JSON needs to finish and pass validation before GENESIS can apply it. None of these models has a matched GENESIS latency benchmark.</p>
 <p>Google exposes adjustable safety filters alongside persistent core protections. DeepSeek&#39;s moderation controls have not been verified for this comparison. Your host&#39;s content policy also applies.</p>
 <ul>
 <li><a href="https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash">Gemini 3.8 Flash model details</a>, <a href="https://ai.google.dev/gemini-api/docs/pricing">pricing</a> and <a href="https://ai.google.dev/gemini-api/docs/safety-settings">safety settings</a>.</li>
 <li><a href="https://api-docs.deepseek.com/quick_start/pricing/">DeepSeek model details and pricing</a> confirm the V4.1 Flash version, non-thinking mode and peak/off-peak billing. The API model name is <code>deepseek-flash</code>.</li>
+<li><a href="https://platform.claude.com/docs/en/models/haiku-5-5/overview">Claude Haiku 5.5 model details and pricing</a> confirm its adaptive thinking and prompt-length price tiers. The API model name is <code>claude-haiku-5-5</code>. <a href="https://platform.claude.com/docs/en/build-with-claude/handling-stop-reasons">Claude stop reasons</a> describe safety refusals.</li>
 </ul>
 <p><a href="integration.html#model-routing">Connect through Sequencer</a> or <a href="providers.html">bring your own adapter</a>.</p>
 <h2 id="sources-and-model-details">Sources and model details</h2>
