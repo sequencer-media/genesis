@@ -1,7 +1,7 @@
 <section class="hero">
 <div>
 
-# Create infinite experiences, in minutes.
+# Create infinite experiences,<br>in minutes.
 
 Give your World Model a memory, an inventory and a playable interface. GENESIS is the dungeon master for your worldstream: it remembers the world, applies the rules and connects player actions to generated scenes.
 
