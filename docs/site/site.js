@@ -1,5 +1,6 @@
 const searchInput = document.querySelector('#docs-search');
 const results = document.querySelector('#search-results');
+const docsRoot = new URL('../', document.querySelector('script[src$="site/site.js"]').src);
 let indexPromise;
 let revision = 0;
 
@@ -10,7 +11,7 @@ async function searchDocs() {
   if (query.length < 2) {results.hidden = true; return;}
   results.hidden = false;
   try {
-    indexPromise ||= fetch('site/search-index.json').then(response => {
+    indexPromise ||= fetch(new URL('site/search-index.json', docsRoot)).then(response => {
       if (!response.ok) throw new Error('Search is unavailable.');
       return response.json();
     });
@@ -25,7 +26,7 @@ async function searchDocs() {
     if (!matches.length) {const empty = document.createElement('p'); empty.textContent = 'No matching guides. Try a shorter search.'; results.append(empty); return;}
     for (const {entry} of matches) {
       const link = document.createElement('a'), title = document.createElement('strong'), excerpt = document.createElement('span');
-      link.href = entry.url;
+      link.href = new URL(entry.url, docsRoot).href;
       title.textContent = entry.title;
       const first = Math.max(0, entry.text.toLowerCase().indexOf(terms[0]));
       const start = Math.max(0, first - 35);

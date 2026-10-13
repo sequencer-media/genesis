@@ -2,6 +2,12 @@
 
 Start with a playable local worldstream, then customize its rules and connect generation. GENESIS is Apache 2.0 licensed; the local fixtures work without a model account.
 
+## Create with Sequencer
+
+For a hosted world, [open My Worlds](https://sequencer.media/worldstreams#my-worlds) and use your existing Sequencer account. Create a world, describe it to Spark or import a GENESIS project in the editor, then preview and publish it to Worldstreams. Sequencer handles your workspace, assets and gems.
+
+Use the local workflow below to build independently and connect your own providers. [Read the Sequencer integration guide](integration.md) to upload a local project with the API.
+
 ## Run a starter
 
 Requires Node 20 or later. Clone the Genesis source preview:

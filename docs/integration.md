@@ -1,5 +1,11 @@
 # Integration
 
+## Publish your world on Sequencer
+
+[Open My Worlds](https://sequencer.media/worldstreams#my-worlds) with your Sequencer account. Create a world and import your GENESIS project in the editor, or ask Spark to build it from a prompt. Preview the world, save it and publish it to Worldstreams. The hosted editor uses your existing identity, workspace, media library and gems.
+
+The API workflow below uses a server-side key for creators building in their own tools. Browser imports use the existing signed-in session.
+
 Use `createLlmProvider` with a `generate(request, context)` callback and a durable result store for paid calls. The request contains prompt, optional context and a bounded JSON responseSchema. The callback receives sessionId, a stable idempotencyKey and maxCostUsd. Keep the provider key on your server. The adapter validates output and sends it as job.ready's event.data.data. Paid providers must enforce the cost ceiling before submission. In-process deduplication does not replace distributed locks.
 
 `createSequencerLlmProvider` connects that callback to the Sequencer LLM endpoint. `FileGenesisToolResults` is an atomic single-host store. Configure a transaction-backed result store for distributed workers. Keep the world generation adapter separate from the LLM adapter so either can be replaced. Image/audio/video generation uses SequencerClient.generate; enumerate supported models with models(), inspect model(modelId), pass a cost ceiling and retain the returned media/job ID. Read status and completed media through media(workspaceId, mediaId). A thumbnail is not an actual video end-frame checkpoint.

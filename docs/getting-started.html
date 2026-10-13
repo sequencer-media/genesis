@@ -5,6 +5,21 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Build your first world. GENESIS open source World Model engine documentation.">
   <title>Build your first world · GENESIS</title>
+  <link rel="canonical" href="https://sequencer.media/genesis/getting-started">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Build your first world · GENESIS">
+  <meta property="og:description" content="Build your first world. GENESIS open source World Model engine documentation.">
+  <meta property="og:url" content="https://sequencer.media/genesis/getting-started">
+  <meta property="og:image" content="https://sequencer.media/genesis/assets/genesis-social.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="GENESIS, World Model Engine. Create infinite experiences, in minutes.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Build your first world · GENESIS">
+  <meta name="twitter:description" content="Build your first world. GENESIS open source World Model engine documentation.">
+  <meta name="twitter:image" content="https://sequencer.media/genesis/assets/genesis-social.png">
+  <meta name="twitter:image:alt" content="GENESIS, World Model Engine. Create infinite experiences, in minutes.">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Build your first world","url":"https://sequencer.media/genesis/getting-started","isPartOf":{"@type":"WebSite","name":"GENESIS","url":"https://sequencer.media/genesis"}}</script>
   <link rel="stylesheet" href="site/site.css">
   <script src="site/site.js" defer></script>
 </head>
@@ -13,6 +28,7 @@
   <header class="site-header">
     <a class="brand" href="index.html" aria-label="GENESIS home">GENESIS</a>
     <a class="license-badge" href="license.html">Open source · Apache 2.0</a>
+    <a class="create-link" href="https://sequencer.media/worldstreams#my-worlds">Create with Sequencer</a>
     <form class="search" role="search">
       <label class="sr-only" for="docs-search">Search Genesis documentation</label>
       <input id="docs-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results">
@@ -55,8 +71,11 @@
 <a href="license.html">Apache 2.0 license</a>
 <a href="readme.html">Project README</a></nav></aside>
     <main id="main" tabindex="-1">
-      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#run-a-starter">Run a starter</a><a href="#choose-an-experience">Choose an experience</a><a href="#make-the-world-yours">Make the world yours</a><a href="#validate-and-export">Validate and export</a><a href="#connect-live-generation">Connect live generation</a><a href="#take-it-into-production">Take it into production</a></nav></details><h1 id="build-your-first-world">Build your first world</h1>
+      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#create-with-sequencer">Create with Sequencer</a><a href="#run-a-starter">Run a starter</a><a href="#choose-an-experience">Choose an experience</a><a href="#make-the-world-yours">Make the world yours</a><a href="#validate-and-export">Validate and export</a><a href="#connect-live-generation">Connect live generation</a><a href="#take-it-into-production">Take it into production</a></nav></details><h1 id="build-your-first-world">Build your first world</h1>
 <p>Start with a playable local worldstream, then customize its rules and connect generation. GENESIS is Apache 2.0 licensed; the local fixtures work without a model account.</p>
+<h2 id="create-with-sequencer">Create with Sequencer</h2>
+<p>For a hosted world, <a href="https://sequencer.media/worldstreams#my-worlds">open My Worlds</a> and use your existing Sequencer account. Create a world, describe it to Spark or import a GENESIS project in the editor, then preview and publish it to Worldstreams. Sequencer handles your workspace, assets and gems.</p>
+<p>Use the local workflow below to build independently and connect your own providers. <a href="integration.html">Read the Sequencer integration guide</a> to upload a local project with the API.</p>
 <h2 id="run-a-starter">Run a starter</h2>
 <p>Requires Node 20 or later. Clone the Genesis source preview:</p>
 <div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-sh">git clone https://github.com/sequencer-media/genesis.git
@@ -116,7 +135,7 @@ node dist/cli.js export ./my-world --out ./my-world.zip</code></pre></div>
 </article>
       <footer class="site-footer">
         <p>GENESIS 0.1.0 · Open source World Model engine</p>
-        <nav aria-label="Footer resources"><a href="license.html">Apache 2.0</a><a href="agent-skill.html">World-building skill</a><a href="contributing.html">Contribute</a><a href="compatibility.html">Development preview</a></nav>
+        <nav aria-label="Footer resources"><a href="https://sequencer.media/worldstreams#my-worlds">Create with Sequencer</a><a href="https://sequencer.media/worldstreams">Explore Worldstreams</a><a href="license.html">Apache 2.0</a><a href="agent-skill.html">World-building skill</a><a href="contributing.html">Contribute</a></nav>
         <p class="release-note"><a href="https://github.com/sequencer-media/genesis">Source on GitHub</a>. Version 0.1 source preview. npm publication and the wider launch are being prepared.</p>
       </footer>
     </main>

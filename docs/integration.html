@@ -5,6 +5,21 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Worldstreams API. GENESIS open source World Model engine documentation.">
   <title>Worldstreams API · GENESIS</title>
+  <link rel="canonical" href="https://sequencer.media/genesis/integration">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Worldstreams API · GENESIS">
+  <meta property="og:description" content="Worldstreams API. GENESIS open source World Model engine documentation.">
+  <meta property="og:url" content="https://sequencer.media/genesis/integration">
+  <meta property="og:image" content="https://sequencer.media/genesis/assets/genesis-social.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="GENESIS, World Model Engine. Create infinite experiences, in minutes.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Worldstreams API · GENESIS">
+  <meta name="twitter:description" content="Worldstreams API. GENESIS open source World Model engine documentation.">
+  <meta name="twitter:image" content="https://sequencer.media/genesis/assets/genesis-social.png">
+  <meta name="twitter:image:alt" content="GENESIS, World Model Engine. Create infinite experiences, in minutes.">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Worldstreams API","url":"https://sequencer.media/genesis/integration","isPartOf":{"@type":"WebSite","name":"GENESIS","url":"https://sequencer.media/genesis"}}</script>
   <link rel="stylesheet" href="site/site.css">
   <script src="site/site.js" defer></script>
 </head>
@@ -13,6 +28,7 @@
   <header class="site-header">
     <a class="brand" href="index.html" aria-label="GENESIS home">GENESIS</a>
     <a class="license-badge" href="license.html">Open source · Apache 2.0</a>
+    <a class="create-link" href="https://sequencer.media/worldstreams#my-worlds">Create with Sequencer</a>
     <form class="search" role="search">
       <label class="sr-only" for="docs-search">Search Genesis documentation</label>
       <input id="docs-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results">
@@ -55,7 +71,10 @@
 <a href="license.html">Apache 2.0 license</a>
 <a href="readme.html">Project README</a></nav></aside>
     <main id="main" tabindex="-1">
-      <article><h1 id="integration">Integration</h1>
+      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#publish-your-world-on-sequencer">Publish your world on Sequencer</a></nav></details><h1 id="integration">Integration</h1>
+<h2 id="publish-your-world-on-sequencer">Publish your world on Sequencer</h2>
+<p><a href="https://sequencer.media/worldstreams#my-worlds">Open My Worlds</a> with your Sequencer account. Create a world and import your GENESIS project in the editor, or ask Spark to build it from a prompt. Preview the world, save it and publish it to Worldstreams. The hosted editor uses your existing identity, workspace, media library and gems.</p>
+<p>The API workflow below uses a server-side key for creators building in their own tools. Browser imports use the existing signed-in session.</p>
 <p>Use <code>createLlmProvider</code> with a <code>generate(request, context)</code> callback and a durable result store for paid calls. The request contains prompt, optional context and a bounded JSON responseSchema. The callback receives sessionId, a stable idempotencyKey and maxCostUsd. Keep the provider key on your server. The adapter validates output and sends it as job.ready&#39;s event.data.data. Paid providers must enforce the cost ceiling before submission. In-process deduplication does not replace distributed locks.</p>
 <p><code>createSequencerLlmProvider</code> connects that callback to the Sequencer LLM endpoint. <code>FileGenesisToolResults</code> is an atomic single-host store. Configure a transaction-backed result store for distributed workers. Keep the world generation adapter separate from the LLM adapter so either can be replaced. Image/audio/video generation uses SequencerClient.generate; enumerate supported models with models(), inspect model(modelId), pass a cost ceiling and retain the returned media/job ID. Read status and completed media through media(workspaceId, mediaId). A thumbnail is not an actual video end-frame checkpoint.</p>
 <p>SequencerClient.save uploads declared assets and saves a guarded draft. load returns a portable project, complete assetFiles and the current versionId. The browser-compatible attachGenesisAssets helper supports signed-in creator imports without putting an account API key in the browser. Portable asset limits are 64 files, 50 MB/file and 100 MB total. The Sequencer adapter currently allows 40 files and 20 MB/file. Supported formats are PNG/JPEG/WebP/GIF, MP4/WebM, MP3/WAV/OGG.</p>
@@ -67,7 +86,7 @@
 </article>
       <footer class="site-footer">
         <p>GENESIS 0.1.0 · Open source World Model engine</p>
-        <nav aria-label="Footer resources"><a href="license.html">Apache 2.0</a><a href="agent-skill.html">World-building skill</a><a href="contributing.html">Contribute</a><a href="compatibility.html">Development preview</a></nav>
+        <nav aria-label="Footer resources"><a href="https://sequencer.media/worldstreams#my-worlds">Create with Sequencer</a><a href="https://sequencer.media/worldstreams">Explore Worldstreams</a><a href="license.html">Apache 2.0</a><a href="agent-skill.html">World-building skill</a><a href="contributing.html">Contribute</a></nav>
         <p class="release-note"><a href="https://github.com/sequencer-media/genesis">Source on GitHub</a>. Version 0.1 source preview. npm publication and the wider launch are being prepared.</p>
       </footer>
     </main>

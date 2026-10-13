@@ -5,6 +5,21 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Contributing. GENESIS open source World Model engine documentation.">
   <title>Contributing · GENESIS</title>
+  <link rel="canonical" href="https://sequencer.media/genesis/contributing">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Contributing · GENESIS">
+  <meta property="og:description" content="Contributing. GENESIS open source World Model engine documentation.">
+  <meta property="og:url" content="https://sequencer.media/genesis/contributing">
+  <meta property="og:image" content="https://sequencer.media/genesis/assets/genesis-social.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="GENESIS, World Model Engine. Create infinite experiences, in minutes.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Contributing · GENESIS">
+  <meta name="twitter:description" content="Contributing. GENESIS open source World Model engine documentation.">
+  <meta name="twitter:image" content="https://sequencer.media/genesis/assets/genesis-social.png">
+  <meta name="twitter:image:alt" content="GENESIS, World Model Engine. Create infinite experiences, in minutes.">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Contributing","url":"https://sequencer.media/genesis/contributing","isPartOf":{"@type":"WebSite","name":"GENESIS","url":"https://sequencer.media/genesis"}}</script>
   <link rel="stylesheet" href="site/site.css">
   <script src="site/site.js" defer></script>
 </head>
@@ -13,6 +28,7 @@
   <header class="site-header">
     <a class="brand" href="index.html" aria-label="GENESIS home">GENESIS</a>
     <a class="license-badge" href="license.html">Open source · Apache 2.0</a>
+    <a class="create-link" href="https://sequencer.media/worldstreams#my-worlds">Create with Sequencer</a>
     <form class="search" role="search">
       <label class="sr-only" for="docs-search">Search Genesis documentation</label>
       <input id="docs-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results">
@@ -59,13 +75,14 @@
 <p>Use Node 20 or later. Run <code>npm ci</code> and <code>npm test</code> from this directory.</p>
 <p>Use the <a href="https://github.com/sequencer-media/genesis/issues/new/choose">bug report or feature request forms</a> to describe reproducible behavior or a concrete creator workflow. For a pull request, fork the repository, create a branch and keep the change focused. Include the relevant checks and an example when it introduces a new programming pattern.</p>
 <p>The documentation site is built from the Markdown guides, the README and the bundled authoring skill. Run <code>npm run docs:build</code> after editing them, or <code>npm run docs:dev</code> for a local browser preview. Commit the generated HTML with its source changes. The build checks local links and section anchors. Keep demos clearly labeled as recorded examples.</p>
+<p>The hosted site lives at <a href="https://sequencer.media/genesis">sequencer.media/genesis</a>. Check this deployment mode with <code>npm run docs:build -- --out .genesis-site --base-path /genesis/</code>. Site navigation stays under that path; creation links reuse Sequencer&#39;s existing My Worlds editor and sign-in. Keep portable SDK examples available for creators using their own hosts.</p>
 <p>Keep the runtime independent of a deployment, provider or framework. Host adapters own credentials, identity, purchases, content policy and resource grants. Project manifests only request capabilities.</p>
 <p>A change to actions, controller context, state views, jobs or playback events needs a compatibility test and an API changelog entry. Add a runnable example for a new programming pattern. Preserve private state filtering and server authority.</p>
 <p>Open an issue before adding a dependency or changing the project format. Pull requests should explain the behavior and include relevant tests. Contributions use Apache 2.0. Maintainers review contributions and publish releases; no community governance or support SLA is implied by this preview.</p>
 </article>
       <footer class="site-footer">
         <p>GENESIS 0.1.0 · Open source World Model engine</p>
-        <nav aria-label="Footer resources"><a href="license.html">Apache 2.0</a><a href="agent-skill.html">World-building skill</a><a href="contributing.html">Contribute</a><a href="compatibility.html">Development preview</a></nav>
+        <nav aria-label="Footer resources"><a href="https://sequencer.media/worldstreams#my-worlds">Create with Sequencer</a><a href="https://sequencer.media/worldstreams">Explore Worldstreams</a><a href="license.html">Apache 2.0</a><a href="agent-skill.html">World-building skill</a><a href="contributing.html">Contribute</a></nav>
         <p class="release-note"><a href="https://github.com/sequencer-media/genesis">Source on GitHub</a>. Version 0.1 source preview. npm publication and the wider launch are being prepared.</p>
       </footer>
     </main>

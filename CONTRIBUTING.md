@@ -6,6 +6,8 @@ Use the [bug report or feature request forms](https://github.com/sequencer-media
 
 The documentation site is built from the Markdown guides, the README and the bundled authoring skill. Run `npm run docs:build` after editing them, or `npm run docs:dev` for a local browser preview. Commit the generated HTML with its source changes. The build checks local links and section anchors. Keep demos clearly labeled as recorded examples.
 
+The hosted site lives at [sequencer.media/genesis](https://sequencer.media/genesis). Check this deployment mode with `npm run docs:build -- --out .genesis-site --base-path /genesis/`. Site navigation stays under that path; creation links reuse Sequencer's existing My Worlds editor and sign-in. Keep portable SDK examples available for creators using their own hosts.
+
 Keep the runtime independent of a deployment, provider or framework. Host adapters own credentials, identity, purchases, content policy and resource grants. Project manifests only request capabilities.
 
 A change to actions, controller context, state views, jobs or playback events needs a compatibility test and an API changelog entry. Add a runnable example for a new programming pattern. Preserve private state filtering and server authority.

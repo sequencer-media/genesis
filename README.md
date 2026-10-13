@@ -13,6 +13,8 @@
 
 Open source, licensed under [Apache 2.0](LICENSE).
 
+[Website](https://sequencer.media/genesis) · [Demos](https://sequencer.media/genesis/demos) · [Documentation](https://sequencer.media/genesis/getting-started) · [Create with Sequencer](https://sequencer.media/worldstreams#my-worlds)
+
 ## Your World Model needs a dungeon master.
 
 Like a tabletop dungeon master, GENESIS remembers your inventory, characters and locations, applies the rules and describes what happens next. It gives your World Model the memory, shared state and playable interface an infinite experience needs.

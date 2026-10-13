@@ -8,7 +8,7 @@
 
 Like a tabletop dungeon master, GENESIS remembers your inventory, characters and locations, applies the rules and connects player actions to generated scenes. It gives your World Model the memory, shared state and playable interface an infinite experience needs.
 
-<div class="hero-actions"><a class="button primary" href="#worldstreams-in-action">Watch the demos</a><a class="button" href="agent-skill.html">Create from one prompt</a></div>
+<div class="hero-actions"><a class="button primary" href="https://sequencer.media/worldstreams#my-worlds">Create with Sequencer</a><a class="button" href="#worldstreams-in-action">Watch the demos</a><a class="button" href="agent-skill.html">Build from one prompt</a></div>
 <p class="hero-note">Apache 2.0 licensed. Bring your own models, or connect the Worldstreams API with one server key.</p>
 </div>
 </section>
@@ -104,6 +104,14 @@ my-world/
 GENESIS coordinates the world; connected providers generate media. Your host supplies identity, storage, credentials and spending policy. [Start building](getting-started.html).
 
 ## Choose your connection
+
+### Create and publish with Sequencer
+
+[Open My Worlds](https://sequencer.media/worldstreams#my-worlds), sign in with your Sequencer account and create a world. Describe your idea to Spark, or import a GENESIS project in the world editor. Preview it, save it and publish it to Worldstreams.
+
+Your existing account, workspace, assets and gems carry through creation and publishing. Exploring these docs and watching the recorded demos is free.
+
+### Connect from your own app
 
 | Worldstreams API | Your own World Models |
 | --- | --- |

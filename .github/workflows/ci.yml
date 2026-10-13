@@ -22,4 +22,5 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run docs:build
+      - run: npm run docs:build -- --out .genesis-site --base-path /genesis/
       - run: npm pack --dry-run

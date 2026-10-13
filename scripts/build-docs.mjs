@@ -8,6 +8,11 @@ const args = process.argv.slice(2);
 const outIndex = args.indexOf('--out');
 if (outIndex >= 0 && !args[outIndex + 1]) throw new Error('Choose a documentation output directory.');
 const output = resolve(root, outIndex >= 0 ? args[outIndex + 1] : 'docs');
+const baseIndex = args.indexOf('--base-path');
+const basePath = baseIndex >= 0 ? args[baseIndex + 1] : '';
+if (baseIndex >= 0 && (!basePath || !/^\/(?:[a-z0-9_-]+\/)+$/i.test(basePath))) {
+  throw new Error('Choose a site base path with leading and trailing slashes, such as /genesis/.');
+}
 const pages = [
   {source:'docs/index.md', file:'index.html', title:'GENESIS', description:'Open source World Model engine. Create infinite experiences, in minutes.', group:'Start here', label:'Overview'},
   {source:'docs/getting-started.md', file:'getting-started.html', title:'Build your first world', group:'Start here'},
@@ -110,12 +115,25 @@ for (const page of pages) {
   const values = {
     TITLE:escape(page.file === 'index.html' ? 'GENESIS · Open Source World Model Engine' : page.title + ' · GENESIS'),
     DESCRIPTION:escape(page.description || page.title + '. GENESIS open source World Model engine documentation.'),
-    NAV:navigation(page.file), BODY:toc + body, PAGE:page.file === 'index.html' ? 'home-page' : 'guide-page', VERSION:escape(version)
+    NAV:navigation(page.file), BODY:toc + body, PAGE:page.file === 'index.html' ? 'home-page' : 'guide-page', VERSION:escape(version),
+    CANONICAL:escape('https://sequencer.media/genesis' + (page.file === 'index.html' ? '' : '/' + page.file.replace(/\.html$/, ''))),
+    SCHEMA:JSON.stringify({
+      '@context':'https://schema.org', '@type':'WebPage', name:page.title,
+      url:'https://sequencer.media/genesis' + (page.file === 'index.html' ? '' : '/' + page.file.replace(/\.html$/, '')),
+      isPartOf:{'@type':'WebSite', name:'GENESIS', url:'https://sequencer.media/genesis'}
+    }).replaceAll('<', '\\u003c')
   };
-  const html = template.replace(/\{\{([A-Z]+)\}\}/g, (_, key) => {
+  let html = template.replace(/\{\{([A-Z]+)\}\}/g, (_, key) => {
     if (!(key in values)) throw new Error('Unknown documentation placeholder: ' + key);
     return values[key];
   });
+  if (basePath) {
+    // Rooted URLs survive clean URLs, nested guides and the /genesis landing route.
+    // Keep fragments on the current page so each guide's contents menu still works.
+    html = html.replace(/\b(href|src|poster)="([^"]+)"/g, (all, attribute, url) => {
+      return /^(?:[a-z][a-z0-9+.-]*:|\/|#)/i.test(url) ? all : attribute + '="' + basePath + url + '"';
+    });
+  }
   generated.set(page.file, html);
   await writeFile(resolve(output, page.file), html);
   if (page.file !== 'license.html' && page.file !== 'readme.html') {
@@ -150,8 +168,9 @@ for (const [file, html] of generated) {
   for (const [, raw] of html.matchAll(/\b(?:href|src|poster)="([^"]+)"/g)) {
     const url = raw.replaceAll('&amp;', '&');
     if (/^(https?:|mailto:)/i.test(url)) continue;
-    const parsed = new URL(url, 'https://genesis.local/' + file);
-    const target = decodeURIComponent(parsed.pathname.slice(1));
+    const parsed = new URL(url, 'https://genesis.local' + (basePath || '/') + file);
+    if (basePath && !parsed.pathname.startsWith(basePath)) throw new Error('Documentation path leaves the site: ' + url);
+    const target = decodeURIComponent(parsed.pathname.slice(basePath ? basePath.length : 1));
     const absolute = resolve(output, target);
     if (!absolute.startsWith(output + sep)) throw new Error('Documentation path escapes the site: ' + url);
     await access(absolute).catch(() => {throw new Error(file + ' links to a missing file: ' + url);});
