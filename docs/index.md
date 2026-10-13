@@ -1,8 +1,5 @@
 <section class="hero">
-<img class="genesis-wordmark" src="assets/genesis-wordmark.svg" alt="GENESIS ASCII wordmark" width="1069" height="256">
 <div>
-
-<p class="hero-label">Open source World Model engine</p>
 
 # Create infinite experiences, in minutes.
 
