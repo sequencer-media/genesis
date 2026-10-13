@@ -6,14 +6,16 @@
 
 GENESIS is a **universal World Model Context Protocol**. It plugs into your World Model to manage memory, rules, variables, state, characters and locations. Its Context Engine connects player actions and user interfaces to the foundation models that bring your world to life.
 
-<nav class="hero-actions" aria-label="Start exploring"><a href="#worldstreams-in-action">Watch the demos</a><a href="#quickstart-with-the-genesis-skill">Build your first world</a></nav>
+<nav class="hero-actions" aria-label="Start exploring"><a href="#what-is-a-worldstream">Watch the demos</a><a href="#quickstart-with-the-genesis-skill">Build your first world</a></nav>
 <p class="hero-note">Run locally with the included examples. Connect your models when you're ready.</p>
 </div>
 </section>
 
-## Worldstreams in action
+<div id="worldstreams-in-action"></div>
 
-Rick and Morty have their own character controls, and both actions feed the shared experience. Watch the multiplayer Worldstream.
+## What is a Worldstream?
+
+A Worldstream is a generated video experience you can watch and interact with. In this multiplayer example, two players direct Rick and Morty through their own character controls.
 
 <figure class="demo-feature">
 <video controls autoplay muted loop playsinline preload="metadata" data-demo-autoplay poster="assets/rick-morty-multiplayer.webp" aria-label="Rick and Morty multiplayer Worldstream">

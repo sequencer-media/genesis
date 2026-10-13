@@ -15,9 +15,13 @@ Open source, licensed under [Apache 2.0](LICENSE).
 
 [Website](https://sequencer.media/genesis) · [Demos](https://sequencer.media/genesis/demos) · [Skill quickstart](https://sequencer.media/genesis/agent-skill) · [Documentation](https://sequencer.media/genesis/getting-started)
 
-[Watch the demos](#worldstreams-in-action) · [What can you build?](#what-can-you-build) · [Build from a prompt](#one-prompt-an-infinite-experience) · [Documentation](docs/getting-started.md) · [SDK API](docs/api.md) · [Connect your models](#connect-your-own-world-models) · [Worldstreams API](#worldstreams-api-instant-setup)
+[Watch the demos](#what-is-a-worldstream) · [What can you build?](#what-can-you-build) · [Build from a prompt](#one-prompt-an-infinite-experience) · [Documentation](docs/getting-started.md) · [SDK API](docs/api.md) · [Connect your models](#connect-your-own-world-models) · [Worldstreams API](#worldstreams-api-instant-setup)
 
-## Worldstreams in action
+<div id="worldstreams-in-action"></div>
+
+## What is a Worldstream?
+
+A Worldstream is a generated video experience you can watch and interact with. Player actions shape what happens next.
 
 ### Rick and Morty · Multiplayer Worldstream
 
