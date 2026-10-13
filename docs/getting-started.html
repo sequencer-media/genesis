@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Build your first world. GENESIS open source World Model game engine documentation.">
+  <title>Build your first world · GENESIS</title>
+  <link rel="stylesheet" href="site/site.css">
+  <script src="site/site.js" defer></script>
+</head>
+<body class="guide-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="GENESIS home"><span class="brand-mark" aria-hidden="true">G</span>GENESIS</a>
+    <a class="license-badge" href="license.html">Open source · Apache 2.0</a>
+    <form class="search" role="search">
+      <label class="sr-only" for="docs-search">Search Genesis documentation</label>
+      <input id="docs-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results">
+      <div id="search-results" class="search-results" role="region" aria-label="Documentation search results" hidden></div>
+    </form>
+  </header>
+  <details class="mobile-navigation"><summary>Documentation menu</summary><nav aria-label="Mobile documentation"><p class="nav-group">Start here</p><a href="index.html">Overview</a>
+<a href="getting-started.html" aria-current="page" class="active">Build your first world</a>
+<a href="world-memory.html">World memory</a>
+<a href="agent-skill.html">Build from one prompt</a>
+<a href="demos.html">Worldstreams demos</a>
+<p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="providers.html">Your own models</a>
+<p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
+<a href="architecture.html">Architecture</a>
+<a href="host-authority.html">Hosting and authority</a>
+<a href="project-boundary.html">Portable projects</a>
+<a href="compatibility.html">Compatibility</a>
+<a href="authoring-rules.html">Authoring contract</a>
+<p class="nav-group">Open source</p><a href="contributing.html">Contributing</a>
+<a href="security.html">Security</a>
+<a href="license.html">Apache 2.0 license</a>
+<a href="readme.html">Project README</a></nav></details>
+  <div class="site-layout">
+    <aside class="sidebar"><nav aria-label="Documentation"><p class="nav-group">Start here</p><a href="index.html">Overview</a>
+<a href="getting-started.html" aria-current="page" class="active">Build your first world</a>
+<a href="world-memory.html">World memory</a>
+<a href="agent-skill.html">Build from one prompt</a>
+<a href="demos.html">Worldstreams demos</a>
+<p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="providers.html">Your own models</a>
+<p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
+<a href="architecture.html">Architecture</a>
+<a href="host-authority.html">Hosting and authority</a>
+<a href="project-boundary.html">Portable projects</a>
+<a href="compatibility.html">Compatibility</a>
+<a href="authoring-rules.html">Authoring contract</a>
+<p class="nav-group">Open source</p><a href="contributing.html">Contributing</a>
+<a href="security.html">Security</a>
+<a href="license.html">Apache 2.0 license</a>
+<a href="readme.html">Project README</a></nav></aside>
+    <main id="main" tabindex="-1">
+      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#run-a-starter">Run a starter</a><a href="#choose-an-experience">Choose an experience</a><a href="#make-the-world-yours">Make the world yours</a><a href="#validate-and-export">Validate and export</a><a href="#connect-live-generation">Connect live generation</a><a href="#take-it-into-production">Take it into production</a></nav></details><h1 id="build-your-first-world">Build your first world</h1>
+<p>Start with a playable local worldstream, then customize its rules and connect generation. GENESIS is Apache 2.0 licensed; the local fixtures work without a model account.</p>
+<h2 id="run-a-starter">Run a starter</h2>
+<p>Requires Node 20 or later and the Genesis source checkout. From the repository:</p>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-sh">npm ci
+npm run build
+node dist/cli.js init ./my-world --template arena-llm
+node dist/cli.js dev ./my-world</code></pre></div>
+<p>Open the printed local URL. Play a turn, switch preview players and inspect the accepted state. The runner uses labeled prepared video and an arena move fixture.</p>
+<h2 id="choose-an-experience">Choose an experience</h2>
+<table>
+<thead>
+<tr>
+<th>Template</th>
+<th>Starting point</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>arena-llm</td>
+<td>Two players, shared health, structured LLM move definitions and a vintage interface.</td>
+</tr>
+<tr>
+<td>exploration</td>
+<td>Generated scene progression and end-frame continuity.</td>
+</tr>
+<tr>
+<td>decisions</td>
+<td>Branching choices and collective decisions.</td>
+</tr>
+<tr>
+<td>timing</td>
+<td>A bounded input window and a repeatable starting scene.</td>
+</tr>
+<tr>
+<td>arena</td>
+<td>Fixed server-resolved moves, inventory, seats and spectator queues.</td>
+</tr>
+</tbody></table>
+<p>Pass the template name with <code>--template</code>. For an original world, <a href="agent-skill.html">give your coding agent a prompt</a>.</p>
+<h2 id="make-the-world-yours">Make the world yours</h2>
+<ul>
+<li><strong>genesis.json:</strong> Declare player actions, settings, requested tools and assets.</li>
+<li><strong>interface.html:</strong> Build the controls and render the accepted public state.</li>
+<li><strong>controller.js:</strong> Keep inventory, variables, locations and characters in state; resolve actions and request backend tools.</li>
+</ul>
+<p>The browser submits intentions. The controller commits the result. Model and media jobs return as events; the controller chooses the next state.</p>
+<p>Restart the local runner after changing the project. Sessions pin their project contents. Remove the generated <code>.genesis/</code> directory inside your world when you want a fresh development session.</p>
+<h2 id="validate-and-export">Validate and export</h2>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-sh">node dist/cli.js validate ./my-world
+node dist/cli.js export ./my-world --out ./my-world.zip</code></pre></div>
+<p>The bundle contains the manifest, interface, controller, JSON Schema and complete declared assets. Use safe relative asset paths. The host attaches those assets and serves runtime URLs.</p>
+<h2 id="connect-live-generation">Connect live generation</h2>
+<p>Use the <a href="integration.html">Worldstreams API</a> for the managed Sequencer path, or <a href="providers.html">register your own providers</a>. Keep credentials on the server. Your host independently authorizes tool access and spending.</p>
+<p>The local runner supplies the arena move fixture for LLM requests. When your world requests another response shape, supply matching fixture data through a local <code>createLlmProvider</code> host adapter or connect the configured backend.</p>
+<h2 id="take-it-into-production">Take it into production</h2>
+<p>Embed <code>mountGenesisPlayer</code> in your app and run <code>GenesisHost</code> behind authenticated routes. Choose persistent storage and a background worker for the room. Distributed deployments need transactional storage and durable scheduling. Read <a href="host-authority.html">host authority</a> and <a href="api.html">the API reference</a> before deployment.</p>
+</article>
+      <footer class="site-footer">
+        <p>GENESIS 0.1.0 · Open source World Model game engine</p>
+        <nav aria-label="Footer resources"><a href="license.html">Apache 2.0</a><a href="agent-skill.html">World-building skill</a><a href="contributing.html">Contribute</a><a href="compatibility.html">Development preview</a></nav>
+        <p class="release-note">Local launch preparation. Public repository and package release are pending.</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

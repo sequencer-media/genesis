@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Architecture. GENESIS open source World Model game engine documentation.">
+  <title>Architecture · GENESIS</title>
+  <link rel="stylesheet" href="site/site.css">
+  <script src="site/site.js" defer></script>
+</head>
+<body class="guide-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="GENESIS home"><span class="brand-mark" aria-hidden="true">G</span>GENESIS</a>
+    <a class="license-badge" href="license.html">Open source · Apache 2.0</a>
+    <form class="search" role="search">
+      <label class="sr-only" for="docs-search">Search Genesis documentation</label>
+      <input id="docs-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results">
+      <div id="search-results" class="search-results" role="region" aria-label="Documentation search results" hidden></div>
+    </form>
+  </header>
+  <details class="mobile-navigation"><summary>Documentation menu</summary><nav aria-label="Mobile documentation"><p class="nav-group">Start here</p><a href="index.html">Overview</a>
+<a href="getting-started.html">Build your first world</a>
+<a href="world-memory.html">World memory</a>
+<a href="agent-skill.html">Build from one prompt</a>
+<a href="demos.html">Worldstreams demos</a>
+<p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="providers.html">Your own models</a>
+<p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
+<a href="architecture.html" aria-current="page" class="active">Architecture</a>
+<a href="host-authority.html">Hosting and authority</a>
+<a href="project-boundary.html">Portable projects</a>
+<a href="compatibility.html">Compatibility</a>
+<a href="authoring-rules.html">Authoring contract</a>
+<p class="nav-group">Open source</p><a href="contributing.html">Contributing</a>
+<a href="security.html">Security</a>
+<a href="license.html">Apache 2.0 license</a>
+<a href="readme.html">Project README</a></nav></details>
+  <div class="site-layout">
+    <aside class="sidebar"><nav aria-label="Documentation"><p class="nav-group">Start here</p><a href="index.html">Overview</a>
+<a href="getting-started.html">Build your first world</a>
+<a href="world-memory.html">World memory</a>
+<a href="agent-skill.html">Build from one prompt</a>
+<a href="demos.html">Worldstreams demos</a>
+<p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="providers.html">Your own models</a>
+<p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
+<a href="architecture.html" aria-current="page" class="active">Architecture</a>
+<a href="host-authority.html">Hosting and authority</a>
+<a href="project-boundary.html">Portable projects</a>
+<a href="compatibility.html">Compatibility</a>
+<a href="authoring-rules.html">Authoring contract</a>
+<p class="nav-group">Open source</p><a href="contributing.html">Contributing</a>
+<a href="security.html">Security</a>
+<a href="license.html">Apache 2.0 license</a>
+<a href="readme.html">Project README</a></nav></aside>
+    <main id="main" tabindex="-1">
+      <article><h1 id="architecture">Architecture</h1>
+<p>Genesis is a portable runtime and project format. A world has a browser interface, a synchronous sandboxed server controller, accepted state and asynchronous host effects. The host owns authentication, provider credentials, permissions, spending, publication and storage. Sequencer implements that host with managed media, LLM requests, versioned assets and stream infrastructure.</p>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-text">Viewer action -&gt; authenticated host -&gt; controller -&gt; committed state
+                                         |
+                                    bounded effect
+                                         |
+                               provider / backend LLM
+                                         |
+                              validated job.ready data
+                                         |
+                                    controller -&gt; UI</code></pre></div>
+<p>The same LLM service can return both a video prompt and structured scene facts. Validate the structured result before accepting it. A director describes the committed game outcome; it cannot rewrite health, payments or eligibility. A generated battle move set is installed once for its battle. The effect&#39;s guard cancels obsolete results after player replacement. A video result becomes playable only after an actual end-frame checkpoint. A live-direction receipt acknowledges queued delivery, not playback completion.</p>
+<p>One server worker advances each shared hosted session under a durable lease. Viewer reads return accepted state and renew throttled presence. They do not independently poll the provider. Cloud Tasks retries failures; a busy worker returns a retryable failure. Durable provider records and stable request IDs survive process loss. Ambiguous paid submissions require reconciliation instead of issuing another charge. These are scoped guarantees, not a promise of exactly-once behavior from arbitrary providers.</p>
+<p>SDK memory/file adapters support one host process. Distributed creators provide transactional storage, job admission and durable scheduling. Never run the loopback authoring server on the public internet. Host adapters validate capabilities independently of the project&#39;s requests.</p>
+<p>Relative paths identify portable assets. ZIP import enforces safe paths, supported media, declared sizes, duplicate detection and bounded decompression. Sequencer uploads owned media, copies immutable version assets and serves host-controlled URLs. The portable registry and inert reference metadata support downloading a complete bundle later. New saves reuse uploads within a SequencerClient instance; multi-instance upload caching is a creator storage choice.</p>
+</article>
+      <footer class="site-footer">
+        <p>GENESIS 0.1.0 · Open source World Model game engine</p>
+        <nav aria-label="Footer resources"><a href="license.html">Apache 2.0</a><a href="agent-skill.html">World-building skill</a><a href="contributing.html">Contribute</a><a href="compatibility.html">Development preview</a></nav>
+        <p class="release-note">Local launch preparation. Public repository and package release are pending.</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

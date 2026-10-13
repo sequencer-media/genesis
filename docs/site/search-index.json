@@ -1,0 +1,290 @@
+[
+  {
+    "title": "GENESIS",
+    "heading": "Create infinite experiences, in minutes.",
+    "url": "index.html",
+    "text": "Open source World Model game engine Create infinite experiences, in minutes. Give your World Model a memory, an inventory and a playable interface. GENESIS is the dungeon master for your worldstream: it remembers the world, applies the rules and connects player actions to generated scenes. Build your first world Create from one prompt Apache 2.0 licensed. Bring your own models, or connect the Worldstreams API with one server key. Your World Model needs a dungeon master. In a tabletop game, the dungeon master remembers what you carry, who you met and what changed. GENESIS gives infinite experiences that same foundation. Your controller owns the facts; your LLM and World Model receive the context for what happens next. World memory Persist inventory, health, quest flags, locations and character relationships in structured state. Playable worlds Build custom interfaces, authoritative turns, player seats and crowd decisions around generated scenes. Connected generation Validate LLM replies, track asynchronous jobs and carry real scene checkpoints into the next moment. Describe any world. Start with one prompt. The included create-world-stream skill helps a coding agent turn your idea into a working prototype: world settings, a custom interface, controller rules, assets and an exportable bundle. Use the create-world-stream skill to build Mosslight, a forest battle worldstream with a"
+  },
+  {
+    "title": "GENESIS / Your World Model needs a dungeon master.",
+    "heading": "Your World Model needs a dungeon master.",
+    "url": "index.html#your-world-model-needs-a-dungeon-master",
+    "text": "Your World Model needs a dungeon master. In a tabletop game, the dungeon master remembers what you carry, who you met and what changed. GENESIS gives infinite experiences that same foundation. Your controller owns the facts; your LLM and World Model receive the context for what happens next."
+  },
+  {
+    "title": "GENESIS / Describe any world. Start with one prompt.",
+    "heading": "Describe any world. Start with one prompt.",
+    "url": "index.html#describe-any-world-start-with-one-prompt",
+    "text": "Describe any world. Start with one prompt. The included create-world-stream skill helps a coding agent turn your idea into a working prototype: world settings, a custom interface, controller rules, assets and an exportable bundle. Use the create-world-stream skill to build Mosslight, a forest battle worldstream with a cream pixel interface. Let two players take turns, ask the backend LLM for four moves per encounter, and remember their inventory, health and progress. Give me a working local preview and an exportable world. Copy world-building prompt Start with labeled fixtures for a local prototype. Connect your chosen models and a generation budget for live media. Learn the agent workflow ."
+  },
+  {
+    "title": "GENESIS / Rick and Morty, together in one worldstream",
+    "heading": "Rick and Morty, together in one worldstream",
+    "url": "index.html#rick-and-morty-together-in-one-worldstream",
+    "text": "Rick and Morty, together in one worldstream Watch the multiplayer example: Rick and Morty have their own character controls, and both actions feed the shared experience. Watch the multiplayer Rick and Morty video Recorded Worldstreams example. Explore all demos ."
+  },
+  {
+    "title": "GENESIS / Three files. Your whole world.",
+    "heading": "Three files. Your whole world.",
+    "url": "index.html#three-files-your-whole-world",
+    "text": "Three files. Your whole world. Copy my-world/ ├── genesis.json World settings, actions, tools and assets ├── interface.html Your interface and player controls ├── controller.js World memory, rules and backend requests └── assets/ Images, audio and video that travel with you GENESIS coordinates the world; connected providers generate media. Your host supplies identity, storage, credentials and spending policy. Start building ."
+  },
+  {
+    "title": "GENESIS / Choose your connection",
+    "heading": "Choose your connection",
+    "url": "index.html#choose-your-connection",
+    "text": "Choose your connection Worldstreams API Your own World Models One Sequencer server key connects LLM tools, media generation, assets and managed worldstream APIs. Choose your LLM and World Model, then register their server-side adapters. Connect Worldstreams Connect your own providers The source is Apache 2.0 licensed . Version 0.1 is an unpublished development preview, being polished for launch. Read the license , contribute or explore the SDK API ."
+  },
+  {
+    "title": "Build your first world",
+    "heading": "Build your first world",
+    "url": "getting-started.html",
+    "text": "Build your first world Start with a playable local worldstream, then customize its rules and connect generation. GENESIS is Apache 2.0 licensed; the local fixtures work without a model account. Run a starter Requires Node 20 or later and the Genesis source checkout. From the repository: Copy npm ci npm run build node dist/cli.js init ./my-world --template arena-llm node dist/cli.js dev ./my-world Open the printed local URL. Play a turn, switch preview players and inspect the accepted state. The runner uses labeled prepared video and an arena move fixture. Choose an experience Template Starting point arena-llm Two players, shared health, structured LLM move definitions and a vintage interface. exploration Generated scene progression and end-frame continuity. decisions Branching choices and collective decisions. timing A bounded input window and a repeatable starting scene. arena Fixed server-resolved moves, inventory, seats and spectator queues. Pass the template name with --template . For an original world, give your coding agent a prompt . Make the world yours genesis.json: Declare player actions, settings, requested tools and assets. interface.html: Build the controls and render the accepted public state. controller.js: Keep inventory, variables, locations and characters in state; resolve actions and request backend tools. The browser submits intentions. The controller commit"
+  },
+  {
+    "title": "Build your first world / Run a starter",
+    "heading": "Run a starter",
+    "url": "getting-started.html#run-a-starter",
+    "text": "Run a starter Requires Node 20 or later and the Genesis source checkout. From the repository: Copy npm ci npm run build node dist/cli.js init ./my-world --template arena-llm node dist/cli.js dev ./my-world Open the printed local URL. Play a turn, switch preview players and inspect the accepted state. The runner uses labeled prepared video and an arena move fixture."
+  },
+  {
+    "title": "Build your first world / Choose an experience",
+    "heading": "Choose an experience",
+    "url": "getting-started.html#choose-an-experience",
+    "text": "Choose an experience Template Starting point arena-llm Two players, shared health, structured LLM move definitions and a vintage interface. exploration Generated scene progression and end-frame continuity. decisions Branching choices and collective decisions. timing A bounded input window and a repeatable starting scene. arena Fixed server-resolved moves, inventory, seats and spectator queues. Pass the template name with --template . For an original world, give your coding agent a prompt ."
+  },
+  {
+    "title": "Build your first world / Make the world yours",
+    "heading": "Make the world yours",
+    "url": "getting-started.html#make-the-world-yours",
+    "text": "Make the world yours genesis.json: Declare player actions, settings, requested tools and assets. interface.html: Build the controls and render the accepted public state. controller.js: Keep inventory, variables, locations and characters in state; resolve actions and request backend tools. The browser submits intentions. The controller commits the result. Model and media jobs return as events; the controller chooses the next state. Restart the local runner after changing the project. Sessions pin their project contents. Remove the generated .genesis/ directory inside your world when you want a fresh development session."
+  },
+  {
+    "title": "Build your first world / Validate and export",
+    "heading": "Validate and export",
+    "url": "getting-started.html#validate-and-export",
+    "text": "Validate and export Copy node dist/cli.js validate ./my-world node dist/cli.js export ./my-world --out ./my-world.zip The bundle contains the manifest, interface, controller, JSON Schema and complete declared assets. Use safe relative asset paths. The host attaches those assets and serves runtime URLs."
+  },
+  {
+    "title": "Build your first world / Connect live generation",
+    "heading": "Connect live generation",
+    "url": "getting-started.html#connect-live-generation",
+    "text": "Connect live generation Use the Worldstreams API for the managed Sequencer path, or register your own providers . Keep credentials on the server. Your host independently authorizes tool access and spending. The local runner supplies the arena move fixture for LLM requests. When your world requests another response shape, supply matching fixture data through a local createLlmProvider host adapter or connect the configured backend."
+  },
+  {
+    "title": "Build your first world / Take it into production",
+    "heading": "Take it into production",
+    "url": "getting-started.html#take-it-into-production",
+    "text": "Take it into production Embed mountGenesisPlayer in your app and run GenesisHost behind authenticated routes. Choose persistent storage and a background worker for the room. Distributed deployments need transactional storage and durable scheduling. Read host authority and the API reference before deployment."
+  },
+  {
+    "title": "World memory",
+    "heading": "World memory, inventory and characters",
+    "url": "world-memory.html",
+    "text": "World memory, inventory and characters A World Model receives the context for its next scene. GENESIS stores the facts that make that scene part of the same experience: what players carry, where they are, who they met and which decisions changed the world. Define your world's facts The controller state is JSON. Choose the structure that fits your world. For example: Copy { \"location\": \"mosslight_gate\", \"inventory\": [\"brass_key\", \"healing_herb\"], \"health\": 90, \"quests\": {\"find_the_lighthouse\": \"active\"}, \"locations\": { \"mosslight_gate\": {\"visited\": true, \"doorUnlocked\": false} }, \"characters\": { \"keeper\": {\"name\": \"Mira\", \"relationship\": \"trusted\"} } } This is an example state shape. Your controller defines the inventory rules, character behavior, location transitions and values your interface displays. Public, private and server state State Use it for public Shared inventory, visible characters, location and game progress. private A participant's hidden information. The host filters the view by actor. server Internal encounter IDs, generation guards and facts the controller needs to keep off the public view. The host persists accepted state with the session. Memory and file adapters support one host process; production hosts choose storage for their deployment. This preview bounds session state to 200 KB. Long histories and external memory stores belong in host adapters. Resolv"
+  },
+  {
+    "title": "World memory / Define your world's facts",
+    "heading": "Define your world's facts",
+    "url": "world-memory.html#define-your-worlds-facts",
+    "text": "Define your world's facts The controller state is JSON. Choose the structure that fits your world. For example: Copy { \"location\": \"mosslight_gate\", \"inventory\": [\"brass_key\", \"healing_herb\"], \"health\": 90, \"quests\": {\"find_the_lighthouse\": \"active\"}, \"locations\": { \"mosslight_gate\": {\"visited\": true, \"doorUnlocked\": false} }, \"characters\": { \"keeper\": {\"name\": \"Mira\", \"relationship\": \"trusted\"} } } This is an example state shape. Your controller defines the inventory rules, character behavior, location transitions and values your interface displays."
+  },
+  {
+    "title": "World memory / Public, private and server state",
+    "heading": "Public, private and server state",
+    "url": "world-memory.html#public-private-and-server-state",
+    "text": "Public, private and server state State Use it for public Shared inventory, visible characters, location and game progress. private A participant's hidden information. The host filters the view by actor. server Internal encounter IDs, generation guards and facts the controller needs to keep off the public view. The host persists accepted state with the session. Memory and file adapters support one host process; production hosts choose storage for their deployment. This preview bounds session state to 200 KB. Long histories and external memory stores belong in host adapters."
+  },
+  {
+    "title": "World memory / Resolve the action first",
+    "heading": "Resolve the action first",
+    "url": "world-memory.html#resolve-the-action-first",
+    "text": "Resolve the action first When a player uses the brass key, the controller checks the accepted inventory and current location. It commits the unlocked door to state, then requests a scene describing that outcome. The interface submits a declared, typed action. The host checks actor eligibility and the current input window. The controller commits the inventory and location changes. A bounded backend request carries the outcome and relevant world context. Validated results return to the controller and update the accepted view. The LLM can describe a character's response or propose structured choices. Your rules remain the authority for inventory, health, access and turn order."
+  },
+  {
+    "title": "World memory / Keep generated data structured",
+    "heading": "Keep generated data structured",
+    "url": "world-memory.html#keep-generated-data-structured",
+    "text": "Keep generated data structured For generated moves, dialogue or choices, use tool.llm.generate with a bounded object response schema. Choose fields such as name, description and permitted numeric attributes. Render model text as text in the interface. Use an encounter or scene guard so an old LLM result cannot replace the current decision. The arena-llm starter generates four moves once per encounter. See structured LLM helpers ."
+  },
+  {
+    "title": "World memory / Give the next scene the right context",
+    "heading": "Give the next scene the right context",
+    "url": "world-memory.html#give-the-next-scene-the-right-context",
+    "text": "Give the next scene the right context Scene requests can carry intent, a required outcome, an anchor and a spending ceiling. Include the facts that matter for this scene rather than sending every stored detail. Carry the actual decoded end frame into the next video request. Generation completion and playback completion are separate events. Reopen visual actions after the host accepts playback completion. GENESIS keeps the state and job lifecycle consistent. Visual fidelity depends on the connected World Model. Read the controller API and architecture ."
+  },
+  {
+    "title": "Build from one prompt",
+    "heading": "Build any world from one prompt",
+    "url": "agent-skill.html",
+    "text": "Build any world from one prompt The open source create-world-stream skill helps a coding agent build a playable World Model prototype in minutes. Describe the experience; the agent creates the interface, controller rules, backend requests and portable project. Use the included skill Give your coding agent the Genesis checkout and ask it to use skills/create-world-stream/SKILL.md . Repo-aware agents discover it through AGENTS.md. Other skill-capable agents can load the file directly. The agent needs access to the checkout, Node 20 or later and the Genesis CLI. This preview is supplied as source; npm and public GitHub publication are pending. Use the create-world-stream skill to build Mosslight, a forest battle worldstream with a cream pixel interface. Let two players take turns, ask the backend LLM for four moves per encounter, and remember their inventory, health and progress. Give me a working local preview and an exportable world. Copy world-building prompt What the agent produces A world manifest with settings, typed actions, tool requests and declared assets. A custom interface for controls, inventory, characters and scene presentation. An authoritative controller for state, shared rules, turns and generation requests. A working local preview and a validated, exportable bundle. Describe the genre, interaction and visual style you want. The skill chooses the nearest starter "
+  },
+  {
+    "title": "Build from one prompt / Use the included skill",
+    "heading": "Use the included skill",
+    "url": "agent-skill.html#use-the-included-skill",
+    "text": "Use the included skill Give your coding agent the Genesis checkout and ask it to use skills/create-world-stream/SKILL.md . Repo-aware agents discover it through AGENTS.md. Other skill-capable agents can load the file directly. The agent needs access to the checkout, Node 20 or later and the Genesis CLI. This preview is supplied as source; npm and public GitHub publication are pending. Use the create-world-stream skill to build Mosslight, a forest battle worldstream with a cream pixel interface. Let two players take turns, ask the backend LLM for four moves per encounter, and remember their inventory, health and progress. Give me a working local preview and an exportable world. Copy world-building prompt"
+  },
+  {
+    "title": "Build from one prompt / What the agent produces",
+    "heading": "What the agent produces",
+    "url": "agent-skill.html#what-the-agent-produces",
+    "text": "What the agent produces A world manifest with settings, typed actions, tool requests and declared assets. A custom interface for controls, inventory, characters and scene presentation. An authoritative controller for state, shared rules, turns and generation requests. A working local preview and a validated, exportable bundle. Describe the genre, interaction and visual style you want. The skill chooses the nearest starter and adapts its mechanics to your idea. Your chosen model provider remains yours."
+  },
+  {
+    "title": "Build from one prompt / Local prototype to live worldstream",
+    "heading": "Local prototype to live worldstream",
+    "url": "agent-skill.html#local-prototype-to-live-worldstream",
+    "text": "Local prototype to live worldstream Prepared fixtures make the interaction loop available immediately. The stock runner includes an arena move fixture; other structured responses need a matching local provider fixture. With a configured provider and authorized budget, the agent can generate and attach images, audio and video. The Worldstreams API connects those services through one Sequencer server key. You can also bring your own models . The skill validates the project, exports its assets and exercises the controls, repeated turns, actor permissions and mobile layout. It reports the actual local result or saved draft and any live-provider behavior still to verify."
+  },
+  {
+    "title": "Build from one prompt / Read or download the skill",
+    "heading": "Read or download the skill",
+    "url": "agent-skill.html#read-or-download-the-skill",
+    "text": "Read or download the skill The skill is included with the Apache 2.0 licensed framework. Download SKILL.md to load it in your agent alongside the checkout. The full authoring instructions appear below."
+  },
+  {
+    "title": "Build from one prompt / Authoring instructions",
+    "heading": "Authoring instructions",
+    "url": "agent-skill.html#authoring-instructions",
+    "text": "Authoring instructions Turn the user's idea into a working world, a local preview and a validated exportable bundle. Choose mechanics, presentation and reasonable defaults from the prompt. Ask only for information that blocks the requested behavior. Preserve the user's chosen provider and existing world behavior. Sequencer is the default managed integration when a provider has not been chosen. Read the package's README and docs/api.md. Use genesis init with the nearest template, then implement the requested world in genesis.json, interface.html and controller.js. Adapt the actual controls, rules and scene context to the idea. Use the local runner's labeled fixtures for an immediate preview; connect live generation when the provider is configured and spending is authorized. The stock local runner returns the arena move fixture for LLM requests. For a different responseSchema, supply matching fixture data through a local host provider using createLlmProvider; keep preview-only providers outside the portable project. Do not present a fixture response as live generation. Use window.Genesis for browser actions, state subscriptions, seats and assets. Read actor eligibility from the accepted host view. Keep health, turn order, vote outcomes and permitted state transitions in synchronous onEvent(context) . Render LLM names as text; never evaluate model output as HTML or JavaScript. For generated moves or world choices, request tool.llm.generate with a bounded object responseSchema, a cost ceiling and a guard against stale battle or scene IDs. Consume job.ready's event.data.data. Ge"
+  },
+  {
+    "title": "Worldstreams demos",
+    "heading": "Worldstreams in action",
+    "url": "demos.html",
+    "text": "Worldstreams in action GENESIS is an open source World Model game engine, licensed under Apache 2.0. These recorded examples show the experiences around World Models: shared character controls, audience choices and playable interfaces. Build from one prompt · Start locally · Read the license Watch the multiplayer Rick and Morty video Rick and Morty · Multiplayer Worldstream Two players direct Rick and Morty through their own controls. Both actions feed the shared experience. Watch the recorded interface and generated world together. Open video Watch the Adventure Time video Adventure Time · Land of Ooo A connected fantasy journey with audience-choice controls around prepared World Model scenes. Try the preview player Watch the World Model games video World Model games Explore the visual presentation of World Model game experiences in this recorded product demo. Open video Build your own infinite experience The bundled create-world-stream skill turns a prompt into a playable local project, a custom interface and a portable world. Start with fixtures, then connect a World Model and generation budget. Create from one prompt Connect Worldstreams The videos are recorded Worldstreams examples. Preview controls illustrate the interaction flow; live generation uses a connected provider. Runnable portable Genesis starters are included in the repository."
+  },
+  {
+    "title": "Worldstreams demos / Build your own infinite experience",
+    "heading": "Build your own infinite experience",
+    "url": "demos.html#build-your-own-infinite-experience",
+    "text": "Build your own infinite experience The bundled create-world-stream skill turns a prompt into a playable local project, a custom interface and a portable world. Start with fixtures, then connect a World Model and generation budget. Create from one prompt Connect Worldstreams The videos are recorded Worldstreams examples. Preview controls illustrate the interaction flow; live generation uses a connected provider. Runnable portable Genesis starters are included in the repository."
+  },
+  {
+    "title": "Worldstreams API",
+    "heading": "Integration",
+    "url": "integration.html",
+    "text": "Integration Use createLlmProvider with a generate(request, context) callback and a durable result store for paid calls. The request contains prompt, optional context and a bounded JSON responseSchema. The callback receives sessionId, a stable idempotencyKey and maxCostUsd. Keep the provider key on your server. The adapter validates output and sends it as job.ready's event.data.data. Paid providers must enforce the cost ceiling before submission. In-process deduplication does not replace distributed locks. createSequencerLlmProvider connects that callback to the Sequencer LLM endpoint. FileGenesisToolResults is an atomic single-host store. Configure a transaction-backed result store for distributed workers. Keep the world generation adapter separate from the LLM adapter so either can be replaced. Image/audio/video generation uses SequencerClient.generate; enumerate supported models with models(), inspect model(modelId), pass a cost ceiling and retain the returned media/job ID. Read status and completed media through media(workspaceId, mediaId). A thumbnail is not an actual video end-frame checkpoint. SequencerClient.save uploads declared assets and saves a guarded draft. load returns a portable project, complete assetFiles and the current versionId. The browser-compatible attachGenesisAssets helper supports signed-in creator imports without putting an account API key in the brow"
+  },
+  {
+    "title": "Your own models",
+    "heading": "Provider integration",
+    "url": "providers.html",
+    "text": "Provider integration A provider is a host module. Projects submit semantic effects and never receive provider credentials. Register providers and allowed capabilities when creating GenesisHost. Paid providers require services.authorizeTool, even when the creator requests access in the manifest. Prepared media createCachedProvider([{videoUrl,imageUrl}]) exercises queue, completion, playback and checkpoints with owned prepared assets. The image must represent the clip's actual last frame. Starter assets are included for no-cost local development. Replicate createReplicateProvider takes a server token and a host-registered model map. Each entry pins a 64-character version hash, provides maxEstimatedCostUsd, maps the Genesis job to model-specific inputs, and persists returned media through an asynchronous result callback. The callback must produce an immutable imageUrl for the actual final frame of scene videos. decodeGenesisEndFrame(inputPath,outputPath) handles bounded owned local files when ffmpeg/ffprobe are installed. The adapter uses POST /v1/predictions, GET /v1/predictions/{id}, and POST /v1/predictions/{id}/cancel. Requests use Bearer authentication. See https://replicate.com/docs/reference/http for the provider protocol. Model costs are estimates, not a guaranteed external spending cap. Hosts enforce admission and actual billing through their own services and provider acc"
+  },
+  {
+    "title": "Your own models / Prepared media",
+    "heading": "Prepared media",
+    "url": "providers.html#prepared-media",
+    "text": "Prepared media createCachedProvider([{videoUrl,imageUrl}]) exercises queue, completion, playback and checkpoints with owned prepared assets. The image must represent the clip's actual last frame. Starter assets are included for no-cost local development."
+  },
+  {
+    "title": "Your own models / Replicate",
+    "heading": "Replicate",
+    "url": "providers.html#replicate",
+    "text": "Replicate createReplicateProvider takes a server token and a host-registered model map. Each entry pins a 64-character version hash, provides maxEstimatedCostUsd, maps the Genesis job to model-specific inputs, and persists returned media through an asynchronous result callback. The callback must produce an immutable imageUrl for the actual final frame of scene videos. decodeGenesisEndFrame(inputPath,outputPath) handles bounded owned local files when ffmpeg/ffprobe are installed. The adapter uses POST /v1/predictions, GET /v1/predictions/{id}, and POST /v1/predictions/{id}/cancel. Requests use Bearer authentication. See https://replicate.com/docs/reference/http for the provider protocol. Model costs are estimates, not a guaranteed external spending cap. Hosts enforce admission and actual billing through their own services and provider account controls. No creator price controls are introduced. Retry behavior depends on provider idempotency support. Replicate submission is deduplicated within the adapter process; uncertain submissions after process loss require reconciliation before a new attempt. The reference host does not automatically resubmit them. Output storage and remote downloading are host responsibilities. Allowlist provider/storage domains, validate redirects, bound download size and duration, and retain immutable assets. Do not let creator URLs become unrestricted server fetch targets. Protocol tests run without secrets. A deployment must test its chosen model's input mapping, output persistence and generation fidelity with live media before production use."
+  },
+  {
+    "title": "Your own models / Custom services",
+    "heading": "Custom services",
+    "url": "providers.html#custom-services",
+    "text": "Custom services A provider can declare tool.audio.speak or tool.maps.lookup alongside its own argument validator and server implementation. Controllers request tool.request with toolId and data. Grant tool IDs independently in host policy. Return bounded result.data; the controller chooses what to expose to participants. Generic tool completion does not automatically replace the video stage. Uncertain paid submissions block participant retry. An operator can reconcile an existing prediction with host.reconcileProviderJob(jobId,providerId,predictionId). Restrict this to authenticated operator infrastructure. GenesisProviderSubmissionError(message,false) identifies a confirmed rejected submission; other paid start failures remain uncertain. This prevents automatic repeat charges after ambiguous network failures."
+  },
+  {
+    "title": "SDK API reference",
+    "heading": "Genesis 0.1 API",
+    "url": "api.html",
+    "text": "Genesis 0.1 API Project GenesisProject has format genesis-project , version 1, title, optional description, coverImageUrl and namespaced extensions, definition, interfaceSource, controllerSource and startImageUrl. validateGenesisProject() validates the versioned JSON Schema and semantic references, then normalizes the project. Unknown product settings and host policies are rejected. coverImageUrl is listing art; startImageUrl initializes the scene checkpoint. createGenesisProject(template) returns a runnable starter. Local media uses /assets paths; external media uses HTTPS. A hosting adapter may narrow allowed media hosts. File-based projects keep settings in genesis.json with interfaceFile: \"interface.html\" and controllerFile: \"controller.js\" . createGenesisProjectManifest(project) produces this source-free manifest. applyGenesisProjectManifest(manifest, interfaceSource, controllerSource) validates editor settings without replacing the opened code. loadGenesisProject(directory) loads referenced source files with directory containment checks. The schema accepts manifests and inline transport projects. exportGenesisProjectArchive(project) produces a ZIP with the three entry files and genesis.schema.json; importGenesisProjectArchive(bytes) validates and restores it with bounded extraction. importGenesisProjectText(text) accepts an inline JSON transport project. Media files remai"
+  },
+  {
+    "title": "SDK API reference / Project",
+    "heading": "Project",
+    "url": "api.html#project",
+    "text": "Project GenesisProject has format genesis-project , version 1, title, optional description, coverImageUrl and namespaced extensions, definition, interfaceSource, controllerSource and startImageUrl. validateGenesisProject() validates the versioned JSON Schema and semantic references, then normalizes the project. Unknown product settings and host policies are rejected. coverImageUrl is listing art; startImageUrl initializes the scene checkpoint. createGenesisProject(template) returns a runnable starter. Local media uses /assets paths; external media uses HTTPS. A hosting adapter may narrow allowed media hosts. File-based projects keep settings in genesis.json with interfaceFile: \"interface.html\" and controllerFile: \"controller.js\" . createGenesisProjectManifest(project) produces this source-free manifest. applyGenesisProjectManifest(manifest, interfaceSource, controllerSource) validates editor settings without replacing the opened code. loadGenesisProject(directory) loads referenced source files with directory containment checks. The schema accepts manifests and inline transport projects. exportGenesisProjectArchive(project) produces a ZIP with the three entry files and genesis.schema.json; importGenesisProjectArchive(bytes) validates and restores it with bounded extraction. importGenesisProjectText(text) accepts an inline JSON transport project. Media files remain references. definition.worldVideo.chunkIntervalSeconds defaults to 14 and accepts whole seconds from 2 to 30. It is a nominal continuous-stream cadence, separate from scene.request.duration . It reaches context.con"
+  },
+  {
+    "title": "SDK API reference / Controller",
+    "heading": "Controller",
+    "url": "api.html#controller",
+    "text": "Controller Define classic JavaScript function onEvent(context) . The context includes state {public, private, server, window}, event {id,type,actorId?,actionId?,data,now}, participants, a server-only ballots snapshot, stage, anchors and config. It contains no host credential or wallet objects. Return an object with optional public/private/server state, window and effects. State updates replace their corresponding object. A window declares id, actionIds, mode (individual or collective), optional actorIds, choices and deadline. An empty actorIds array grants no actor permission. Collective windows require 2 to 12 choices. Window IDs must change between decisions. Choice and ballot payloads carry optionId; the browser SDK includes the current collective windowId. Events include session.started, participant.joined, participant.left, action, vote.cast, vote.resolved, vote.empty, timer, job.ready, job.failed, job.skipped and playback.completed. Generation completion describes prepared media. Playback completion means the host's participant policy has been satisfied. Effects: scene.request, image.request, live.direction, tool.request, stage.show, stage.restore, stage.play and timer.set. Each has a unique id. Tool effects carry intent, optional anchorId, modelId, duration, requiredOutcome and maxCostUsd. Timers carry delayMs and data. Stage play carries a saved videoUrl. A restored anchor preserves controller scores and inventory. Tools must be requested in the manifest and granted by the host. Stream defaults do not restrict operations in custom controllers. A provider still must "
+  },
+  {
+    "title": "SDK API reference / Browser SDK",
+    "heading": "Browser SDK",
+    "url": "api.html#browser-sdk",
+    "text": "Browser SDK window.Genesis.action(id,data) sends an action. actions.get(id) and actions.list() describe current permissions. state.get() returns public state; state.subscribe(fn) receives updates. stage.get() returns presentation and anchor data. stage.point(event,element) returns normalized frame coordinates accounting for letterboxing. on('state',fn) receives the filtered view. The existing image, voice and character helpers depend on host support; the standalone reference player currently supports typed actions and standard text/click/choice controls. State subscriptions begin when the host supplies the first view. They receive the current view immediately when registered after that point. Initialize UI placeholders in HTML, and read player seats and game state inside a subscription. Custom interfaces execute inside opaque sandbox iframes with blocked network connections. The host remains responsible for essential exit, reconnect and billing UI. Host-message handling checks the frame source, nonce and declared action."
+  },
+  {
+    "title": "SDK API reference / Node host and adapters",
+    "heading": "Node host and adapters",
+    "url": "api.html#node-host-and-adapters",
+    "text": "Node host and adapters Construct GenesisHost(sessionId,project,{storage,policy,services,providers}), then await initialize(). Methods: join, leave, view, action, playback, runJob, tick, retry and skip. diagnostics() is author-only and includes internal state. Never expose it to general participants. Providers implement id, paid, capabilities, start, poll and optional cancel. Start receives a stable idempotencyKey, a job and anchor. Poll returns running, ready or failed. Ready scene results include videoUrl and an actual end-frame imageUrl. Storage implements load/save snapshots. The reference host serializes per-session operations in one process; distributed hosts provide their own transaction/lease adapter."
+  },
+  {
+    "title": "SDK API reference / Custom tools",
+    "heading": "Custom tools",
+    "url": "api.html#custom-tools",
+    "text": "Custom tools Request namespaced capabilities such as tool.lookup in the manifest. The host must independently grant the capability and register a provider with that capability. Controllers emit {id,type:\"tool.request\",toolId:\"tool.lookup\",data:{...}} . Arguments and returned result.data are bounded to 12 KB. Provider validate(job) rejects invalid arguments before paid authorization. Completion enters job.ready with event.data.data. Generic tools preserve the stage; the controller decides presentation. No provider credential or unrestricted fetch capability enters the sandbox. Collective submissions emit vote.cast with actorId and optionId. Controllers can inspect context.ballots to implement weights, quorum, early resolution or custom aggregation. Returning window:null closes the decision. The standard controller keeps deadline aggregation."
+  },
+  {
+    "title": "SDK API reference / Portable project boundary",
+    "heading": "Portable project boundary",
+    "url": "api.html#portable-project-boundary",
+    "text": "Portable project boundary The JSON Schema is exported as GENESIS_PROJECT_SCHEMA. createGenesisProjectManifest clears hosted package versions and saved-game connections without mutating the source definition. Inline source remains confined to transport projects. The Worldstreams editor preserves host references separately when applying manifest edits. definition.interface.chat optionally requests {presentation:\"minimized\"|\"open\"|\"disabled\",reactions:boolean} . Chat access and enforcement stay with the host. extensions uses namespaced keys such as org.example , up to 16 namespaces and 16 KB total. Unknown extension data is preserved without execution or capability grants."
+  },
+  {
+    "title": "SDK API reference / Participation version 1",
+    "heading": "Participation version 1",
+    "url": "api.html#participation-version-1",
+    "text": "Participation version 1 For explicitly claimed seats, declare definition.participation.seats as {version:1,slots:[{id,label}],queue:true,maxSeatsPerIdentity:1} . Seats require multiplayer mode and spectators, with minPlayers no greater than the slot count and slots no greater than maxPlayers. Slot IDs are unique. Defaults are queue false and one seat per verified identity. Configure room as shared or private; room discovery is implemented by the hosting adapter. Sequencer defaults seat worlds to one shared public arena per published version. Continuous worlds always share their audience room. Ordinary projects without seats retain their admission behavior. Genesis.players.get() and subscribe(fn) expose version, capabilities, seats with actorId/canClaim/canRelease, queueLength, own queuePosition/canQueue, and own cooldownUntil. claim(seatId) , leave(seatId) , joinQueue() and leaveQueue() request server transitions. A browser cannot specify another actor, a role, lease, identity, cooldown or removal authority. The host injects the verified identity. Sequencer requires sign-in to claim or queue. Watchers can remain anonymous. Controller context.participation contains public seats and queueLength, with no identities or credentials. Events are seat.claimed, seat.released, queue.joined and queue.left. To release a defeated player, return {id,type:\"players.release\",seatId,expectedActorId,cooldownMs:5000} . Expected ownership is checked before commit; the cooldown is limited to 60 seconds and follows the identity across new actor IDs. Replacements are promoted atomically from the e"
+  },
+  {
+    "title": "SDK API reference / Structured LLM and asset helpers",
+    "heading": "Structured LLM and asset helpers",
+    "url": "api.html#structured-llm-and-asset-helpers",
+    "text": "Structured LLM and asset helpers Tool tool.llm.generate accepts {prompt,context?,responseSchema} with a bounded object schema. Completion emits job.ready with event.data.data. Effect guard {key,value} must match current server state before a result is applied; obsolete jobs emit job.cancelled without exposing their result. Controllers receive jobs metadata for scheduling, including status, type and guard. Genesis.assets.get(path) resolves host-provided media sources. Portable bundles use declared assets/ paths; Sequencer interfaces use asset:// IDs after attachment. importGenesisProjectBundle preserves complete assetFiles; importGenesisProjectArchive returns only the project for compatibility."
+  },
+  {
+    "title": "Architecture",
+    "heading": "Architecture",
+    "url": "architecture.html",
+    "text": "Architecture Genesis is a portable runtime and project format. A world has a browser interface, a synchronous sandboxed server controller, accepted state and asynchronous host effects. The host owns authentication, provider credentials, permissions, spending, publication and storage. Sequencer implements that host with managed media, LLM requests, versioned assets and stream infrastructure. Copy Viewer action -> authenticated host -> controller -> committed state | bounded effect | provider / backend LLM | validated job.ready data | controller -> UI The same LLM service can return both a video prompt and structured scene facts. Validate the structured result before accepting it. A director describes the committed game outcome; it cannot rewrite health, payments or eligibility. A generated battle move set is installed once for its battle. The effect's guard cancels obsolete results after player replacement. A video result becomes playable only after an actual end-frame checkpoint. A live-direction receipt acknowledges queued delivery, not playback completion. One server worker advances each shared hosted session under a durable lease. Viewer reads return accepted state and renew throttled presence. They do not independently poll the provider. Cloud Tasks retries failures; a busy worker returns a retryable failure. Durable provider records and stable request IDs survive process l"
+  },
+  {
+    "title": "Hosting and authority",
+    "heading": "Host authority",
+    "url": "host-authority.html",
+    "text": "Host authority Creator code owns rules, scores, UI, turns, votes, story behavior and declared project settings. Manifest capabilities are requests. GenesisHostPolicy supplies independent host grants and ceilings; a manifest cannot raise them. The deployment owns authentication and actor admission, content policy, storage access, resource admission, billing, wallet state and verified purchases. GenesisHostServices exposes authorization and action-moderation hooks. GenesisMeteringAdapter describes authoritative viewer admission/release integration. A host calls these from its own viewer infrastructure, not from controller-provided times. Sequencer's shared hourly gem pool, split across active authenticated viewers, stays in its private host adapter. GenesisCommerceAdapter quotes registered offers and verifies platform receipts. No controller defines prices, adds gems or asserts that a purchase succeeded. Host quote/confirmation/charge infrastructure remains external. The portable preview does not implement a wallet or a commerce UI. Keep required billing, exit and reconnect controls outside creator iframes. Filter participant-private state and omit server state from view broadcasts. Public metadata and configuration are not secret storage. Diagnostics are restricted to authors/operators. The local runner binds loopback, issues actor tokens, checks same-origin writes, and rejects "
+  },
+  {
+    "title": "Portable projects",
+    "heading": "Project, product and host",
+    "url": "project-boundary.html",
+    "text": "Project, product and host Genesis is a portable project contract. It can run inside a hosting product or the standalone reference runner. Layer Owns Genesis project Metadata, assets, interface, controller, participation, action contracts, stream defaults, content preferences, requested capabilities and budgets. Hosting product Ownership, collaborators, publication/discovery, avatar account connections, chat membership/moderation, offers, prices and payouts. Host policy/services Credentials, model access, granted tools, resource ceilings, required safety checks, authoritative metering, wallets and verified receipts. Requested settings are validated independently of grants. Importing a project does not replace product permissions or grant new host capabilities. Unknown manifest fields are rejected. Namespaced extensions preserve bounded configuration and have no execution or permission semantics. Hosts can impose narrower limits. Worldstreams currently supports 100-character titles, 280-character listing descriptions and 14-second continuous stream chunks. Unsupported values are rejected before saving, while the portable project contract remains independent of those product limits. The three entry points are genesis.json, interface.html and controller.js. HTML may include browser JavaScript for local interactions. Shared world logic executes in the isolated controller. A viewer i"
+  },
+  {
+    "title": "Compatibility",
+    "heading": "Compatibility and growth",
+    "url": "compatibility.html",
+    "text": "Compatibility and growth Genesis can continue to evolve after publication. Releases use semantic versioning. Project format 1, participation 1, bounded tool contracts and asset registry fields are versioned independently. Existing format-1 projects without assets or LLM capabilities remain valid. Unknown fields fail visibly; hosts advertise capabilities and supported cadence instead of silently promising unsupported behavior. Keep new provider integrations in adapters. Add optional capabilities before making a host depend on them. Extensions are bounded inert data and grant no authority. A host pins controller/interface versions for a session, and new drafts affect new sessions. Maintain supported version fixtures and round-trip tests. Breaking format changes require an explicit migration and a major release; do not mutate existing session rules halfway through a game. This unpublished preview runs CI on Node 20 and 22. Package publication is disabled with private:true. Remove that guard only for an authorized release. The local launch repository has no remote. Keep commercial account records, operational credentials and deployment settings outside it."
+  },
+  {
+    "title": "Authoring contract",
+    "heading": "Authoring Genesis projects",
+    "url": "authoring-rules.html",
+    "text": "Authoring Genesis projects When asked to build a world from an idea, use skills/create-world-stream/SKILL.md. Deliver a playable local project with its interface, controller and complete asset bundle. Use the nearest starter and preserve the user's chosen provider. Read docs/api.md and the appropriate example before editing. Author settings in genesis.json with interfaceFile and controllerFile references. Keep browser code in interface.html and shared rules in controller.js. Archive exports include the three entry files, their JSON Schema and complete declared media. Transport JSON can inline both sources. Keep product records and host authority outside the manifest; unknown fields are rejected. Keep HTML/CSS/browser JavaScript separate from the synchronous server onEvent controller. Use window.Genesis.action(actionId, data), actions.get(id).canSubmit, state.subscribe and stage.point in interface code. Declare each action and its typed fields. Controllers return public/private/server state, an eligible input window and effects. Asynchronous generation runs through host effects and returns job.ready or job.failed events. Determine committed game outcomes before requesting a generated scene. Generation does not verify visual correctness. Open actions only for eligible actors and use challenge IDs for timing games. Use the actual end-frame anchor for exploration and the saved star"
+  },
+  {
+    "title": "Contributing",
+    "heading": "Contributing",
+    "url": "contributing.html",
+    "text": "Contributing Use Node 20 or later. Run npm ci and npm test from this directory. The documentation site is built from the Markdown guides, the README and the bundled authoring skill. Run npm run docs:build after editing them, or npm run docs:dev for a local browser preview. Commit the generated HTML with its source changes. The build checks local links and section anchors. Keep demos clearly labeled as recorded examples. Keep the runtime independent of a deployment, provider or framework. Host adapters own credentials, identity, purchases, content policy and resource grants. Project manifests only request capabilities. A change to actions, controller context, state views, jobs or playback events needs a compatibility test and an API changelog entry. Add a runnable example for a new programming pattern. Preserve private state filtering and server authority. Open an issue before adding a dependency or changing the project format. Pull requests should explain the behavior and include relevant tests. Contributions use Apache 2.0. Maintainers review contributions and publish releases; no community governance or support SLA is implied by this preview."
+  },
+  {
+    "title": "Security",
+    "heading": "Security",
+    "url": "security.html",
+    "text": "Security Report suspected vulnerabilities privately to the maintainers through the repository's private vulnerability-reporting channel once the public repository exists. Until launch, use the private development channel. Never attach credentials or private user data to public issues. The controller has no network, Node or filesystem globals. Browser interfaces run in a sandbox. LLM input/output is bounded and validated as data. Host policies independently enforce tool grants, authenticated actor identity, spending and owned media. Creator projects cannot set gem rates or wallet balances. Paid live access requires server revocation, not just a short JWT expiry. Sequencer's current paid adapter requires LiveKit Cloud with participant token revocation; self-hosted LiveKit is rejected for this paid path. It issues a lease-scoped identity, stores revocation requests durably and removes expired or leaving viewers. Reactor startup tokens are withheld from paid public viewers until the protected native transport is ready. Cleanup is scheduled before revocation is attempted. If cleanup keeps failing for 30 seconds, the worker requests whole-room teardown. Billing refunds do not block that teardown. A provider outage can still delay both physical revocation and room teardown, so deployments must monitor failures. Provider reference: LiveKit token grants and participant removal . Prepare"
+  }
+]

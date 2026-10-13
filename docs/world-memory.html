@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="World memory. GENESIS open source World Model game engine documentation.">
+  <title>World memory · GENESIS</title>
+  <link rel="stylesheet" href="site/site.css">
+  <script src="site/site.js" defer></script>
+</head>
+<body class="guide-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="GENESIS home"><span class="brand-mark" aria-hidden="true">G</span>GENESIS</a>
+    <a class="license-badge" href="license.html">Open source · Apache 2.0</a>
+    <form class="search" role="search">
+      <label class="sr-only" for="docs-search">Search Genesis documentation</label>
+      <input id="docs-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results">
+      <div id="search-results" class="search-results" role="region" aria-label="Documentation search results" hidden></div>
+    </form>
+  </header>
+  <details class="mobile-navigation"><summary>Documentation menu</summary><nav aria-label="Mobile documentation"><p class="nav-group">Start here</p><a href="index.html">Overview</a>
+<a href="getting-started.html">Build your first world</a>
+<a href="world-memory.html" aria-current="page" class="active">World memory</a>
+<a href="agent-skill.html">Build from one prompt</a>
+<a href="demos.html">Worldstreams demos</a>
+<p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="providers.html">Your own models</a>
+<p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
+<a href="architecture.html">Architecture</a>
+<a href="host-authority.html">Hosting and authority</a>
+<a href="project-boundary.html">Portable projects</a>
+<a href="compatibility.html">Compatibility</a>
+<a href="authoring-rules.html">Authoring contract</a>
+<p class="nav-group">Open source</p><a href="contributing.html">Contributing</a>
+<a href="security.html">Security</a>
+<a href="license.html">Apache 2.0 license</a>
+<a href="readme.html">Project README</a></nav></details>
+  <div class="site-layout">
+    <aside class="sidebar"><nav aria-label="Documentation"><p class="nav-group">Start here</p><a href="index.html">Overview</a>
+<a href="getting-started.html">Build your first world</a>
+<a href="world-memory.html" aria-current="page" class="active">World memory</a>
+<a href="agent-skill.html">Build from one prompt</a>
+<a href="demos.html">Worldstreams demos</a>
+<p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="providers.html">Your own models</a>
+<p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
+<a href="architecture.html">Architecture</a>
+<a href="host-authority.html">Hosting and authority</a>
+<a href="project-boundary.html">Portable projects</a>
+<a href="compatibility.html">Compatibility</a>
+<a href="authoring-rules.html">Authoring contract</a>
+<p class="nav-group">Open source</p><a href="contributing.html">Contributing</a>
+<a href="security.html">Security</a>
+<a href="license.html">Apache 2.0 license</a>
+<a href="readme.html">Project README</a></nav></aside>
+    <main id="main" tabindex="-1">
+      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#define-your-worlds-facts">Define your world's facts</a><a href="#public-private-and-server-state">Public, private and server state</a><a href="#resolve-the-action-first">Resolve the action first</a><a href="#keep-generated-data-structured">Keep generated data structured</a><a href="#give-the-next-scene-the-right-context">Give the next scene the right context</a></nav></details><h1 id="world-memory-inventory-and-characters">World memory, inventory and characters</h1>
+<p>A World Model receives the context for its next scene. GENESIS stores the facts that make that scene part of the same experience: what players carry, where they are, who they met and which decisions changed the world.</p>
+<h2 id="define-your-worlds-facts">Define your world&#39;s facts</h2>
+<p>The controller state is JSON. Choose the structure that fits your world. For example:</p>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-json">{
+  &quot;location&quot;: &quot;mosslight_gate&quot;,
+  &quot;inventory&quot;: [&quot;brass_key&quot;, &quot;healing_herb&quot;],
+  &quot;health&quot;: 90,
+  &quot;quests&quot;: {&quot;find_the_lighthouse&quot;: &quot;active&quot;},
+  &quot;locations&quot;: {
+    &quot;mosslight_gate&quot;: {&quot;visited&quot;: true, &quot;doorUnlocked&quot;: false}
+  },
+  &quot;characters&quot;: {
+    &quot;keeper&quot;: {&quot;name&quot;: &quot;Mira&quot;, &quot;relationship&quot;: &quot;trusted&quot;}
+  }
+}</code></pre></div>
+<p>This is an example state shape. Your controller defines the inventory rules, character behavior, location transitions and values your interface displays.</p>
+<h2 id="public-private-and-server-state">Public, private and server state</h2>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Use it for</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>public</td>
+<td>Shared inventory, visible characters, location and game progress.</td>
+</tr>
+<tr>
+<td>private</td>
+<td>A participant&#39;s hidden information. The host filters the view by actor.</td>
+</tr>
+<tr>
+<td>server</td>
+<td>Internal encounter IDs, generation guards and facts the controller needs to keep off the public view.</td>
+</tr>
+</tbody></table>
+<p>The host persists accepted state with the session. Memory and file adapters support one host process; production hosts choose storage for their deployment. This preview bounds session state to 200 KB. Long histories and external memory stores belong in host adapters.</p>
+<h2 id="resolve-the-action-first">Resolve the action first</h2>
+<p>When a player uses the brass key, the controller checks the accepted inventory and current location. It commits the unlocked door to state, then requests a scene describing that outcome.</p>
+<ol>
+<li>The interface submits a declared, typed action.</li>
+<li>The host checks actor eligibility and the current input window.</li>
+<li>The controller commits the inventory and location changes.</li>
+<li>A bounded backend request carries the outcome and relevant world context.</li>
+<li>Validated results return to the controller and update the accepted view.</li>
+</ol>
+<p>The LLM can describe a character&#39;s response or propose structured choices. Your rules remain the authority for inventory, health, access and turn order.</p>
+<h2 id="keep-generated-data-structured">Keep generated data structured</h2>
+<p>For generated moves, dialogue or choices, use <code>tool.llm.generate</code> with a bounded object response schema. Choose fields such as name, description and permitted numeric attributes. Render model text as text in the interface.</p>
+<p>Use an encounter or scene guard so an old LLM result cannot replace the current decision. The <a href="getting-started.html">arena-llm starter</a> generates four moves once per encounter. See <a href="api.html#structured-llm-and-asset-helpers">structured LLM helpers</a>.</p>
+<h2 id="give-the-next-scene-the-right-context">Give the next scene the right context</h2>
+<p>Scene requests can carry intent, a required outcome, an anchor and a spending ceiling. Include the facts that matter for this scene rather than sending every stored detail.</p>
+<p>Carry the actual decoded end frame into the next video request. Generation completion and playback completion are separate events. Reopen visual actions after the host accepts playback completion.</p>
+<p>GENESIS keeps the state and job lifecycle consistent. Visual fidelity depends on the connected World Model. <a href="api.html#controller">Read the controller API</a> and <a href="architecture.html">architecture</a>.</p>
+</article>
+      <footer class="site-footer">
+        <p>GENESIS 0.1.0 · Open source World Model game engine</p>
+        <nav aria-label="Footer resources"><a href="license.html">Apache 2.0</a><a href="agent-skill.html">World-building skill</a><a href="contributing.html">Contribute</a><a href="compatibility.html">Development preview</a></nav>
+        <p class="release-note">Local launch preparation. Public repository and package release are pending.</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

@@ -29,6 +29,7 @@
     "CONTRIBUTING.md",
     "CHANGELOG.md",
     "schema",
+    "scripts",
     "skills",
     "SECURITY.md"
   ],
@@ -53,7 +54,9 @@
     "build": "tsc && node scripts/write-schema.mjs",
     "test": "npm run build && node --test --test-concurrency=1 test/*.test.mjs",
     "dev": "npm run build && node dist/cli.js dev examples/exploration",
-    "check": "npm test && npm pack --dry-run"
+    "docs:build": "node scripts/build-docs.mjs",
+    "docs:dev": "npm run docs:build && node scripts/serve-docs.mjs",
+    "check": "npm test && npm run docs:build && npm pack --dry-run"
   },
   "dependencies": {
     "ajv": "8.17.1",
@@ -62,6 +65,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "marked": "13.0.3",
     "typescript": "^5.7.0"
   },
   "typesVersions": {

@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Project README. GENESIS open source World Model game engine documentation.">
+  <title>Project README · GENESIS</title>
+  <link rel="stylesheet" href="site/site.css">
+  <script src="site/site.js" defer></script>
+</head>
+<body class="guide-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="GENESIS home"><span class="brand-mark" aria-hidden="true">G</span>GENESIS</a>
+    <a class="license-badge" href="license.html">Open source · Apache 2.0</a>
+    <form class="search" role="search">
+      <label class="sr-only" for="docs-search">Search Genesis documentation</label>
+      <input id="docs-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results">
+      <div id="search-results" class="search-results" role="region" aria-label="Documentation search results" hidden></div>
+    </form>
+  </header>
+  <details class="mobile-navigation"><summary>Documentation menu</summary><nav aria-label="Mobile documentation"><p class="nav-group">Start here</p><a href="index.html">Overview</a>
+<a href="getting-started.html">Build your first world</a>
+<a href="world-memory.html">World memory</a>
+<a href="agent-skill.html">Build from one prompt</a>
+<a href="demos.html">Worldstreams demos</a>
+<p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="providers.html">Your own models</a>
+<p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
+<a href="architecture.html">Architecture</a>
+<a href="host-authority.html">Hosting and authority</a>
+<a href="project-boundary.html">Portable projects</a>
+<a href="compatibility.html">Compatibility</a>
+<a href="authoring-rules.html">Authoring contract</a>
+<p class="nav-group">Open source</p><a href="contributing.html">Contributing</a>
+<a href="security.html">Security</a>
+<a href="license.html">Apache 2.0 license</a>
+<a href="readme.html" aria-current="page" class="active">Project README</a></nav></details>
+  <div class="site-layout">
+    <aside class="sidebar"><nav aria-label="Documentation"><p class="nav-group">Start here</p><a href="index.html">Overview</a>
+<a href="getting-started.html">Build your first world</a>
+<a href="world-memory.html">World memory</a>
+<a href="agent-skill.html">Build from one prompt</a>
+<a href="demos.html">Worldstreams demos</a>
+<p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="providers.html">Your own models</a>
+<p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
+<a href="architecture.html">Architecture</a>
+<a href="host-authority.html">Hosting and authority</a>
+<a href="project-boundary.html">Portable projects</a>
+<a href="compatibility.html">Compatibility</a>
+<a href="authoring-rules.html">Authoring contract</a>
+<p class="nav-group">Open source</p><a href="contributing.html">Contributing</a>
+<a href="security.html">Security</a>
+<a href="license.html">Apache 2.0 license</a>
+<a href="readme.html" aria-current="page" class="active">Project README</a></nav></aside>
+    <main id="main" tabindex="-1">
+      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#your-world-model-needs-a-dungeon-master">Your World Model needs a dungeon master.</a><a href="#worldstreams-in-action">Worldstreams in action</a><a href="#rick-and-morty--multiplayer-worldstream">Rick and Morty · Multiplayer Worldstream</a><a href="#one-prompt-an-infinite-experience">One prompt. An infinite experience.</a><a href="#play-your-first-world">Play your first world</a><a href="#three-files-your-whole-world">Three files. Your whole world.</a><a href="#development-preview">Development preview</a><a href="#connect-your-own-world-models">Connect your own World Models</a><a href="#worldstreams-api-instant-setup">Worldstreams API: instant setup</a></nav></details><div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-text">  _____ ______ _   _ ______  _____ _____  _____
+ / ____|  ____| \ | |  ____|/ ____|_   _|/ ____|
+| |  __| |__  |  \| | |__  | (___   | | | (___
+| | |_ |  __| | . \ |  __|  \___ \  | |  \___ \
+| |__| | |____| |\  | |____ ____) |_| |_ ____) |
+ \_____|______|_| \_|______|_____/|_____|_____/</code></pre></div>
+<h1 id="genesis--open-source-world-model-game-engine">GENESIS · Open Source World Model Game Engine</h1>
+<p><strong>Create infinite experiences, in minutes.</strong></p>
+<p>Give your World Model a memory, an inventory and a playable interface.</p>
+<p>GENESIS is an open source SDK for building worldstreams: evolving experiences where player actions, shared rules and generated scenes move together. Describe your world to a coding agent, play the local prototype, then connect your World Model.</p>
+<p><a href="index.html">Documentation</a> · <a href="#worldstreams-in-action">Watch the demos</a> · <a href="#one-prompt-an-infinite-experience">Build from a prompt</a> · <a href="#play-your-first-world">Start locally</a> · <a href="#connect-your-own-world-models">Connect your models</a> · <a href="#worldstreams-api-instant-setup">Worldstreams API</a></p>
+<h2 id="your-world-model-needs-a-dungeon-master">Your World Model needs a dungeon master.</h2>
+<p>In a tabletop roleplaying game, the dungeon master remembers your inventory, knows the characters and locations, applies the rules and describes what happens next. An infinite experience needs the same foundation.</p>
+<p>GENESIS fills that role for your World Model. It keeps the world in structured state, resolves player actions and passes the committed outcome to the LLM and scene generator. Your interface reflects the same shared reality.</p>
+<p>Pick up a key, and it stays in your inventory. Unlock a door, and that location changes. Meet a character, and your controller can remember the relationship. The next scene receives that context, and every player sees the accepted result.</p>
+<table>
+<thead>
+<tr>
+<th>GENESIS handles</th>
+<th>Your world remembers</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>World memory</strong></td>
+<td>Progress, previous choices and persistent public, private and server state.</td>
+</tr>
+<tr>
+<td><strong>Inventory and variables</strong></td>
+<td>Items, health, scores, resources, quest flags and the values your rules depend on.</td>
+</tr>
+<tr>
+<td><strong>Scenes, locations and characters</strong></td>
+<td>Define places, characters, relationships and scene facts in structured state, then carry them into generation requests.</td>
+</tr>
+<tr>
+<td><strong>LLM orchestration and prompts</strong></td>
+<td>Supply world context and committed outcomes; validate structured replies for new moves, dialogue and choices.</td>
+</tr>
+<tr>
+<td><strong>Playable interfaces</strong></td>
+<td>Custom controls, inventory panels, overlays and animations in HTML, CSS and JavaScript.</td>
+</tr>
+<tr>
+<td><strong>Shared rules and multiplayer</strong></td>
+<td>Authoritative turns, player seats, crowd votes and validated actions.</td>
+</tr>
+<tr>
+<td><strong>Generation and scene continuity</strong></td>
+<td>Track jobs, reject stale results, carry the actual end frame forward and reopen actions after playback.</td>
+</tr>
+<tr>
+<td><strong>Portable worlds and media</strong></td>
+<td>Export the world&#39;s source and declared images, audio and video as one bundle.</td>
+</tr>
+</tbody></table>
+<p>You define the world and its rules. GENESIS runs the state and interaction loop; connected World Models and LLMs generate the media and structured responses.</p>
+<h2 id="worldstreams-in-action">Worldstreams in action</h2>
+<h3 id="rick-and-morty--multiplayer-worldstream">Rick and Morty · Multiplayer Worldstream</h3>
+<p>Two players direct Rick and Morty through their own character controls. Both actions feed the shared Worldstream. Click the image to watch the multiplayer recording.</p>
+<p><a href="https://sequencer.media/demo/worlds/multiplayer-demo-cropped-v2.mp4"><img src="assets/rick-morty-multiplayer.webp" alt="Watch the multiplayer Rick and Morty Worldstream" loading="lazy"></a></p>
+<p><a href="https://sequencer.media/demo/worlds/multiplayer-demo-cropped-v2.mp4">Watch multiplayer video</a> · <a href="demos.html">Explore the demos</a></p>
+<table>
+<thead>
+<tr>
+<th>Adventure Time · Land of Ooo</th>
+<th>World Model games</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://sequencer.media/demo/worldstreams/adventure-time/adventure-time-720p-0bfe8c425454.mp4"><img src="assets/adventure-time-worldstream.webp" alt="Watch the Adventure Time Worldstream" loading="lazy"></a></td>
+<td><a href="https://sequencer.media/landing/product-demos/world-games-v03-720p.mp4"><img src="assets/world-model-games.webp" alt="Watch World Model games" loading="lazy"></a></td>
+</tr>
+<tr>
+<td>A connected fantasy journey with audience-choice controls. <a href="https://sequencer.media/demo/worldstreams/adventure-time/adventure-time-720p-0bfe8c425454.mp4">Watch video</a> · <a href="https://sequencer.media/demo/worldstreams/adventure-time">Try the preview</a></td>
+<td>Explore the visual presentation of World Model game experiences. <a href="https://sequencer.media/landing/product-demos/world-games-v03-720p.mp4">Watch video</a></td>
+</tr>
+</tbody></table>
+<p>These are recorded examples. Preview choices illustrate the interaction flow around prepared World Model output. Live generation uses a connected provider. The <a href="index.html">demo and documentation site</a> includes playable videos, the full SDK reference and the <a href="agent-skill.html">world-building skill guide</a>.</p>
+<h2 id="one-prompt-an-infinite-experience">One prompt. An infinite experience.</h2>
+<p>The bundled <a href="agent-skill.html">create-world-stream agent skill</a> turns an idea into world settings, a custom interface, controller rules and a portable project.</p>
+<p>Give a coding agent this checkout and a prompt:</p>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-text">Use the create-world-stream skill to build Mosslight, a forest battle
+worldstream with a cream pixel interface. Let two players take turns
+and have the backend LLM create four moves for each encounter.
+Remember their inventory, health and progress. Give me a working
+local preview and an exportable world.</code></pre></div>
+<p>The skill wires backend requests, declares assets, validates the bundle and exercises the player flow. <a href="authoring-rules.html">AGENTS.md</a> points repo-aware agents to it; other skill-capable agents can load its SKILL.md directly.</p>
+<p>Start with labeled local fixtures. With a configured provider and budget, the agent can create and attach images, audio and video for your worldstream.</p>
+<h2 id="play-your-first-world">Play your first world</h2>
+<p>Requires Node 20 or later. From this source checkout:</p>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-sh">npm ci
+npm run build
+node dist/cli.js init ./my-world --template arena-llm
+node dist/cli.js dev ./my-world</code></pre></div>
+<p>Open the printed local URL. Play the vintage pixel battle, switch preview players and take a turn. The starter uses four structured move definitions, shared health and authoritative turns. Local moves and video use prepared fixtures; a connected Worldstreams host requests real backend LLM results.</p>
+<table>
+<thead>
+<tr>
+<th>Starter</th>
+<th>Create your experience</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>arena-llm</code></td>
+<td>A vintage battle with LLM-created moves and shared player seats.</td>
+</tr>
+<tr>
+<td><code>exploration</code></td>
+<td>An evolving world where each completed scene becomes the next starting point.</td>
+</tr>
+<tr>
+<td><code>decisions</code></td>
+<td>Branching choices and collective decisions.</td>
+</tr>
+<tr>
+<td><code>timing</code></td>
+<td>A challenge with a defined input window and repeatable starting scene.</td>
+</tr>
+<tr>
+<td><code>arena</code></td>
+<td>A battle with fixed server-resolved moves, inventory and spectator queues.</td>
+</tr>
+</tbody></table>
+<p>Choose another starter with <code>--template</code>. Edit the project files, then restart the runner. Sessions pin their project version; remove the generated <code>.genesis/</code> directory inside your world to start a fresh development session after code changes.</p>
+<details>
+<summary>See the vintage arena on mobile</summary>
+
+<p><img src="assets/arena-mobile.jpg" alt="Vintage arena mobile author preview using prepared move data" loading="lazy"></p>
+</details>
+
+<h2 id="three-files-your-whole-world">Three files. Your whole world.</h2>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-text">my-world/
+├── genesis.json      World settings, actions, tools and asset registry
+├── interface.html    Your interface, controls and browser behavior
+├── controller.js     World memory, shared rules and backend requests
+└── assets/           Images, audio and video that travel with the project</code></pre></div>
+<p>The interface sends actions and renders accepted state. The controller updates inventory, variables, characters and locations according to your rules, then requests the next scene. The host supplies identity, credentials, storage and spending policy.</p>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-sh">node dist/cli.js validate ./my-world
+node dist/cli.js export ./my-world --out ./my-world.zip</code></pre></div>
+<p>The ZIP includes the three entry files, the JSON Schema and complete declared assets. Safe relative paths make media portable; hosting adapters copy assets and provide runtime URLs. Keep provider keys, wallets and commercial settings in the host. <a href="project-boundary.html">Read the project boundary</a>.</p>
+<h2 id="development-preview">Development preview</h2>
+<p>Version 0.1 is an unpublished development preview, licensed under Apache 2.0. This repository is being polished for launch.</p>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-sh">npm test
+npm run docs:build
+npm pack --dry-run</code></pre></div>
+<details>
+<summary>Current runtime and provider limits</summary>
+
+<p>The standalone preview verifies bounded clips, prepared media and structured tool data. Continuous worldstreams and avatar/audio sessions require a deployment-specific presentation adapter. The Replicate adapter has protocol-fixture coverage; live paid predictions still need validation. Current reference limits include 100 participants, 32 actions, 200 KB session state and 2–10 second clips.</p>
+<p>Portable continuous-stream settings accept 2–30 second chunk intervals. The current Worldstreams deployment accepts 14 seconds, with approximately 14.375 seconds of provider output. Hosts validate supported intervals.</p>
+<p>Private Worldstreams API sessions currently support 30–600 seconds and cost $40/hour of active streaming. The API quotes and reserves the maximum cost, then refunds unused credit on teardown. Startup is excluded; generation and LLM requests are priced separately. Always use the returned quote.</p>
+<p>See <a href="compatibility.html">compatibility</a>, <a href="integration.html">integration</a> and <a href="launch.md">launch preparation</a> for versioning, stream leases and release checks.</p>
+</details>
+
+<h2 id="connect-your-own-world-models">Connect your own World Models</h2>
+<p>GENESIS works with the providers you choose. Keep your LLM and World Model adapters separate so either can evolve independently.</p>
+<ol>
+<li><strong>Connect your LLM.</strong> Use <code>createLlmProvider</code> with a server-side <code>generate(request, context)</code> callback. Map the prompt, world context, response schema and budget to your provider&#39;s API. GENESIS validates the returned data before sending it to the controller.</li>
+<li><strong>Connect your World Model.</strong> Implement the <a href="providers.html">provider contract</a> for submission, status and cancellation. Persist generated media and supply the video&#39;s actual end-frame checkpoint. The SDK includes prepared-media and Replicate adapters.</li>
+<li><strong>Connect your app.</strong> Run <code>GenesisHost</code> on your server and <code>mountGenesisPlayer</code> in the browser, joined by authenticated routes. Your host controls identity, credentials, permissions and billing.</li>
+</ol>
+<p>Use durable result storage for paid requests. Memory and atomic file adapters support one host process; distributed deployments need transactional storage, admission control and durable scheduling. Live worldstreams also need readiness, prompt delivery, playback acknowledgments, reconnects and viewer revocation. <a href="api.html">Read the API</a>, <a href="architecture.html">architecture</a> and <a href="host-authority.html">host authority</a>.</p>
+<h2 id="worldstreams-api-instant-setup">Worldstreams API: instant setup</h2>
+<p>Use the included Sequencer integration to connect the <a href="https://worldstreams.ai">Worldstreams</a> API. One server-side <code>SEQUENCER_API_KEY</code> connects LLM tools, World Model streams, image/audio/video generation, assets and versioned world drafts.</p>
+<p>Set your key in the server environment, choose your workspace and save the project:</p>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-sh">export SEQUENCER_API_KEY=&quot;YOUR_SERVER_API_KEY&quot;
+node dist/cli.js save ./my-world --workspace YOUR_WORKSPACE_ID</code></pre></div>
+<p>The command uploads the declared assets and returns a saved draft and preview URL. Use <code>SequencerClient</code> to discover models, quote generation and control a private worldstream. <code>createSequencerLlmProvider</code> connects structured LLM tools to the same account. <a href="integration.html">Follow the integration guide</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>GENESIS + Worldstreams API</th>
+<th>GENESIS + your own models</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>World memory, rules, custom UI and portable bundles</td>
+<td>Included</td>
+<td>Included</td>
+</tr>
+<tr>
+<td>LLM, images, audio, video and World Model stream APIs</td>
+<td>One Sequencer server key</td>
+<td>Connect adapters and credentials</td>
+</tr>
+<tr>
+<td>Assets and versioned world drafts</td>
+<td>Managed integration</td>
+<td>Choose storage and publishing</td>
+</tr>
+<tr>
+<td>Shared backend job polling</td>
+<td>Managed by Worldstreams hosting</td>
+<td>Run your worker</td>
+</tr>
+<tr>
+<td>Hosted viewer identity and billing</td>
+<td>Worldstreams accounts, gems and viewer leases</td>
+<td>Implement your policies</td>
+</tr>
+<tr>
+<td>Audience and monetization in your own app</td>
+<td>Yours to manage</td>
+<td>Yours to manage</td>
+</tr>
+</tbody></table>
+<p><a href="contributing.html">Contributing</a> · <a href="security.html">Security</a> · <a href="license.html">Apache 2.0 license</a></p>
+</article>
+      <footer class="site-footer">
+        <p>GENESIS 0.1.0 · Open source World Model game engine</p>
+        <nav aria-label="Footer resources"><a href="license.html">Apache 2.0</a><a href="agent-skill.html">World-building skill</a><a href="contributing.html">Contribute</a><a href="compatibility.html">Development preview</a></nav>
+        <p class="release-note">Local launch preparation. Public repository and package release are pending.</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

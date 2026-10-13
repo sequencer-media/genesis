@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="SDK API reference. GENESIS open source World Model game engine documentation.">
+  <title>SDK API reference · GENESIS</title>
+  <link rel="stylesheet" href="site/site.css">
+  <script src="site/site.js" defer></script>
+</head>
+<body class="guide-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="GENESIS home"><span class="brand-mark" aria-hidden="true">G</span>GENESIS</a>
+    <a class="license-badge" href="license.html">Open source · Apache 2.0</a>
+    <form class="search" role="search">
+      <label class="sr-only" for="docs-search">Search Genesis documentation</label>
+      <input id="docs-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results">
+      <div id="search-results" class="search-results" role="region" aria-label="Documentation search results" hidden></div>
+    </form>
+  </header>
+  <details class="mobile-navigation"><summary>Documentation menu</summary><nav aria-label="Mobile documentation"><p class="nav-group">Start here</p><a href="index.html">Overview</a>
+<a href="getting-started.html">Build your first world</a>
+<a href="world-memory.html">World memory</a>
+<a href="agent-skill.html">Build from one prompt</a>
+<a href="demos.html">Worldstreams demos</a>
+<p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="providers.html">Your own models</a>
+<p class="nav-group">Reference</p><a href="api.html" aria-current="page" class="active">SDK API reference</a>
+<a href="architecture.html">Architecture</a>
+<a href="host-authority.html">Hosting and authority</a>
+<a href="project-boundary.html">Portable projects</a>
+<a href="compatibility.html">Compatibility</a>
+<a href="authoring-rules.html">Authoring contract</a>
+<p class="nav-group">Open source</p><a href="contributing.html">Contributing</a>
+<a href="security.html">Security</a>
+<a href="license.html">Apache 2.0 license</a>
+<a href="readme.html">Project README</a></nav></details>
+  <div class="site-layout">
+    <aside class="sidebar"><nav aria-label="Documentation"><p class="nav-group">Start here</p><a href="index.html">Overview</a>
+<a href="getting-started.html">Build your first world</a>
+<a href="world-memory.html">World memory</a>
+<a href="agent-skill.html">Build from one prompt</a>
+<a href="demos.html">Worldstreams demos</a>
+<p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="providers.html">Your own models</a>
+<p class="nav-group">Reference</p><a href="api.html" aria-current="page" class="active">SDK API reference</a>
+<a href="architecture.html">Architecture</a>
+<a href="host-authority.html">Hosting and authority</a>
+<a href="project-boundary.html">Portable projects</a>
+<a href="compatibility.html">Compatibility</a>
+<a href="authoring-rules.html">Authoring contract</a>
+<p class="nav-group">Open source</p><a href="contributing.html">Contributing</a>
+<a href="security.html">Security</a>
+<a href="license.html">Apache 2.0 license</a>
+<a href="readme.html">Project README</a></nav></aside>
+    <main id="main" tabindex="-1">
+      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#project">Project</a><a href="#controller">Controller</a><a href="#browser-sdk">Browser SDK</a><a href="#node-host-and-adapters">Node host and adapters</a><a href="#custom-tools">Custom tools</a><a href="#portable-project-boundary">Portable project boundary</a><a href="#participation-version-1">Participation version 1</a><a href="#structured-llm-and-asset-helpers">Structured LLM and asset helpers</a></nav></details><h1 id="genesis-01-api">Genesis 0.1 API</h1>
+<h2 id="project">Project</h2>
+<p><code>GenesisProject</code> has format <code>genesis-project</code>, version 1, title, optional description, coverImageUrl and namespaced extensions, definition, interfaceSource, controllerSource and startImageUrl. <code>validateGenesisProject()</code> validates the versioned JSON Schema and semantic references, then normalizes the project. Unknown product settings and host policies are rejected. <code>coverImageUrl</code> is listing art; <code>startImageUrl</code> initializes the scene checkpoint. <code>createGenesisProject(template)</code> returns a runnable starter. Local media uses /assets paths; external media uses HTTPS. A hosting adapter may narrow allowed media hosts.</p>
+<p>File-based projects keep settings in <code>genesis.json</code> with <code>interfaceFile: &quot;interface.html&quot;</code> and <code>controllerFile: &quot;controller.js&quot;</code>. <code>createGenesisProjectManifest(project)</code> produces this source-free manifest. <code>applyGenesisProjectManifest(manifest, interfaceSource, controllerSource)</code> validates editor settings without replacing the opened code. <code>loadGenesisProject(directory)</code> loads referenced source files with directory containment checks. The schema accepts manifests and inline transport projects. <code>exportGenesisProjectArchive(project)</code> produces a ZIP with the three entry files and genesis.schema.json; <code>importGenesisProjectArchive(bytes)</code> validates and restores it with bounded extraction. <code>importGenesisProjectText(text)</code> accepts an inline JSON transport project. Media files remain references.</p>
+<p><code>definition.worldVideo.chunkIntervalSeconds</code> defaults to 14 and accepts whole seconds from 2 to 30. It is a nominal continuous-stream cadence, separate from <code>scene.request.duration</code>. It reaches <code>context.config.video.chunkIntervalSeconds</code>. Hosts must reject unsupported intervals before admission and configure the provider; the runtime does not resample provider video or override a fixed provider cadence.</p>
+<p><code>definition.interface.stageAspectRatio</code> controls the media stage&#39;s width divided by height. It defaults to 16/9 (1.7777777777777777) and accepts numbers from 0.25 to 4, including portrait 9/16 (0.5625), square (1), and custom ratios. Players contain media within that shape and preserve frame coordinates through letterboxing. This presentation preference does not change the generation provider&#39;s output dimensions. Custom overlay interfaces use the stage shape; panel interfaces retain their own layout.</p>
+<p><code>definition.genesis.configSchema</code> maps setting IDs to primitive fields. Each declares type (string, number or boolean), label, default, optional description, numeric min/max, maxLength or an options array of {value,label}. <code>config</code> holds validated values. Controllers read <code>config.settings</code>. These settings are public and must contain no secrets. genesis.worldPrompt is server context and is removed from public definitions. initialState becomes public controller state; initialize private/server state in the controller.</p>
+<h2 id="controller">Controller</h2>
+<p>Define classic JavaScript <code>function onEvent(context)</code>. The context includes state {public, private, server, window}, event {id,type,actorId?,actionId?,data,now}, participants, a server-only ballots snapshot, stage, anchors and config. It contains no host credential or wallet objects.</p>
+<p>Return an object with optional public/private/server state, window and effects. State updates replace their corresponding object. A window declares id, actionIds, mode (individual or collective), optional actorIds, choices and deadline. An empty actorIds array grants no actor permission. Collective windows require 2 to 12 choices. Window IDs must change between decisions. Choice and ballot payloads carry optionId; the browser SDK includes the current collective windowId.</p>
+<p>Events include session.started, participant.joined, participant.left, action, vote.cast, vote.resolved, vote.empty, timer, job.ready, job.failed, job.skipped and playback.completed. Generation completion describes prepared media. Playback completion means the host&#39;s participant policy has been satisfied.</p>
+<p>Effects: scene.request, image.request, live.direction, tool.request, stage.show, stage.restore, stage.play and timer.set. Each has a unique id. Tool effects carry intent, optional anchorId, modelId, duration, requiredOutcome and maxCostUsd. Timers carry delayMs and data. Stage play carries a saved videoUrl. A restored anchor preserves controller scores and inventory.</p>
+<p>Tools must be requested in the manifest and granted by the host. Stream defaults do not restrict operations in custom controllers. A provider still must implement the requested capability. The default controller uses stream defaults to choose its behavior.</p>
+<h2 id="browser-sdk">Browser SDK</h2>
+<p><code>window.Genesis.action(id,data)</code> sends an action. <code>actions.get(id)</code> and <code>actions.list()</code> describe current permissions. <code>state.get()</code> returns public state; <code>state.subscribe(fn)</code> receives updates. <code>stage.get()</code> returns presentation and anchor data. <code>stage.point(event,element)</code> returns normalized frame coordinates accounting for letterboxing. <code>on(&#39;state&#39;,fn)</code> receives the filtered view. The existing image, voice and character helpers depend on host support; the standalone reference player currently supports typed actions and standard text/click/choice controls.</p>
+<p>State subscriptions begin when the host supplies the first view. They receive the current view immediately when registered after that point. Initialize UI placeholders in HTML, and read player seats and game state inside a subscription.</p>
+<p>Custom interfaces execute inside opaque sandbox iframes with blocked network connections. The host remains responsible for essential exit, reconnect and billing UI. Host-message handling checks the frame source, nonce and declared action.</p>
+<h2 id="node-host-and-adapters">Node host and adapters</h2>
+<p>Construct GenesisHost(sessionId,project,{storage,policy,services,providers}), then await initialize(). Methods: join, leave, view, action, playback, runJob, tick, retry and skip. diagnostics() is author-only and includes internal state. Never expose it to general participants.</p>
+<p>Providers implement id, paid, capabilities, start, poll and optional cancel. Start receives a stable idempotencyKey, a job and anchor. Poll returns running, ready or failed. Ready scene results include videoUrl and an actual end-frame imageUrl. Storage implements load/save snapshots. The reference host serializes per-session operations in one process; distributed hosts provide their own transaction/lease adapter.</p>
+<h2 id="custom-tools">Custom tools</h2>
+<p>Request namespaced capabilities such as tool.lookup in the manifest. The host must independently grant the capability and register a provider with that capability. Controllers emit <code>{id,type:&quot;tool.request&quot;,toolId:&quot;tool.lookup&quot;,data:{...}}</code>. Arguments and returned result.data are bounded to 12 KB. Provider validate(job) rejects invalid arguments before paid authorization. Completion enters job.ready with event.data.data. Generic tools preserve the stage; the controller decides presentation. No provider credential or unrestricted fetch capability enters the sandbox.</p>
+<p>Collective submissions emit vote.cast with actorId and optionId. Controllers can inspect context.ballots to implement weights, quorum, early resolution or custom aggregation. Returning window:null closes the decision. The standard controller keeps deadline aggregation.</p>
+<h2 id="portable-project-boundary">Portable project boundary</h2>
+<p>The JSON Schema is exported as GENESIS_PROJECT_SCHEMA. <code>createGenesisProjectManifest</code> clears hosted package versions and saved-game connections without mutating the source definition. Inline source remains confined to transport projects. The Worldstreams editor preserves host references separately when applying manifest edits. <code>definition.interface.chat</code> optionally requests <code>{presentation:&quot;minimized&quot;|&quot;open&quot;|&quot;disabled&quot;,reactions:boolean}</code>. Chat access and enforcement stay with the host. <code>extensions</code> uses namespaced keys such as <code>org.example</code>, up to 16 namespaces and 16 KB total. Unknown extension data is preserved without execution or capability grants.</p>
+<h2 id="participation-version-1">Participation version 1</h2>
+<p>For explicitly claimed seats, declare <code>definition.participation.seats</code> as <code>{version:1,slots:[{id,label}],queue:true,maxSeatsPerIdentity:1}</code>. Seats require multiplayer mode and spectators, with minPlayers no greater than the slot count and slots no greater than maxPlayers. Slot IDs are unique. Defaults are queue false and one seat per verified identity. Configure <code>room</code> as shared or private; room discovery is implemented by the hosting adapter. Sequencer defaults seat worlds to one shared public arena per published version. Continuous worlds always share their audience room. Ordinary projects without seats retain their admission behavior.</p>
+<p><code>Genesis.players.get()</code> and <code>subscribe(fn)</code> expose version, capabilities, seats with actorId/canClaim/canRelease, queueLength, own queuePosition/canQueue, and own cooldownUntil. <code>claim(seatId)</code>, <code>leave(seatId)</code>, <code>joinQueue()</code> and <code>leaveQueue()</code> request server transitions. A browser cannot specify another actor, a role, lease, identity, cooldown or removal authority. The host injects the verified identity. Sequencer requires sign-in to claim or queue. Watchers can remain anonymous.</p>
+<p>Controller context.participation contains public seats and queueLength, with no identities or credentials. Events are seat.claimed, seat.released, queue.joined and queue.left. To release a defeated player, return <code>{id,type:&quot;players.release&quot;,seatId,expectedActorId,cooldownMs:5000}</code>. Expected ownership is checked before commit; the cooldown is limited to 60 seconds and follows the identity across new actor IDs. Replacements are promoted atomically from the eligible FIFO queue. Actions still use ordinary window.actorIds and typed fields, keeping game-specific turns, teams and health in the controller.</p>
+<p>Host methods <code>players(actorId,request)</code> and <code>read(actorId)</code> serialize and persist transitions. Host <code>join(actorId,name,role,identityKey)</code> must receive actorId and a stable identityKey from authenticated server middleware. The actor-ID fallback is for trusted local previews. The 45-second seat lease is renewed by read/action traffic at most every 15 seconds; a late heartbeat cannot revive an expired seat. Distributed hosts can use the exported participation reducers and requestGenesisPlayer inside their own transaction. Never expose host.join, diagnostics, identity registration, releaseGenesisSeat or controller dispatch as participant-controlled endpoints.</p>
+<p>The arena starter demonstrates two seats, four moves, health, inventory, waiting spectators, defeat cooldown and replacement. Its animate setting defaults false for charge-free rule testing. Enable animate and configure a generation provider to render committed battle outcomes. Browser UI code stays in interface.html and game rules stay in controller.js.</p>
+<h2 id="structured-llm-and-asset-helpers">Structured LLM and asset helpers</h2>
+<p>Tool tool.llm.generate accepts <code>{prompt,context?,responseSchema}</code> with a bounded object schema. Completion emits job.ready with event.data.data. Effect guard <code>{key,value}</code> must match current server state before a result is applied; obsolete jobs emit job.cancelled without exposing their result. Controllers receive jobs metadata for scheduling, including status, type and guard.</p>
+<p>Genesis.assets.get(path) resolves host-provided media sources. Portable bundles use declared assets/ paths; Sequencer interfaces use asset:// IDs after attachment. <code>importGenesisProjectBundle</code> preserves complete assetFiles; importGenesisProjectArchive returns only the project for compatibility.</p>
+</article>
+      <footer class="site-footer">
+        <p>GENESIS 0.1.0 · Open source World Model game engine</p>
+        <nav aria-label="Footer resources"><a href="license.html">Apache 2.0</a><a href="agent-skill.html">World-building skill</a><a href="contributing.html">Contribute</a><a href="compatibility.html">Development preview</a></nav>
+        <p class="release-note">Local launch preparation. Public repository and package release are pending.</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

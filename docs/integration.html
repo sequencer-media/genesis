@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Worldstreams API. GENESIS open source World Model game engine documentation.">
+  <title>Worldstreams API · GENESIS</title>
+  <link rel="stylesheet" href="site/site.css">
+  <script src="site/site.js" defer></script>
+</head>
+<body class="guide-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="GENESIS home"><span class="brand-mark" aria-hidden="true">G</span>GENESIS</a>
+    <a class="license-badge" href="license.html">Open source · Apache 2.0</a>
+    <form class="search" role="search">
+      <label class="sr-only" for="docs-search">Search Genesis documentation</label>
+      <input id="docs-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results">
+      <div id="search-results" class="search-results" role="region" aria-label="Documentation search results" hidden></div>
+    </form>
+  </header>
+  <details class="mobile-navigation"><summary>Documentation menu</summary><nav aria-label="Mobile documentation"><p class="nav-group">Start here</p><a href="index.html">Overview</a>
+<a href="getting-started.html">Build your first world</a>
+<a href="world-memory.html">World memory</a>
+<a href="agent-skill.html">Build from one prompt</a>
+<a href="demos.html">Worldstreams demos</a>
+<p class="nav-group">Connect</p><a href="integration.html" aria-current="page" class="active">Worldstreams API</a>
+<a href="providers.html">Your own models</a>
+<p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
+<a href="architecture.html">Architecture</a>
+<a href="host-authority.html">Hosting and authority</a>
+<a href="project-boundary.html">Portable projects</a>
+<a href="compatibility.html">Compatibility</a>
+<a href="authoring-rules.html">Authoring contract</a>
+<p class="nav-group">Open source</p><a href="contributing.html">Contributing</a>
+<a href="security.html">Security</a>
+<a href="license.html">Apache 2.0 license</a>
+<a href="readme.html">Project README</a></nav></details>
+  <div class="site-layout">
+    <aside class="sidebar"><nav aria-label="Documentation"><p class="nav-group">Start here</p><a href="index.html">Overview</a>
+<a href="getting-started.html">Build your first world</a>
+<a href="world-memory.html">World memory</a>
+<a href="agent-skill.html">Build from one prompt</a>
+<a href="demos.html">Worldstreams demos</a>
+<p class="nav-group">Connect</p><a href="integration.html" aria-current="page" class="active">Worldstreams API</a>
+<a href="providers.html">Your own models</a>
+<p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
+<a href="architecture.html">Architecture</a>
+<a href="host-authority.html">Hosting and authority</a>
+<a href="project-boundary.html">Portable projects</a>
+<a href="compatibility.html">Compatibility</a>
+<a href="authoring-rules.html">Authoring contract</a>
+<p class="nav-group">Open source</p><a href="contributing.html">Contributing</a>
+<a href="security.html">Security</a>
+<a href="license.html">Apache 2.0 license</a>
+<a href="readme.html">Project README</a></nav></aside>
+    <main id="main" tabindex="-1">
+      <article><h1 id="integration">Integration</h1>
+<p>Use <code>createLlmProvider</code> with a <code>generate(request, context)</code> callback and a durable result store for paid calls. The request contains prompt, optional context and a bounded JSON responseSchema. The callback receives sessionId, a stable idempotencyKey and maxCostUsd. Keep the provider key on your server. The adapter validates output and sends it as job.ready&#39;s event.data.data. Paid providers must enforce the cost ceiling before submission. In-process deduplication does not replace distributed locks.</p>
+<p><code>createSequencerLlmProvider</code> connects that callback to the Sequencer LLM endpoint. <code>FileGenesisToolResults</code> is an atomic single-host store. Configure a transaction-backed result store for distributed workers. Keep the world generation adapter separate from the LLM adapter so either can be replaced. Image/audio/video generation uses SequencerClient.generate; enumerate supported models with models(), inspect model(modelId), pass a cost ceiling and retain the returned media/job ID. Read status and completed media through media(workspaceId, mediaId). A thumbnail is not an actual video end-frame checkpoint.</p>
+<p>SequencerClient.save uploads declared assets and saves a guarded draft. load returns a portable project, complete assetFiles and the current versionId. The browser-compatible attachGenesisAssets helper supports signed-in creator imports without putting an account API key in the browser. Portable asset limits are 64 files, 50 MB/file and 100 MB total. The Sequencer adapter currently allows 40 files and 20 MB/file. Supported formats are PNG/JPEG/WebP/GIF, MP4/WebM, MP3/WAV/OGG.</p>
+<p>Custom deployments authenticate their own audience, call server APIs using their account key and issue restricted viewer access. Hosted Worldstreams use Sequencer authentication and gems. A creator account key is never a public viewer token. Custom monetization, tips, subscriptions and voting payments remain creator decisions.</p>
+<p>Private stream APIs use <code>/workspaces/{workspaceId}/live-worlds/{worldId}/streams/quote</code> and <code>streams/{uuid}/{start,heartbeat,prompt,stop}</code>. They currently support 30–600 seconds per session. Renew about every 10 seconds; the host stops a disconnected stream after its 60-second lease. A stream reserves its maximum USD cost, excludes startup and refunds unused credit once stopped. The current rate is $40/hour; always use the returned quote. Longer seamless sessions need a later provider/runtime capability and are not advertised as supported in this preview.</p>
+<p>Call host.tick in one background worker per room. Start an authorized queued job with host.runJob, persist its provider handle, poll with bounded backoff, and pass accepted views to authenticated clients. Autorun decisions belong to the host&#39;s spending policy. Sequencer automatically runs its declared LLM tool against the hosting workspace owner&#39;s credit ($0.01/request by default); manual media generation uses the initiating authenticated account. Configured model rates and account limits remain server authority.</p>
+<p>Use HTTPS stream tokens with minimum grants. A plain video URL supports prepared media; continuous providers need readiness, delivery, prompt updates, stop, lease renewal, playback acknowledgments and revocation when paid access ends. Model completion, prompt acceptance and actual playback are separate events.</p>
+<p>Current hosted bounds are 100 Genesis participants and 250 paid viewer connections per stream. Multiple tabs for one account share a payer and cannot lower the pool&#39;s total cost. Larger deployments require a later host policy and metering implementation. Paid native Worldstreams require LiveKit Cloud participant revocation; Sequencer&#39;s configured transport supports this requirement. Self-hosted creators must supply equivalent access termination for their chosen transport.</p>
+</article>
+      <footer class="site-footer">
+        <p>GENESIS 0.1.0 · Open source World Model game engine</p>
+        <nav aria-label="Footer resources"><a href="license.html">Apache 2.0</a><a href="agent-skill.html">World-building skill</a><a href="contributing.html">Contribute</a><a href="compatibility.html">Development preview</a></nav>
+        <p class="release-note">Local launch preparation. Public repository and package release are pending.</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

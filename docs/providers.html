@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Your own models. GENESIS open source World Model game engine documentation.">
+  <title>Your own models · GENESIS</title>
+  <link rel="stylesheet" href="site/site.css">
+  <script src="site/site.js" defer></script>
+</head>
+<body class="guide-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="GENESIS home"><span class="brand-mark" aria-hidden="true">G</span>GENESIS</a>
+    <a class="license-badge" href="license.html">Open source · Apache 2.0</a>
+    <form class="search" role="search">
+      <label class="sr-only" for="docs-search">Search Genesis documentation</label>
+      <input id="docs-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results">
+      <div id="search-results" class="search-results" role="region" aria-label="Documentation search results" hidden></div>
+    </form>
+  </header>
+  <details class="mobile-navigation"><summary>Documentation menu</summary><nav aria-label="Mobile documentation"><p class="nav-group">Start here</p><a href="index.html">Overview</a>
+<a href="getting-started.html">Build your first world</a>
+<a href="world-memory.html">World memory</a>
+<a href="agent-skill.html">Build from one prompt</a>
+<a href="demos.html">Worldstreams demos</a>
+<p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="providers.html" aria-current="page" class="active">Your own models</a>
+<p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
+<a href="architecture.html">Architecture</a>
+<a href="host-authority.html">Hosting and authority</a>
+<a href="project-boundary.html">Portable projects</a>
+<a href="compatibility.html">Compatibility</a>
+<a href="authoring-rules.html">Authoring contract</a>
+<p class="nav-group">Open source</p><a href="contributing.html">Contributing</a>
+<a href="security.html">Security</a>
+<a href="license.html">Apache 2.0 license</a>
+<a href="readme.html">Project README</a></nav></details>
+  <div class="site-layout">
+    <aside class="sidebar"><nav aria-label="Documentation"><p class="nav-group">Start here</p><a href="index.html">Overview</a>
+<a href="getting-started.html">Build your first world</a>
+<a href="world-memory.html">World memory</a>
+<a href="agent-skill.html">Build from one prompt</a>
+<a href="demos.html">Worldstreams demos</a>
+<p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="providers.html" aria-current="page" class="active">Your own models</a>
+<p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
+<a href="architecture.html">Architecture</a>
+<a href="host-authority.html">Hosting and authority</a>
+<a href="project-boundary.html">Portable projects</a>
+<a href="compatibility.html">Compatibility</a>
+<a href="authoring-rules.html">Authoring contract</a>
+<p class="nav-group">Open source</p><a href="contributing.html">Contributing</a>
+<a href="security.html">Security</a>
+<a href="license.html">Apache 2.0 license</a>
+<a href="readme.html">Project README</a></nav></aside>
+    <main id="main" tabindex="-1">
+      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#prepared-media">Prepared media</a><a href="#replicate">Replicate</a><a href="#custom-services">Custom services</a></nav></details><h1 id="provider-integration">Provider integration</h1>
+<p>A provider is a host module. Projects submit semantic effects and never receive provider credentials. Register providers and allowed capabilities when creating GenesisHost. Paid providers require services.authorizeTool, even when the creator requests access in the manifest.</p>
+<h2 id="prepared-media">Prepared media</h2>
+<p>createCachedProvider([{videoUrl,imageUrl}]) exercises queue, completion, playback and checkpoints with owned prepared assets. The image must represent the clip&#39;s actual last frame. Starter assets are included for no-cost local development.</p>
+<h2 id="replicate">Replicate</h2>
+<p>createReplicateProvider takes a server token and a host-registered model map. Each entry pins a 64-character version hash, provides maxEstimatedCostUsd, maps the Genesis job to model-specific inputs, and persists returned media through an asynchronous result callback. The callback must produce an immutable imageUrl for the actual final frame of scene videos. decodeGenesisEndFrame(inputPath,outputPath) handles bounded owned local files when ffmpeg/ffprobe are installed.</p>
+<p>The adapter uses POST /v1/predictions, GET /v1/predictions/{id}, and POST /v1/predictions/{id}/cancel. Requests use Bearer authentication. See <a href="https://replicate.com/docs/reference/http">https://replicate.com/docs/reference/http</a> for the provider protocol.</p>
+<p>Model costs are estimates, not a guaranteed external spending cap. Hosts enforce admission and actual billing through their own services and provider account controls. No creator price controls are introduced. Retry behavior depends on provider idempotency support. Replicate submission is deduplicated within the adapter process; uncertain submissions after process loss require reconciliation before a new attempt. The reference host does not automatically resubmit them.</p>
+<p>Output storage and remote downloading are host responsibilities. Allowlist provider/storage domains, validate redirects, bound download size and duration, and retain immutable assets. Do not let creator URLs become unrestricted server fetch targets.</p>
+<p>Protocol tests run without secrets. A deployment must test its chosen model&#39;s input mapping, output persistence and generation fidelity with live media before production use.</p>
+<h2 id="custom-services">Custom services</h2>
+<p>A provider can declare tool.audio.speak or tool.maps.lookup alongside its own argument validator and server implementation. Controllers request tool.request with toolId and data. Grant tool IDs independently in host policy. Return bounded result.data; the controller chooses what to expose to participants. Generic tool completion does not automatically replace the video stage.</p>
+<p>Uncertain paid submissions block participant retry. An operator can reconcile an existing prediction with host.reconcileProviderJob(jobId,providerId,predictionId). Restrict this to authenticated operator infrastructure. GenesisProviderSubmissionError(message,false) identifies a confirmed rejected submission; other paid start failures remain uncertain. This prevents automatic repeat charges after ambiguous network failures.</p>
+</article>
+      <footer class="site-footer">
+        <p>GENESIS 0.1.0 · Open source World Model game engine</p>
+        <nav aria-label="Footer resources"><a href="license.html">Apache 2.0</a><a href="agent-skill.html">World-building skill</a><a href="contributing.html">Contribute</a><a href="compatibility.html">Development preview</a></nav>
+        <p class="release-note">Local launch preparation. Public repository and package release are pending.</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

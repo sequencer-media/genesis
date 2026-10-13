@@ -15,7 +15,7 @@ Give your World Model a memory, an inventory and a playable interface.
 
 GENESIS is an open source SDK for building worldstreams: evolving experiences where player actions, shared rules and generated scenes move together. Describe your world to a coding agent, play the local prototype, then connect your World Model.
 
-[Watch the demos](#worldstreams-in-action) · [Build from a prompt](#one-prompt-an-infinite-experience) · [Start locally](#play-your-first-world) · [Connect your models](#connect-your-own-world-models) · [Worldstreams API](#worldstreams-api-instant-setup)
+[Documentation](docs/index.html) · [Watch the demos](#worldstreams-in-action) · [Build from a prompt](#one-prompt-an-infinite-experience) · [Start locally](#play-your-first-world) · [Connect your models](#connect-your-own-world-models) · [Worldstreams API](#worldstreams-api-instant-setup)
 
 ## Your World Model needs a dungeon master.
 
@@ -40,20 +40,20 @@ You define the world and its rules. GENESIS runs the state and interaction loop;
 
 ## Worldstreams in action
 
-### Rick and Morty · Interdimensional Chaos Trip
+### Rick and Morty · Multiplayer Worldstream
 
-A World Model adventure across ten connected scenes, with a preview interface for the audience's next choice. Click the image to watch the video.
+Two players direct Rick and Morty through their own character controls. Both actions feed the shared Worldstream. Click the image to watch the multiplayer recording.
 
-[![Watch the Rick and Morty Worldstream example video](docs/assets/rick-morty-worldstream.webp)](https://sequencer.media/demo/infinite-tv/rick-morty-720p-4e729b8d4107.mp4)
+[![Watch the multiplayer Rick and Morty Worldstream](docs/assets/rick-morty-multiplayer.webp)](https://sequencer.media/demo/worlds/multiplayer-demo-cropped-v2.mp4)
 
-[Watch video](https://sequencer.media/demo/infinite-tv/rick-morty-720p-4e729b8d4107.mp4) · [Try the preview player](https://sequencer.media/demo/infinite-tv)
+[Watch multiplayer video](https://sequencer.media/demo/worlds/multiplayer-demo-cropped-v2.mp4) · [Explore the demos](docs/demos.html)
 
-| Adventure Time · Land of Ooo | Multiplayer Worldstreams |
+| Adventure Time · Land of Ooo | World Model games |
 | --- | --- |
-| [![Watch the Adventure Time Worldstream](docs/assets/adventure-time-worldstream.webp)](https://sequencer.media/demo/worldstreams/adventure-time/adventure-time-720p-0bfe8c425454.mp4) | [![Watch the multiplayer Worldstreams demo](docs/assets/multiplayer-worldstream.webp)](https://sequencer.media/demo/about/media/worldstreams-multiplayer.mp4) |
-| A connected fantasy journey with audience-choice controls. [Watch video](https://sequencer.media/demo/worldstreams/adventure-time/adventure-time-720p-0bfe8c425454.mp4) · [Try the preview](https://sequencer.media/demo/worldstreams/adventure-time) | See two players directing their own characters in a shared experience. [Watch video](https://sequencer.media/demo/about/media/worldstreams-multiplayer.mp4) |
+| [![Watch the Adventure Time Worldstream](docs/assets/adventure-time-worldstream.webp)](https://sequencer.media/demo/worldstreams/adventure-time/adventure-time-720p-0bfe8c425454.mp4) | [![Watch World Model games](docs/assets/world-model-games.webp)](https://sequencer.media/landing/product-demos/world-games-v03-720p.mp4) |
+| A connected fantasy journey with audience-choice controls. [Watch video](https://sequencer.media/demo/worldstreams/adventure-time/adventure-time-720p-0bfe8c425454.mp4) · [Try the preview](https://sequencer.media/demo/worldstreams/adventure-time) | Explore the visual presentation of World Model game experiences. [Watch video](https://sequencer.media/landing/product-demos/world-games-v03-720p.mp4) |
 
-These are recorded Worldstreams demos. Preview choices illustrate the interaction flow around prepared World Model output. Live generation uses a connected provider. Open the [local video gallery](docs/demos.html) in a browser to play all three videos.
+These are recorded examples. Preview choices illustrate the interaction flow around prepared World Model output. Live generation uses a connected provider. The [demo and documentation site](docs/index.html) includes playable videos, the full SDK reference and the [world-building skill guide](docs/agent-skill.html).
 
 ## One prompt. An infinite experience.
 
@@ -128,6 +128,7 @@ Version 0.1 is an unpublished development preview, licensed under Apache 2.0. Th
 
 ```sh
 npm test
+npm run docs:build
 npm pack --dry-run
 ```
 

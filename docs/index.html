@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Open source World Model game engine. Create infinite experiences, in minutes.">
+  <title>GENESIS · Open Source World Model Game Engine</title>
+  <link rel="stylesheet" href="site/site.css">
+  <script src="site/site.js" defer></script>
+</head>
+<body class="home-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="GENESIS home"><span class="brand-mark" aria-hidden="true">G</span>GENESIS</a>
+    <a class="license-badge" href="license.html">Open source · Apache 2.0</a>
+    <form class="search" role="search">
+      <label class="sr-only" for="docs-search">Search Genesis documentation</label>
+      <input id="docs-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results">
+      <div id="search-results" class="search-results" role="region" aria-label="Documentation search results" hidden></div>
+    </form>
+  </header>
+  <details class="mobile-navigation"><summary>Documentation menu</summary><nav aria-label="Mobile documentation"><p class="nav-group">Start here</p><a href="index.html" aria-current="page" class="active">Overview</a>
+<a href="getting-started.html">Build your first world</a>
+<a href="world-memory.html">World memory</a>
+<a href="agent-skill.html">Build from one prompt</a>
+<a href="demos.html">Worldstreams demos</a>
+<p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="providers.html">Your own models</a>
+<p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
+<a href="architecture.html">Architecture</a>
+<a href="host-authority.html">Hosting and authority</a>
+<a href="project-boundary.html">Portable projects</a>
+<a href="compatibility.html">Compatibility</a>
+<a href="authoring-rules.html">Authoring contract</a>
+<p class="nav-group">Open source</p><a href="contributing.html">Contributing</a>
+<a href="security.html">Security</a>
+<a href="license.html">Apache 2.0 license</a>
+<a href="readme.html">Project README</a></nav></details>
+  <div class="site-layout">
+    <aside class="sidebar"><nav aria-label="Documentation"><p class="nav-group">Start here</p><a href="index.html" aria-current="page" class="active">Overview</a>
+<a href="getting-started.html">Build your first world</a>
+<a href="world-memory.html">World memory</a>
+<a href="agent-skill.html">Build from one prompt</a>
+<a href="demos.html">Worldstreams demos</a>
+<p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="providers.html">Your own models</a>
+<p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
+<a href="architecture.html">Architecture</a>
+<a href="host-authority.html">Hosting and authority</a>
+<a href="project-boundary.html">Portable projects</a>
+<a href="compatibility.html">Compatibility</a>
+<a href="authoring-rules.html">Authoring contract</a>
+<p class="nav-group">Open source</p><a href="contributing.html">Contributing</a>
+<a href="security.html">Security</a>
+<a href="license.html">Apache 2.0 license</a>
+<a href="readme.html">Project README</a></nav></aside>
+    <main id="main" tabindex="-1">
+      <article><section class="hero">
+<div>
+<p class="hero-label">Open source World Model game engine</p>
+
+<h1 id="create-infinite-experiences-in-minutes">Create infinite experiences, in minutes.</h1>
+<p>Give your World Model a memory, an inventory and a playable interface. GENESIS is the dungeon master for your worldstream: it remembers the world, applies the rules and connects player actions to generated scenes.</p>
+<div class="hero-actions"><a class="button primary" href="getting-started.html">Build your first world</a><a class="button" href="agent-skill.html">Create from one prompt</a></div>
+<p class="hero-note">Apache 2.0 licensed. Bring your own models, or connect the Worldstreams API with one server key.</p>
+</div>
+<img src="assets/genesis-worlds.svg" alt="Three pixel worlds: a floating forest, a castle arena and a lunar outpost" width="1280" height="360">
+</section>
+
+<h2 id="your-world-model-needs-a-dungeon-master">Your World Model needs a dungeon master.</h2>
+<p>In a tabletop game, the dungeon master remembers what you carry, who you met and what changed. GENESIS gives infinite experiences that same foundation. Your controller owns the facts; your LLM and World Model receive the context for what happens next.</p>
+<div class="feature-grid">
+<section><h3 id="world-memory">World memory</h3><p>Persist inventory, health, quest flags, locations and character relationships in structured state.</p></section>
+<section><h3 id="playable-worlds">Playable worlds</h3><p>Build custom interfaces, authoritative turns, player seats and crowd decisions around generated scenes.</p></section>
+<section><h3 id="connected-generation">Connected generation</h3><p>Validate LLM replies, track asynchronous jobs and carry real scene checkpoints into the next moment.</p></section>
+</div>
+
+<h2 id="describe-any-world-start-with-one-prompt">Describe any world. Start with one prompt.</h2>
+<p>The included <strong>create-world-stream skill</strong> helps a coding agent turn your idea into a working prototype: world settings, a custom interface, controller rules, assets and an exportable bundle.</p>
+<div class="prompt-card">
+<pre><code>Use the create-world-stream skill to build Mosslight, a forest
+battle worldstream with a cream pixel interface. Let two players
+take turns, ask the backend LLM for four moves per encounter,
+and remember their inventory, health and progress. Give me a
+working local preview and an exportable world.</code></pre>
+<button type="button" data-copy-prompt>Copy world-building prompt</button>
+</div>
+
+<p>Start with labeled fixtures for a local prototype. Connect your chosen models and a generation budget for live media. <a href="agent-skill.html">Learn the agent workflow</a>.</p>
+<h2 id="rick-and-morty-together-in-one-worldstream">Rick and Morty, together in one worldstream</h2>
+<p>Watch the multiplayer example: Rick and Morty have their own character controls, and both actions feed the shared experience.</p>
+<figure class="demo-feature">
+<video controls playsinline preload="none" poster="assets/rick-morty-multiplayer.webp" aria-label="Rick and Morty multiplayer Worldstream">
+<source src="https://sequencer.media/demo/worlds/multiplayer-demo-cropped-v2.mp4" type="video/mp4">
+<a href="https://sequencer.media/demo/worlds/multiplayer-demo-cropped-v2.mp4">Watch the multiplayer Rick and Morty video</a>
+</video>
+<figcaption>Recorded Worldstreams example. <a href="demos.html">Explore all demos</a>.</figcaption>
+</figure>
+
+<h2 id="three-files-your-whole-world">Three files. Your whole world.</h2>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-text">my-world/
+├── genesis.json      World settings, actions, tools and assets
+├── interface.html    Your interface and player controls
+├── controller.js     World memory, rules and backend requests
+└── assets/           Images, audio and video that travel with you</code></pre></div>
+<p>GENESIS coordinates the world; connected providers generate media. Your host supplies identity, storage, credentials and spending policy. <a href="getting-started.html">Start building</a>.</p>
+<h2 id="choose-your-connection">Choose your connection</h2>
+<table>
+<thead>
+<tr>
+<th>Worldstreams API</th>
+<th>Your own World Models</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>One Sequencer server key connects LLM tools, media generation, assets and managed worldstream APIs.</td>
+<td>Choose your LLM and World Model, then register their server-side adapters.</td>
+</tr>
+<tr>
+<td><a href="integration.html">Connect Worldstreams</a></td>
+<td><a href="providers.html">Connect your own providers</a></td>
+</tr>
+</tbody></table>
+<p>The source is <strong>Apache 2.0 licensed</strong>. Version 0.1 is an unpublished development preview, being polished for launch. <a href="license.html">Read the license</a>, <a href="contributing.html">contribute</a> or <a href="api.html">explore the SDK API</a>.</p>
+</article>
+      <footer class="site-footer">
+        <p>GENESIS 0.1.0 · Open source World Model game engine</p>
+        <nav aria-label="Footer resources"><a href="license.html">Apache 2.0</a><a href="agent-skill.html">World-building skill</a><a href="contributing.html">Contribute</a><a href="compatibility.html">Development preview</a></nav>
+        <p class="release-note">Local launch preparation. Public repository and package release are pending.</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
