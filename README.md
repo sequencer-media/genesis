@@ -17,6 +17,8 @@ Open source, licensed under [Apache 2.0](LICENSE).
 
 [Watch the demos](#what-is-a-worldstream) · [What can you build?](#what-can-you-build) · [Build from a prompt](#one-prompt-an-infinite-experience) · [Documentation](docs/getting-started.md) · [SDK API](docs/api.md) · [Connect your models](#connect-your-own-world-models) · [Worldstreams API](#worldstreams-api-instant-setup)
 
+![Three pixel worlds: a floating forest, a castle arena and a lunar outpost](docs/assets/genesis-worlds.svg)
+
 ## Your World Model needs an Engine.
 
 In a tabletop game, the dungeon master remembers what you carry, who you met and what changed. GENESIS gives infinite experiences that same foundation.
