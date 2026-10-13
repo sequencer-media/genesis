@@ -1,6 +1,6 @@
 # Private launch preparation
 
-Status: local and unpublished. The independent local repository lives alongside the parent development project. No npm publication or public GitHub creation is performed.
+Repository: [sequencer-media/genesis](https://github.com/sequencer-media/genesis). Keep its current visibility until the planned public launch. The source preview is prepared independently of the parent application. npm publication remains disabled until an authorized package release.
 
 ## Positioning
 
@@ -26,7 +26,7 @@ An offline fixture lets developers understand the same loop before spending cred
 - Run one bounded real LLM call and private stream through deployed adapters, including stop/refund and viewer revocation.
 - Load test distributed session workers and viewer billing, including provider outages and reconciliation.
 - Verify current pricing, provider limits, license and fixture provenance.
-- Add the chosen private repository remote and enable private vulnerability reporting before making it public.
+- Verify the GitHub repository, CI checks and first-run instructions. Enable private vulnerability reporting before the public launch.
 - Configure the release registry, then remove private:true only for the approved release.
 
 The comparison table describes supported workflows and ownership responsibilities. Keep claims tied to demonstrated behavior and current provider limits. Keep external-provider adapters small and independently testable.

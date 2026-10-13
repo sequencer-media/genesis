@@ -2,6 +2,14 @@
   "name": "@genesis-worlds/runtime",
   "version": "0.1.0",
   "description": "Open source World Model engine. Build infinite experiences and worldstreams with memory, inventory, shared rules and custom interfaces.",
+  "homepage": "https://github.com/sequencer-media/genesis#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sequencer-media/genesis.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sequencer-media/genesis/issues"
+  },
   "keywords": [
     "world-models",
     "world-model-engine",

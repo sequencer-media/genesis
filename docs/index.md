@@ -68,4 +68,4 @@ GENESIS coordinates the world; connected providers generate media. Your host sup
 | One Sequencer server key connects LLM tools, media generation, assets and managed worldstream APIs. | Choose your LLM and World Model, then register their server-side adapters. |
 | [Connect Worldstreams](integration.html) | [Connect your own providers](providers.html) |
 
-The source is **Apache 2.0 licensed**. Version 0.1 is an unpublished development preview, being polished for launch. [Read the license](license.html), [contribute](contributing.html) or [explore the SDK API](api.html).
+The source is **Apache 2.0 licensed**. Version 0.1 is a source preview, with npm publication and the wider launch being prepared. [Browse the repository](https://github.com/sequencer-media/genesis), [read the license](license.html), [contribute](contributing.html) or [explore the SDK API](api.html).

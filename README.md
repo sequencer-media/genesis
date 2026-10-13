@@ -9,13 +9,20 @@
 
 # GENESIS · Open Source World Model Engine
 
+[![CI: Node 20 and 22](https://img.shields.io/badge/CI-Node_20_%2B_22-f46aa6?style=flat-square&logo=githubactions&logoColor=white)](https://github.com/sequencer-media/genesis/actions/workflows/ci.yml)
+[![Apache 2.0 license](https://img.shields.io/badge/license-Apache_2.0-ff9b55?style=flat-square)](LICENSE)
+[![Source preview 0.1.0](https://img.shields.io/badge/source_preview-v0.1.0-f46aa6?style=flat-square)](docs/compatibility.md)
+[![Node.js 20 or later](https://img.shields.io/badge/Node.js-20%2B-ff9b55?style=flat-square&logo=nodedotjs&logoColor=white)](docs/getting-started.md)
+[![TypeScript API](https://img.shields.io/badge/TypeScript-typed_API-f46aa6?style=flat-square&logo=typescript&logoColor=white)](docs/api.md)
+[![World-building agent skill included](https://img.shields.io/badge/agent_skill-included-ff9b55?style=flat-square)](skills/create-world-stream/SKILL.md)
+
 **Create infinite experiences, in minutes.**
 
 Give your World Model a memory, an inventory and a playable interface.
 
 GENESIS is an open source SDK for building worldstreams: evolving experiences where player actions, shared rules and generated scenes move together. Describe your world to a coding agent, play the local prototype, then connect your World Model.
 
-[Documentation](docs/index.html) · [Watch the demos](#worldstreams-in-action) · [Build from a prompt](#one-prompt-an-infinite-experience) · [Start locally](#play-your-first-world) · [Connect your models](#connect-your-own-world-models) · [Worldstreams API](#worldstreams-api-instant-setup)
+[Documentation](docs/getting-started.md) · [Watch the demos](#worldstreams-in-action) · [Build from a prompt](#one-prompt-an-infinite-experience) · [SDK API](docs/api.md) · [Connect your models](#connect-your-own-world-models) · [Worldstreams API](#worldstreams-api-instant-setup)
 
 ## Your World Model needs a dungeon master.
 
@@ -46,14 +53,14 @@ Two players direct Rick and Morty through their own character controls. Both act
 
 [![Watch the multiplayer Rick and Morty Worldstream](docs/assets/rick-morty-multiplayer.webp)](https://sequencer.media/demo/worlds/multiplayer-demo-cropped-v2.mp4)
 
-[Watch multiplayer video](https://sequencer.media/demo/worlds/multiplayer-demo-cropped-v2.mp4) · [Explore the demos](docs/demos.html)
+[Watch multiplayer video](https://sequencer.media/demo/worlds/multiplayer-demo-cropped-v2.mp4) · [Explore the demos](docs/demos.md)
 
 | Adventure Time · Land of Ooo | World Model games |
 | --- | --- |
 | [![Watch the Adventure Time Worldstream](docs/assets/adventure-time-worldstream.webp)](https://sequencer.media/demo/worldstreams/adventure-time/adventure-time-720p-0bfe8c425454.mp4) | [![Watch World Model games](docs/assets/world-model-games.webp)](https://sequencer.media/landing/product-demos/world-games-v03-720p.mp4) |
 | A connected fantasy journey with audience-choice controls. [Watch video](https://sequencer.media/demo/worldstreams/adventure-time/adventure-time-720p-0bfe8c425454.mp4) · [Try the preview](https://sequencer.media/demo/worldstreams/adventure-time) | Explore the visual presentation of World Model game experiences. [Watch video](https://sequencer.media/landing/product-demos/world-games-v03-720p.mp4) |
 
-These are recorded examples. Preview choices illustrate the interaction flow around prepared World Model output. Live generation uses a connected provider. The [demo and documentation site](docs/index.html) includes playable videos, the full SDK reference and the [world-building skill guide](docs/agent-skill.html).
+These are recorded Worldstreams examples. Preview choices illustrate the interaction flow around prepared World Model output. Live generation uses a connected provider. Read the [SDK reference](docs/api.md) and [world-building skill guide](docs/agent-skill.md), or run `npm run docs:dev` to open the searchable documentation site and video gallery locally.
 
 ## One prompt. An infinite experience.
 
@@ -75,9 +82,11 @@ Start with labeled local fixtures. With a configured provider and budget, the ag
 
 ## Play your first world
 
-Requires Node 20 or later. From this source checkout:
+Requires Node 20 or later. Clone the repository and run:
 
 ```sh
+git clone https://github.com/sequencer-media/genesis.git
+cd genesis
 npm ci
 npm run build
 node dist/cli.js init ./my-world --template arena-llm
@@ -124,7 +133,7 @@ The ZIP includes the three entry files, the JSON Schema and complete declared as
 
 ## Development preview
 
-Version 0.1 is an unpublished development preview, licensed under Apache 2.0. This repository is being polished for launch.
+Version 0.1 is an Apache 2.0 licensed source preview. Clone the repository to build and run it locally. npm publication and the wider launch are being prepared.
 
 ```sh
 npm test
@@ -141,7 +150,7 @@ Portable continuous-stream settings accept 2–30 second chunk intervals. The cu
 
 Private Worldstreams API sessions currently support 30–600 seconds and cost $40/hour of active streaming. The API quotes and reserves the maximum cost, then refunds unused credit on teardown. Startup is excluded; generation and LLM requests are priced separately. Always use the returned quote.
 
-See [compatibility](docs/compatibility.md), [integration](docs/integration.md) and [launch preparation](docs/launch.md) for versioning, stream leases and release checks.
+See [compatibility](docs/compatibility.md) and [integration](docs/integration.md) for versioning, stream leases and release checks.
 
 </details>
 
@@ -177,4 +186,8 @@ The command uploads the declared assets and returns a saved draft and preview UR
 | Hosted viewer identity and billing | Worldstreams accounts, gems and viewer leases | Implement your policies |
 | Audience and monetization in your own app | Yours to manage | Yours to manage |
 
-[Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Apache 2.0 license](LICENSE)
+## Build with us
+
+Found an issue or have an idea? [Open an issue](https://github.com/sequencer-media/genesis/issues). Read the [contribution guide](CONTRIBUTING.md) before making a pull request. If GENESIS is useful to you, star the repository and share what you build.
+
+[Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Apache 2.0 license](LICENSE) · [Sequencer](https://sequencer.media) · [Worldstreams](https://worldstreams.ai)

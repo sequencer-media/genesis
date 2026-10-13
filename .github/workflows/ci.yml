@@ -1,5 +1,10 @@
 name: Genesis compatibility
 on: [push, pull_request]
+permissions:
+  contents: read
+concurrency:
+  group: genesis-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   runtime:
     runs-on: ubuntu-latest

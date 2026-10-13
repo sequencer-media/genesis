@@ -1,0 +1,23 @@
+name: Feature request
+description: Propose a useful creator workflow or engine capability.
+title: "[Feature]: "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Creator workflow
+      description: What are you building, and what do you need Genesis to handle?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Give a concrete example of the interface, controller or provider behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Current approach
+      description: How do you handle this today, and where does it fall short?

@@ -6,7 +6,7 @@ The open source **create-world-stream** skill helps a coding agent build a playa
 
 Give your coding agent the Genesis checkout and ask it to use `skills/create-world-stream/SKILL.md`. Repo-aware agents discover it through AGENTS.md. Other skill-capable agents can load the file directly.
 
-The agent needs access to the checkout, Node 20 or later and the Genesis CLI. This preview is supplied as source; npm and public GitHub publication are pending.
+The agent needs access to the checkout, Node 20 or later and the Genesis CLI. Clone [sequencer-media/genesis](https://github.com/sequencer-media/genesis) to get the source preview. npm publication is being prepared.
 
 <div class="prompt-card">
 <pre><code>Use the create-world-stream skill to build Mosslight, a forest

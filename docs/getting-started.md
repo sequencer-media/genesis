@@ -4,9 +4,11 @@ Start with a playable local worldstream, then customize its rules and connect ge
 
 ## Run a starter
 
-Requires Node 20 or later and the Genesis source checkout. From the repository:
+Requires Node 20 or later. Clone the Genesis source preview:
 
 ```sh
+git clone https://github.com/sequencer-media/genesis.git
+cd genesis
 npm ci
 npm run build
 node dist/cli.js init ./my-world --template arena-llm

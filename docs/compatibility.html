@@ -58,12 +58,12 @@
       <article><h1 id="compatibility-and-growth">Compatibility and growth</h1>
 <p>Genesis can continue to evolve after publication. Releases use semantic versioning. Project format 1, participation 1, bounded tool contracts and asset registry fields are versioned independently. Existing format-1 projects without assets or LLM capabilities remain valid. Unknown fields fail visibly; hosts advertise capabilities and supported cadence instead of silently promising unsupported behavior.</p>
 <p>Keep new provider integrations in adapters. Add optional capabilities before making a host depend on them. Extensions are bounded inert data and grant no authority. A host pins controller/interface versions for a session, and new drafts affect new sessions. Maintain supported version fixtures and round-trip tests. Breaking format changes require an explicit migration and a major release; do not mutate existing session rules halfway through a game.</p>
-<p>This unpublished preview runs CI on Node 20 and 22. Package publication is disabled with private:true. Remove that guard only for an authorized release. The local launch repository has no remote. Keep commercial account records, operational credentials and deployment settings outside it.</p>
+<p>This source preview runs CI on Node 20 and 22 in <a href="https://github.com/sequencer-media/genesis">sequencer-media/genesis</a>. npm publication is disabled with private:true until an authorized package release. GitHub repository visibility is managed separately. Keep commercial account records, operational credentials and deployment settings outside the repository.</p>
 </article>
       <footer class="site-footer">
         <p>GENESIS 0.1.0 · Open source World Model engine</p>
         <nav aria-label="Footer resources"><a href="license.html">Apache 2.0</a><a href="agent-skill.html">World-building skill</a><a href="contributing.html">Contribute</a><a href="compatibility.html">Development preview</a></nav>
-        <p class="release-note">Local launch preparation. Public repository and package release are pending.</p>
+        <p class="release-note"><a href="https://github.com/sequencer-media/genesis">Source on GitHub</a>. Version 0.1 source preview. npm publication and the wider launch are being prepared.</p>
       </footer>
     </main>
   </div>

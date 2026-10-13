@@ -55,17 +55,23 @@
 <a href="license.html">Apache 2.0 license</a>
 <a href="readme.html" aria-current="page" class="active">Project README</a></nav></aside>
     <main id="main" tabindex="-1">
-      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#your-world-model-needs-a-dungeon-master">Your World Model needs a dungeon master.</a><a href="#worldstreams-in-action">Worldstreams in action</a><a href="#rick-and-morty--multiplayer-worldstream">Rick and Morty · Multiplayer Worldstream</a><a href="#one-prompt-an-infinite-experience">One prompt. An infinite experience.</a><a href="#play-your-first-world">Play your first world</a><a href="#three-files-your-whole-world">Three files. Your whole world.</a><a href="#development-preview">Development preview</a><a href="#connect-your-own-world-models">Connect your own World Models</a><a href="#worldstreams-api-instant-setup">Worldstreams API: instant setup</a></nav></details><div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-text">  _____ ______ _   _ ______  _____ _____  _____
+      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#your-world-model-needs-a-dungeon-master">Your World Model needs a dungeon master.</a><a href="#worldstreams-in-action">Worldstreams in action</a><a href="#rick-and-morty--multiplayer-worldstream">Rick and Morty · Multiplayer Worldstream</a><a href="#one-prompt-an-infinite-experience">One prompt. An infinite experience.</a><a href="#play-your-first-world">Play your first world</a><a href="#three-files-your-whole-world">Three files. Your whole world.</a><a href="#development-preview">Development preview</a><a href="#connect-your-own-world-models">Connect your own World Models</a><a href="#worldstreams-api-instant-setup">Worldstreams API: instant setup</a><a href="#build-with-us">Build with us</a></nav></details><div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-text">  _____ ______ _   _ ______  _____ _____  _____
  / ____|  ____| \ | |  ____|/ ____|_   _|/ ____|
 | |  __| |__  |  \| | |__  | (___   | | | (___
 | | |_ |  __| | . \ |  __|  \___ \  | |  \___ \
 | |__| | |____| |\  | |____ ____) |_| |_ ____) |
  \_____|______|_| \_|______|_____/|_____|_____/</code></pre></div>
 <h1 id="genesis--open-source-world-model-engine">GENESIS · Open Source World Model Engine</h1>
+<p><a href="https://github.com/sequencer-media/genesis/actions/workflows/ci.yml"><img src="https://img.shields.io/badge/CI-Node_20_%2B_22-f46aa6?style=flat-square&amp;logo=githubactions&amp;logoColor=white" alt="CI: Node 20 and 22" loading="lazy"></a>
+<a href="license.html"><img src="https://img.shields.io/badge/license-Apache_2.0-ff9b55?style=flat-square" alt="Apache 2.0 license" loading="lazy"></a>
+<a href="compatibility.html"><img src="https://img.shields.io/badge/source_preview-v0.1.0-f46aa6?style=flat-square" alt="Source preview 0.1.0" loading="lazy"></a>
+<a href="getting-started.html"><img src="https://img.shields.io/badge/Node.js-20%2B-ff9b55?style=flat-square&amp;logo=nodedotjs&amp;logoColor=white" alt="Node.js 20 or later" loading="lazy"></a>
+<a href="api.html"><img src="https://img.shields.io/badge/TypeScript-typed_API-f46aa6?style=flat-square&amp;logo=typescript&amp;logoColor=white" alt="TypeScript API" loading="lazy"></a>
+<a href="agent-skill.html"><img src="https://img.shields.io/badge/agent_skill-included-ff9b55?style=flat-square" alt="World-building agent skill included" loading="lazy"></a></p>
 <p><strong>Create infinite experiences, in minutes.</strong></p>
 <p>Give your World Model a memory, an inventory and a playable interface.</p>
 <p>GENESIS is an open source SDK for building worldstreams: evolving experiences where player actions, shared rules and generated scenes move together. Describe your world to a coding agent, play the local prototype, then connect your World Model.</p>
-<p><a href="index.html">Documentation</a> · <a href="#worldstreams-in-action">Watch the demos</a> · <a href="#one-prompt-an-infinite-experience">Build from a prompt</a> · <a href="#play-your-first-world">Start locally</a> · <a href="#connect-your-own-world-models">Connect your models</a> · <a href="#worldstreams-api-instant-setup">Worldstreams API</a></p>
+<p><a href="getting-started.html">Documentation</a> · <a href="#worldstreams-in-action">Watch the demos</a> · <a href="#one-prompt-an-infinite-experience">Build from a prompt</a> · <a href="api.html">SDK API</a> · <a href="#connect-your-own-world-models">Connect your models</a> · <a href="#worldstreams-api-instant-setup">Worldstreams API</a></p>
 <h2 id="your-world-model-needs-a-dungeon-master">Your World Model needs a dungeon master.</h2>
 <p>In a tabletop roleplaying game, the dungeon master remembers your inventory, knows the characters and locations, applies the rules and describes what happens next. An infinite experience needs the same foundation.</p>
 <p>GENESIS fills that role for your World Model. It keeps the world in structured state, resolves player actions and passes the committed outcome to the LLM and scene generator. Your interface reflects the same shared reality.</p>
@@ -132,7 +138,7 @@
 <td>Explore the visual presentation of World Model game experiences. <a href="https://sequencer.media/landing/product-demos/world-games-v03-720p.mp4">Watch video</a></td>
 </tr>
 </tbody></table>
-<p>These are recorded examples. Preview choices illustrate the interaction flow around prepared World Model output. Live generation uses a connected provider. The <a href="index.html">demo and documentation site</a> includes playable videos, the full SDK reference and the <a href="agent-skill.html">world-building skill guide</a>.</p>
+<p>These are recorded Worldstreams examples. Preview choices illustrate the interaction flow around prepared World Model output. Live generation uses a connected provider. Read the <a href="api.html">SDK reference</a> and <a href="agent-skill.html">world-building skill guide</a>, or run <code>npm run docs:dev</code> to open the searchable documentation site and video gallery locally.</p>
 <h2 id="one-prompt-an-infinite-experience">One prompt. An infinite experience.</h2>
 <p>The bundled <a href="agent-skill.html">create-world-stream agent skill</a> turns an idea into world settings, a custom interface, controller rules and a portable project.</p>
 <p>Give a coding agent this checkout and a prompt:</p>
@@ -144,8 +150,10 @@ local preview and an exportable world.</code></pre></div>
 <p>The skill wires backend requests, declares assets, validates the bundle and exercises the player flow. <a href="authoring-rules.html">AGENTS.md</a> points repo-aware agents to it; other skill-capable agents can load its SKILL.md directly.</p>
 <p>Start with labeled local fixtures. With a configured provider and budget, the agent can create and attach images, audio and video for your worldstream.</p>
 <h2 id="play-your-first-world">Play your first world</h2>
-<p>Requires Node 20 or later. From this source checkout:</p>
-<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-sh">npm ci
+<p>Requires Node 20 or later. Clone the repository and run:</p>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-sh">git clone https://github.com/sequencer-media/genesis.git
+cd genesis
+npm ci
 npm run build
 node dist/cli.js init ./my-world --template arena-llm
 node dist/cli.js dev ./my-world</code></pre></div>
@@ -196,7 +204,7 @@ node dist/cli.js dev ./my-world</code></pre></div>
 node dist/cli.js export ./my-world --out ./my-world.zip</code></pre></div>
 <p>The ZIP includes the three entry files, the JSON Schema and complete declared assets. Safe relative paths make media portable; hosting adapters copy assets and provide runtime URLs. Keep provider keys, wallets and commercial settings in the host. <a href="project-boundary.html">Read the project boundary</a>.</p>
 <h2 id="development-preview">Development preview</h2>
-<p>Version 0.1 is an unpublished development preview, licensed under Apache 2.0. This repository is being polished for launch.</p>
+<p>Version 0.1 is an Apache 2.0 licensed source preview. Clone the repository to build and run it locally. npm publication and the wider launch are being prepared.</p>
 <div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-sh">npm test
 npm run docs:build
 npm pack --dry-run</code></pre></div>
@@ -206,7 +214,7 @@ npm pack --dry-run</code></pre></div>
 <p>The standalone preview verifies bounded clips, prepared media and structured tool data. Continuous worldstreams and avatar/audio sessions require a deployment-specific presentation adapter. The Replicate adapter has protocol-fixture coverage; live paid predictions still need validation. Current reference limits include 100 participants, 32 actions, 200 KB session state and 2–10 second clips.</p>
 <p>Portable continuous-stream settings accept 2–30 second chunk intervals. The current Worldstreams deployment accepts 14 seconds, with approximately 14.375 seconds of provider output. Hosts validate supported intervals.</p>
 <p>Private Worldstreams API sessions currently support 30–600 seconds and cost $40/hour of active streaming. The API quotes and reserves the maximum cost, then refunds unused credit on teardown. Startup is excluded; generation and LLM requests are priced separately. Always use the returned quote.</p>
-<p>See <a href="compatibility.html">compatibility</a>, <a href="integration.html">integration</a> and <a href="launch.md">launch preparation</a> for versioning, stream leases and release checks.</p>
+<p>See <a href="compatibility.html">compatibility</a> and <a href="integration.html">integration</a> for versioning, stream leases and release checks.</p>
 </details>
 
 <h2 id="connect-your-own-world-models">Connect your own World Models</h2>
@@ -262,12 +270,14 @@ node dist/cli.js save ./my-world --workspace YOUR_WORKSPACE_ID</code></pre></div
 <td>Yours to manage</td>
 </tr>
 </tbody></table>
-<p><a href="contributing.html">Contributing</a> · <a href="security.html">Security</a> · <a href="license.html">Apache 2.0 license</a></p>
+<h2 id="build-with-us">Build with us</h2>
+<p>Found an issue or have an idea? <a href="https://github.com/sequencer-media/genesis/issues">Open an issue</a>. Read the <a href="contributing.html">contribution guide</a> before making a pull request. If GENESIS is useful to you, star the repository and share what you build.</p>
+<p><a href="contributing.html">Contributing</a> · <a href="security.html">Security</a> · <a href="license.html">Apache 2.0 license</a> · <a href="https://sequencer.media">Sequencer</a> · <a href="https://worldstreams.ai">Worldstreams</a></p>
 </article>
       <footer class="site-footer">
         <p>GENESIS 0.1.0 · Open source World Model engine</p>
         <nav aria-label="Footer resources"><a href="license.html">Apache 2.0</a><a href="agent-skill.html">World-building skill</a><a href="contributing.html">Contribute</a><a href="compatibility.html">Development preview</a></nav>
-        <p class="release-note">Local launch preparation. Public repository and package release are pending.</p>
+        <p class="release-note"><a href="https://github.com/sequencer-media/genesis">Source on GitHub</a>. Version 0.1 source preview. npm publication and the wider launch are being prepared.</p>
       </footer>
     </main>
   </div>

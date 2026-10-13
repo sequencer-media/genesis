@@ -1,0 +1,41 @@
+name: Bug report
+description: Report a reproducible Genesis problem.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: "Include a minimal world or code sample. Remove API keys, credentials and private player data. Use the security reporting instructions for suspected vulnerabilities."
+  - type: input
+    id: version
+    attributes:
+      label: Genesis version or commit
+      placeholder: "0.1.0 or the commit from your checkout"
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Node version, operating system, browser and provider or local fixture.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Include the smallest project or commands that reproduce the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include relevant error messages or screenshots with private data removed.
+    validations:
+      required: true

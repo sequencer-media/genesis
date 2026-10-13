@@ -2,6 +2,8 @@
 
 Use Node 20 or later. Run `npm ci` and `npm test` from this directory.
 
+Use the [bug report or feature request forms](https://github.com/sequencer-media/genesis/issues/new/choose) to describe reproducible behavior or a concrete creator workflow. For a pull request, fork the repository, create a branch and keep the change focused. Include the relevant checks and an example when it introduces a new programming pattern.
+
 The documentation site is built from the Markdown guides, the README and the bundled authoring skill. Run `npm run docs:build` after editing them, or `npm run docs:dev` for a local browser preview. Commit the generated HTML with its source changes. The build checks local links and section anchors. Keep demos clearly labeled as recorded examples.
 
 Keep the runtime independent of a deployment, provider or framework. Host adapters own credentials, identity, purchases, content policy and resource grants. Project manifests only request capabilities.

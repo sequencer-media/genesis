@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation and first world
+    url: https://github.com/sequencer-media/genesis/blob/main/docs/getting-started.md
+    about: Build a local world, then connect your chosen models.
+  - name: Security reporting
+    url: https://github.com/sequencer-media/genesis/blob/main/SECURITY.md
+    about: Follow the private reporting instructions for suspected vulnerabilities.
