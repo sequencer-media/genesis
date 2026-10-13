@@ -2,6 +2,18 @@
 
 Genesis is a portable runtime and project format. A world has a browser interface, a synchronous sandboxed server controller, accepted state and asynchronous host effects. The host owns authentication, provider credentials, permissions, spending, publication and storage. Sequencer implements that host with managed media, LLM requests, versioned assets and stream infrastructure.
 
+## A universal World Model Context Protocol
+
+GENESIS defines a shared contract for world state, player actions and model requests. The LLM and World Model boxes below are adapter slots in that orchestration layer. Their providers run through the host. Streaming delivery returns generated video to the player's interface.
+
+<p class="diagram-hint">Scroll the diagram horizontally to explore the full loop.</p>
+<figure class="world-flow">
+<div class="world-flow-scroll" role="region" aria-label="GENESIS modular World Model flow diagram" tabindex="0"><img src="assets/genesis-world-context.svg" alt="Character memory, scenes and locations, inventory and multiplayer feed GENESIS world state. Its LLM and World Model adapters produce the next scene, while streaming delivery returns video to the interactive UI and player actions continue the loop." width="960" height="648" loading="lazy"></div>
+<figcaption>Use the modules your project needs and connect providers through host adapters.</figcaption>
+</figure>
+
+## The action and generation loop
+
 ```
 Viewer action -> authenticated host -> controller -> committed state
                                          |

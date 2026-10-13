@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="648" viewBox="0 0 960 648" role="img" aria-labelledby="title description">
+  <title id="title">GENESIS, a universal World Model Context Protocol</title>
+  <desc id="description">GENESIS wraps the World Model in a modular context and interaction loop. Character memory, scenes and locations, inventory and multiplayer feed world state. Player actions update that state. The LLM adapter receives context and returns structured replies, then supplies prompts to the World Model adapter. Generated scenes pass through streaming delivery back to the interactive UI. Point and click, player controls and inventory panels continue the loop. Providers connect through replaceable adapters.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path d="M1 1L7 4L1 7" fill="none" stroke="#a53861" stroke-width="1.4"/></marker>
+  </defs>
+  <style>
+    text{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;fill:#382b32}
+    .title{font-size:24px;font-weight:700;letter-spacing:1px}
+    .label{font-size:18px;font-weight:700}
+    .detail{font-size:13px;fill:#75636b}
+    .caption{font-size:13px;fill:#a53861}
+    .node{fill:#f5f0e4;stroke:#bba49c;stroke-width:1}
+    .adapter{fill:#f5f0e4;stroke:#a53861;stroke-width:1.3;stroke-dasharray:5 4}
+    .flow{fill:none;stroke:#a53861;stroke-width:1.5;marker-end:url(#arrow)}
+    .context{fill:none;stroke:#bba49c;stroke-width:1.2}
+  </style>
+  <rect width="960" height="648" fill="#f5f0e4"/>
+  <rect x="24" y="20" width="912" height="462" fill="none" stroke="#382b32" stroke-width="1.5"/>
+  <text x="52" y="56" class="title">GENESIS</text>
+  <text x="52" y="81" class="detail">A universal World Model Context Protocol</text>
+  <text x="918" y="58" text-anchor="end" class="caption">[ modular by design ]</text>
+
+  <g text-anchor="middle">
+    <rect x="52" y="106" width="200" height="76" class="node"/>
+    <path d="M52 106H252" stroke="#f46aa6" stroke-width="2"/>
+    <text x="152" y="137" class="label">Character memory</text>
+    <text x="152" y="160" class="detail">History + relationships</text>
+    <rect x="274" y="106" width="200" height="76" class="node"/>
+    <path d="M274 106H474" stroke="#ff9b55" stroke-width="2"/>
+    <text x="374" y="137" class="label">Scenes + places</text>
+    <text x="374" y="160" class="detail">Locations + continuity</text>
+    <rect x="496" y="106" width="200" height="76" class="node"/>
+    <path d="M496 106H696" stroke="#f46aa6" stroke-width="2"/>
+    <text x="596" y="137" class="label">Inventory</text>
+    <text x="596" y="160" class="detail">Items + variables</text>
+    <rect x="718" y="106" width="200" height="76" class="node"/>
+    <path d="M718 106H918" stroke="#ff9b55" stroke-width="2"/>
+    <text x="818" y="137" class="label">Multiplayer</text>
+    <text x="818" y="160" class="detail">Seats + turns + votes</text>
+  </g>
+  <path class="context" d="M152 182V202H818V182M374 182V202M596 182V202"/>
+  <path class="flow" d="M177 202V222"/>
+
+  <g text-anchor="middle">
+    <rect x="52" y="222" width="250" height="98" class="node"/>
+    <text x="177" y="258" class="label">World state + rules</text>
+    <text x="177" y="284" class="detail">Accept actions</text>
+    <text x="177" y="306" class="detail">Remember outcomes</text>
+    <rect x="350" y="222" width="240" height="98" class="adapter"/>
+    <text x="470" y="258" class="label">LLM module</text>
+    <text x="470" y="284" class="detail">Prompts + typed replies</text>
+    <text x="470" y="306" class="detail">Connect your LLM provider</text>
+    <rect x="648" y="222" width="270" height="98" class="adapter"/>
+    <text x="783" y="258" class="label">World Model</text>
+    <text x="783" y="284" class="detail">Generate the next scene</text>
+    <text x="783" y="306" class="detail">Connect your model provider</text>
+  </g>
+  <path class="flow" marker-start="url(#arrow)" d="M306 276H346"/>
+  <text x="324" y="218" text-anchor="middle" class="caption">Context / replies</text>
+  <path class="flow" d="M594 276H644"/>
+  <text x="619" y="345" text-anchor="middle" class="caption">Scene prompt</text>
+
+  <path class="flow" marker-start="url(#arrow)" d="M177 324V366"/>
+  <text x="197" y="360" class="caption">Actions / accepted state</text>
+  <rect x="52" y="370" width="352" height="82" class="node"/>
+  <text x="228" y="399" text-anchor="middle" class="label">Interactive UI</text>
+  <text x="228" y="423" text-anchor="middle" class="detail">Point and click + player controls</text>
+  <text x="228" y="444" text-anchor="middle" class="detail">Inventory panels + overlays</text>
+  <text x="448" y="393" class="label">Plug in the parts you need.</text>
+  <text x="448" y="420" class="detail">Shared context, replaceable modules.</text>
+  <text x="448" y="443" class="detail">Your host connects the providers.</text>
+
+  <path class="flow" d="M783 324V520"/>
+  <text x="801" y="504" class="caption">Generated scene</text>
+  <rect x="610" y="524" width="330" height="88" class="adapter"/>
+  <text x="775" y="554" text-anchor="middle" class="label">Streaming delivery</text>
+  <text x="775" y="578" text-anchor="middle" class="detail">Video to every viewer</text>
+  <text x="775" y="600" text-anchor="middle" class="detail">Your stream / player adapter</text>
+  <path class="flow" d="M606 568H228V456"/>
+  <text x="413" y="549" text-anchor="middle" class="caption">Live video returns to the UI</text>
+  <text x="52" y="636" class="detail">Solid boxes: world modules. Dashed boxes: provider adapter slots.</text>
+</svg>

@@ -11,6 +11,8 @@
 
 **Create infinite experiences, in minutes.**
 
+**A universal World Model Context Protocol.**
+
 Open source, licensed under [Apache 2.0](LICENSE).
 
 [Website](https://sequencer.media/genesis) · [Demos](https://sequencer.media/genesis/demos) · [Skill quickstart](https://sequencer.media/genesis/agent-skill) · [Documentation](https://sequencer.media/genesis/getting-started)
@@ -39,6 +41,14 @@ Two players direct Rick and Morty through their own character controls. Both act
 | A connected fantasy journey with audience-choice controls. [Watch video](https://sequencer.media/demo/worldstreams/adventure-time/adventure-time-720p-0bfe8c425454.mp4) · [Try the preview](https://sequencer.media/demo/worldstreams/adventure-time) | Explore the visual presentation of World Model game experiences. [Watch video](https://sequencer.media/landing/product-demos/world-games-v03-720p.mp4) |
 
 These are recorded Worldstreams examples. Preview choices illustrate the interaction flow around prepared World Model output. Live generation uses a connected provider. Read the [SDK reference](docs/api.md) and [world-building skill guide](docs/agent-skill.md), or run `npm run docs:dev` to open the searchable documentation site and video gallery locally.
+
+## How GENESIS works
+
+GENESIS wraps your World Model in a shared context layer. Character memory, scenes, inventory and multiplayer rules feed the world state. Player actions update that state, the LLM turns its context into prompts, and the World Model generates the next scene. Streaming delivery brings the video back to your interactive UI.
+
+![GENESIS modular flow: memory and player actions feed world state, the LLM builds prompts, the World Model generates scenes, and streaming delivery returns video to the interface](docs/assets/genesis-world-context.svg)
+
+Connect the modules your experience needs. GENESIS defines the contract for world state, player actions and model requests. LLMs, World Models and streaming delivery use replaceable adapters; your host supplies their credentials and infrastructure. [Explore the architecture](docs/architecture.md).
 
 ## What can you build?
 

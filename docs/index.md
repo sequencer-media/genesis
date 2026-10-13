@@ -6,6 +6,8 @@
 
 <p class="hero-tagline">Create infinite experiences, in minutes.</p>
 
+**A universal World Model Context Protocol.**
+
 ## Your World Model needs an engine.
 
 GENESIS gives generated worlds memory, rules and controls. It tracks your inventory, characters and locations, then connects each player action to what happens next.
@@ -52,6 +54,16 @@ Explore worlds built with GENESIS. Start with Pokémon Stadium, a shared battle 
 <img src="https://firebasestorage.googleapis.com/v0/b/smoothieeditor.firebasestorage.app/o/workspaces%2F279ad71b-7b8c-41d8-9ea5-497450ef5a3e%2Fmedia%2Fspark-74b43ed06569195da84f027b028edcb420f8e715484fc4f1%2Fv1.png?alt=media&amp;token=c4f6ec2c-078b-4273-8dae-9a8df9df00f5" alt="Pokémon Stadium project cover" loading="lazy" width="640" height="480">
 <div><h3>Pokémon Stadium</h3><p>Two trainers choose their Pokémon, ready up and battle in the same Worldstream.</p><ul><li>Shared turns and a challenger queue</li><li>Type effects, status conditions and items</li><li>Health, EXP and battle progress</li><li>Player controls around generated video</li></ul><a class="button primary" href="https://sequencer.media/worldstreams/S_R5xijO8Pjv">Open Pokémon Stadium</a> <a href="examples.html">Project walkthrough</a></div>
 </article>
+
+## How GENESIS works
+
+GENESIS wraps your World Model in a shared context layer. Memory, rules and player actions shape the LLM's next prompt. Your model generates the scene, streaming delivery brings it to the interface, and the next action continues the loop.
+
+<p class="diagram-hint">Scroll the diagram horizontally to explore the full loop.</p>
+<figure class="world-flow">
+<div class="world-flow-scroll" role="region" aria-label="GENESIS modular World Model flow diagram" tabindex="0"><img src="assets/genesis-world-context.svg" alt="GENESIS contains character memory, scenes and locations, inventory, multiplayer rules, world state, an LLM adapter, a World Model adapter and interactive UI. Player actions update world state, the LLM builds prompts, the World Model generates scenes, and streaming delivery returns video to the interface." width="960" height="648" loading="lazy"></div>
+<figcaption>Connect the modules your experience needs. LLMs, World Models and streaming delivery use replaceable adapters; your host supplies their credentials and infrastructure. <a href="architecture.html">Explore the architecture</a>.</figcaption>
+</figure>
 
 ## What GENESIS handles
 
