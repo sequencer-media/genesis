@@ -1,4 +1,4 @@
-import {readFile, writeFile, mkdir, cp, access} from 'node:fs/promises';
+import {readFile, writeFile, mkdir, cp, access, readdir} from 'node:fs/promises';
 import {resolve, dirname, relative, sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {Marked} from 'marked';
@@ -133,6 +133,12 @@ for (const page of pages) {
 for (const folder of ['assets', 'site']) {
   const from = resolve(root, 'docs', folder), to = resolve(output, folder);
   if (from !== to) await cp(from, to, {recursive:true});
+}
+// Retain linked source documents when exporting a standalone static site.
+if (output !== resolve(root, 'docs')) {
+  for (const file of await readdir(resolve(root, 'docs'))) {
+    if (file.endsWith('.md')) await cp(resolve(root, 'docs', file), resolve(output, file));
+  }
 }
 await mkdir(resolve(output, 'skills/create-world-stream'), {recursive:true});
 await cp(resolve(root, 'skills/create-world-stream/SKILL.md'), resolve(output, 'skills/create-world-stream/SKILL.md'));
