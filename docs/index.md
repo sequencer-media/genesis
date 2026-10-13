@@ -5,7 +5,7 @@
 
 Give your World Model a memory, an inventory and a playable interface. GENESIS is the dungeon master for your worldstream: it remembers the world, applies the rules and connects player actions to generated scenes.
 
-<nav class="hero-actions" aria-label="Start exploring"><a class="button primary" href="#quickstart-with-the-genesis-skill">Build your first world</a><a class="button" href="agent-skill.html">Create from one prompt</a></nav>
+<nav class="hero-actions" aria-label="Start exploring"><a class="button primary" href="#quickstart-with-the-genesis-skill">Build your first world stream</a></nav>
 <p class="hero-note">Run locally with the included examples. Connect your models when you're ready.</p>
 </div>
 <img class="hero-worlds" src="assets/genesis-worlds.svg" alt="Three pixel worlds: a floating forest, a castle arena and a lunar outpost" width="1280" height="360">
