@@ -8,17 +8,17 @@ Pick a model for the experience you want to build. Native detail, scene continui
 
 <!-- WORLDSTREAM_MODEL_TABLE -->
 
-Model setup links lead to Sequencer. Provider specifications and prices were checked **October 13, 2026**. The provider column shows published costs. The Sequencer column applies **15% markup**, calculated as provider cost × 1.15, for planned third-party routes. Viva keeps its existing $40/hour retail rate.
+Model setup links lead to Sequencer. Specifications were checked **October 13, 2026**. The tables show customer-facing Sequencer prices. Viva keeps its existing $40/hour rate.
 
 Third-party routes are planned and their prices are estimates. Live quotes determine the actual rate when a connector becomes available. Hourly figures use 3,600 billable seconds and exclude app infrastructure, taxes and separately priced services. Resolution and frame rate describe output format; they do not establish visual quality.
 
 ## Read the prices correctly
 
 - **Sequencer:** Advertises $40 per active stream hour. The session quote is authoritative. Viva includes built-in LLM world direction. Custom Genesis LLM requests and extra image/audio generation are separately metered. [Worldstreams API](https://sequencer.media/worldstream-api), [Genesis integration](integration.md).
-- **fal H3 Max Director:** Bills generated video at $0.08 per second, with a 60-second minimum ($4.80). Public sessions currently have a 15-minute ceiling. [Director pricing and session limits](https://fal.ai/h3-max-director).
-- **Reactor:** Bills wall-clock time while a session holds a GPU, including ready-but-idle time and recoverable disconnects. The three Reactor rates in the table also match its public pricing API at the check date. [Billing rules](https://docs.reactor.inc/resources/billing), [current pricing API](https://api.reactor.inc/pricing).
+- **fal H3 Max Director:** Bills generated video, with a 60-second minimum. Public sessions currently have a 15-minute ceiling. [Director pricing and session limits](https://fal.ai/h3-max-director).
+- **Reactor:** Bills wall-clock time while a session holds a GPU, including ready-but-idle time and recoverable disconnects. Use the session quote to confirm the applicable rate. [Billing rules](https://docs.reactor.inc/resources/billing), [current pricing API](https://api.reactor.inc/pricing).
 
-At the proposed 15% markup, Orbis Stable is about $40.16 per session hour. Viva is $40 per active stream hour, with built-in LLM direction. The billing clocks differ, so compare the session quote and your usage pattern. A complete experience also needs state storage, user access, LLM logic and audience billing. Compare those responsibilities in the [setup options](index.html#choose-your-connection).
+The planned Orbis Stable route is estimated at $40.16 per session hour. Viva is $40 per active stream hour, with built-in LLM direction. The billing clocks differ, so compare the session quote and your usage pattern. A complete experience also needs state storage, user access, LLM logic and audience billing. Compare those responsibilities in the [setup options](index.html#choose-your-connection).
 
 ## Read the timing correctly
 
@@ -52,7 +52,7 @@ Viva LLM means the built-in direction service in a Viva Worldstream. It turns ac
 
 <!-- LLM_MODEL_TABLE -->
 
-Token rates are **USD per one million input / output tokens** for standard text requests. Planned token-priced Sequencer routes use the same **15% markup**. The available structured LLM endpoint retains its current per-request rate. Caching, reasoning tokens, tools and provider minimums can affect the final quote.
+Token rates are **USD per one million input / output tokens** for standard text requests. Planned token-priced routes show estimated Sequencer prices. The available structured LLM endpoint retains its current per-request rate. Caching, reasoning tokens, tools and provider minimums can affect the final quote.
 
 ### Latency and moderation
 
@@ -61,8 +61,8 @@ Token rates are **USD per one million input / output tokens** for standard text 
 The moderation column describes the controls we can verify. Google exposes adjustable filters alongside persistent core protections. Groq documents a separate moderation workflow. Open-weight models can have learned refusals, and hosted providers still apply their policies. A self-hosted app can choose whether to add a moderation layer; that does not remove refusals built into its chosen model.
 
 - [Google Gemini pricing](https://ai.google.dev/gemini-api/docs/pricing) and [Flash-Lite model details](https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash-lite) support the token rates and low-latency design. [Safety settings](https://ai.google.dev/gemini-api/docs/safety-settings) describe adjustable filters and core protections.
-- [Groq model catalog](https://console.groq.com/docs/models) lists GPT OSS 20B at $0.075 input / $0.30 output and about 1,000 tokens/second. [Content moderation](https://console.groq.com/docs/content-moderation) describes an app moderation workflow.
-- [Cerebras pricing](https://www.cerebras.ai/pricing) lists GPT OSS 120B at $0.35 input / $0.75 output. Its [model catalog](https://inference-docs.cerebras.ai/models/overview) lists about 3,000 tokens/second. Model and capacity availability can change.
+- [Groq model catalog](https://console.groq.com/docs/models) lists GPT OSS 20B at about 1,000 tokens/second. [Content moderation](https://console.groq.com/docs/content-moderation) describes an app moderation workflow.
+- [Cerebras pricing](https://www.cerebras.ai/pricing) documents provider billing. Its [model catalog](https://inference-docs.cerebras.ai/models/overview) lists about 3,000 tokens/second. Model and capacity availability can change.
 
 Provider speeds are published throughput claims, not measured GENESIS latency guarantees. [Connect through Sequencer](integration.md#model-routing) or [bring your own adapter](providers.md).
 

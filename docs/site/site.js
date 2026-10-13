@@ -64,3 +64,28 @@ for (const video of document.querySelectorAll('video')) {
     for (const other of document.querySelectorAll('video')) if (other !== video) other.pause();
   });
 }
+
+const demoVideos = [...document.querySelectorAll('video[data-demo-autoplay]')];
+if (demoVideos.length && 'IntersectionObserver' in window) {
+  const visibility = new Map();
+  let activeVideo;
+  const playVisibleDemo = () => {
+    const visible = [...visibility].filter(([, ratio]) => ratio >= 0.25).sort((a, b) => b[1] - a[1])[0]?.[0];
+    if (visible === activeVideo && !document.hidden) return;
+    activeVideo = document.hidden ? undefined : visible;
+    for (const video of demoVideos) {
+      if (video === activeVideo) video.play().catch(() => {});
+      else video.pause();
+    }
+  };
+  for (const video of demoVideos) {
+    video.muted = true;
+    video.pause();
+  }
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) visibility.set(entry.target, entry.intersectionRatio);
+    playVisibleDemo();
+  }, {threshold:[0, 0.25, 0.5, 0.75, 1]});
+  demoVideos.forEach(video => observer.observe(video));
+  document.addEventListener('visibilitychange', playVisibleDemo);
+}

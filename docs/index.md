@@ -22,7 +22,7 @@ GENESIS gives generated worlds memory, rules and controls. It tracks your invent
 Rick and Morty have their own character controls, and both actions feed the shared experience. Watch the multiplayer Worldstream.
 
 <figure class="demo-feature">
-<video controls playsinline preload="none" poster="assets/rick-morty-multiplayer.webp" aria-label="Rick and Morty multiplayer Worldstream">
+<video controls autoplay muted loop playsinline preload="metadata" data-demo-autoplay poster="assets/rick-morty-multiplayer.webp" aria-label="Rick and Morty multiplayer Worldstream">
 <source src="https://sequencer.media/demo/worlds/multiplayer-demo-cropped-v2.mp4" type="video/mp4">
 <a href="https://sequencer.media/demo/worlds/multiplayer-demo-cropped-v2.mp4">Watch the multiplayer Rick and Morty video</a>
 </video>
@@ -31,14 +31,14 @@ Rick and Morty have their own character controls, and both actions feed the shar
 
 <div class="demo-gallery">
 <section class="demo-card">
-<video controls playsinline preload="none" poster="assets/adventure-time-worldstream.webp" aria-label="Adventure Time Worldstream, Land of Ooo">
+<video controls autoplay muted loop playsinline preload="metadata" data-demo-autoplay poster="assets/adventure-time-worldstream.webp" aria-label="Adventure Time Worldstream, Land of Ooo">
 <source src="https://sequencer.media/demo/worldstreams/adventure-time/adventure-time-720p-0bfe8c425454.mp4" type="video/mp4">
 <a href="https://sequencer.media/demo/worldstreams/adventure-time/adventure-time-720p-0bfe8c425454.mp4">Watch the Adventure Time video</a>
 </video>
 <div class="demo-caption"><h3>Adventure Time · Land of Ooo</h3><p>A fantasy journey with audience-choice controls around prepared World Model scenes.</p><a href="https://sequencer.media/demo/worldstreams/adventure-time">Try the preview player</a></div>
 </section>
 <section class="demo-card">
-<video controls playsinline preload="none" poster="assets/world-model-games.webp" aria-label="World Model games example">
+<video controls autoplay muted loop playsinline preload="metadata" data-demo-autoplay poster="assets/world-model-games.webp" aria-label="World Model games example">
 <source src="https://sequencer.media/landing/product-demos/world-games-v03-720p.mp4" type="video/mp4">
 <a href="https://sequencer.media/landing/product-demos/world-games-v03-720p.mp4">Watch the World Model games video</a>
 </video>
@@ -51,7 +51,7 @@ Rick and Morty have their own character controls, and both actions feed the shar
 Explore worlds built with GENESIS. Start with Pokémon Stadium, a shared battle experience with persistent game state and its own player interface.
 
 <article class="project-example">
-<img src="https://firebasestorage.googleapis.com/v0/b/smoothieeditor.firebasestorage.app/o/workspaces%2F279ad71b-7b8c-41d8-9ea5-497450ef5a3e%2Fmedia%2Fspark-74b43ed06569195da84f027b028edcb420f8e715484fc4f1%2Fv1.png?alt=media&amp;token=c4f6ec2c-078b-4273-8dae-9a8df9df00f5" alt="Pokémon Stadium project cover" loading="lazy" width="640" height="480">
+<a href="https://sequencer.media/worldstreams/S_R5xijO8Pjv"><img src="assets/pokemon-stadium-ui.webp" alt="Pokémon Stadium interface with trainer seats, health and battle controls" loading="lazy" width="1600" height="878"></a>
 <div><h3>Pokémon Stadium</h3><p>Two trainers choose their Pokémon, ready up and battle in the same Worldstream.</p><ul><li>Shared turns and a challenger queue</li><li>Type effects, status conditions and items</li><li>Health, EXP and battle progress</li><li>Player controls around generated video</li></ul><a class="button primary" href="https://sequencer.media/worldstreams/S_R5xijO8Pjv">Open Pokémon Stadium</a> <a href="examples.html">Project walkthrough</a></div>
 </article>
 
@@ -61,8 +61,8 @@ GENESIS wraps your World Model in a shared context layer. Memory, rules and play
 
 <p class="diagram-hint">Scroll the diagram horizontally to explore the full loop.</p>
 <figure class="world-flow">
-<div class="world-flow-scroll" role="region" aria-label="GENESIS modular World Model flow diagram" tabindex="0"><img src="assets/genesis-world-context.svg" alt="GENESIS contains character memory, scenes and locations, inventory, multiplayer rules, world state, an LLM adapter, a World Model adapter and interactive UI. Player actions update world state, the LLM builds prompts, the World Model generates scenes, and streaming delivery returns video to the interface." width="960" height="648" loading="lazy"></div>
-<figcaption>Connect the modules your experience needs. LLMs, World Models and streaming delivery use replaceable adapters; your host supplies their credentials and infrastructure. <a href="architecture.html">Explore the architecture</a>.</figcaption>
+<div class="world-flow-scroll" role="region" aria-label="GENESIS modular World Model flow diagram" tabindex="0"><img src="assets/genesis-world-context.svg" alt="GENESIS contains character memory, scenes and locations, inventory, multiplayer rules, world state and interactive UI. External LLM and World Model services connect through adapters. Player actions update world state, the LLM builds prompts, the World Model generates scenes, and streaming delivery returns video to the interface." width="960" height="648" loading="lazy"></div>
+<figcaption>Connect the modules your experience needs. The LLM and World Model are external services connected through replaceable adapters. Your host supplies credentials, streaming delivery and infrastructure. <a href="architecture.html">Explore the architecture</a>.</figcaption>
 </figure>
 
 ## What GENESIS handles
@@ -145,7 +145,7 @@ To run a live world, you need hosting, persistent state, user access, billing co
 <tr><th scope="row">Assets, images and audio</th><td>Your storage, CDN and generation providers</td><td>Sequencer workspace assets and media APIs</td><td>Workspace media library and generation tools</td></tr>
 <tr><th scope="row">Audience billing</th><td>You build payments and usage controls</td><td>You pay API usage and manage your audience's payments</td><td>Sequencer gems and shared viewer billing</td></tr>
 <tr><th scope="row">Publishing and community</th><td>You build discovery, chat and voting UI</td><td>You build your app's audience experience</td><td>Publishing, discovery, chat, voting and moderation</td></tr>
-<tr><th scope="row">Price</th><td>GENESIS is free. Pay your providers and infrastructure costs</td><td>Viva: $40 / active stream hour. Planned third-party models: provider cost + 15%</td><td>Viva stream cost shared across viewers in gems. Paid actions can cost extra</td></tr>
+<tr><th scope="row">Price</th><td>GENESIS is free. Pay your providers and infrastructure costs</td><td>Viva: $40 / active stream hour. Other models priced per route</td><td>Viva stream cost shared across viewers in gems. Paid actions can cost extra</td></tr>
 </tbody>
 </table>
 </div>
@@ -158,13 +158,13 @@ Viva includes its built-in LLM world direction. Custom structured LLM calls, ima
 
 ## Compare Worldstream models
 
-Choose your model through Sequencer. Compare the managed Viva service with planned third-party routes, including their provider costs and Sequencer's 15% markup.
+Choose your model through Sequencer. Compare the managed Viva service with planned third-party routes, including price, output format and response timing.
 
 <p class="comparison-hint">Scroll the table horizontally to compare all model details.</p>
 
 <!-- WORLDSTREAM_MODEL_TABLE -->
 
-Third-party prices are estimates calculated as **provider cost × 1.15**. Viva keeps its current $40/hour rate. Availability is shown per row; use the live session quote when starting a stream. Provider billing units, minimums and extra services still apply.
+Third-party prices are estimates for planned Sequencer routes. Viva keeps its current $40/hour rate. Availability is shown per row; use the live session quote when starting a stream. Provider billing units, minimums and extra services still apply.
 
 Quality ratings use a shared five-point rubric. Models remain **unrated** until they have been tested with the same prompts and conditions. [See the sources, billing details and rating method](models.html).
 

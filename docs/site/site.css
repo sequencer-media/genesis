@@ -53,17 +53,17 @@ th{background:var(--paper)}
 .setup-comparison{min-width:780px}
 .setup-comparison th:first-child{width:19%}
 .setup-comparison thead th:not(:first-child){width:27%}
-.model-comparison{min-width:940px}
+.model-comparison{min-width:860px}
 .model-comparison th:first-child{width:17%}
-.llm-comparison{min-width:940px}
+.llm-comparison{min-width:780px}
 .llm-comparison th:first-child{width:19%}
-.project-example{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:24px;padding:20px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:26px 0}
-.project-example img{width:100%;height:240px;object-fit:cover;margin:0}
+.project-example{display:grid;grid-template-columns:1fr;gap:24px;padding:20px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:26px 0}
+.project-example img{display:block;width:100%;height:auto;margin:0}
 .project-example h3{margin:0 0 12px}
 .project-example p,.project-example li{font-size:14px}
-.project-example ul{padding-left:20px;margin:14px 0}
+.project-example ul{padding-left:20px;margin:14px 0;columns:2}
 .project-example .button{font-size:13px;margin-right:16px}
-@media(max-width:720px){.project-example{grid-template-columns:1fr;padding:16px 0}.project-example img{height:auto;max-height:300px}}
+@media(max-width:720px){.project-example{padding:16px 0}.project-example ul{columns:1}}
 .table-detail{display:block;margin-top:5px;font-size:12px;line-height:1.55;color:var(--muted);font-weight:400}
 .quality-status{font-size:12px}
 .comparison-hint{display:none;color:var(--muted);font-size:13px}

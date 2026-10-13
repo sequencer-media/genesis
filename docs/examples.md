@@ -8,6 +8,8 @@ Explore GENESIS worlds with real interfaces, shared rules and persistent state.
 
 Two trainers choose their Pokémon, ready up and battle in the same Worldstream. A challenger queue lets the next trainer join the action.
 
+[![Pokémon Stadium interface showing trainer seats, health and battle controls](assets/pokemon-stadium-ui.webp)](https://sequencer.media/worldstreams/S_R5xijO8Pjv)
+
 | Part of the experience | What it demonstrates |
 | --- | --- |
 | Trainer selection and readiness | Player seats, eligible actions and a shared start condition. |

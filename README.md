@@ -185,6 +185,8 @@ See [compatibility](docs/compatibility.md) and [integration](docs/integration.md
 
 ## Example projects
 
+[![Pokémon Stadium interface with trainer seats, health, inventory and battle controls](docs/assets/pokemon-stadium-ui.webp)](https://sequencer.media/worldstreams/S_R5xijO8Pjv)
+
 [**Pokémon Stadium**](https://sequencer.media/worldstreams/S_R5xijO8Pjv) brings two trainers into a shared battle Worldstream, with Pokémon selection, turns, type effects, status conditions, items, EXP and a challenger queue. [Explore the project](https://sequencer.media/genesis/examples).
 
 ## Connect your own World Models
@@ -220,9 +222,9 @@ The command uploads the declared assets and returns a saved draft and preview UR
 | Assets and world drafts | Choose storage | Sequencer workspace assets | Workspace media library |
 | Audience billing | You build | You manage; your account pays API usage | Gems and shared viewer billing |
 | Publishing, chat and voting UI | You build | Your app's audience experience | Sequencer provides |
-| Price | Free engine; provider and infrastructure costs | Viva $40/hour; planned third-party routes at provider cost + 15% | Viva cost shared in gems; paid actions can cost extra |
+| Price | Free engine; provider and infrastructure costs | Viva $40/hour; other models priced per route | Viva cost shared in gems; paid actions can cost extra |
 
-Viva includes built-in LLM direction. Custom structured calls and extra media have separate usage charges. Compare the [setup options](docs/index.md#choose-your-connection) and [World Models and low-latency LLMs](https://sequencer.media/genesis/models), including prices, response timing and moderation controls. Planned third-party routes use provider cost plus 15% markup; live quotes determine billing.
+Viva includes built-in LLM direction. Custom structured calls and extra media have separate usage charges. Compare the [setup options](docs/index.md#choose-your-connection) and [World Models and low-latency LLMs](https://sequencer.media/genesis/models), including prices, response timing and moderation controls. Planned routes have estimated prices; live quotes determine billing.
 
 ## Build with us
 

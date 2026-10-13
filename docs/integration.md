@@ -6,7 +6,7 @@ Use one server-side Sequencer key for Worldstreams, structured LLM tools and med
 
 **Available now:** Viva Worldstreams with built-in LLM world direction, plus separately metered structured LLM requests ($0.01/request by default) and image/audio/video generation.
 
-**Planned routes:** H3 Max Director, Reactor FastH3 and Orbis. Their comparison prices use **provider cost × 1.15**, including a 15% Sequencer markup. These routes are estimates until their connectors, metering and live session quotes are available. Viva keeps its existing $40/hour retail price.
+**Planned routes:** H3 Max Director, Reactor FastH3 and Orbis. Their comparison prices are estimates until connectors and live session quotes are available. Viva keeps its existing $40/hour retail price.
 
 Start with the current [Worldstreams API](https://sequencer.media/worldstream-api) and use its returned quote. [Compare models and pricing](models.md).
 
