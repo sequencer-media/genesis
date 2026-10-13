@@ -196,14 +196,18 @@ node dist/cli.js save ./my-world --workspace YOUR_WORKSPACE_ID
 
 The command uploads the declared assets and returns a saved draft and preview URL. Use `SequencerClient` to discover models, quote generation and control a private worldstream. `createSequencerLlmProvider` connects structured LLM tools to the same account. [Follow the integration guide](docs/integration.md).
 
-| Capability | GENESIS + Worldstreams API | GENESIS + your own models |
-| --- | --- | --- |
-| World memory, rules, custom UI and portable bundles | Included | Included |
-| LLM, images, audio, video and World Model stream APIs | One Sequencer server key | Connect adapters and credentials |
-| Assets and versioned world drafts | Managed integration | Choose storage and publishing |
-| Shared backend job polling | Managed by Worldstreams hosting | Run your worker |
-| Hosted viewer identity and billing | Worldstreams accounts, gems and viewer leases | Implement your policies |
-| Audience and monetization in your own app | Yours to manage | Yours to manage |
+| Requirement | Your own stack (BYO) | Your app + Sequencer API | Sequencer hosted |
+| --- | --- | --- | --- |
+| World memory, rules and custom UI | GENESIS | GENESIS | GENESIS in the world editor |
+| App hosting, database and world workers | You provide | Your app infrastructure, managed model services | Sequencer provides |
+| Audience authentication | You provide | You provide; server key authenticates API calls | Sequencer accounts |
+| World Model and video delivery | Choose provider and integration | Managed Worldstreams API | Managed model, player and rooms |
+| LLM, image and audio APIs | Choose providers | Same Sequencer key, metered usage | Built-in tools, metered usage |
+| Assets and world drafts | Choose storage | Sequencer workspace assets | Workspace media library |
+| Audience billing | You build | You manage; your account pays API usage | Gems and shared viewer billing |
+| Publishing, chat and voting UI | You build | Your app's audience experience | Sequencer provides |
+
+Custom LLM calls and additional media generation have separate usage charges. Compare the [setup options](docs/index.md#choose-your-connection) and [Worldstream models, prices and quality rating method](docs/models.md).
 
 ## Build with us
 

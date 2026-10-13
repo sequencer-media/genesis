@@ -3,13 +3,19 @@
     "title": "GENESIS",
     "heading": "Create infinite experiences, in minutes.",
     "url": "index.html",
-    "text": "Open source World Model engine Create infinite experiences, in minutes. Your World Model needs an engine. GENESIS gives generated worlds memory, rules and controls. It tracks your inventory, characters and locations, then connects each player action to what happens next. Rick and Morty have their own character controls, and both actions feed the shared experience. Watch the multiplayer Worldstream. Watch the multiplayer Rick and Morty video Recorded Worldstreams example. Explore all demos . Watch the Adventure Time video Adventure Time · Land of Ooo A fantasy journey with audience-choice controls around prepared World Model scenes. Try the preview player Watch the World Model games video World Model games Explore playable World Model experiences in this recorded product demo. Open video What GENESIS handles You define the experience. GENESIS runs the state and interaction loop around your connected models. World memory Remember choices, quest progress and relationships from one turn to the next. Inventory and variables Track items, health, scores and resources using your world's rules. Characters and locations Keep your cast, places and scene facts organized for the next generation request. LLM prompts and replies Pass world context to your LLM and validate structured moves, dialogue and choices. Custom interfaces Build player controls, inventory panels and overlays with HTML, "
+    "text": "Open source World Model engine Create infinite experiences, in minutes. Your World Model needs an engine. GENESIS gives generated worlds memory, rules and controls. It tracks your inventory, characters and locations, then connects each player action to what happens next. Watch the demos Build your first world Run locally with the included examples. Connect your models when you're ready. Worldstreams in action Rick and Morty have their own character controls, and both actions feed the shared experience. Watch the multiplayer Worldstream. Watch the multiplayer Rick and Morty video Recorded Worldstreams example. Explore all demos . Watch the Adventure Time video Adventure Time · Land of Ooo A fantasy journey with audience-choice controls around prepared World Model scenes. Try the preview player Watch the World Model games video World Model games Explore playable World Model experiences in this recorded product demo. Open video What GENESIS handles You define the experience. GENESIS runs the state and interaction loop around your connected models. World memory Remember choices, quest progress and relationships from one turn to the next. Inventory and variables Track items, health, scores and resources using your world's rules. Characters and locations Keep your cast, places and scene facts organized for the next generation request. LLM prompts and replies Pass world context to you"
   },
   {
     "title": "GENESIS / Your World Model needs an engine.",
     "heading": "Your World Model needs an engine.",
     "url": "index.html#your-world-model-needs-an-engine",
-    "text": "Your World Model needs an engine. GENESIS gives generated worlds memory, rules and controls. It tracks your inventory, characters and locations, then connects each player action to what happens next. Rick and Morty have their own character controls, and both actions feed the shared experience. Watch the multiplayer Worldstream. Watch the multiplayer Rick and Morty video Recorded Worldstreams example. Explore all demos . Watch the Adventure Time video"
+    "text": "Your World Model needs an engine. GENESIS gives generated worlds memory, rules and controls. It tracks your inventory, characters and locations, then connects each player action to what happens next. Watch the demos Build your first world Run locally with the included examples. Connect your models when you're ready."
+  },
+  {
+    "title": "GENESIS / Worldstreams in action",
+    "heading": "Worldstreams in action",
+    "url": "index.html#worldstreams-in-action",
+    "text": "Worldstreams in action Rick and Morty have their own character controls, and both actions feed the shared experience. Watch the multiplayer Worldstream. Watch the multiplayer Rick and Morty video Recorded Worldstreams example. Explore all demos . Watch the Adventure Time video"
   },
   {
     "title": "GENESIS / What GENESIS handles",
@@ -39,19 +45,13 @@
     "title": "GENESIS / Choose your connection",
     "heading": "Choose your connection",
     "url": "index.html#choose-your-connection",
-    "text": "Choose your connection "
+    "text": "Choose your connection To run a live world, you need hosting, persistent state, user access, billing controls, an LLM and a World Model. Choose which parts you want to operate yourself. Scroll the table horizontally to see every option. Who provides each part of your live experience? What you need Your own stack (BYO) Your app + Sequencer API Sequencer hosted World engine and interface GENESIS GENESIS GENESIS in the world editor Website and app hosting You provide You provide Sequencer provides Database and world workers You configure storage and run the controller You run your app and Genesis controller. Sequencer runs model services Sequencer stores world state and runs the controller User authentication Your identity provider Your audience auth, plus a Sequencer server key Sequencer accounts and access controls World Model and video delivery Your chosen provider and stream integration Managed Worldstreams API and stream connection details Managed model, player and audience rooms LLM access Your chosen LLM and adapter Sequencer LLM tools through the same key Managed prompt direction and LLM tools Assets, images and audio Your storage, CDN and generation providers Sequencer workspace assets and media APIs Workspace media library and generation tools Audience billing You build payments and usage controls You pay API usage and manage your audience's payments Sequencer gems and shared viewer billing Publishing and community You build discovery, chat and voting UI You build your app's audience experience Publishing, discovery, chat, voting and moderation Choose BYO for full co"
   },
   {
-    "title": "GENESIS / Publish on Sequencer",
-    "heading": "Publish on Sequencer",
-    "url": "index.html#publish-on-sequencer",
-    "text": "Publish on Sequencer Open My Worlds , sign in with your Sequencer account and create a world. Describe your idea to Spark, or import a GENESIS project in the world editor. Preview it, save it and publish it to Worldstreams. Your existing account, workspace, assets and gems carry through creation and publishing."
-  },
-  {
-    "title": "GENESIS / Connect from your own app",
-    "heading": "Connect from your own app",
-    "url": "index.html#connect-from-your-own-app",
-    "text": "Connect from your own app Worldstreams API: Connect LLM tools, media generation, assets and managed worldstreams with one Sequencer server key. Integration guide . Your own models: Choose your LLM and World Model, then register their server-side adapters. Provider guide . The source is Apache 2.0 licensed . Version 0.1 is a source preview, with npm publication and the wider launch being prepared. Browse the repository , read the license , contribute or explore the SDK API ."
+    "title": "GENESIS / Compare Worldstream models",
+    "heading": "Compare Worldstream models",
+    "url": "index.html#compare-worldstream-models",
+    "text": "Compare Worldstream models Compare native video, published pricing and how quickly a model can respond. The hourly figures use the provider's billing unit, so they show model cost rather than the total cost of running your app. Scroll the table horizontally to compare all model details. Published model specifications and rates, checked October 13, 2026 Model / API Video and audio Published price Response timing Quality / 5 Sequencer Viva Managed Worldstreams 768p, 24 fps Generated video and audio $40 / active stream hour About $0.67 / minute Continuous stream Measured startup latency not published Unrated H3 Max Director fal 480p or 768p, 24 fps Stereo audio $0.08 / generated second $288 / generated hour 5–15s segments First-frame latency not specified Unrated MiniMax FastH3 Reactor 1344 × 768, 24 fps Generated audio $0.035 / session second $126 / session hour About 1× real-time generation Clips queued before playback Unrated Visko Orbis Stable Reactor 832 × 480, 18 fps Upscaled delivery up to 4K; audio $0.0097 / session second $34.92 / session hour About 1.8s chunks Prompt changes at chunk boundaries Unrated Visko Orbis Dynamic Reactor 640 × 368, 18 fps Upscaled delivery up to 4K; audio $0.0209 / session second $75.24 / session hour About 1.8s chunks Live delivery resolution changes Unrated Rates checked October 13, 2026 . Reactor bills time holding a GPU, including idle time. fal Director bills generated video with a 60-second minimum. Sequencer advertises active stream time; use its session quote for the current rate. LLM tools, extra assets and your app infrastructure c"
   },
   {
     "title": "Quickstart with the Genesis skill",
@@ -220,6 +220,42 @@
     "heading": "Custom services",
     "url": "providers.html#custom-services",
     "text": "Custom services A provider can declare tool.audio.speak or tool.maps.lookup alongside its own argument validator and server implementation. Controllers request tool.request with toolId and data. Grant tool IDs independently in host policy. Return bounded result.data; the controller chooses what to expose to participants. Generic tool completion does not automatically replace the video stage. Uncertain paid submissions block participant retry. An operator can reconcile an existing prediction with host.reconcileProviderJob(jobId,providerId,predictionId). Restrict this to authenticated operator infrastructure. GenesisProviderSubmissionError(message,false) identifies a confirmed rejected submission; other paid start failures remain uncertain. This prevents automatic repeat charges after ambiguous network failures."
+  },
+  {
+    "title": "Models and pricing",
+    "heading": "Worldstream models and pricing",
+    "url": "models.html",
+    "text": "Worldstream models and pricing Pick a model for the experience you want to build. Native detail, scene continuity, response speed and billing rules all affect that choice. Published model comparison Scroll the table horizontally to compare all model details. Published model specifications and rates, checked October 13, 2026 Model / API Video and audio Published price Response timing Quality / 5 Sequencer Viva Managed Worldstreams 768p, 24 fps Generated video and audio $40 / active stream hour About $0.67 / minute Continuous stream Measured startup latency not published Unrated H3 Max Director fal 480p or 768p, 24 fps Stereo audio $0.08 / generated second $288 / generated hour 5–15s segments First-frame latency not specified Unrated MiniMax FastH3 Reactor 1344 × 768, 24 fps Generated audio $0.035 / session second $126 / session hour About 1× real-time generation Clips queued before playback Unrated Visko Orbis Stable Reactor 832 × 480, 18 fps Upscaled delivery up to 4K; audio $0.0097 / session second $34.92 / session hour About 1.8s chunks Prompt changes at chunk boundaries Unrated Visko Orbis Dynamic Reactor 640 × 368, 18 fps Upscaled delivery up to 4K; audio $0.0209 / session second $75.24 / session hour About 1.8s chunks Live delivery resolution changes Unrated These are published specifications and rates checked October 13, 2026 . Hourly figures multiply a provider's rate by"
+  },
+  {
+    "title": "Models and pricing / Published model comparison",
+    "heading": "Published model comparison",
+    "url": "models.html#published-model-comparison",
+    "text": "Published model comparison Scroll the table horizontally to compare all model details. Published model specifications and rates, checked October 13, 2026 Model / API Video and audio Published price Response timing Quality / 5 Sequencer Viva Managed Worldstreams 768p, 24 fps Generated video and audio $40 / active stream hour About $0.67 / minute Continuous stream Measured startup latency not published Unrated H3 Max Director fal 480p or 768p, 24 fps Stereo audio $0.08 / generated second $288 / generated hour 5–15s segments First-frame latency not specified Unrated MiniMax FastH3 Reactor 1344 × 768, 24 fps Generated audio $0.035 / session second $126 / session hour About 1× real-time generation Clips queued before playback Unrated Visko Orbis Stable Reactor 832 × 480, 18 fps Upscaled delivery up to 4K; audio $0.0097 / session second $34.92 / session hour About 1.8s chunks Prompt changes at chunk boundaries Unrated Visko Orbis Dynamic Reactor 640 × 368, 18 fps Upscaled delivery up to 4K; audio $0.0209 / session second $75.24 / session hour About 1.8s chunks Live delivery resolution changes Unrated These are published specifications and rates checked October 13, 2026 . Hourly figures multiply a provider's rate by 3,600 billable seconds. They exclude your own app hosting, storage, LLM requests, taxes and any separately priced assets. Resolution and frame rate describe output format; they do not establish visual quality."
+  },
+  {
+    "title": "Models and pricing / Read the prices correctly",
+    "heading": "Read the prices correctly",
+    "url": "models.html#read-the-prices-correctly",
+    "text": "Read the prices correctly Sequencer: Advertises $40 per active stream hour. The session quote is authoritative. Custom Genesis LLM requests and extra image/audio generation are separately metered. Worldstreams API , Genesis integration . fal H3 Max Director: Bills generated video at $0.08 per second, with a 60-second minimum ($4.80). Public sessions currently have a 15-minute ceiling. Director pricing and session limits . Reactor: Bills wall-clock time while a session holds a GPU, including ready-but-idle time and recoverable disconnects. The three Reactor rates in the table also match its public pricing API at the check date. Billing rules , current pricing API . Orbis Stable has the lowest listed session rate in this comparison. A complete experience also needs state storage, user access, LLM logic and audience billing. Compare those responsibilities in the setup options ."
+  },
+  {
+    "title": "Models and pricing / Read the timing correctly",
+    "heading": "Read the timing correctly",
+    "url": "models.html#read-the-timing-correctly",
+    "text": "Read the timing correctly Startup latency is the time from requesting a session to seeing its first usable frame. Response latency is the time from sending an action to seeing its effect. Generation speed describes how quickly video is produced. Chunk duration describes when a streaming model can accept a new direction. The timing column reports the measure each provider publishes. It is not a common end-to-end latency benchmark. Queuing, network delivery, buffering and your controller can change the wait a player experiences."
+  },
+  {
+    "title": "Models and pricing / Quality ratings",
+    "heading": "Quality ratings",
+    "url": "models.html#quality-ratings",
+    "text": "Quality ratings GENESIS uses a 1–5 rating for each of five criteria. The overall quality score is their mean, shown to one decimal place. Speed and price are reported separately. Criterion What to check Visual detail Clear subjects, readable environments and visible artifacts. Prompt adherence Whether the requested action, setting and constraints appear. Character consistency Whether identities, clothing and objects remain recognizable. Scene continuity Whether locations, spatial relationships and previous events carry forward. Motion and stability Natural movement, temporal consistency and recovery after a direction change. Use 1 for major failures, 2 for frequent failures, 3 for a usable result, 4 for a consistently strong result and 5 for a reliably excellent result across the test set. Score at least ten shared scenarios, run each three times for two minutes, and publish the prompts, model/version, resolution, settings, date and recordings. Include the same character, inventory and scene-transition challenges for every model. Have at least two reviewers score recordings without provider labels. No matched GENESIS benchmark has been completed. Every model is currently unrated , including Sequencer. A provider's demo or a clip-generation leaderboard does not establish its score for a persistent interactive world."
+  },
+  {
+    "title": "Models and pricing / Sources and model details",
+    "heading": "Sources and model details",
+    "url": "models.html#sources-and-model-details",
+    "text": "Sources and model details Sequencer Viva tutorial and Worldstreams API . Viva specifications follow Sequencer's published product material; available deployments and stream quotes can change. fal H3 Max Director . This is the streaming endpoint. The H3 Max image-to-video endpoint returns clips and has its own pricing. Reactor MiniMax FastH3 specifications . Its published 1× real-time generation rate describes throughput, not time to the first frame. Reactor Orbis Stable specifications . It generates 832 × 480 frames and upscales the delivered stream. Reactor Orbis Dynamic specifications . Its current model card lists 640 × 368 native frames. The shared API overview lists a different raster, so confirm the selected deployment's output before choosing it for resolution-sensitive work. These provider options require a host adapter and a tested stream integration. Listing a model here does not mean the standalone Genesis preview already includes its live connector. Connect your own providers ."
   },
   {
     "title": "SDK API reference",

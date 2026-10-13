@@ -21,6 +21,7 @@ const pages = [
   {source:'docs/demos.md', file:'demos.html', title:'Worldstreams demos', group:'Start here'},
   {source:'docs/integration.md', file:'integration.html', title:'Worldstreams API', group:'Connect'},
   {source:'docs/providers.md', file:'providers.html', title:'Your own models', group:'Connect'},
+  {source:'docs/models.md', file:'models.html', title:'Models and pricing', group:'Connect'},
   {source:'docs/api.md', file:'api.html', title:'SDK API reference', group:'Reference'},
   {source:'docs/architecture.md', file:'architecture.html', title:'Architecture', group:'Reference'},
   {source:'docs/host-authority.md', file:'host-authority.html', title:'Hosting and authority', group:'Reference'},
@@ -97,6 +98,9 @@ for (const page of pages) {
     }
   }});
   let input = source;
+  if (input.includes('<!-- WORLDSTREAM_MODEL_TABLE -->')) {
+    input = input.replace('<!-- WORLDSTREAM_MODEL_TABLE -->', await readFile(resolve(root, 'docs/site/model-comparison.html'), 'utf8'));
+  }
   if (page.source === 'docs/agent-skill.md') {
     const skill = await readFile(resolve(root, 'skills/create-world-stream/SKILL.md'), 'utf8');
     input += '\n\n<details class="reference-details">\n<summary>Read the full authoring instructions</summary>\n\n' + skill.replace(/^---\n[\s\S]*?\n---\n/, '') + '\n\n</details>\n';

@@ -41,6 +41,7 @@
 <a href="demos.html">Worldstreams demos</a>
 <p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
 <a href="providers.html">Your own models</a>
+<a href="models.html">Models and pricing</a>
 <p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
 <a href="architecture.html">Architecture</a>
 <a href="host-authority.html">Hosting and authority</a>
@@ -59,6 +60,7 @@
 <a href="demos.html">Worldstreams demos</a>
 <p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
 <a href="providers.html">Your own models</a>
+<a href="models.html">Models and pricing</a>
 <p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
 <a href="architecture.html">Architecture</a>
 <a href="host-authority.html">Hosting and authority</a>
@@ -77,11 +79,14 @@
 <h1 id="create-infinite-experiences-in-minutes">Create infinite experiences, in minutes.</h1>
 <h2 id="your-world-model-needs-an-engine">Your World Model needs an engine.</h2>
 <p>GENESIS gives generated worlds memory, rules and controls. It tracks your inventory, characters and locations, then connects each player action to what happens next.</p>
+<div class="hero-actions"><a class="button primary" href="#worldstreams-in-action">Watch the demos</a><a class="button" href="#quickstart-with-the-genesis-skill">Build your first world</a></div>
+<p class="hero-note">Run locally with the included examples. Connect your models when you're ready.</p>
 </div>
 </section>
 
+<h2 id="worldstreams-in-action">Worldstreams in action</h2>
 <p>Rick and Morty have their own character controls, and both actions feed the shared experience. Watch the multiplayer Worldstream.</p>
-<figure class="demo-feature" id="worldstreams-in-action">
+<figure class="demo-feature">
 <video controls playsinline preload="none" poster="assets/rick-morty-multiplayer.webp" aria-label="Rick and Morty multiplayer Worldstream">
 <source src="https://sequencer.media/demo/worlds/multiplayer-demo-cropped-v2.mp4" type="video/mp4">
 <a href="https://sequencer.media/demo/worlds/multiplayer-demo-cropped-v2.mp4">Watch the multiplayer Rick and Morty video</a>
@@ -153,14 +158,51 @@
 └── assets/           Images, audio and video that travel with you</code></pre></div>
 <p>GENESIS coordinates the world; connected providers generate media. Your host supplies identity, storage, credentials and spending policy. <a href="getting-started.html">Start building</a>.</p>
 <h2 id="choose-your-connection">Choose your connection</h2>
-<h3 id="publish-on-sequencer">Publish on Sequencer</h3>
-<p><a href="https://sequencer.media/worldstreams#my-worlds">Open My Worlds</a>, sign in with your Sequencer account and create a world. Describe your idea to Spark, or import a GENESIS project in the world editor. Preview it, save it and publish it to Worldstreams.</p>
-<p>Your existing account, workspace, assets and gems carry through creation and publishing.</p>
-<h3 id="connect-from-your-own-app">Connect from your own app</h3>
-<ul>
-<li><strong>Worldstreams API:</strong> Connect LLM tools, media generation, assets and managed worldstreams with one Sequencer server key. <a href="integration.html">Integration guide</a>.</li>
-<li><strong>Your own models:</strong> Choose your LLM and World Model, then register their server-side adapters. <a href="providers.html">Provider guide</a>.</li>
-</ul>
+<p>To run a live world, you need hosting, persistent state, user access, billing controls, an LLM and a World Model. Choose which parts you want to operate yourself.</p>
+<p class="comparison-hint">Scroll the table horizontally to see every option.</p>
+
+<div class="comparison-scroll" role="region" aria-label="Compare worldstream setup options" tabindex="0">
+<table class="setup-comparison">
+<caption>Who provides each part of your live experience?</caption>
+<thead><tr><th scope="col">What you need</th><th scope="col">Your own stack (BYO)</th><th scope="col">Your app + Sequencer API</th><th scope="col">Sequencer hosted</th></tr></thead>
+<tbody>
+<tr><th scope="row">World engine and interface</th><td>GENESIS</td><td>GENESIS</td><td>GENESIS in the world editor</td></tr>
+<tr><th scope="row">Website and app hosting</th><td>You provide</td><td>You provide</td><td>Sequencer provides</td></tr>
+<tr><th scope="row">Database and world workers</th><td>You configure storage and run the controller</td><td>You run your app and Genesis controller. Sequencer runs model services</td><td>Sequencer stores world state and runs the controller</td></tr>
+<tr><th scope="row">User authentication</th><td>Your identity provider</td><td>Your audience auth, plus a Sequencer server key</td><td>Sequencer accounts and access controls</td></tr>
+<tr><th scope="row">World Model and video delivery</th><td>Your chosen provider and stream integration</td><td>Managed Worldstreams API and stream connection details</td><td>Managed model, player and audience rooms</td></tr>
+<tr><th scope="row">LLM access</th><td>Your chosen LLM and adapter</td><td>Sequencer LLM tools through the same key</td><td>Managed prompt direction and LLM tools</td></tr>
+<tr><th scope="row">Assets, images and audio</th><td>Your storage, CDN and generation providers</td><td>Sequencer workspace assets and media APIs</td><td>Workspace media library and generation tools</td></tr>
+<tr><th scope="row">Audience billing</th><td>You build payments and usage controls</td><td>You pay API usage and manage your audience's payments</td><td>Sequencer gems and shared viewer billing</td></tr>
+<tr><th scope="row">Publishing and community</th><td>You build discovery, chat and voting UI</td><td>You build your app's audience experience</td><td>Publishing, discovery, chat, voting and moderation</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Choose <strong>BYO</strong> for full control over your stack, <strong>Sequencer API</strong> for managed generation inside your app, or <strong>Sequencer hosted</strong> to create and publish using an existing account and workspace.</p>
+<p>LLM and media services are available through the same Sequencer key. Custom LLM calls, images and audio have their own usage charges. Your own app remains responsible for its audience&#39;s authentication, database and monetization.</p>
+<p><a href="providers.html">Bring your own providers</a> · <a href="integration.html">Connect the Sequencer API</a> · <a href="https://sequencer.media/worldstreams#my-worlds">Create or import in My Worlds</a></p>
+<h2 id="compare-worldstream-models">Compare Worldstream models</h2>
+<p>Compare native video, published pricing and how quickly a model can respond. The hourly figures use the provider&#39;s billing unit, so they show model cost rather than the total cost of running your app.</p>
+<p class="comparison-hint">Scroll the table horizontally to compare all model details.</p>
+
+<div class="comparison-scroll" role="region" aria-label="Compare Worldstream models and API pricing" tabindex="0">
+<table class="model-comparison">
+<caption>Published model specifications and rates, checked October 13, 2026</caption>
+<thead><tr><th scope="col">Model / API</th><th scope="col">Video and audio</th><th scope="col">Published price</th><th scope="col">Response timing</th><th scope="col">Quality / 5</th></tr></thead>
+<tbody>
+<tr><th scope="row"><a href="https://sequencer.media/worldstream-api">Sequencer Viva</a><span class="table-detail">Managed Worldstreams</span></th><td>768p, 24 fps<span class="table-detail">Generated video and audio</span></td><td><a href="https://sequencer.media/worldstream-api">$40 / active stream hour</a><span class="table-detail">About $0.67 / minute</span></td><td>Continuous stream<span class="table-detail">Measured startup latency not published</span></td><td><a class="quality-status" href="models.html#quality-ratings">Unrated</a></td></tr>
+<tr><th scope="row"><a href="https://fal.ai/h3-max-director">H3 Max Director</a><span class="table-detail">fal</span></th><td>480p or 768p, 24 fps<span class="table-detail">Stereo audio</span></td><td>$0.08 / generated second<span class="table-detail">$288 / generated hour</span></td><td>5–15s segments<span class="table-detail">First-frame latency not specified</span></td><td><a class="quality-status" href="models.html#quality-ratings">Unrated</a></td></tr>
+<tr><th scope="row"><a href="https://www.reactor.inc/models/fast-h3/info">MiniMax FastH3</a><span class="table-detail">Reactor</span></th><td>1344 × 768, 24 fps<span class="table-detail">Generated audio</span></td><td>$0.035 / session second<span class="table-detail">$126 / session hour</span></td><td>About 1× real-time generation<span class="table-detail">Clips queued before playback</span></td><td><a class="quality-status" href="models.html#quality-ratings">Unrated</a></td></tr>
+<tr><th scope="row"><a href="https://www.reactor.inc/models/visko-orbis-stable/info">Visko Orbis Stable</a><span class="table-detail">Reactor</span></th><td>832 × 480, 18 fps<span class="table-detail">Upscaled delivery up to 4K; audio</span></td><td>$0.0097 / session second<span class="table-detail">$34.92 / session hour</span></td><td>About 1.8s chunks<span class="table-detail">Prompt changes at chunk boundaries</span></td><td><a class="quality-status" href="models.html#quality-ratings">Unrated</a></td></tr>
+<tr><th scope="row"><a href="https://www.reactor.inc/models/visko-orbis-dynamic/info">Visko Orbis Dynamic</a><span class="table-detail">Reactor</span></th><td>640 × 368, 18 fps<span class="table-detail">Upscaled delivery up to 4K; audio</span></td><td>$0.0209 / session second<span class="table-detail">$75.24 / session hour</span></td><td>About 1.8s chunks<span class="table-detail">Live delivery resolution changes</span></td><td><a class="quality-status" href="models.html#quality-ratings">Unrated</a></td></tr>
+</tbody>
+</table>
+</div>
+
+
+<p>Rates checked <strong>October 13, 2026</strong>. Reactor bills time holding a GPU, including idle time. fal Director bills generated video with a 60-second minimum. Sequencer advertises active stream time; use its session quote for the current rate. LLM tools, extra assets and your app infrastructure can add costs.</p>
+<p>Quality ratings use a shared five-point rubric. Models remain <strong>unrated</strong> until they have been tested with the same prompts and conditions. <a href="models.html">See the sources, billing details and rating method</a>.</p>
 <p>The source is <strong>Apache 2.0 licensed</strong>. Version 0.1 is a source preview, with npm publication and the wider launch being prepared. <a href="https://github.com/sequencer-media/genesis">Browse the repository</a>, <a href="license.html">read the license</a>, <a href="contributing.html">contribute</a> or <a href="api.html">explore the SDK API</a>.</p>
 </article>
       <footer class="site-footer">

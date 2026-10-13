@@ -44,6 +44,21 @@ img{max-width:100%;height:auto}
 table{width:100%;border-collapse:collapse;margin:24px 0;font-size:14px;line-height:1.6;overflow-wrap:anywhere}
 th,td{padding:12px;border:1px solid var(--line);text-align:left;vertical-align:top}
 th{background:var(--soft)}
+.comparison-scroll{max-width:100%;overflow-x:auto;margin:26px 0;border:1px solid var(--line);background:var(--card);scrollbar-color:var(--accent) var(--card);overscroll-behavior-x:contain}
+.comparison-scroll table{margin:0;font-size:13px;line-height:1.6}
+.comparison-scroll caption{text-align:left;padding:14px 12px;color:var(--muted);font-size:13px;background:var(--paper)}
+.comparison-scroll th,.comparison-scroll td{padding:13px 12px}
+.comparison-scroll tbody th{background:var(--paper);font-size:14px;font-weight:600}
+.comparison-scroll thead th{font-size:13px;font-weight:650}
+.setup-comparison{min-width:780px}
+.setup-comparison th:first-child{width:19%}
+.setup-comparison thead th:not(:first-child){width:27%}
+.model-comparison{min-width:820px}
+.model-comparison th:first-child{width:19%}
+.table-detail{display:block;margin-top:5px;font-size:12px;line-height:1.55;color:var(--muted);font-weight:400}
+.quality-status{display:inline-block;padding:3px 6px;border:1px solid var(--line);background:var(--paper);font:11px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace}
+.comparison-hint{display:none;color:var(--muted);font-size:13px}
+@media(max-width:1100px){.comparison-hint{display:block}}
 code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
 :not(pre)>code{font-size:.9em;background:#f3e0dc;padding:2px 5px;overflow-wrap:anywhere}
 pre{overflow:auto;margin:0;padding:20px;background:#f0e5df;font-size:13px;line-height:1.65;tab-size:2}

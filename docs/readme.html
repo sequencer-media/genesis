@@ -41,6 +41,7 @@
 <a href="demos.html">Worldstreams demos</a>
 <p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
 <a href="providers.html">Your own models</a>
+<a href="models.html">Models and pricing</a>
 <p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
 <a href="architecture.html">Architecture</a>
 <a href="host-authority.html">Hosting and authority</a>
@@ -59,6 +60,7 @@
 <a href="demos.html">Worldstreams demos</a>
 <p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
 <a href="providers.html">Your own models</a>
+<a href="models.html">Models and pricing</a>
 <p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
 <a href="architecture.html">Architecture</a>
 <a href="host-authority.html">Hosting and authority</a>
@@ -316,42 +318,62 @@ node dist/cli.js save ./my-world --workspace YOUR_WORKSPACE_ID</code></pre></div
 <table>
 <thead>
 <tr>
-<th>Capability</th>
-<th>GENESIS + Worldstreams API</th>
-<th>GENESIS + your own models</th>
+<th>Requirement</th>
+<th>Your own stack (BYO)</th>
+<th>Your app + Sequencer API</th>
+<th>Sequencer hosted</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>World memory, rules, custom UI and portable bundles</td>
-<td>Included</td>
-<td>Included</td>
+<td>World memory, rules and custom UI</td>
+<td>GENESIS</td>
+<td>GENESIS</td>
+<td>GENESIS in the world editor</td>
 </tr>
 <tr>
-<td>LLM, images, audio, video and World Model stream APIs</td>
-<td>One Sequencer server key</td>
-<td>Connect adapters and credentials</td>
+<td>App hosting, database and world workers</td>
+<td>You provide</td>
+<td>Your app infrastructure, managed model services</td>
+<td>Sequencer provides</td>
 </tr>
 <tr>
-<td>Assets and versioned world drafts</td>
-<td>Managed integration</td>
-<td>Choose storage and publishing</td>
+<td>Audience authentication</td>
+<td>You provide</td>
+<td>You provide; server key authenticates API calls</td>
+<td>Sequencer accounts</td>
 </tr>
 <tr>
-<td>Shared backend job polling</td>
-<td>Managed by Worldstreams hosting</td>
-<td>Run your worker</td>
+<td>World Model and video delivery</td>
+<td>Choose provider and integration</td>
+<td>Managed Worldstreams API</td>
+<td>Managed model, player and rooms</td>
 </tr>
 <tr>
-<td>Hosted viewer identity and billing</td>
-<td>Worldstreams accounts, gems and viewer leases</td>
-<td>Implement your policies</td>
+<td>LLM, image and audio APIs</td>
+<td>Choose providers</td>
+<td>Same Sequencer key, metered usage</td>
+<td>Built-in tools, metered usage</td>
 </tr>
 <tr>
-<td>Audience and monetization in your own app</td>
-<td>Yours to manage</td>
-<td>Yours to manage</td>
+<td>Assets and world drafts</td>
+<td>Choose storage</td>
+<td>Sequencer workspace assets</td>
+<td>Workspace media library</td>
+</tr>
+<tr>
+<td>Audience billing</td>
+<td>You build</td>
+<td>You manage; your account pays API usage</td>
+<td>Gems and shared viewer billing</td>
+</tr>
+<tr>
+<td>Publishing, chat and voting UI</td>
+<td>You build</td>
+<td>Your app&#39;s audience experience</td>
+<td>Sequencer provides</td>
 </tr>
 </tbody></table>
+<p>Custom LLM calls and additional media generation have separate usage charges. Compare the <a href="index.html#choose-your-connection">setup options</a> and <a href="models.html">Worldstream models, prices and quality rating method</a>.</p>
 <h2 id="build-with-us">Build with us</h2>
 <p>Found an issue or have an idea? <a href="https://github.com/sequencer-media/genesis/issues">Open an issue</a>. Read the <a href="contributing.html">contribution guide</a> before making a pull request. If GENESIS is useful to you, star the repository and share what you build.</p>
 <p><a href="contributing.html">Contributing</a> · <a href="security.html">Security</a> · <a href="license.html">Apache 2.0 license</a> · <a href="https://sequencer.media">Sequencer</a> · <a href="https://worldstreams.ai">Worldstreams</a></p>

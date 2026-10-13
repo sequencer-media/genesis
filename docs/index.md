@@ -8,12 +8,16 @@
 
 GENESIS gives generated worlds memory, rules and controls. It tracks your inventory, characters and locations, then connects each player action to what happens next.
 
+<div class="hero-actions"><a class="button primary" href="#worldstreams-in-action">Watch the demos</a><a class="button" href="#quickstart-with-the-genesis-skill">Build your first world</a></div>
+<p class="hero-note">Run locally with the included examples. Connect your models when you're ready.</p>
 </div>
 </section>
 
+## Worldstreams in action
+
 Rick and Morty have their own character controls, and both actions feed the shared experience. Watch the multiplayer Worldstream.
 
-<figure class="demo-feature" id="worldstreams-in-action">
+<figure class="demo-feature">
 <video controls playsinline preload="none" poster="assets/rick-morty-multiplayer.webp" aria-label="Rick and Morty multiplayer Worldstream">
 <source src="https://sequencer.media/demo/worlds/multiplayer-demo-cropped-v2.mp4" type="video/mp4">
 <a href="https://sequencer.media/demo/worlds/multiplayer-demo-cropped-v2.mp4">Watch the multiplayer Rick and Morty video</a>
@@ -100,15 +104,44 @@ GENESIS coordinates the world; connected providers generate media. Your host sup
 
 ## Choose your connection
 
-### Publish on Sequencer
+To run a live world, you need hosting, persistent state, user access, billing controls, an LLM and a World Model. Choose which parts you want to operate yourself.
 
-[Open My Worlds](https://sequencer.media/worldstreams#my-worlds), sign in with your Sequencer account and create a world. Describe your idea to Spark, or import a GENESIS project in the world editor. Preview it, save it and publish it to Worldstreams.
+<p class="comparison-hint">Scroll the table horizontally to see every option.</p>
 
-Your existing account, workspace, assets and gems carry through creation and publishing.
+<div class="comparison-scroll" role="region" aria-label="Compare worldstream setup options" tabindex="0">
+<table class="setup-comparison">
+<caption>Who provides each part of your live experience?</caption>
+<thead><tr><th scope="col">What you need</th><th scope="col">Your own stack (BYO)</th><th scope="col">Your app + Sequencer API</th><th scope="col">Sequencer hosted</th></tr></thead>
+<tbody>
+<tr><th scope="row">World engine and interface</th><td>GENESIS</td><td>GENESIS</td><td>GENESIS in the world editor</td></tr>
+<tr><th scope="row">Website and app hosting</th><td>You provide</td><td>You provide</td><td>Sequencer provides</td></tr>
+<tr><th scope="row">Database and world workers</th><td>You configure storage and run the controller</td><td>You run your app and Genesis controller. Sequencer runs model services</td><td>Sequencer stores world state and runs the controller</td></tr>
+<tr><th scope="row">User authentication</th><td>Your identity provider</td><td>Your audience auth, plus a Sequencer server key</td><td>Sequencer accounts and access controls</td></tr>
+<tr><th scope="row">World Model and video delivery</th><td>Your chosen provider and stream integration</td><td>Managed Worldstreams API and stream connection details</td><td>Managed model, player and audience rooms</td></tr>
+<tr><th scope="row">LLM access</th><td>Your chosen LLM and adapter</td><td>Sequencer LLM tools through the same key</td><td>Managed prompt direction and LLM tools</td></tr>
+<tr><th scope="row">Assets, images and audio</th><td>Your storage, CDN and generation providers</td><td>Sequencer workspace assets and media APIs</td><td>Workspace media library and generation tools</td></tr>
+<tr><th scope="row">Audience billing</th><td>You build payments and usage controls</td><td>You pay API usage and manage your audience's payments</td><td>Sequencer gems and shared viewer billing</td></tr>
+<tr><th scope="row">Publishing and community</th><td>You build discovery, chat and voting UI</td><td>You build your app's audience experience</td><td>Publishing, discovery, chat, voting and moderation</td></tr>
+</tbody>
+</table>
+</div>
 
-### Connect from your own app
+Choose **BYO** for full control over your stack, **Sequencer API** for managed generation inside your app, or **Sequencer hosted** to create and publish using an existing account and workspace.
 
-- **Worldstreams API:** Connect LLM tools, media generation, assets and managed worldstreams with one Sequencer server key. [Integration guide](integration.html).
-- **Your own models:** Choose your LLM and World Model, then register their server-side adapters. [Provider guide](providers.html).
+LLM and media services are available through the same Sequencer key. Custom LLM calls, images and audio have their own usage charges. Your own app remains responsible for its audience's authentication, database and monetization.
+
+[Bring your own providers](providers.html) · [Connect the Sequencer API](integration.html) · [Create or import in My Worlds](https://sequencer.media/worldstreams#my-worlds)
+
+## Compare Worldstream models
+
+Compare native video, published pricing and how quickly a model can respond. The hourly figures use the provider's billing unit, so they show model cost rather than the total cost of running your app.
+
+<p class="comparison-hint">Scroll the table horizontally to compare all model details.</p>
+
+<!-- WORLDSTREAM_MODEL_TABLE -->
+
+Rates checked **October 13, 2026**. Reactor bills time holding a GPU, including idle time. fal Director bills generated video with a 60-second minimum. Sequencer advertises active stream time; use its session quote for the current rate. LLM tools, extra assets and your app infrastructure can add costs.
+
+Quality ratings use a shared five-point rubric. Models remain **unrated** until they have been tested with the same prompts and conditions. [See the sources, billing details and rating method](models.html).
 
 The source is **Apache 2.0 licensed**. Version 0.1 is a source preview, with npm publication and the wider launch being prepared. [Browse the repository](https://github.com/sequencer-media/genesis), [read the license](license.html), [contribute](contributing.html) or [explore the SDK API](api.html).
