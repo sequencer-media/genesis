@@ -2,12 +2,12 @@
 
 # World Model Engine
 
-[![CI: Node 20 and 22](https://img.shields.io/badge/CI-Node_20_%2B_22-f46aa6?style=flat-square&logo=githubactions&logoColor=white)](https://github.com/sequencer-media/genesis/actions/workflows/ci.yml)
-[![Apache 2.0 license](https://img.shields.io/badge/license-Apache_2.0-ff9b55?style=flat-square)](LICENSE)
-[![Source preview 0.1.0](https://img.shields.io/badge/source_preview-v0.1.0-f46aa6?style=flat-square)](docs/compatibility.md)
-[![Node.js 20 or later](https://img.shields.io/badge/Node.js-20%2B-ff9b55?style=flat-square&logo=nodedotjs&logoColor=white)](docs/getting-started.md)
-[![TypeScript API](https://img.shields.io/badge/TypeScript-typed_API-f46aa6?style=flat-square&logo=typescript&logoColor=white)](docs/api.md)
-[![World-building agent skill included](https://img.shields.io/badge/agent_skill-included-ff9b55?style=flat-square)](skills/create-world-stream/SKILL.md)
+[![CI: Node 20 and 22](docs/assets/badges/ci.svg)](https://github.com/sequencer-media/genesis/actions/workflows/ci.yml)
+[![Apache 2.0 license](docs/assets/badges/license.svg)](LICENSE)
+[![Source preview 0.1.0](docs/assets/badges/source-preview.svg)](docs/compatibility.md)
+[![Node.js 20 or later](docs/assets/badges/node.svg)](docs/getting-started.md)
+[![TypeScript API](docs/assets/badges/typescript.svg)](docs/api.md)
+[![World-building agent skill included](docs/assets/badges/agent-skill.svg)](skills/create-world-stream/SKILL.md)
 
 **Create infinite experiences, in minutes.**
 
