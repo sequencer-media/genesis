@@ -18,7 +18,7 @@ Two trainers choose their Pokémon, ready up and battle in the same Worldstream.
 
 ### Build something similar
 
-Use the [Genesis skill quickstart](agent-skill.md). Describe your own cast, battle rules and visual style. Start with the `arena-llm` example for generated move sets, or `arena-controller` for controller-driven combat.
+Use the [Genesis skill quickstart](agent-skill.md). Describe your own cast, battle rules and visual style. Start with the `arena-llm` example for generated move sets, or `arena` for controller-driven combat.
 
 Keep accepted game outcomes in `controller.js`. Ask the LLM for bounded move data, then validate it before opening actions. Use generated video to depict the committed outcome and advance the visual turn after playback completes. [Read the authoring contract](../AGENTS.md).
 
