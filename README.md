@@ -1,6 +1,6 @@
 ![GENESIS ASCII wordmark](docs/assets/genesis-wordmark.svg)
 
-# World Model Engine
+# World Model Engine for Infinite Experiences.
 
 [![CI: Node 20 and 22](docs/assets/badges/ci.svg)](https://github.com/sequencer-media/genesis/actions/workflows/ci.yml)
 [![Apache 2.0 license](docs/assets/badges/license.svg)](LICENSE)
@@ -9,19 +9,11 @@
 [![TypeScript API](docs/assets/badges/typescript.svg)](docs/api.md)
 [![World-building agent skill included](docs/assets/badges/agent-skill.svg)](skills/create-world-stream/SKILL.md)
 
-**Create infinite experiences, in minutes.**
-
-**A universal World Model Context Protocol.**
+GENESIS is a **universal World Model Context Protocol**. It plugs into your World Model to manage memory, rules, variables, state, characters and locations. Its Context Engine connects player actions and user interfaces to the foundation models that bring your world to life.
 
 Open source, licensed under [Apache 2.0](LICENSE).
 
 [Website](https://sequencer.media/genesis) · [Demos](https://sequencer.media/genesis/demos) · [Skill quickstart](https://sequencer.media/genesis/agent-skill) · [Documentation](https://sequencer.media/genesis/getting-started)
-
-## Your World Model needs a Context Engine.
-
-GENESIS is the Context Engine that plugs into your World Model. It remembers inventory, characters and locations, applies the rules and connects accepted player actions to the next generation request.
-
-Player actions change the world. GENESIS commits the outcome, gives the LLM and scene generator the context, and keeps every player's interface in sync.
 
 [Watch the demos](#worldstreams-in-action) · [What can you build?](#what-can-you-build) · [Build from a prompt](#one-prompt-an-infinite-experience) · [Documentation](docs/getting-started.md) · [SDK API](docs/api.md) · [Connect your models](#connect-your-own-world-models) · [Worldstreams API](#worldstreams-api-instant-setup)
 

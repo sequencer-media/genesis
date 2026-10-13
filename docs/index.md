@@ -2,15 +2,9 @@
 <img class="genesis-wordmark" src="assets/genesis-wordmark.svg" alt="GENESIS ASCII wordmark" width="1069" height="256">
 <div>
 
-# World Model Engine
+# World Model Engine for Infinite Experiences.
 
-<p class="hero-tagline">Create infinite experiences, in minutes.</p>
-
-**A universal World Model Context Protocol.**
-
-## Your World Model needs a Context Engine.
-
-GENESIS is the Context Engine that plugs into your World Model. It connects memory, rules, characters, locations and player actions to the models that create your world.
+GENESIS is a **universal World Model Context Protocol**. It plugs into your World Model to manage memory, rules, variables, state, characters and locations. Its Context Engine connects player actions and user interfaces to the foundation models that bring your world to life.
 
 <nav class="hero-actions" aria-label="Start exploring"><a href="#worldstreams-in-action">Watch the demos</a><a href="#quickstart-with-the-genesis-skill">Build your first world</a></nav>
 <p class="hero-note">Run locally with the included examples. Connect your models when you're ready.</p>
