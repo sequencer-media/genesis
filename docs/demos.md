@@ -1,6 +1,6 @@
 # Worldstreams in action
 
-**GENESIS is an open source World Model game engine, licensed under Apache 2.0.** These recorded examples show the experiences around World Models: shared character controls, audience choices and playable interfaces.
+**GENESIS is an open source World Model engine, licensed under Apache 2.0.** These recorded examples show the experiences around World Models: shared character controls, audience choices and playable interfaces.
 
 [Build from one prompt](agent-skill.md) · [Start locally](getting-started.md) · [Read the license](license.html)
 

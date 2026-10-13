@@ -9,7 +9,7 @@ const outIndex = args.indexOf('--out');
 if (outIndex >= 0 && !args[outIndex + 1]) throw new Error('Choose a documentation output directory.');
 const output = resolve(root, outIndex >= 0 ? args[outIndex + 1] : 'docs');
 const pages = [
-  {source:'docs/index.md', file:'index.html', title:'GENESIS', description:'Open source World Model game engine. Create infinite experiences, in minutes.', group:'Start here', label:'Overview'},
+  {source:'docs/index.md', file:'index.html', title:'GENESIS', description:'Open source World Model engine. Create infinite experiences, in minutes.', group:'Start here', label:'Overview'},
   {source:'docs/getting-started.md', file:'getting-started.html', title:'Build your first world', group:'Start here'},
   {source:'docs/world-memory.md', file:'world-memory.html', title:'World memory', group:'Start here'},
   {source:'docs/agent-skill.md', file:'agent-skill.html', title:'Build from one prompt', group:'Start here'},
@@ -108,8 +108,8 @@ for (const page of pages) {
     '<details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections">' +
     headings.map(heading => '<a href="#' + heading.id + '">' + escape(heading.text) + '</a>').join('') + '</nav></details>';
   const values = {
-    TITLE:escape(page.file === 'index.html' ? 'GENESIS · Open Source World Model Game Engine' : page.title + ' · GENESIS'),
-    DESCRIPTION:escape(page.description || page.title + '. GENESIS open source World Model game engine documentation.'),
+    TITLE:escape(page.file === 'index.html' ? 'GENESIS · Open Source World Model Engine' : page.title + ' · GENESIS'),
+    DESCRIPTION:escape(page.description || page.title + '. GENESIS open source World Model engine documentation.'),
     NAV:navigation(page.file), BODY:toc + body, PAGE:page.file === 'index.html' ? 'home-page' : 'guide-page', VERSION:escape(version)
   };
   const html = template.replace(/\{\{([A-Z]+)\}\}/g, (_, key) => {

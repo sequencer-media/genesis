@@ -1,6 +1,6 @@
 <section class="hero">
 <div>
-<p class="hero-label">Open source World Model game engine</p>
+<p class="hero-label">Open source World Model engine</p>
 
 # Create infinite experiences, in minutes.
 

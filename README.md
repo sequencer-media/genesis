@@ -7,7 +7,7 @@
  \_____|______|_| \_|______|_____/|_____|_____/
 ```
 
-# GENESIS · Open Source World Model Game Engine
+# GENESIS · Open Source World Model Engine
 
 **Create infinite experiences, in minutes.**
 

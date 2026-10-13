@@ -4,13 +4,13 @@ Status: local and unpublished. The independent local repository lives alongside 
 
 ## Positioning
 
-**GENESIS · Open Source World Model Game Engine**
+**GENESIS · Open Source World Model Engine**
 
 **Create infinite experiences, in minutes.**
 
 The creator promise is a short path from an idea to a playable worldstream: describe the world, let the bundled agent skill build its interface and rules, then connect a World Model. GENESIS acts as the dungeon master: it persists world memory, inventory and variables, runs shared rules and passes structured scene, location and character context to backend tools. The Worldstreams API supplies managed model and hosting APIs through one Sequencer server key.
 
-Repository description: Open source World Model game engine. Build infinite experiences and worldstreams with memory, inventory, shared rules and custom interfaces.
+Repository description: Open source World Model engine. Build infinite experiences and worldstreams with memory, inventory, shared rules and custom interfaces.
 
 The strongest audience is developers turning World Models into infinite experiences. Lead with the ASCII wordmark, the dungeon-master role and the multiplayer Rick and Morty recording. Include Adventure Time and World Model games, then show a remixable project. Link the documentation site, complete SDK reference and single-prompt authoring skill. Label recorded demos and prepared preview output. Show provider choice, portable assets and the Apache 2.0 license next to the managed Worldstreams API path.
 

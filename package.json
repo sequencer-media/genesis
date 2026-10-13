@@ -1,10 +1,10 @@
 {
   "name": "@genesis-worlds/runtime",
   "version": "0.1.0",
-  "description": "Open source World Model game engine. Build infinite experiences and worldstreams with memory, inventory, shared rules and custom interfaces.",
+  "description": "Open source World Model engine. Build infinite experiences and worldstreams with memory, inventory, shared rules and custom interfaces.",
   "keywords": [
     "world-models",
-    "game-engine",
+    "world-model-engine",
     "generative-video",
     "ai-worlds",
     "worldstreams",
