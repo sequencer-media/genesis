@@ -15,7 +15,7 @@ if (baseIndex >= 0 && (!basePath || !/^\/(?:[a-z0-9_-]+\/)+$/i.test(basePath))) 
   throw new Error('Choose a site base path with leading and trailing slashes, such as /genesis/.');
 }
 const pages = [
-  {source:'docs/index.md', file:'index.html', title:'GENESIS', description:'World Model engine for infinite experiences. GENESIS connects memory, rules, state and player interfaces to your World Model.', group:'Start here', label:'Overview'},
+  {source:'docs/index.md', file:'index.html', title:'GENESIS', description:'Create infinite experiences, in minutes. Give your World Model a memory, an inventory and a playable interface with GENESIS.', group:'Start here', label:'Overview'},
   {source:'docs/agent-skill.md', file:'agent-skill.html', title:'Quickstart with the Genesis skill', label:'Quickstart with the skill', group:'Start here'},
   {source:'docs/getting-started.md', file:'getting-started.html', title:'Run a starter locally', group:'Start here'},
   {source:'docs/world-memory.md', file:'world-memory.html', title:'World memory', group:'Start here'},

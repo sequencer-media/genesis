@@ -2,14 +2,20 @@
 <img class="genesis-wordmark" src="assets/genesis-wordmark.svg" alt="GENESIS ASCII wordmark" width="1069" height="256">
 <div>
 
-# World Model Engine for Infinite Experiences.
+<p class="hero-label">Open source World Model engine</p>
 
-GENESIS is a **universal World Model Context Protocol**. It plugs into your World Model to manage memory, rules, variables, state, characters and locations. Its Context Engine connects player actions and user interfaces to the foundation models that bring your world to life.
+# Create infinite experiences, in minutes.
+
+Give your World Model a memory, an inventory and a playable interface. GENESIS is the dungeon master for your worldstream: it remembers the world, applies the rules and connects player actions to generated scenes.
 
 <nav class="hero-actions" aria-label="Start exploring"><a href="#what-is-a-worldstream">Watch the demos</a><a href="#quickstart-with-the-genesis-skill">Build your first world</a></nav>
 <p class="hero-note">Run locally with the included examples. Connect your models when you're ready.</p>
 </div>
 </section>
+
+## Your World Model needs an Engine.
+
+In a tabletop game, the dungeon master remembers what you carry, who you met and what changed. GENESIS gives infinite experiences that same foundation.
 
 <div id="worldstreams-in-action"></div>
 
