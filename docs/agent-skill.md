@@ -1,39 +1,56 @@
-# Build any world from one prompt
+# Build a world with the Genesis skill
 
-The open source **create-world-stream** skill helps a coding agent build a playable World Model prototype in minutes. Describe the experience; the agent creates the interface, controller rules, backend requests and portable project.
+Describe your world, then let your coding agent build its interface, memory and rules. The included **create-world-stream** skill takes it through a local preview and a complete project export.
 
-## Use the included skill
+Requires a coding agent that can read local files and run commands, plus Node 20 or later.
 
-Give your coding agent the Genesis checkout and ask it to use `skills/create-world-stream/SKILL.md`. Repo-aware agents discover it through AGENTS.md. Other skill-capable agents can load the file directly.
+## Get Genesis ready
 
-The agent needs access to the checkout, Node 20 or later and the Genesis CLI. Clone [sequencer-media/genesis](https://github.com/sequencer-media/genesis) to get the source preview. npm publication is being prepared.
+Clone the repository and build the local tools:
+
+```sh
+git clone https://github.com/sequencer-media/genesis.git
+cd genesis
+npm ci
+npm run build
+```
+
+Open the `genesis` folder in your coding agent. The skill is already included at `skills/create-world-stream/SKILL.md`. Repo-aware agents can also discover it through `AGENTS.md`.
+
+## Describe your world
+
+Paste this prompt into your agent. Change the setting, interactions and visual style to match your idea.
 
 <div class="prompt-card">
-<pre><code>Use the create-world-stream skill to build Mosslight, a forest
-battle worldstream with a cream pixel interface. Let two players
-take turns, ask the backend LLM for four moves per encounter,
-and remember their inventory, health and progress. Give me a
-working local preview and an exportable world.</code></pre>
+<pre><code>Read skills/create-world-stream/SKILL.md and use it to build Mosslight, a forest battle worldstream with a cream pixel interface.&#10;&#10;Let two players take turns. Have the backend LLM create four moves per encounter. Remember inventory, health and progress.&#10;&#10;Start with labeled local fixtures. Validate the project, test the controls, and give me a playable local preview and a complete ZIP export.</code></pre>
 <button type="button" data-copy-prompt>Copy world-building prompt</button>
 </div>
 
-## What the agent produces
+The agent chooses a starter, adapts its controls and rules, and checks the result. Tell it which model provider you want when you are ready to connect generation.
 
-- A world manifest with settings, typed actions, tool requests and declared assets.
-- A custom interface for controls, inventory, characters and scene presentation.
-- An authoritative controller for state, shared rules, turns and generation requests.
-- A working local preview and a validated, exportable bundle.
+## Play, refine and export
 
-Describe the genre, interaction and visual style you want. The skill chooses the nearest starter and adapts its mechanics to your idea. Your chosen model provider remains yours.
+Open the preview URL your agent returns. Try a turn, switch players and check that inventory and progress carry forward. Ask for changes in the same conversation.
 
-## Local prototype to live worldstream
+Your agent should give you:
 
-Prepared fixtures make the interaction loop available immediately. The stock runner includes an arena move fixture; other structured responses need a matching local provider fixture.
+- **A playable preview:** Your interface and controls running locally.
+- **An editable project:** `genesis.json`, `interface.html`, `controller.js` and declared assets.
+- **A complete ZIP:** A validated bundle to import into a compatible host.
 
-With a configured provider and authorized budget, the agent can generate and attach images, audio and video. The [Worldstreams API](integration.md) connects those services through one Sequencer server key. You can also [bring your own models](providers.md).
+Want to inspect or export the project yourself? Follow the [local starter guide](getting-started.md#validate-and-export).
 
-The skill validates the project, exports its assets and exercises the controls, repeated turns, actor permissions and mobile layout. It reports the actual local result or saved draft and any live-provider behavior still to verify.
+## Connect live generation
 
-## Read or download the skill
+Local previews use prepared responses and media. The stock runner includes an arena move fixture; another response format needs a matching local provider fixture.
 
-The skill is included with the Apache 2.0 licensed framework. <a href="skills/create-world-stream/SKILL.md" download>Download SKILL.md</a> to load it in your agent alongside the checkout. The full authoring instructions appear below.
+Choose a connection when you want generated images, audio and video:
+
+- **Sequencer:** Use the [Worldstreams API](integration.md) with one server key, or [import your project into My Worlds](https://sequencer.media/worldstreams#my-worlds) to preview and publish it.
+- **Your own providers:** Connect your LLM and World Model through [server-side adapters](providers.md).
+
+Configure your provider and generation budget before requesting live media. Credentials and spending limits belong on the host server.
+
+## Skill reference
+
+The skill ships with the Apache 2.0 licensed engine. <a href="skills/create-world-stream/SKILL.md" download>Download SKILL.md</a>, or expand the full instructions below.

@@ -1,16 +1,12 @@
-# Build your first world
+# Run a starter locally
 
-Start with a playable local worldstream, then customize its rules and connect generation. GENESIS is Apache 2.0 licensed; the local fixtures work without a model account.
+Play an included world, customize its rules and connect generation. Requires Node 20 or later.
 
-## Create with Sequencer
+Want your coding agent to build an original world? Start with the [Genesis skill quickstart](agent-skill.md).
 
-For a hosted world, [open My Worlds](https://sequencer.media/worldstreams#my-worlds) and use your existing Sequencer account. Create a world, describe it to Spark or import a GENESIS project in the editor, then preview and publish it to Worldstreams. Sequencer handles your workspace, assets and gems.
+## Start the preview
 
-Use the local workflow below to build independently and connect your own providers. [Read the Sequencer integration guide](integration.md) to upload a local project with the API.
-
-## Run a starter
-
-Requires Node 20 or later. Clone the Genesis source preview:
+Clone Genesis, build the tools and start the vintage battle example:
 
 ```sh
 git clone https://github.com/sequencer-media/genesis.git
@@ -59,6 +55,12 @@ The bundle contains the manifest, interface, controller, JSON Schema and complet
 Use the [Worldstreams API](integration.md) for the managed Sequencer path, or [register your own providers](providers.md). Keep credentials on the server. Your host independently authorizes tool access and spending.
 
 The local runner supplies the arena move fixture for LLM requests. When your world requests another response shape, supply matching fixture data through a local `createLlmProvider` host adapter or connect the configured backend.
+
+## Publish on Sequencer
+
+[Open My Worlds](https://sequencer.media/worldstreams#my-worlds) with your existing Sequencer account. Create a world, import your ZIP in the editor, then preview, save and publish it. Sequencer handles your workspace, assets and gems.
+
+Read the [integration guide](integration.md) to upload a local project with the API.
 
 ## Take it into production
 

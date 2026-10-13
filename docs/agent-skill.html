@@ -3,23 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Build from one prompt. GENESIS open source World Model engine documentation.">
-  <title>Build from one prompt · GENESIS</title>
+  <meta name="description" content="Quickstart with the Genesis skill. GENESIS open source World Model engine documentation.">
+  <title>Quickstart with the Genesis skill · GENESIS</title>
   <link rel="canonical" href="https://sequencer.media/genesis/agent-skill">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Build from one prompt · GENESIS">
-  <meta property="og:description" content="Build from one prompt. GENESIS open source World Model engine documentation.">
+  <meta property="og:title" content="Quickstart with the Genesis skill · GENESIS">
+  <meta property="og:description" content="Quickstart with the Genesis skill. GENESIS open source World Model engine documentation.">
   <meta property="og:url" content="https://sequencer.media/genesis/agent-skill">
   <meta property="og:image" content="https://sequencer.media/genesis/assets/genesis-social.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="GENESIS, World Model Engine. Create infinite experiences, in minutes.">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Build from one prompt · GENESIS">
-  <meta name="twitter:description" content="Build from one prompt. GENESIS open source World Model engine documentation.">
+  <meta name="twitter:title" content="Quickstart with the Genesis skill · GENESIS">
+  <meta name="twitter:description" content="Quickstart with the Genesis skill. GENESIS open source World Model engine documentation.">
   <meta name="twitter:image" content="https://sequencer.media/genesis/assets/genesis-social.png">
   <meta name="twitter:image:alt" content="GENESIS, World Model Engine. Create infinite experiences, in minutes.">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Build from one prompt","url":"https://sequencer.media/genesis/agent-skill","isPartOf":{"@type":"WebSite","name":"GENESIS","url":"https://sequencer.media/genesis"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Quickstart with the Genesis skill","url":"https://sequencer.media/genesis/agent-skill","isPartOf":{"@type":"WebSite","name":"GENESIS","url":"https://sequencer.media/genesis"}}</script>
   <link rel="stylesheet" href="site/site.css">
   <script src="site/site.js" defer></script>
 </head>
@@ -35,9 +35,9 @@
     </form>
   </header>
   <details class="mobile-navigation"><summary>Documentation menu</summary><nav aria-label="Mobile documentation"><p class="nav-group">Start here</p><a href="index.html">Overview</a>
-<a href="getting-started.html">Build your first world</a>
+<a href="agent-skill.html" aria-current="page" class="active">Quickstart with the skill</a>
+<a href="getting-started.html">Run a starter locally</a>
 <a href="world-memory.html">World memory</a>
-<a href="agent-skill.html" aria-current="page" class="active">Build from one prompt</a>
 <a href="demos.html">Worldstreams demos</a>
 <p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
 <a href="providers.html">Your own models</a>
@@ -53,9 +53,9 @@
 <a href="readme.html">Project README</a></nav></details>
   <div class="site-layout">
     <aside class="sidebar"><nav aria-label="Documentation"><p class="nav-group">Start here</p><a href="index.html">Overview</a>
-<a href="getting-started.html">Build your first world</a>
+<a href="agent-skill.html" aria-current="page" class="active">Quickstart with the skill</a>
+<a href="getting-started.html">Run a starter locally</a>
 <a href="world-memory.html">World memory</a>
-<a href="agent-skill.html" aria-current="page" class="active">Build from one prompt</a>
 <a href="demos.html">Worldstreams demos</a>
 <p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
 <a href="providers.html">Your own models</a>
@@ -70,35 +70,47 @@
 <a href="license.html">Apache 2.0 license</a>
 <a href="readme.html">Project README</a></nav></aside>
     <main id="main" tabindex="-1">
-      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#use-the-included-skill">Use the included skill</a><a href="#what-the-agent-produces">What the agent produces</a><a href="#local-prototype-to-live-worldstream">Local prototype to live worldstream</a><a href="#read-or-download-the-skill">Read or download the skill</a><a href="#authoring-instructions">Authoring instructions</a></nav></details><h1 id="build-any-world-from-one-prompt">Build any world from one prompt</h1>
-<p>The open source <strong>create-world-stream</strong> skill helps a coding agent build a playable World Model prototype in minutes. Describe the experience; the agent creates the interface, controller rules, backend requests and portable project.</p>
-<h2 id="use-the-included-skill">Use the included skill</h2>
-<p>Give your coding agent the Genesis checkout and ask it to use <code>skills/create-world-stream/SKILL.md</code>. Repo-aware agents discover it through AGENTS.md. Other skill-capable agents can load the file directly.</p>
-<p>The agent needs access to the checkout, Node 20 or later and the Genesis CLI. Clone <a href="https://github.com/sequencer-media/genesis">sequencer-media/genesis</a> to get the source preview. npm publication is being prepared.</p>
+      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#get-genesis-ready">Get Genesis ready</a><a href="#describe-your-world">Describe your world</a><a href="#play-refine-and-export">Play, refine and export</a><a href="#connect-live-generation">Connect live generation</a><a href="#skill-reference">Skill reference</a></nav></details><h1 id="build-a-world-with-the-genesis-skill">Build a world with the Genesis skill</h1>
+<p>Describe your world, then let your coding agent build its interface, memory and rules. The included <strong>create-world-stream</strong> skill takes it through a local preview and a complete project export.</p>
+<p>Requires a coding agent that can read local files and run commands, plus Node 20 or later.</p>
+<h2 id="get-genesis-ready">Get Genesis ready</h2>
+<p>Clone the repository and build the local tools:</p>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-sh">git clone https://github.com/sequencer-media/genesis.git
+cd genesis
+npm ci
+npm run build</code></pre></div>
+<p>Open the <code>genesis</code> folder in your coding agent. The skill is already included at <code>skills/create-world-stream/SKILL.md</code>. Repo-aware agents can also discover it through <code>AGENTS.md</code>.</p>
+<h2 id="describe-your-world">Describe your world</h2>
+<p>Paste this prompt into your agent. Change the setting, interactions and visual style to match your idea.</p>
 <div class="prompt-card">
-<pre><code>Use the create-world-stream skill to build Mosslight, a forest
-battle worldstream with a cream pixel interface. Let two players
-take turns, ask the backend LLM for four moves per encounter,
-and remember their inventory, health and progress. Give me a
-working local preview and an exportable world.</code></pre>
+<pre><code>Read skills/create-world-stream/SKILL.md and use it to build Mosslight, a forest battle worldstream with a cream pixel interface.&#10;&#10;Let two players take turns. Have the backend LLM create four moves per encounter. Remember inventory, health and progress.&#10;&#10;Start with labeled local fixtures. Validate the project, test the controls, and give me a playable local preview and a complete ZIP export.</code></pre>
 <button type="button" data-copy-prompt>Copy world-building prompt</button>
 </div>
 
-<h2 id="what-the-agent-produces">What the agent produces</h2>
+<p>The agent chooses a starter, adapts its controls and rules, and checks the result. Tell it which model provider you want when you are ready to connect generation.</p>
+<h2 id="play-refine-and-export">Play, refine and export</h2>
+<p>Open the preview URL your agent returns. Try a turn, switch players and check that inventory and progress carry forward. Ask for changes in the same conversation.</p>
+<p>Your agent should give you:</p>
 <ul>
-<li>A world manifest with settings, typed actions, tool requests and declared assets.</li>
-<li>A custom interface for controls, inventory, characters and scene presentation.</li>
-<li>An authoritative controller for state, shared rules, turns and generation requests.</li>
-<li>A working local preview and a validated, exportable bundle.</li>
+<li><strong>A playable preview:</strong> Your interface and controls running locally.</li>
+<li><strong>An editable project:</strong> <code>genesis.json</code>, <code>interface.html</code>, <code>controller.js</code> and declared assets.</li>
+<li><strong>A complete ZIP:</strong> A validated bundle to import into a compatible host.</li>
 </ul>
-<p>Describe the genre, interaction and visual style you want. The skill chooses the nearest starter and adapts its mechanics to your idea. Your chosen model provider remains yours.</p>
-<h2 id="local-prototype-to-live-worldstream">Local prototype to live worldstream</h2>
-<p>Prepared fixtures make the interaction loop available immediately. The stock runner includes an arena move fixture; other structured responses need a matching local provider fixture.</p>
-<p>With a configured provider and authorized budget, the agent can generate and attach images, audio and video. The <a href="integration.html">Worldstreams API</a> connects those services through one Sequencer server key. You can also <a href="providers.html">bring your own models</a>.</p>
-<p>The skill validates the project, exports its assets and exercises the controls, repeated turns, actor permissions and mobile layout. It reports the actual local result or saved draft and any live-provider behavior still to verify.</p>
-<h2 id="read-or-download-the-skill">Read or download the skill</h2>
-<p>The skill is included with the Apache 2.0 licensed framework. <a href="skills/create-world-stream/SKILL.md" download>Download SKILL.md</a> to load it in your agent alongside the checkout. The full authoring instructions appear below.</p>
-<h2 id="authoring-instructions">Authoring instructions</h2>
+<p>Want to inspect or export the project yourself? Follow the <a href="getting-started.html#validate-and-export">local starter guide</a>.</p>
+<h2 id="connect-live-generation">Connect live generation</h2>
+<p>Local previews use prepared responses and media. The stock runner includes an arena move fixture; another response format needs a matching local provider fixture.</p>
+<p>Choose a connection when you want generated images, audio and video:</p>
+<ul>
+<li><strong>Sequencer:</strong> Use the <a href="integration.html">Worldstreams API</a> with one server key, or <a href="https://sequencer.media/worldstreams#my-worlds">import your project into My Worlds</a> to preview and publish it.</li>
+<li><strong>Your own providers:</strong> Connect your LLM and World Model through <a href="providers.html">server-side adapters</a>.</li>
+</ul>
+<p>Configure your provider and generation budget before requesting live media. Credentials and spending limits belong on the host server.</p>
+<h2 id="skill-reference">Skill reference</h2>
+<p>The skill ships with the Apache 2.0 licensed engine. <a href="skills/create-world-stream/SKILL.md" download>Download SKILL.md</a>, or expand the full instructions below.</p>
+<details class="reference-details">
+<summary>Read the full authoring instructions</summary>
+
+
 <p>Turn the user&#39;s idea into a working world, a local preview and a validated exportable bundle. Choose mechanics, presentation and reasonable defaults from the prompt. Ask only for information that blocks the requested behavior. Preserve the user&#39;s chosen provider and existing world behavior. Sequencer is the default managed integration when a provider has not been chosen.</p>
 <p>Read the package&#39;s README and docs/api.md. Use <code>genesis init</code> with the nearest template, then implement the requested world in genesis.json, interface.html and controller.js. Adapt the actual controls, rules and scene context to the idea. Use the local runner&#39;s labeled fixtures for an immediate preview; connect live generation when the provider is configured and spending is authorized.</p>
 <p>The stock local runner returns the arena move fixture for LLM requests. For a different responseSchema, supply matching fixture data through a local host provider using createLlmProvider; keep preview-only providers outside the portable project. Do not present a fixture response as live generation.</p>
@@ -107,6 +119,7 @@ working local preview and an exportable world.</code></pre>
 <p>Declare media under <code>assets/</code> with MIME type and byte size. Export a complete ZIP with <code>genesis export</code>. Use relative paths in portable files; attach them through the host adapter for production. Hosts copy immutable assets and provide runtime URLs. Keep credentials, wallets and prices outside project files.</p>
 <p>For Sequencer, use a server-side SequencerClient with SEQUENCER_API_KEY. Read its model catalog and pricing before paid image, audio or video work. Pass a server-enforced maxCostUsd and a stable idempotencyKey to generate; read the resulting media through media(workspaceId, mediaId). Quote private streams for their chosen duration before starting. Save a version-checked draft with complete assets. Saving a draft does not start a stream or publish it. Supply your own authenticated server transport and monetization for custom deployments. For another provider, implement the provider contract and persistent result store described in docs/providers.md.</p>
 <p>Run <code>genesis validate</code>, export the complete bundle and open an actual local preview. Exercise the changed custom control, repeat a turn, reject a wrong actor and stale action, and verify mobile layout. Run npm test when changing the runtime or provider contracts. Offline move/video fixtures demonstrate the protocol; describe them as fixtures. Deliver the project location, preview URL and bundle, or the saved draft when requested. Report any untested live-provider behavior. Publish only within the user&#39;s authorized scope.</p>
+</details>
 </article>
       <footer class="site-footer">
         <p>GENESIS 0.1.0 · Open source World Model engine</p>

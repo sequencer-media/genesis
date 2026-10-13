@@ -13,7 +13,7 @@
 
 Open source, licensed under [Apache 2.0](LICENSE).
 
-[Website](https://sequencer.media/genesis) · [Demos](https://sequencer.media/genesis/demos) · [Documentation](https://sequencer.media/genesis/getting-started)
+[Website](https://sequencer.media/genesis) · [Demos](https://sequencer.media/genesis/demos) · [Skill quickstart](https://sequencer.media/genesis/agent-skill) · [Documentation](https://sequencer.media/genesis/getting-started)
 
 ## Your World Model needs an engine.
 
@@ -83,7 +83,7 @@ You define the world and its rules. GENESIS runs the state and interaction loop;
 
 ## One prompt. An infinite experience.
 
-The bundled [create-world-stream agent skill](skills/create-world-stream/SKILL.md) turns an idea into world settings, a custom interface, controller rules and a portable project.
+The bundled [create-world-stream agent skill](skills/create-world-stream/SKILL.md) turns an idea into world settings, a custom interface, controller rules and a portable project. Follow the [skill quickstart](docs/agent-skill.md) to set up Genesis, describe your world and play the result.
 
 Give a coding agent this checkout and a prompt:
 

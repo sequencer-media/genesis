@@ -3,13 +3,13 @@
     "title": "GENESIS",
     "heading": "Create infinite experiences, in minutes.",
     "url": "index.html",
-    "text": "Open source World Model engine Create infinite experiences, in minutes. Your World Model needs an engine. GENESIS remembers your inventory, characters and locations, applies the rules and connects player actions to generated scenes. It gives your World Model the memory, shared state and playable interface an infinite experience needs. Watch the demos Build from one prompt Apache 2.0 licensed. Bring your own models, or connect the Worldstreams API with one server key. Worldstreams in action Rick and Morty have their own character controls, and both actions feed the shared experience. Watch the multiplayer Worldstream. Watch the multiplayer Rick and Morty video Recorded Worldstreams example. Explore all demos . Watch the Adventure Time video Adventure Time · Land of Ooo A fantasy journey with audience-choice controls around prepared World Model scenes. Try the preview player Watch the World Model games video World Model games Explore playable World Model experiences in this recorded product demo. Open video What can you build? Build worlds people can play, watch, explore, learn from and shape together. Experience Imagine your worldstream Games Roleplaying adventures, puzzles, quests and battles that remember each choice. Multiplayer games Cooperative journeys, competitive arenas and shared worlds with individual player controls. Infinite TV Ongoing shows with recurring characters"
+    "text": "Open source World Model engine Create infinite experiences, in minutes. Your World Model needs an engine. GENESIS gives generated worlds memory, rules and controls. It tracks your inventory, characters and locations, then connects each player action to what happens next. Watch the demos Build your first world Run locally with the included examples. Connect your models when you're ready. Worldstreams in action Rick and Morty have their own character controls, and both actions feed the shared experience. Watch the multiplayer Worldstream. Watch the multiplayer Rick and Morty video Recorded Worldstreams example. Explore all demos . Watch the Adventure Time video Adventure Time · Land of Ooo A fantasy journey with audience-choice controls around prepared World Model scenes. Try the preview player Watch the World Model games video World Model games Explore playable World Model experiences in this recorded product demo. Open video What GENESIS handles You define the experience. GENESIS runs the state and interaction loop around your connected models. World memory Remember choices, quest progress and relationships from one turn to the next. Inventory and variables Track items, health, scores and resources using your world's rules. Characters and locations Keep your cast, places and scene facts organized for the next generation request. LLM prompts and replies Pass world context to you"
   },
   {
     "title": "GENESIS / Your World Model needs an engine.",
     "heading": "Your World Model needs an engine.",
     "url": "index.html#your-world-model-needs-an-engine",
-    "text": "Your World Model needs an engine. GENESIS remembers your inventory, characters and locations, applies the rules and connects player actions to generated scenes. It gives your World Model the memory, shared state and playable interface an infinite experience needs. Watch the demos Build from one prompt Apache 2.0 licensed. Bring your own models, or connect the Worldstreams API with one server key."
+    "text": "Your World Model needs an engine. GENESIS gives generated worlds memory, rules and controls. It tracks your inventory, characters and locations, then connects each player action to what happens next. Watch the demos Build your first world Run locally with the included examples. Connect your models when you're ready."
   },
   {
     "title": "GENESIS / Worldstreams in action",
@@ -18,22 +18,22 @@
     "text": "Worldstreams in action Rick and Morty have their own character controls, and both actions feed the shared experience. Watch the multiplayer Worldstream. Watch the multiplayer Rick and Morty video Recorded Worldstreams example. Explore all demos . Watch the Adventure Time video"
   },
   {
-    "title": "GENESIS / What can you build?",
-    "heading": "What can you build?",
-    "url": "index.html#what-can-you-build",
-    "text": "What can you build? Build worlds people can play, watch, explore, learn from and shape together. Experience Imagine your worldstream Games Roleplaying adventures, puzzles, quests and battles that remember each choice. Multiplayer games Cooperative journeys, competitive arenas and shared worlds with individual player controls. Infinite TV Ongoing shows with recurring characters, evolving storylines and audience-directed plots. Learning experiences Explore science, practice languages and solve problems inside interactive worlds. Travel experiences Wander cities, landmarks and imagined destinations, choosing where to go next. Interactive history lessons Step into another era, meet its characters and explore how decisions shape events. Robotics training simulations Connect simulation tools to rehearse navigation, object interactions and changing environments. Therapy and wellbeing Practitioner-led roleplay, guided reflection and calming environments. Coaching Rehearse interviews, leadership and public speaking with scenarios that remember progress. Training and rehearsal Practice customer service, workplace scenarios and complex decisions in guided simulations. Interactive stories Branching mysteries, character relationships and adventures shaped by the audience. Social worlds Shared hangouts, community characters and places that grow with their participants. Creative sandboxes Design spaces, invent characters and direct scenes inside a world you can keep changing. Live events Audience-led performances, collective challenges and interactive broadcasts. Virtual showrooms Explore"
-  },
-  {
     "title": "GENESIS / What GENESIS handles",
     "heading": "What GENESIS handles",
     "url": "index.html#what-genesis-handles",
-    "text": "What GENESIS handles Your controller owns the world's facts. Your LLM and World Model receive the context for what happens next, and every player's interface reflects the accepted result."
+    "text": "What GENESIS handles You define the experience. GENESIS runs the state and interaction loop around your connected models. World memory Remember choices, quest progress and relationships from one turn to the next. Inventory and variables Track items, health, scores and resources using your world's rules. Characters and locations Keep your cast, places and scene facts organized for the next generation request. LLM prompts and replies Pass world context to your LLM and validate structured moves, dialogue and choices. Custom interfaces Build player controls, inventory panels and overlays with HTML, CSS and JavaScript. Multiplayer and shared rules Coordinate player seats, turns and crowd votes. Keep everyone's accepted state in sync. Scene continuity Track generation jobs, carry the actual last frame forward and advance after playback. Portable worlds and assets Export your settings, interface, controller and declared media in one complete bundle."
   },
   {
-    "title": "GENESIS / Describe any world. Start with one prompt.",
-    "heading": "Describe any world. Start with one prompt.",
-    "url": "index.html#describe-any-world-start-with-one-prompt",
-    "text": "Describe any world. Start with one prompt. The included create-world-stream skill helps a coding agent turn your idea into a working prototype: world settings, a custom interface, controller rules, assets and an exportable bundle. Use the create-world-stream skill to build Mosslight, a forest battle worldstream with a cream pixel interface. Let two players take turns, ask the backend LLM for four moves per encounter, and remember their inventory, health and progress. Give me a working local preview and an exportable world. Copy world-building prompt Start with labeled fixtures for a local prototype. Connect your chosen models and a generation budget for live media. Learn the agent workflow ."
+    "title": "GENESIS / Quickstart with the Genesis skill",
+    "heading": "Quickstart with the Genesis skill",
+    "url": "index.html#quickstart-with-the-genesis-skill",
+    "text": "Quickstart with the Genesis skill Give your coding agent an idea. The included create-world-stream skill guides it through building and checking a playable prototype."
+  },
+  {
+    "title": "GENESIS / What can you build?",
+    "heading": "What can you build?",
+    "url": "index.html#what-can-you-build",
+    "text": "What can you build? One engine, many kinds of infinite experience. Start with a world people can play, watch, explore or learn from. Play Games, multiplayer games and creative sandboxes. Build quests, cooperative battles and worlds players can keep changing. Watch Infinite TV, interactive stories and live events. Create ongoing shows and performances shaped by the audience. Explore Travel experiences, social worlds and virtual showrooms. Visit destinations, meet characters and tour spaces together. Learn Learning experiences, interactive history lessons and robotics training simulations. Practice languages, step into another era or connect specialist simulation tools. Practice Coaching, training and rehearsal, and therapy and wellbeing. Rehearse interviews and workplace scenarios, or build practitioner-led reflection experiences. You supply the domain content, rules and any specialist tools your experience needs."
   },
   {
     "title": "GENESIS / Three files. Your whole world.",
@@ -48,61 +48,97 @@
     "text": "Choose your connection "
   },
   {
-    "title": "GENESIS / Create and publish with Sequencer",
-    "heading": "Create and publish with Sequencer",
-    "url": "index.html#create-and-publish-with-sequencer",
-    "text": "Create and publish with Sequencer Open My Worlds , sign in with your Sequencer account and create a world. Describe your idea to Spark, or import a GENESIS project in the world editor. Preview it, save it and publish it to Worldstreams. Your existing account, workspace, assets and gems carry through creation and publishing. Exploring these docs and watching the recorded demos is free."
+    "title": "GENESIS / Publish on Sequencer",
+    "heading": "Publish on Sequencer",
+    "url": "index.html#publish-on-sequencer",
+    "text": "Publish on Sequencer Open My Worlds , sign in with your Sequencer account and create a world. Describe your idea to Spark, or import a GENESIS project in the world editor. Preview it, save it and publish it to Worldstreams. Your existing account, workspace, assets and gems carry through creation and publishing."
   },
   {
     "title": "GENESIS / Connect from your own app",
     "heading": "Connect from your own app",
     "url": "index.html#connect-from-your-own-app",
-    "text": "Connect from your own app Worldstreams API Your own World Models One Sequencer server key connects LLM tools, media generation, assets and managed worldstream APIs. Choose your LLM and World Model, then register their server-side adapters. Connect Worldstreams Connect your own providers The source is Apache 2.0 licensed . Version 0.1 is a source preview, with npm publication and the wider launch being prepared. Browse the repository , read the license , contribute or explore the SDK API ."
+    "text": "Connect from your own app Worldstreams API: Connect LLM tools, media generation, assets and managed worldstreams with one Sequencer server key. Integration guide . Your own models: Choose your LLM and World Model, then register their server-side adapters. Provider guide . The source is Apache 2.0 licensed . Version 0.1 is a source preview, with npm publication and the wider launch being prepared. Browse the repository , read the license , contribute or explore the SDK API ."
   },
   {
-    "title": "Build your first world",
-    "heading": "Build your first world",
+    "title": "Quickstart with the Genesis skill",
+    "heading": "Build a world with the Genesis skill",
+    "url": "agent-skill.html",
+    "text": "Build a world with the Genesis skill Describe your world, then let your coding agent build its interface, memory and rules. The included create-world-stream skill takes it through a local preview and a complete project export. Requires a coding agent that can read local files and run commands, plus Node 20 or later. Get Genesis ready Clone the repository and build the local tools: Copy git clone https://github.com/sequencer-media/genesis.git cd genesis npm ci npm run build Open the genesis folder in your coding agent. The skill is already included at skills/create-world-stream/SKILL.md . Repo-aware agents can also discover it through AGENTS.md . Describe your world Paste this prompt into your agent. Change the setting, interactions and visual style to match your idea. Read skills/create-world-stream/SKILL.md and use it to build Mosslight, a forest battle worldstream with a cream pixel interface. Let two players take turns. Have the backend LLM create four moves per encounter. Remember inventory, health and progress. Start with labeled local fixtures. Validate the project, test the controls, and give me a playable local preview and a complete ZIP export. Copy world-building prompt The agent chooses a starter, adapts its controls and rules, and checks the result. Tell it which model provider you want when you are ready to connect generation. Play, refine and export Open the previ"
+  },
+  {
+    "title": "Quickstart with the Genesis skill / Get Genesis ready",
+    "heading": "Get Genesis ready",
+    "url": "agent-skill.html#get-genesis-ready",
+    "text": "Get Genesis ready Clone the repository and build the local tools: Copy git clone https://github.com/sequencer-media/genesis.git cd genesis npm ci npm run build Open the genesis folder in your coding agent. The skill is already included at skills/create-world-stream/SKILL.md . Repo-aware agents can also discover it through AGENTS.md ."
+  },
+  {
+    "title": "Quickstart with the Genesis skill / Describe your world",
+    "heading": "Describe your world",
+    "url": "agent-skill.html#describe-your-world",
+    "text": "Describe your world Paste this prompt into your agent. Change the setting, interactions and visual style to match your idea. Read skills/create-world-stream/SKILL.md and use it to build Mosslight, a forest battle worldstream with a cream pixel interface. Let two players take turns. Have the backend LLM create four moves per encounter. Remember inventory, health and progress. Start with labeled local fixtures. Validate the project, test the controls, and give me a playable local preview and a complete ZIP export. Copy world-building prompt The agent chooses a starter, adapts its controls and rules, and checks the result. Tell it which model provider you want when you are ready to connect generation."
+  },
+  {
+    "title": "Quickstart with the Genesis skill / Play, refine and export",
+    "heading": "Play, refine and export",
+    "url": "agent-skill.html#play-refine-and-export",
+    "text": "Play, refine and export Open the preview URL your agent returns. Try a turn, switch players and check that inventory and progress carry forward. Ask for changes in the same conversation. Your agent should give you: A playable preview: Your interface and controls running locally. An editable project: genesis.json , interface.html , controller.js and declared assets. A complete ZIP: A validated bundle to import into a compatible host. Want to inspect or export the project yourself? Follow the local starter guide ."
+  },
+  {
+    "title": "Quickstart with the Genesis skill / Connect live generation",
+    "heading": "Connect live generation",
+    "url": "agent-skill.html#connect-live-generation",
+    "text": "Connect live generation Local previews use prepared responses and media. The stock runner includes an arena move fixture; another response format needs a matching local provider fixture. Choose a connection when you want generated images, audio and video: Sequencer: Use the Worldstreams API with one server key, or import your project into My Worlds to preview and publish it. Your own providers: Connect your LLM and World Model through server-side adapters . Configure your provider and generation budget before requesting live media. Credentials and spending limits belong on the host server."
+  },
+  {
+    "title": "Quickstart with the Genesis skill / Skill reference",
+    "heading": "Skill reference",
+    "url": "agent-skill.html#skill-reference",
+    "text": "Skill reference The skill ships with the Apache 2.0 licensed engine. Download SKILL.md , or expand the full instructions below. Read the full authoring instructions Turn the user's idea into a working world, a local preview and a validated exportable bundle. Choose mechanics, presentation and reasonable defaults from the prompt. Ask only for information that blocks the requested behavior. Preserve the user's chosen provider and existing world behavior. Sequencer is the default managed integration when a provider has not been chosen. Read the package's README and docs/api.md. Use genesis init with the nearest template, then implement the requested world in genesis.json, interface.html and controller.js. Adapt the actual controls, rules and scene context to the idea. Use the local runner's labeled fixtures for an immediate preview; connect live generation when the provider is configured and spending is authorized. The stock local runner returns the arena move fixture for LLM requests. For a different responseSchema, supply matching fixture data through a local host provider using createLlmProvider; keep preview-only providers outside the portable project. Do not present a fixture response as live generation. Use window.Genesis for browser actions, state subscriptions, seats and assets. Read actor eligibility from the accepted host view. Keep health, turn order, vote outcomes and permitted state transitions in synchronous onEvent(context) . Render LLM names as text; never evaluate model output as HTML or JavaScript. For generated moves or world choices, request tool.llm.genera"
+  },
+  {
+    "title": "Run a starter locally",
+    "heading": "Run a starter locally",
     "url": "getting-started.html",
-    "text": "Build your first world Start with a playable local worldstream, then customize its rules and connect generation. GENESIS is Apache 2.0 licensed; the local fixtures work without a model account. Create with Sequencer For a hosted world, open My Worlds and use your existing Sequencer account. Create a world, describe it to Spark or import a GENESIS project in the editor, then preview and publish it to Worldstreams. Sequencer handles your workspace, assets and gems. Use the local workflow below to build independently and connect your own providers. Read the Sequencer integration guide to upload a local project with the API. Run a starter Requires Node 20 or later. Clone the Genesis source preview: Copy git clone https://github.com/sequencer-media/genesis.git cd genesis npm ci npm run build node dist/cli.js init ./my-world --template arena-llm node dist/cli.js dev ./my-world Open the printed local URL. Play a turn, switch preview players and inspect the accepted state. The runner uses labeled prepared video and an arena move fixture. Choose an experience Template Starting point arena-llm Two players, shared health, structured LLM move definitions and a vintage interface. exploration Generated scene progression and end-frame continuity. decisions Branching choices and collective decisions. timing A bounded input window and a repeatable starting scene. arena Fixed server-resolved mov"
+    "text": "Run a starter locally Play an included world, customize its rules and connect generation. Requires Node 20 or later. Want your coding agent to build an original world? Start with the Genesis skill quickstart . Start the preview Clone Genesis, build the tools and start the vintage battle example: Copy git clone https://github.com/sequencer-media/genesis.git cd genesis npm ci npm run build node dist/cli.js init ./my-world --template arena-llm node dist/cli.js dev ./my-world Open the printed local URL. Play a turn, switch preview players and inspect the accepted state. The runner uses labeled prepared video and an arena move fixture. Choose an experience Template Starting point arena-llm Two players, shared health, structured LLM move definitions and a vintage interface. exploration Generated scene progression and end-frame continuity. decisions Branching choices and collective decisions. timing A bounded input window and a repeatable starting scene. arena Fixed server-resolved moves, inventory, seats and spectator queues. Pass the template name with --template . For an original world, give your coding agent a prompt . Make the world yours genesis.json: Declare player actions, settings, requested tools and assets. interface.html: Build the controls and render the accepted public state. controller.js: Keep inventory, variables, locations and characters in state; resolve actions and"
   },
   {
-    "title": "Build your first world / Create with Sequencer",
-    "heading": "Create with Sequencer",
-    "url": "getting-started.html#create-with-sequencer",
-    "text": "Create with Sequencer For a hosted world, open My Worlds and use your existing Sequencer account. Create a world, describe it to Spark or import a GENESIS project in the editor, then preview and publish it to Worldstreams. Sequencer handles your workspace, assets and gems. Use the local workflow below to build independently and connect your own providers. Read the Sequencer integration guide to upload a local project with the API."
+    "title": "Run a starter locally / Start the preview",
+    "heading": "Start the preview",
+    "url": "getting-started.html#start-the-preview",
+    "text": "Start the preview Clone Genesis, build the tools and start the vintage battle example: Copy git clone https://github.com/sequencer-media/genesis.git cd genesis npm ci npm run build node dist/cli.js init ./my-world --template arena-llm node dist/cli.js dev ./my-world Open the printed local URL. Play a turn, switch preview players and inspect the accepted state. The runner uses labeled prepared video and an arena move fixture."
   },
   {
-    "title": "Build your first world / Run a starter",
-    "heading": "Run a starter",
-    "url": "getting-started.html#run-a-starter",
-    "text": "Run a starter Requires Node 20 or later. Clone the Genesis source preview: Copy git clone https://github.com/sequencer-media/genesis.git cd genesis npm ci npm run build node dist/cli.js init ./my-world --template arena-llm node dist/cli.js dev ./my-world Open the printed local URL. Play a turn, switch preview players and inspect the accepted state. The runner uses labeled prepared video and an arena move fixture."
-  },
-  {
-    "title": "Build your first world / Choose an experience",
+    "title": "Run a starter locally / Choose an experience",
     "heading": "Choose an experience",
     "url": "getting-started.html#choose-an-experience",
     "text": "Choose an experience Template Starting point arena-llm Two players, shared health, structured LLM move definitions and a vintage interface. exploration Generated scene progression and end-frame continuity. decisions Branching choices and collective decisions. timing A bounded input window and a repeatable starting scene. arena Fixed server-resolved moves, inventory, seats and spectator queues. Pass the template name with --template . For an original world, give your coding agent a prompt ."
   },
   {
-    "title": "Build your first world / Make the world yours",
+    "title": "Run a starter locally / Make the world yours",
     "heading": "Make the world yours",
     "url": "getting-started.html#make-the-world-yours",
     "text": "Make the world yours genesis.json: Declare player actions, settings, requested tools and assets. interface.html: Build the controls and render the accepted public state. controller.js: Keep inventory, variables, locations and characters in state; resolve actions and request backend tools. The browser submits intentions. The controller commits the result. Model and media jobs return as events; the controller chooses the next state. Restart the local runner after changing the project. Sessions pin their project contents. Remove the generated .genesis/ directory inside your world when you want a fresh development session."
   },
   {
-    "title": "Build your first world / Validate and export",
+    "title": "Run a starter locally / Validate and export",
     "heading": "Validate and export",
     "url": "getting-started.html#validate-and-export",
     "text": "Validate and export Copy node dist/cli.js validate ./my-world node dist/cli.js export ./my-world --out ./my-world.zip The bundle contains the manifest, interface, controller, JSON Schema and complete declared assets. Use safe relative asset paths. The host attaches those assets and serves runtime URLs."
   },
   {
-    "title": "Build your first world / Connect live generation",
+    "title": "Run a starter locally / Connect live generation",
     "heading": "Connect live generation",
     "url": "getting-started.html#connect-live-generation",
     "text": "Connect live generation Use the Worldstreams API for the managed Sequencer path, or register your own providers . Keep credentials on the server. Your host independently authorizes tool access and spending. The local runner supplies the arena move fixture for LLM requests. When your world requests another response shape, supply matching fixture data through a local createLlmProvider host adapter or connect the configured backend."
   },
   {
-    "title": "Build your first world / Take it into production",
+    "title": "Run a starter locally / Publish on Sequencer",
+    "heading": "Publish on Sequencer",
+    "url": "getting-started.html#publish-on-sequencer",
+    "text": "Publish on Sequencer Open My Worlds with your existing Sequencer account. Create a world, import your ZIP in the editor, then preview, save and publish it. Sequencer handles your workspace, assets and gems. Read the integration guide to upload a local project with the API."
+  },
+  {
+    "title": "Run a starter locally / Take it into production",
     "heading": "Take it into production",
     "url": "getting-started.html#take-it-into-production",
     "text": "Take it into production Embed mountGenesisPlayer in your app and run GenesisHost behind authenticated routes. Choose persistent storage and a background worker for the room. Distributed deployments need transactional storage and durable scheduling. Read host authority and the API reference before deployment."
@@ -144,52 +180,16 @@
     "text": "Give the next scene the right context Scene requests can carry intent, a required outcome, an anchor and a spending ceiling. Include the facts that matter for this scene rather than sending every stored detail. Carry the actual decoded end frame into the next video request. Generation completion and playback completion are separate events. Reopen visual actions after the host accepts playback completion. GENESIS keeps the state and job lifecycle consistent. Visual fidelity depends on the connected World Model. Read the controller API and architecture ."
   },
   {
-    "title": "Build from one prompt",
-    "heading": "Build any world from one prompt",
-    "url": "agent-skill.html",
-    "text": "Build any world from one prompt The open source create-world-stream skill helps a coding agent build a playable World Model prototype in minutes. Describe the experience; the agent creates the interface, controller rules, backend requests and portable project. Use the included skill Give your coding agent the Genesis checkout and ask it to use skills/create-world-stream/SKILL.md . Repo-aware agents discover it through AGENTS.md. Other skill-capable agents can load the file directly. The agent needs access to the checkout, Node 20 or later and the Genesis CLI. Clone sequencer-media/genesis to get the source preview. npm publication is being prepared. Use the create-world-stream skill to build Mosslight, a forest battle worldstream with a cream pixel interface. Let two players take turns, ask the backend LLM for four moves per encounter, and remember their inventory, health and progress. Give me a working local preview and an exportable world. Copy world-building prompt What the agent produces A world manifest with settings, typed actions, tool requests and declared assets. A custom interface for controls, inventory, characters and scene presentation. An authoritative controller for state, shared rules, turns and generation requests. A working local preview and a validated, exportable bundle. Describe the genre, interaction and visual style you want. The skill chooses the nearest"
-  },
-  {
-    "title": "Build from one prompt / Use the included skill",
-    "heading": "Use the included skill",
-    "url": "agent-skill.html#use-the-included-skill",
-    "text": "Use the included skill Give your coding agent the Genesis checkout and ask it to use skills/create-world-stream/SKILL.md . Repo-aware agents discover it through AGENTS.md. Other skill-capable agents can load the file directly. The agent needs access to the checkout, Node 20 or later and the Genesis CLI. Clone sequencer-media/genesis to get the source preview. npm publication is being prepared. Use the create-world-stream skill to build Mosslight, a forest battle worldstream with a cream pixel interface. Let two players take turns, ask the backend LLM for four moves per encounter, and remember their inventory, health and progress. Give me a working local preview and an exportable world. Copy world-building prompt"
-  },
-  {
-    "title": "Build from one prompt / What the agent produces",
-    "heading": "What the agent produces",
-    "url": "agent-skill.html#what-the-agent-produces",
-    "text": "What the agent produces A world manifest with settings, typed actions, tool requests and declared assets. A custom interface for controls, inventory, characters and scene presentation. An authoritative controller for state, shared rules, turns and generation requests. A working local preview and a validated, exportable bundle. Describe the genre, interaction and visual style you want. The skill chooses the nearest starter and adapts its mechanics to your idea. Your chosen model provider remains yours."
-  },
-  {
-    "title": "Build from one prompt / Local prototype to live worldstream",
-    "heading": "Local prototype to live worldstream",
-    "url": "agent-skill.html#local-prototype-to-live-worldstream",
-    "text": "Local prototype to live worldstream Prepared fixtures make the interaction loop available immediately. The stock runner includes an arena move fixture; other structured responses need a matching local provider fixture. With a configured provider and authorized budget, the agent can generate and attach images, audio and video. The Worldstreams API connects those services through one Sequencer server key. You can also bring your own models . The skill validates the project, exports its assets and exercises the controls, repeated turns, actor permissions and mobile layout. It reports the actual local result or saved draft and any live-provider behavior still to verify."
-  },
-  {
-    "title": "Build from one prompt / Read or download the skill",
-    "heading": "Read or download the skill",
-    "url": "agent-skill.html#read-or-download-the-skill",
-    "text": "Read or download the skill The skill is included with the Apache 2.0 licensed framework. Download SKILL.md to load it in your agent alongside the checkout. The full authoring instructions appear below."
-  },
-  {
-    "title": "Build from one prompt / Authoring instructions",
-    "heading": "Authoring instructions",
-    "url": "agent-skill.html#authoring-instructions",
-    "text": "Authoring instructions Turn the user's idea into a working world, a local preview and a validated exportable bundle. Choose mechanics, presentation and reasonable defaults from the prompt. Ask only for information that blocks the requested behavior. Preserve the user's chosen provider and existing world behavior. Sequencer is the default managed integration when a provider has not been chosen. Read the package's README and docs/api.md. Use genesis init with the nearest template, then implement the requested world in genesis.json, interface.html and controller.js. Adapt the actual controls, rules and scene context to the idea. Use the local runner's labeled fixtures for an immediate preview; connect live generation when the provider is configured and spending is authorized. The stock local runner returns the arena move fixture for LLM requests. For a different responseSchema, supply matching fixture data through a local host provider using createLlmProvider; keep preview-only providers outside the portable project. Do not present a fixture response as live generation. Use window.Genesis for browser actions, state subscriptions, seats and assets. Read actor eligibility from the accepted host view. Keep health, turn order, vote outcomes and permitted state transitions in synchronous onEvent(context) . Render LLM names as text; never evaluate model output as HTML or JavaScript. For generated moves or world choices, request tool.llm.generate with a bounded object responseSchema, a cost ceiling and a guard against stale battle or scene IDs. Consume job.ready's event.data.data. Ge"
-  },
-  {
     "title": "Worldstreams demos",
     "heading": "Worldstreams in action",
     "url": "demos.html",
-    "text": "Worldstreams in action GENESIS is an open source World Model engine, licensed under Apache 2.0. These recorded examples show the experiences around World Models: shared character controls, audience choices and playable interfaces. Build from one prompt · Start locally · Read the license Watch the multiplayer Rick and Morty video Rick and Morty · Multiplayer Worldstream Two players direct Rick and Morty through their own controls. Both actions feed the shared experience. Watch the recorded interface and generated world together. Open video Watch the Adventure Time video Adventure Time · Land of Ooo A connected fantasy journey with audience-choice controls around prepared World Model scenes. Try the preview player Watch the World Model games video World Model games Explore the visual presentation of World Model game experiences in this recorded product demo. Open video Build your own infinite experience The bundled create-world-stream skill turns a prompt into a playable local project, a custom interface and a portable world. Start with fixtures, then connect a World Model and generation budget. Create from one prompt Connect Worldstreams The videos are recorded Worldstreams examples. Preview controls illustrate the interaction flow; live generation uses a connected provider. Runnable portable Genesis starters are included in the repository."
+    "text": "Worldstreams in action GENESIS is an open source World Model engine, licensed under Apache 2.0. These recorded examples show the experiences around World Models: shared character controls, audience choices and playable interfaces. Skill quickstart · Run a starter · Read the license Watch the multiplayer Rick and Morty video Rick and Morty · Multiplayer Worldstream Two players direct Rick and Morty through their own controls. Both actions feed the shared experience. Watch the recorded interface and generated world together. Open video Watch the Adventure Time video Adventure Time · Land of Ooo A connected fantasy journey with audience-choice controls around prepared World Model scenes. Try the preview player Watch the World Model games video World Model games Explore the visual presentation of World Model game experiences in this recorded product demo. Open video Build your own infinite experience The bundled create-world-stream skill turns a prompt into a playable local project, a custom interface and a portable world. Start with fixtures, then connect a World Model and generation budget. Follow the skill quickstart Connect Worldstreams The videos are recorded Worldstreams examples. Preview controls illustrate the interaction flow; live generation uses a connected provider. Runnable portable Genesis starters are included in the repository."
   },
   {
     "title": "Worldstreams demos / Build your own infinite experience",
     "heading": "Build your own infinite experience",
     "url": "demos.html#build-your-own-infinite-experience",
-    "text": "Build your own infinite experience The bundled create-world-stream skill turns a prompt into a playable local project, a custom interface and a portable world. Start with fixtures, then connect a World Model and generation budget. Create from one prompt Connect Worldstreams The videos are recorded Worldstreams examples. Preview controls illustrate the interaction flow; live generation uses a connected provider. Runnable portable Genesis starters are included in the repository."
+    "text": "Build your own infinite experience The bundled create-world-stream skill turns a prompt into a playable local project, a custom interface and a portable world. Start with fixtures, then connect a World Model and generation budget. Follow the skill quickstart Connect Worldstreams The videos are recorded Worldstreams examples. Preview controls illustrate the interaction flow; live generation uses a connected provider. Runnable portable Genesis starters are included in the repository."
   },
   {
     "title": "Worldstreams API",

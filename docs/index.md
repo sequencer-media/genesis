@@ -6,10 +6,10 @@
 
 ## Your World Model needs an engine.
 
-GENESIS remembers your inventory, characters and locations, applies the rules and connects player actions to generated scenes. It gives your World Model the memory, shared state and playable interface an infinite experience needs.
+GENESIS gives generated worlds memory, rules and controls. It tracks your inventory, characters and locations, then connects each player action to what happens next.
 
-<div class="hero-actions"><a class="button primary" href="#worldstreams-in-action">Watch the demos</a><a class="button" href="agent-skill.html">Build from one prompt</a></div>
-<p class="hero-note">Apache 2.0 licensed. Bring your own models, or connect the Worldstreams API with one server key.</p>
+<div class="hero-actions"><a class="button primary" href="#worldstreams-in-action">Watch the demos</a><a class="button" href="#quickstart-with-the-genesis-skill">Build your first world</a></div>
+<p class="hero-note">Run locally with the included examples. Connect your models when you're ready.</p>
 </div>
 </section>
 
@@ -42,54 +42,53 @@ Rick and Morty have their own character controls, and both actions feed the shar
 </section>
 </div>
 
-## What can you build?
-
-Build worlds people can play, watch, explore, learn from and shape together.
-
-| Experience | Imagine your worldstream |
-| --- | --- |
-| **Games** | Roleplaying adventures, puzzles, quests and battles that remember each choice. |
-| **Multiplayer games** | Cooperative journeys, competitive arenas and shared worlds with individual player controls. |
-| **Infinite TV** | Ongoing shows with recurring characters, evolving storylines and audience-directed plots. |
-| **Learning experiences** | Explore science, practice languages and solve problems inside interactive worlds. |
-| **Travel experiences** | Wander cities, landmarks and imagined destinations, choosing where to go next. |
-| **Interactive history lessons** | Step into another era, meet its characters and explore how decisions shape events. |
-| **Robotics training simulations** | Connect simulation tools to rehearse navigation, object interactions and changing environments. |
-| **Therapy and wellbeing** | Practitioner-led roleplay, guided reflection and calming environments. |
-| **Coaching** | Rehearse interviews, leadership and public speaking with scenarios that remember progress. |
-| **Training and rehearsal** | Practice customer service, workplace scenarios and complex decisions in guided simulations. |
-| **Interactive stories** | Branching mysteries, character relationships and adventures shaped by the audience. |
-| **Social worlds** | Shared hangouts, community characters and places that grow with their participants. |
-| **Creative sandboxes** | Design spaces, invent characters and direct scenes inside a world you can keep changing. |
-| **Live events** | Audience-led performances, collective challenges and interactive broadcasts. |
-| **Virtual showrooms** | Explore products, interiors and spaces through guided tours and custom interactions. |
-
-These are directions for your next experience. You supply the domain content and rules, then connect the models or specialist tools it needs.
-
 ## What GENESIS handles
 
-Your controller owns the world's facts. Your LLM and World Model receive the context for what happens next, and every player's interface reflects the accepted result.
+You define the experience. GENESIS runs the state and interaction loop around your connected models.
 
-<div class="feature-grid">
-<section><h3>World memory</h3><p>Persist inventory, health, quest flags, locations and character relationships in structured state.</p></section>
-<section><h3>Playable worlds</h3><p>Build custom interfaces, authoritative turns, player seats and crowd decisions around generated scenes.</p></section>
-<section><h3>Connected generation</h3><p>Validate LLM replies, track asynchronous jobs and carry real scene checkpoints into the next moment.</p></section>
-</div>
+<ul class="feature-list">
+<li><strong>World memory</strong><span>Remember choices, quest progress and relationships from one turn to the next.</span></li>
+<li><strong>Inventory and variables</strong><span>Track items, health, scores and resources using your world's rules.</span></li>
+<li><strong>Characters and locations</strong><span>Keep your cast, places and scene facts organized for the next generation request.</span></li>
+<li><strong>LLM prompts and replies</strong><span>Pass world context to your LLM and validate structured moves, dialogue and choices.</span></li>
+<li><strong>Custom interfaces</strong><span>Build player controls, inventory panels and overlays with HTML, CSS and JavaScript.</span></li>
+<li><strong>Multiplayer and shared rules</strong><span>Coordinate player seats, turns and crowd votes. Keep everyone's accepted state in sync.</span></li>
+<li><strong>Scene continuity</strong><span>Track generation jobs, carry the actual last frame forward and advance after playback.</span></li>
+<li><strong>Portable worlds and assets</strong><span>Export your settings, interface, controller and declared media in one complete bundle.</span></li>
+</ul>
 
-## Describe any world. Start with one prompt.
+## Quickstart with the Genesis skill
 
-The included **create-world-stream skill** helps a coding agent turn your idea into a working prototype: world settings, a custom interface, controller rules, assets and an exportable bundle.
+Give your coding agent an idea. The included **create-world-stream** skill guides it through building and checking a playable prototype.
 
+<ol class="quickstart-steps">
+<li><h3>Open Genesis in your coding agent</h3><p>Clone the repository and open its folder in your agent. The skill is included at <code>skills/create-world-stream/SKILL.md</code>. <a href="agent-skill.html#get-genesis-ready">View setup commands</a>.</p></li>
+<li><h3>Describe your world</h3><p>Start with the prompt below. Change the setting, controls and visual style to make it yours.</p>
 <div class="prompt-card">
-<pre><code>Use the create-world-stream skill to build Mosslight, a forest
-battle worldstream with a cream pixel interface. Let two players
-take turns, ask the backend LLM for four moves per encounter,
-and remember their inventory, health and progress. Give me a
-working local preview and an exportable world.</code></pre>
+<pre><code>Read skills/create-world-stream/SKILL.md and use it to build Mosslight, a forest battle worldstream with a cream pixel interface.&#10;&#10;Let two players take turns. Have the backend LLM create four moves per encounter. Remember inventory, health and progress.&#10;&#10;Start with labeled local fixtures. Validate the project, test the controls, and give me a playable local preview and a complete ZIP export.</code></pre>
 <button type="button" data-copy-prompt>Copy world-building prompt</button>
 </div>
+</li>
+<li><h3>Play, refine and export</h3><p>Open the local preview, try the controls and ask your agent for changes. Your ZIP contains the world's code and declared assets, ready to import into a compatible host.</p></li>
+</ol>
 
-Start with labeled fixtures for a local prototype. Connect your chosen models and a generation budget for live media. [Learn the agent workflow](agent-skill.html).
+Local previews use prepared responses and media. For live generation, connect the [Worldstreams API](integration.html) or [your own models](providers.html).
+
+[Follow the full skill quickstart](agent-skill.html) · [Run a starter yourself](getting-started.html)
+
+## What can you build?
+
+One engine, many kinds of infinite experience. Start with a world people can play, watch, explore or learn from.
+
+<dl class="experience-list">
+<div><dt>Play</dt><dd><strong>Games, multiplayer games and creative sandboxes.</strong> Build quests, cooperative battles and worlds players can keep changing.</dd></div>
+<div><dt>Watch</dt><dd><strong>Infinite TV, interactive stories and live events.</strong> Create ongoing shows and performances shaped by the audience.</dd></div>
+<div><dt>Explore</dt><dd><strong>Travel experiences, social worlds and virtual showrooms.</strong> Visit destinations, meet characters and tour spaces together.</dd></div>
+<div><dt>Learn</dt><dd><strong>Learning experiences, interactive history lessons and robotics training simulations.</strong> Practice languages, step into another era or connect specialist simulation tools.</dd></div>
+<div><dt>Practice</dt><dd><strong>Coaching, training and rehearsal, and therapy and wellbeing.</strong> Rehearse interviews and workplace scenarios, or build practitioner-led reflection experiences.</dd></div>
+</dl>
+
+You supply the domain content, rules and any specialist tools your experience needs.
 
 ## Three files. Your whole world.
 
@@ -105,17 +104,15 @@ GENESIS coordinates the world; connected providers generate media. Your host sup
 
 ## Choose your connection
 
-### Create and publish with Sequencer
+### Publish on Sequencer
 
 [Open My Worlds](https://sequencer.media/worldstreams#my-worlds), sign in with your Sequencer account and create a world. Describe your idea to Spark, or import a GENESIS project in the world editor. Preview it, save it and publish it to Worldstreams.
 
-Your existing account, workspace, assets and gems carry through creation and publishing. Exploring these docs and watching the recorded demos is free.
+Your existing account, workspace, assets and gems carry through creation and publishing.
 
 ### Connect from your own app
 
-| Worldstreams API | Your own World Models |
-| --- | --- |
-| One Sequencer server key connects LLM tools, media generation, assets and managed worldstream APIs. | Choose your LLM and World Model, then register their server-side adapters. |
-| [Connect Worldstreams](integration.html) | [Connect your own providers](providers.html) |
+- **Worldstreams API:** Connect LLM tools, media generation, assets and managed worldstreams with one Sequencer server key. [Integration guide](integration.html).
+- **Your own models:** Choose your LLM and World Model, then register their server-side adapters. [Provider guide](providers.html).
 
 The source is **Apache 2.0 licensed**. Version 0.1 is a source preview, with npm publication and the wider launch being prepared. [Browse the repository](https://github.com/sequencer-media/genesis), [read the license](license.html), [contribute](contributing.html) or [explore the SDK API](api.html).

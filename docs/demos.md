@@ -2,7 +2,7 @@
 
 **GENESIS is an open source World Model engine, licensed under Apache 2.0.** These recorded examples show the experiences around World Models: shared character controls, audience choices and playable interfaces.
 
-[Build from one prompt](agent-skill.md) · [Start locally](getting-started.md) · [Read the license](license.html)
+[Skill quickstart](agent-skill.md) · [Run a starter](getting-started.md) · [Read the license](license.html)
 
 <div class="demo-gallery">
 <section class="demo-card featured">
@@ -32,6 +32,6 @@
 
 The bundled **create-world-stream skill** turns a prompt into a playable local project, a custom interface and a portable world. Start with fixtures, then connect a World Model and generation budget.
 
-<div class="hero-actions"><a class="button primary" href="agent-skill.html">Create from one prompt</a><a class="button" href="integration.html">Connect Worldstreams</a></div>
+<div class="hero-actions"><a class="button primary" href="agent-skill.html">Follow the skill quickstart</a><a class="button" href="integration.html">Connect Worldstreams</a></div>
 
 The videos are recorded Worldstreams examples. Preview controls illustrate the interaction flow; live generation uses a connected provider. Runnable portable Genesis starters are included in the repository.

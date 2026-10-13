@@ -15,9 +15,9 @@ if (baseIndex >= 0 && (!basePath || !/^\/(?:[a-z0-9_-]+\/)+$/i.test(basePath))) 
 }
 const pages = [
   {source:'docs/index.md', file:'index.html', title:'GENESIS', description:'Open source World Model engine. Create infinite experiences, in minutes.', group:'Start here', label:'Overview'},
-  {source:'docs/getting-started.md', file:'getting-started.html', title:'Build your first world', group:'Start here'},
+  {source:'docs/agent-skill.md', file:'agent-skill.html', title:'Quickstart with the Genesis skill', label:'Quickstart with the skill', group:'Start here'},
+  {source:'docs/getting-started.md', file:'getting-started.html', title:'Run a starter locally', group:'Start here'},
   {source:'docs/world-memory.md', file:'world-memory.html', title:'World memory', group:'Start here'},
-  {source:'docs/agent-skill.md', file:'agent-skill.html', title:'Build from one prompt', group:'Start here'},
   {source:'docs/demos.md', file:'demos.html', title:'Worldstreams demos', group:'Start here'},
   {source:'docs/integration.md', file:'integration.html', title:'Worldstreams API', group:'Connect'},
   {source:'docs/providers.md', file:'providers.html', title:'Your own models', group:'Connect'},
@@ -99,7 +99,7 @@ for (const page of pages) {
   let input = source;
   if (page.source === 'docs/agent-skill.md') {
     const skill = await readFile(resolve(root, 'skills/create-world-stream/SKILL.md'), 'utf8');
-    input += '\n\n## Authoring instructions\n\n' + skill.replace(/^---\n[\s\S]*?\n---\n/, '');
+    input += '\n\n<details class="reference-details">\n<summary>Read the full authoring instructions</summary>\n\n' + skill.replace(/^---\n[\s\S]*?\n---\n/, '') + '\n\n</details>\n';
   }
   let body = page.source === 'LICENSE' ? '<h1>Apache 2.0 license</h1><p>GENESIS is open source, licensed under Apache 2.0.</p><pre class="license-text">' + escape(source) + '</pre>' : markdown.parse(input);
   // HTML cards are authored in the guide sources; give their headings stable anchors too.
