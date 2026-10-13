@@ -7,7 +7,7 @@
  \_____|______|_| \_|______|_____/|_____|_____/
 ```
 
-# Open Source World Model Engine
+# World Model Engine
 
 [![CI: Node 20 and 22](https://img.shields.io/badge/CI-Node_20_%2B_22-f46aa6?style=flat-square&logo=githubactions&logoColor=white)](https://github.com/sequencer-media/genesis/actions/workflows/ci.yml)
 [![Apache 2.0 license](https://img.shields.io/badge/license-Apache_2.0-ff9b55?style=flat-square)](LICENSE)
@@ -17,6 +17,8 @@
 [![World-building agent skill included](https://img.shields.io/badge/agent_skill-included-ff9b55?style=flat-square)](skills/create-world-stream/SKILL.md)
 
 **Create infinite experiences, in minutes.**
+
+Open source, licensed under [Apache 2.0](LICENSE).
 
 ## Your World Model needs a dungeon master.
 
