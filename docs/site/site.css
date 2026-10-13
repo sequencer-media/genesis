@@ -50,9 +50,6 @@ th{background:var(--paper)}
 .comparison-scroll th,.comparison-scroll td{padding:13px 12px}
 .comparison-scroll tbody th{background:var(--paper);font-size:14px;font-weight:600}
 .comparison-scroll thead th{font-size:13px;font-weight:650}
-.setup-comparison{min-width:780px}
-.setup-comparison th:first-child{width:19%}
-.setup-comparison thead th:not(:first-child){width:27%}
 .model-comparison{min-width:860px}
 .model-comparison th:first-child{width:17%}
 .llm-comparison{min-width:780px}

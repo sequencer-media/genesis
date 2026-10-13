@@ -18,7 +18,7 @@ Third-party routes are planned and their prices are estimates. Live quotes deter
 - **fal H3 Max Director:** Bills generated video, with a 60-second minimum. Public sessions currently have a 15-minute ceiling. [Director pricing and session limits](https://fal.ai/h3-max-director).
 - **Reactor:** Bills wall-clock time while a session holds a GPU, including ready-but-idle time and recoverable disconnects. Use the session quote to confirm the applicable rate. [Billing rules](https://docs.reactor.inc/resources/billing), [current pricing API](https://api.reactor.inc/pricing).
 
-The planned Orbis Stable route is estimated at $40.16 per session hour. Viva is $40 per active stream hour, with built-in LLM direction. The billing clocks differ, so compare the session quote and your usage pattern. A complete experience also needs state storage, user access, LLM logic and audience billing. Compare those responsibilities in the [setup options](index.html#choose-your-connection).
+The planned Orbis Stable route is estimated at $40.16 per session hour. Viva is $40 per active stream hour, with built-in LLM direction. The billing clocks differ, so compare the session quote and your usage pattern. A complete experience also needs state storage, user access, LLM logic and audience billing. Read about those responsibilities in the [host authority guide](host-authority.md).
 
 ## Read the timing correctly
 

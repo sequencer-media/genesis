@@ -228,7 +228,7 @@ The command uploads the declared assets and returns a saved draft and preview UR
 | Publishing, chat and voting UI | You build | Your app's audience experience | Sequencer provides |
 | Price | Free engine; provider and infrastructure costs | Viva $40/hour; other models priced per route | Viva cost shared in gems; paid actions can cost extra |
 
-Viva includes built-in LLM direction. Custom structured calls and extra media have separate usage charges. Compare the [setup options](docs/index.md#choose-your-connection) and [World Models and low-latency LLMs](https://sequencer.media/genesis/models), including prices, response timing and moderation controls. Planned routes have estimated prices; live quotes determine billing.
+Viva includes built-in LLM direction. Custom structured calls and extra media have separate usage charges. [Compare World Models and low-latency LLMs](https://sequencer.media/genesis/models), including prices, response timing and moderation controls. Planned routes have estimated prices; live quotes determine billing.
 
 ## Build with us
 

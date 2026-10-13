@@ -129,37 +129,6 @@ my-world/
 
 GENESIS coordinates the world; connected providers generate media. Your host supplies identity, storage, credentials and spending policy. [Start building](getting-started.html).
 
-## Choose your connection
-
-To run a live world, you need hosting, persistent state, user access, billing controls, an LLM and a World Model. Choose which parts you want to operate yourself.
-
-<p class="comparison-hint">Scroll the table horizontally to see every option.</p>
-
-<div class="comparison-scroll" role="region" aria-label="Compare worldstream setup options" tabindex="0">
-<table class="setup-comparison">
-<caption>Who provides each part of your live experience?</caption>
-<thead><tr><th scope="col">What you need</th><th scope="col">Your own stack (BYO)</th><th scope="col">Your app + Sequencer API</th><th scope="col">Sequencer hosted</th></tr></thead>
-<tbody>
-<tr><th scope="row">World engine and interface</th><td>GENESIS</td><td>GENESIS</td><td>GENESIS in the world editor</td></tr>
-<tr><th scope="row">Website and app hosting</th><td>You provide</td><td>You provide</td><td>Sequencer provides</td></tr>
-<tr><th scope="row">Database and world workers</th><td>You configure storage and run the controller</td><td>You run your app and Genesis controller. Sequencer runs model services</td><td>Sequencer stores world state and runs the controller</td></tr>
-<tr><th scope="row">User authentication</th><td>Your identity provider</td><td>Your audience auth, plus a Sequencer server key</td><td>Sequencer accounts and access controls</td></tr>
-<tr><th scope="row">World Model and video delivery</th><td>Your chosen provider and stream integration</td><td>Managed Worldstreams API and stream connection details</td><td>Managed model, player and audience rooms</td></tr>
-<tr><th scope="row">LLM access</th><td>Your chosen LLM and adapter</td><td>Sequencer LLM tools through the same key</td><td>Managed prompt direction and LLM tools</td></tr>
-<tr><th scope="row">Assets, images and audio</th><td>Your storage, CDN and generation providers</td><td>Sequencer workspace assets and media APIs</td><td>Workspace media library and generation tools</td></tr>
-<tr><th scope="row">Audience billing</th><td>You build payments and usage controls</td><td>You pay API usage and manage your audience's payments</td><td>Sequencer gems and shared viewer billing</td></tr>
-<tr><th scope="row">Publishing and community</th><td>You build discovery, chat and voting UI</td><td>You build your app's audience experience</td><td>Publishing, discovery, chat, voting and moderation</td></tr>
-<tr><th scope="row">Price</th><td>GENESIS is free. Pay your providers and infrastructure costs</td><td>Viva: $40 / active stream hour. Other models priced per route</td><td>Viva stream cost shared across viewers in gems. Paid actions can cost extra</td></tr>
-</tbody>
-</table>
-</div>
-
-Choose **BYO** for full control over your stack, **Sequencer API** for managed generation inside your app, or **Sequencer hosted** to create and publish using an existing account and workspace.
-
-Viva includes its built-in LLM world direction. Custom structured LLM calls, images and audio have their own usage charges through the same Sequencer key. Your own app handles audience authentication, database and monetization.
-
-[Bring your own providers](providers.html) · [Connect the Sequencer API](integration.html) · [Create or import in My Worlds](https://sequencer.media/worldstreams#my-worlds)
-
 ## Compare Worldstream models
 
 Choose your model through Sequencer. Compare the managed Viva service with planned third-party routes, including price, output format and response timing.
