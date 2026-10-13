@@ -4,11 +4,11 @@
 
 # Create infinite experiences, in minutes.
 
-## Your World Model needs a dungeon master.
+## Your World Model needs an engine.
 
-Like a tabletop dungeon master, GENESIS remembers your inventory, characters and locations, applies the rules and connects player actions to generated scenes. It gives your World Model the memory, shared state and playable interface an infinite experience needs.
+GENESIS remembers your inventory, characters and locations, applies the rules and connects player actions to generated scenes. It gives your World Model the memory, shared state and playable interface an infinite experience needs.
 
-<div class="hero-actions"><a class="button primary" href="https://sequencer.media/worldstreams#my-worlds">Create with Sequencer</a><a class="button" href="#worldstreams-in-action">Watch the demos</a><a class="button" href="agent-skill.html">Build from one prompt</a></div>
+<div class="hero-actions"><a class="button primary" href="#worldstreams-in-action">Watch the demos</a><a class="button" href="agent-skill.html">Build from one prompt</a></div>
 <p class="hero-note">Apache 2.0 licensed. Bring your own models, or connect the Worldstreams API with one server key.</p>
 </div>
 </section>
