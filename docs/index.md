@@ -1,14 +1,16 @@
 <section class="hero">
+<img class="genesis-wordmark" src="assets/genesis-wordmark.svg" alt="GENESIS ASCII wordmark" width="1069" height="256">
 <div>
-<p class="hero-label">Open source World Model engine</p>
 
-# Create infinite experiences, in minutes.
+# World Model Engine
+
+<p class="hero-tagline">Create infinite experiences, in minutes.</p>
 
 ## Your World Model needs an engine.
 
 GENESIS gives generated worlds memory, rules and controls. It tracks your inventory, characters and locations, then connects each player action to what happens next.
 
-<div class="hero-actions"><a class="button primary" href="#worldstreams-in-action">Watch the demos</a><a class="button" href="#quickstart-with-the-genesis-skill">Build your first world</a></div>
+<nav class="hero-actions" aria-label="Start exploring"><a href="#worldstreams-in-action">Watch the demos</a><a href="#quickstart-with-the-genesis-skill">Build your first world</a></nav>
 <p class="hero-note">Run locally with the included examples. Connect your models when you're ready.</p>
 </div>
 </section>
