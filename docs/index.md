@@ -133,26 +133,9 @@ my-world/
 
 GENESIS coordinates the world; connected providers generate media. Your host supplies identity, storage, credentials and spending policy. [Start building](getting-started.html).
 
-## Compare Worldstream models
+<div id="compare-worldstream-models"></div>
+<div id="low-latency-llms"></div>
 
-Choose your model through Sequencer. Compare the managed Viva service with planned third-party routes, including price, output format and response timing.
-
-<p class="comparison-hint">Scroll the table horizontally to compare all model details.</p>
-
-<!-- WORLDSTREAM_MODEL_TABLE -->
-
-Third-party prices are estimates for planned Sequencer routes. Viva keeps its current $40/hour rate. Availability is shown per row; use the live session quote when starting a stream. Provider billing units, minimums and extra services still apply.
-
-Quality ratings use a shared five-point rubric. Models remain **unrated** until they have been tested with the same prompts and conditions. [See the sources, billing details and rating method](models.html).
-
-## Low-latency LLMs
-
-Viva includes its world-direction LLM. For custom moves, dialogue and structured replies, choose Gemini 3.8 Flash, DeepSeek V4.1 Flash or Claude Haiku 5.5. You can also [connect your own LLM](providers.html).
-
-<p class="comparison-hint">Scroll the table horizontally to compare all LLM details.</p>
-
-<!-- LLM_MODEL_TABLE -->
-
-External LLMs are planned Sequencer routes. Custom structured LLM calls are billed separately from Viva's included world direction. [Pricing, timing and safety details](models.html#low-latency-llms).
+[Compare World Models, LLMs and pricing](models.html).
 
 The source is **Apache 2.0 licensed**. Version 0.1 is a source preview, with npm publication and the wider launch being prepared. [Browse the repository](https://github.com/sequencer-media/genesis), [read the license](license.html), [contribute](contributing.html) or [explore the SDK API](api.html).
