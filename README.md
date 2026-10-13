@@ -17,9 +17,9 @@ Open source, licensed under [Apache 2.0](LICENSE).
 
 [Website](https://sequencer.media/genesis) · [Demos](https://sequencer.media/genesis/demos) · [Skill quickstart](https://sequencer.media/genesis/agent-skill) · [Documentation](https://sequencer.media/genesis/getting-started)
 
-## Your World Model needs an engine.
+## Your World Model needs a Context Engine.
 
-GENESIS remembers your inventory, characters and locations, applies the rules and describes what happens next. It gives your World Model the memory, shared state and playable interface an infinite experience needs.
+GENESIS is the Context Engine that plugs into your World Model. It remembers inventory, characters and locations, applies the rules and connects accepted player actions to the next generation request.
 
 Player actions change the world. GENESIS commits the outcome, gives the LLM and scene generator the context, and keeps every player's interface in sync.
 
@@ -44,9 +44,11 @@ These are recorded Worldstreams examples. Preview choices illustrate the interac
 
 ## How GENESIS works
 
-GENESIS wraps your World Model in a shared context layer. Character memory, scenes, inventory and multiplayer rules feed the world state. Player actions update that state, the LLM turns its context into prompts, and the World Model generates the next scene. Streaming delivery brings the video back to your interactive UI.
+The GENESIS Context Engine combines character memory, scenes, inventory, multiplayer rules and world settings into model context. An external LLM creates prompts and structured replies, and the World Model generates the next scene. Streaming delivery brings the video back to your interactive UI.
 
-![GENESIS modular flow: memory and player actions feed world state, the LLM builds prompts, the World Model generates scenes, and streaming delivery returns video to the interface](docs/assets/genesis-world-context.svg)
+![GENESIS Context Engine connects memory, settings and player actions to external models. An optional image model takes LLM prompts and supplies images to the World Model. Streaming delivery returns scenes to the UI.](docs/assets/genesis-world-context.svg)
+
+**Optional image generation:** your world settings and controller can trigger a connected image model. It takes prompts from the LLM and creates starting or reference images for the World Model.
 
 Connect the modules your experience needs. GENESIS defines the contract for world state, player actions and model requests. LLMs, World Models and streaming delivery use replaceable adapters; your host supplies their credentials and infrastructure. [Explore the architecture](docs/architecture.md).
 
@@ -80,10 +82,12 @@ Pick up a key, and it stays in your inventory. Unlock a door, and that location 
 
 | GENESIS handles | Your world remembers |
 | --- | --- |
+| **Context Engine** | Assemble memory, world settings and accepted actions into context for connected models. |
 | **World memory** | Progress, previous choices and persistent public, private and server state. |
 | **Inventory and variables** | Items, health, scores, resources, quest flags and the values your rules depend on. |
 | **Scenes, locations and characters** | Define places, characters, relationships and scene facts in structured state, then carry them into generation requests. |
 | **LLM orchestration and prompts** | Supply world context and committed outcomes; validate structured replies for new moves, dialogue and choices. |
+| **Optional image generation** | Trigger image requests from world settings and controller rules, then pass accepted starting or reference images to a compatible World Model. |
 | **Playable interfaces** | Custom controls, inventory panels, overlays and animations in HTML, CSS and JavaScript. |
 | **Shared rules and multiplayer** | Authoritative turns, player seats, crowd votes and validated actions. |
 | **Generation and scene continuity** | Track jobs, reject stale results, carry the actual end frame forward and reopen actions after playback. |

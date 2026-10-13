@@ -8,9 +8,9 @@
 
 **A universal World Model Context Protocol.**
 
-## Your World Model needs an engine.
+## Your World Model needs a Context Engine.
 
-GENESIS gives generated worlds memory, rules and controls. It tracks your inventory, characters and locations, then connects each player action to what happens next.
+GENESIS is the Context Engine that plugs into your World Model. It connects memory, rules, characters, locations and player actions to the models that create your world.
 
 <nav class="hero-actions" aria-label="Start exploring"><a href="#worldstreams-in-action">Watch the demos</a><a href="#quickstart-with-the-genesis-skill">Build your first world</a></nav>
 <p class="hero-note">Run locally with the included examples. Connect your models when you're ready.</p>
@@ -57,12 +57,14 @@ Explore worlds built with GENESIS. Start with Pokémon Stadium, a shared battle 
 
 ## How GENESIS works
 
-GENESIS wraps your World Model in a shared context layer. Memory, rules and player actions shape the LLM's next prompt. Your model generates the scene, streaming delivery brings it to the interface, and the next action continues the loop.
+The GENESIS Context Engine turns world memory, settings and player actions into model context. An external LLM creates prompts and structured replies. Your World Model generates the scene, streaming delivery brings it to the interface, and the next action continues the loop.
+
+Optional image generation adds another path: the LLM supplies an image prompt, an external image model creates a starting or reference image, and that image feeds the World Model. Your world settings and controller decide when to use it.
 
 <p class="diagram-hint">Scroll the diagram horizontally to explore the full loop.</p>
 <figure class="world-flow">
-<div class="world-flow-scroll" role="region" aria-label="GENESIS modular World Model flow diagram" tabindex="0"><img src="assets/genesis-world-context.svg" alt="GENESIS contains character memory, scenes and locations, inventory, multiplayer rules, world state and interactive UI. External LLM and World Model services connect through adapters. Player actions update world state, the LLM builds prompts, the World Model generates scenes, and streaming delivery returns video to the interface." width="960" height="648" loading="lazy"></div>
-<figcaption>Connect the modules your experience needs. The LLM and World Model are external services connected through replaceable adapters. Your host supplies credentials, streaming delivery and infrastructure. <a href="architecture.html">Explore the architecture</a>.</figcaption>
+<div class="world-flow-scroll" role="region" aria-label="GENESIS modular World Model flow diagram" tabindex="0"><img src="assets/genesis-world-context.svg" alt="The GENESIS Context Engine connects memory, scenes, inventory, multiplayer, settings and player actions to an external World Model. An external LLM creates prompts. An optional external image model takes LLM prompts and supplies images to the World Model. Streaming delivery returns scenes to the interactive UI." width="960" height="760" loading="lazy"></div>
+<figcaption>Connect the modules your experience needs. The LLM, World Model and optional image model are external services connected through replaceable adapters. Your host supplies credentials, streaming delivery and infrastructure. <a href="architecture.html">Explore the architecture</a>.</figcaption>
 </figure>
 
 ## What GENESIS handles
@@ -70,10 +72,12 @@ GENESIS wraps your World Model in a shared context layer. Memory, rules and play
 You define the experience. GENESIS runs the state and interaction loop around your connected models.
 
 <ul class="feature-list">
+<li><strong>Context Engine</strong><span>Combine world memory, settings and accepted actions into context for your connected models.</span></li>
 <li><strong>World memory</strong><span>Remember choices, quest progress and relationships from one turn to the next.</span></li>
 <li><strong>Inventory and variables</strong><span>Track items, health, scores and resources using your world's rules.</span></li>
 <li><strong>Characters and locations</strong><span>Keep your cast, places and scene facts organized for the next generation request.</span></li>
 <li><strong>LLM prompts and replies</strong><span>Pass world context to your LLM and validate structured moves, dialogue and choices.</span></li>
+<li><strong>Optional image generation</strong><span>Use world settings and controller rules to request starting or reference images from a connected image model.</span></li>
 <li><strong>Custom interfaces</strong><span>Build player controls, inventory panels and overlays with HTML, CSS and JavaScript.</span></li>
 <li><strong>Multiplayer and shared rules</strong><span>Coordinate player seats, turns and crowd votes. Keep everyone's accepted state in sync.</span></li>
 <li><strong>Scene continuity</strong><span>Track generation jobs, carry the actual last frame forward and advance after playback.</span></li>

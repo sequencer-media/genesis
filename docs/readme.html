@@ -75,7 +75,7 @@
 <a href="license.html">Apache 2.0 license</a>
 <a href="readme.html" aria-current="page" class="active">Project README</a></nav></aside>
     <main id="main" tabindex="-1">
-      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#your-world-model-needs-an-engine">Your World Model needs an engine.</a><a href="#worldstreams-in-action">Worldstreams in action</a><a href="#rick-and-morty--multiplayer-worldstream">Rick and Morty · Multiplayer Worldstream</a><a href="#how-genesis-works">How GENESIS works</a><a href="#what-can-you-build">What can you build?</a><a href="#what-genesis-handles">What GENESIS handles</a><a href="#one-prompt-an-infinite-experience">One prompt. An infinite experience.</a><a href="#play-your-first-world">Play your first world</a><a href="#three-files-your-whole-world">Three files. Your whole world.</a><a href="#development-preview">Development preview</a><a href="#example-projects">Example projects</a><a href="#connect-your-own-world-models">Connect your own World Models</a><a href="#worldstreams-api-instant-setup">Worldstreams API: instant setup</a><a href="#build-with-us">Build with us</a></nav></details><p><img src="assets/genesis-wordmark.svg" alt="GENESIS ASCII wordmark" loading="lazy"></p>
+      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#your-world-model-needs-a-context-engine">Your World Model needs a Context Engine.</a><a href="#worldstreams-in-action">Worldstreams in action</a><a href="#rick-and-morty--multiplayer-worldstream">Rick and Morty · Multiplayer Worldstream</a><a href="#how-genesis-works">How GENESIS works</a><a href="#what-can-you-build">What can you build?</a><a href="#what-genesis-handles">What GENESIS handles</a><a href="#one-prompt-an-infinite-experience">One prompt. An infinite experience.</a><a href="#play-your-first-world">Play your first world</a><a href="#three-files-your-whole-world">Three files. Your whole world.</a><a href="#development-preview">Development preview</a><a href="#example-projects">Example projects</a><a href="#connect-your-own-world-models">Connect your own World Models</a><a href="#worldstreams-api-instant-setup">Worldstreams API: instant setup</a><a href="#build-with-us">Build with us</a></nav></details><p><img src="assets/genesis-wordmark.svg" alt="GENESIS ASCII wordmark" loading="lazy"></p>
 <h1 id="world-model-engine">World Model Engine</h1>
 <p><a href="https://github.com/sequencer-media/genesis/actions/workflows/ci.yml"><img src="assets/badges/ci.svg" alt="CI: Node 20 and 22" loading="lazy"></a>
 <a href="license.html"><img src="assets/badges/license.svg" alt="Apache 2.0 license" loading="lazy"></a>
@@ -87,8 +87,8 @@
 <p><strong>A universal World Model Context Protocol.</strong></p>
 <p>Open source, licensed under <a href="license.html">Apache 2.0</a>.</p>
 <p><a href="https://sequencer.media/genesis">Website</a> · <a href="https://sequencer.media/genesis/demos">Demos</a> · <a href="https://sequencer.media/genesis/agent-skill">Skill quickstart</a> · <a href="https://sequencer.media/genesis/getting-started">Documentation</a></p>
-<h2 id="your-world-model-needs-an-engine">Your World Model needs an engine.</h2>
-<p>GENESIS remembers your inventory, characters and locations, applies the rules and describes what happens next. It gives your World Model the memory, shared state and playable interface an infinite experience needs.</p>
+<h2 id="your-world-model-needs-a-context-engine">Your World Model needs a Context Engine.</h2>
+<p>GENESIS is the Context Engine that plugs into your World Model. It remembers inventory, characters and locations, applies the rules and connects accepted player actions to the next generation request.</p>
 <p>Player actions change the world. GENESIS commits the outcome, gives the LLM and scene generator the context, and keeps every player&#39;s interface in sync.</p>
 <p><a href="#worldstreams-in-action">Watch the demos</a> · <a href="#what-can-you-build">What can you build?</a> · <a href="#one-prompt-an-infinite-experience">Build from a prompt</a> · <a href="getting-started.html">Documentation</a> · <a href="api.html">SDK API</a> · <a href="#connect-your-own-world-models">Connect your models</a> · <a href="#worldstreams-api-instant-setup">Worldstreams API</a></p>
 <h2 id="worldstreams-in-action">Worldstreams in action</h2>
@@ -114,8 +114,9 @@
 </tbody></table>
 <p>These are recorded Worldstreams examples. Preview choices illustrate the interaction flow around prepared World Model output. Live generation uses a connected provider. Read the <a href="api.html">SDK reference</a> and <a href="agent-skill.html">world-building skill guide</a>, or run <code>npm run docs:dev</code> to open the searchable documentation site and video gallery locally.</p>
 <h2 id="how-genesis-works">How GENESIS works</h2>
-<p>GENESIS wraps your World Model in a shared context layer. Character memory, scenes, inventory and multiplayer rules feed the world state. Player actions update that state, the LLM turns its context into prompts, and the World Model generates the next scene. Streaming delivery brings the video back to your interactive UI.</p>
-<p><img src="assets/genesis-world-context.svg" alt="GENESIS modular flow: memory and player actions feed world state, the LLM builds prompts, the World Model generates scenes, and streaming delivery returns video to the interface" loading="lazy"></p>
+<p>The GENESIS Context Engine combines character memory, scenes, inventory, multiplayer rules and world settings into model context. An external LLM creates prompts and structured replies, and the World Model generates the next scene. Streaming delivery brings the video back to your interactive UI.</p>
+<p><img src="assets/genesis-world-context.svg" alt="GENESIS Context Engine connects memory, settings and player actions to external models. An optional image model takes LLM prompts and supplies images to the World Model. Streaming delivery returns scenes to the UI." loading="lazy"></p>
+<p><strong>Optional image generation:</strong> your world settings and controller can trigger a connected image model. It takes prompts from the LLM and creates starting or reference images for the World Model.</p>
 <p>Connect the modules your experience needs. GENESIS defines the contract for world state, player actions and model requests. LLMs, World Models and streaming delivery use replaceable adapters; your host supplies their credentials and infrastructure. <a href="architecture.html">Explore the architecture</a>.</p>
 <h2 id="what-can-you-build">What can you build?</h2>
 <p>Build worlds people can play, watch, explore, learn from and shape together.</p>
@@ -198,6 +199,10 @@
 </tr>
 </thead>
 <tbody><tr>
+<td><strong>Context Engine</strong></td>
+<td>Assemble memory, world settings and accepted actions into context for connected models.</td>
+</tr>
+<tr>
 <td><strong>World memory</strong></td>
 <td>Progress, previous choices and persistent public, private and server state.</td>
 </tr>
@@ -212,6 +217,10 @@
 <tr>
 <td><strong>LLM orchestration and prompts</strong></td>
 <td>Supply world context and committed outcomes; validate structured replies for new moves, dialogue and choices.</td>
+</tr>
+<tr>
+<td><strong>Optional image generation</strong></td>
+<td>Trigger image requests from world settings and controller rules, then pass accepted starting or reference images to a compatible World Model.</td>
 </tr>
 <tr>
 <td><strong>Playable interfaces</strong></td>

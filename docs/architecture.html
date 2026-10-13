@@ -75,16 +75,19 @@
 <a href="license.html">Apache 2.0 license</a>
 <a href="readme.html">Project README</a></nav></aside>
     <main id="main" tabindex="-1">
-      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#a-universal-world-model-context-protocol">A universal World Model Context Protocol</a><a href="#the-action-and-generation-loop">The action and generation loop</a></nav></details><h1 id="architecture">Architecture</h1>
+      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#a-universal-world-model-context-protocol">A universal World Model Context Protocol</a><a href="#optional-image-generation">Optional image generation</a><a href="#the-action-and-generation-loop">The action and generation loop</a></nav></details><h1 id="architecture">Architecture</h1>
 <p>Genesis is a portable runtime and project format. A world has a browser interface, a synchronous sandboxed server controller, accepted state and asynchronous host effects. The host owns authentication, provider credentials, permissions, spending, publication and storage. Sequencer implements that host with managed media, LLM requests, versioned assets and stream infrastructure.</p>
 <h2 id="a-universal-world-model-context-protocol">A universal World Model Context Protocol</h2>
-<p>GENESIS defines a shared contract for world state, player actions and model requests. The tinted LLM and World Model boxes are external services. GENESIS connects to them through host adapters. Streaming delivery returns generated video to the player&#39;s interface.</p>
+<p>The GENESIS Context Engine connects structured world state, settings and player actions to your World Model. It defines the shared contract for model requests and accepted results. The tinted LLM, World Model and optional image model are external services connected through host adapters. Streaming delivery returns generated video to the player&#39;s interface.</p>
 <p class="diagram-hint">Scroll the diagram horizontally to explore the full loop.</p>
 <figure class="world-flow">
-<div class="world-flow-scroll" role="region" aria-label="GENESIS modular World Model flow diagram" tabindex="0"><img src="assets/genesis-world-context.svg" alt="Character memory, scenes and locations, inventory and multiplayer feed GENESIS world state. Its LLM and World Model adapters produce the next scene, while streaming delivery returns video to the interactive UI and player actions continue the loop." width="960" height="648" loading="lazy"></div>
+<div class="world-flow-scroll" role="region" aria-label="GENESIS modular World Model flow diagram" tabindex="0"><img src="assets/genesis-world-context.svg" alt="Memory, scenes, inventory, multiplayer and settings feed the GENESIS Context Engine, which connects to an external World Model and LLM. An optional image model takes LLM prompts and supplies image inputs to the World Model. Streaming delivery returns generated video to the UI." width="960" height="760" loading="lazy"></div>
 <figcaption>Use the GENESIS modules your project needs. Connect external models through host adapters.</figcaption>
 </figure>
 
+<h3 id="optional-image-generation">Optional image generation</h3>
+<p>A project can declare a boolean setting in <code>definition.genesis.configSchema</code>, then read it through <code>context.config.settings</code> to decide when its controller emits <code>image.request</code>. Declare the capability in the project and grant it on the host. The host adapter connects the image provider and enforces permissions and spending limits.</p>
+<p>The LLM can supply a bounded image prompt. Validate that reply, request the image and wait for <code>job.ready</code> before using its accepted image or anchor in the next scene request. This makes image generation a settings-controlled branch of the context loop. The World Model adapter must support the image input your project uses.</p>
 <h2 id="the-action-and-generation-loop">The action and generation loop</h2>
 <div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-text">Viewer action -&gt; authenticated host -&gt; controller -&gt; committed state
                                          |
