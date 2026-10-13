@@ -3,6 +3,7 @@
   <desc id="description">GENESIS has a Context Engine that connects character memory, scenes, inventory, multiplayer, world settings and player actions to a World Model. Visual Context is an optional component inside GENESIS. It receives LLM prompts and world settings, then supplies reference or starting images directly to the World Model alongside text context. The external LLM and World Model connect through adapters. Generated scenes pass through streaming delivery to the interactive UI, continuing the loop.</desc>
   <defs>
     <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path d="M1 1L7 4L1 7" fill="none" stroke="#a53861" stroke-width="1.4"/></marker>
+    <linearGradient id="module-accent" gradientUnits="userSpaceOnUse" x1="52" y1="106" x2="918" y2="106"><stop offset="0" stop-color="#f46aa6"/><stop offset="1" stop-color="#ff9b55"/></linearGradient>
   </defs>
   <style>
     text{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;fill:#382b32}
@@ -26,19 +27,19 @@
 
   <g text-anchor="middle">
     <rect x="52" y="106" width="200" height="76" class="node"/>
-    <path d="M52 106H252" stroke="#f46aa6" stroke-width="2"/>
+    <path d="M52 106H252" stroke="url(#module-accent)" stroke-width="2"/>
     <text x="152" y="137" class="label">Character memory</text>
     <text x="152" y="160" class="detail">History + relationships</text>
     <rect x="274" y="106" width="200" height="76" class="node"/>
-    <path d="M274 106H474" stroke="#ff9b55" stroke-width="2"/>
+    <path d="M274 106H474" stroke="url(#module-accent)" stroke-width="2"/>
     <text x="374" y="137" class="label">Scenes + places</text>
     <text x="374" y="160" class="detail">Locations + continuity</text>
     <rect x="496" y="106" width="200" height="76" class="node"/>
-    <path d="M496 106H696" stroke="#f46aa6" stroke-width="2"/>
+    <path d="M496 106H696" stroke="url(#module-accent)" stroke-width="2"/>
     <text x="596" y="137" class="label">Inventory</text>
     <text x="596" y="160" class="detail">Items + variables</text>
     <rect x="718" y="106" width="200" height="76" class="node"/>
-    <path d="M718 106H918" stroke="#ff9b55" stroke-width="2"/>
+    <path d="M718 106H918" stroke="url(#module-accent)" stroke-width="2"/>
     <text x="818" y="137" class="label">Multiplayer</text>
     <text x="818" y="160" class="detail">Seats + turns + votes</text>
   </g>
