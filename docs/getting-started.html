@@ -87,6 +87,7 @@ npm run build
 node dist/cli.js init ./my-world --template arena-llm
 node dist/cli.js dev ./my-world</code></pre></div>
 <p>Open the printed local URL. Play a turn, switch preview players and inspect the accepted state. The runner uses labeled prepared video and an arena move fixture.</p>
+<p>The local preview runs without a Sequencer account, Worldstreams API key or generation service. <code>genesis dev</code> always uses its prepared providers, including when a key is present in the environment. Live AI generation requires a custom host connected to your chosen provider. Continuous streaming also requires that provider&#39;s playback and session integration.</p>
 <h2 id="choose-an-experience">Choose an experience</h2>
 <table>
 <thead>

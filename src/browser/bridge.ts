@@ -40,5 +40,6 @@ export function experienceInterfaceBridgeScript(nonce: string, bindingIds: strin
 }
 export function injectExperienceBridge(document: string, nonce: string, bindingIds: string[]) {
   const stripped = document.replace(/<script[^>]+data-sequencer-experience-bridge[^>]*>[\s\S]*?<\/script>\s*/gi, '');
-  return stripped.replace(/<head([^>]*)>/i, `<head$1>${experienceInterfaceBridgeScript(nonce, bindingIds)}`);
+  // An owned prelude precedes every creator byte, including misleading head tags in comments.
+  return `<!doctype html><html><head>${experienceInterfaceBridgeScript(nonce, bindingIds)}</head>${stripped}</html>`;
 }

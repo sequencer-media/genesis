@@ -30,7 +30,7 @@ Tools must be requested in the manifest and granted by the host. Stream defaults
 
 State subscriptions begin when the host supplies the first view. They receive the current view immediately when registered after that point. Initialize UI placeholders in HTML, and read player seats and game state inside a subscription.
 
-Custom interfaces execute inside opaque sandbox iframes with blocked network connections. The host remains responsible for essential exit, reconnect and billing UI. Host-message handling checks the frame source, nonce and declared action.
+Custom interfaces execute inside opaque sandbox iframes. Their content policy blocks network APIs such as fetch and WebSocket, while allowing HTTPS images and media and the host's local asset paths. This permits outbound media requests and is not complete network isolation. Production hosts must restrict media destinations and iframe navigation with their own content security policy and keep secrets outside interface views. The local runner restricts iframe navigation to its own origin. The host remains responsible for essential exit, reconnect and billing UI. Host-message handling checks the frame source, nonce and declared action.
 
 ## Node host and adapters
 
