@@ -15,20 +15,6 @@ Open source, licensed under [Apache 2.0](LICENSE).
 
 [Watch the demos](#what-is-a-worldstream) · [What can you build?](#what-can-you-build) · [Build from a prompt](#one-prompt-an-infinite-experience) · [Documentation](docs/getting-started.md) · [SDK API](docs/api.md) · [Connect your models](#connect-your-own-world-models) · [Worldstreams API](#worldstreams-api-instant-setup)
 
-## Play a game now
-
-Requires Node 20 or later. Start with a complete solo adventure:
-
-```sh
-git clone https://github.com/sequencer-media/genesis.git
-cd genesis
-npm run play
-```
-
-Open the printed local URL. **Mosslight: Lantern Run** is ready for your first choice. Collect three stars, befriend a fox, manage your inventory and outwit the thorn sentinel. Play with your mouse or the **1, 2, 3** keys, then try another route.
-
-The command installs the tools, builds Genesis and creates an editable `my-world/` project. The game runs locally with no account, API key or generation charges. Open **Make this game yours** below the game to find its three source files. Use the [world-building skill](docs/agent-skill.md) to turn your own idea into a different game.
-
 ![Three pixel worlds: a floating forest, a castle arena and a lunar outpost](docs/assets/genesis-worlds.svg)
 
 ## Your World Model needs an Engine.
@@ -126,6 +112,20 @@ local preview and an exportable world.
 The skill wires backend requests, declares assets, validates the bundle and exercises the player flow. [AGENTS.md](AGENTS.md) points repo-aware agents to it; other skill-capable agents can load its SKILL.md directly.
 
 Start with labeled local fixtures. With a configured provider and budget, the agent can create and attach images, audio and video for your worldstream.
+
+## Play a game now
+
+Requires Node 20 or later. Start with a complete solo adventure:
+
+```sh
+git clone https://github.com/sequencer-media/genesis.git
+cd genesis
+npm run play
+```
+
+Open the printed local URL. **Mosslight: Lantern Run** is ready for your first choice. Collect three stars, befriend a fox, manage your inventory and outwit the thorn sentinel. Play with your mouse or the **1, 2, 3** keys, then try another route.
+
+The command installs the tools, builds Genesis and creates an editable `my-world/` project. The game runs locally with no account, API key or generation charges. Open **Make this game yours** below the game to find its three source files. Use the [world-building skill](docs/agent-skill.md) to turn your own idea into a different game.
 
 ## Choose another starter
 
