@@ -1,6 +1,4 @@
-<img src="docs/assets/genesis-logo.jpg" alt="GENESIS globe logo" width="128" height="128">
-
-# Create infinite experiences, in minutes.
+# Create infinite experiences.
 
 [![CI: Node 20 and 22](docs/assets/badges/ci.svg)](https://github.com/sequencer-media/genesis/actions/workflows/ci.yml)
 [![Apache 2.0 license](docs/assets/badges/license.svg)](LICENSE)
