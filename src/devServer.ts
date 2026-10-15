@@ -2,7 +2,7 @@ import { createServer, type IncomingMessage, type ServerResponse } from 'node:ht
 import { readFile, realpath } from 'node:fs/promises';
 import { dirname, extname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { randomUUID } from 'node:crypto';
+import { randomUUID, createHash } from 'node:crypto';
 import { GenesisHost } from './host.js';
 import { FileGenesisStorage } from './storage.js';
 import { createCachedProvider } from './cachedProvider.js';
@@ -11,13 +11,20 @@ import { defaultGenesisHostPolicy } from './policy.js';
 import { loadGenesisProject } from './projectFiles.js';
 import { publicExperienceDefinition } from './experienceDefinition.js';
 const runtimeDirectory = dirname(fileURLToPath(import.meta.url));
-const css = `*{box-sizing:border-box}body{margin:0;background:#09090b;color:#fafafa;font:14px system-ui}button,select,input{font:inherit;color:inherit;background:#18181b;border:1px solid #3f3f46;border-radius:10px;padding:10px 14px}button{cursor:pointer}button:disabled{opacity:.45;cursor:default}header{display:flex;align-items:center;gap:16px;max-width:1160px;margin:auto;padding:24px 20px}h1{font-size:23px;margin:0;flex:1}main{max-width:1160px;margin:auto;padding:0 20px 32px;display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:16px}.genesis-player,aside{border:1px solid #27272a;border-radius:18px;background:#111113;overflow:hidden}.genesis-stage{position:relative;aspect-ratio:16/9;background:#09090b}.genesis-stage img,.genesis-stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}.genesis-overlay{position:absolute;inset:0;transition:opacity .2s}.genesis-overlay iframe{height:100%;width:100%;border:0;background:transparent}.genesis-panel iframe{width:100%;height:280px;border:0}.genesis-controls{display:flex;gap:8px;flex-wrap:wrap;padding:12px}.genesis-status{padding:0 14px;color:#a1a1aa}aside{padding:16px}aside h2{font-size:15px;margin:0 0 12px}pre{font:11px ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere;color:#a1a1aa}.note{color:#a1a1aa;font-size:12px}[hidden]{display:none!important}@media(max-width:800px){main{grid-template-columns:1fr}header{flex-wrap:wrap}h1{width:100%;flex:auto}}`;
+const css = `*{box-sizing:border-box}body{margin:0;background:#101c18;color:#e9eddf;font:14px system-ui}button,select,input{font:inherit;color:inherit;background:#23352b;border:1px solid #516350;border-radius:6px;padding:10px 14px}button{cursor:pointer}button:disabled{opacity:.45;cursor:default}.preview-header{display:flex;align-items:center;gap:16px;max-width:1060px;margin:auto;padding:20px}.preview-brand{color:#9daa91;font-size:11px;letter-spacing:2px}.preview-heading{flex:1}h1{font-size:20px;margin:4px 0 0}main{max-width:1060px;margin:auto;padding:0 20px 32px}.genesis-player{border:1px solid #4a5b47;background:#f4efdf;overflow:hidden}.genesis-stage{position:relative;aspect-ratio:16/9;background:#172a21}.genesis-stage img,.genesis-stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}.genesis-overlay{position:absolute;inset:0;transition:opacity .2s}.genesis-overlay iframe{height:100%;width:100%;border:0;background:transparent}.genesis-panel iframe{display:block;width:100%;height:730px;border:0}.genesis-controls{display:flex;gap:8px;flex-wrap:wrap;padding:12px;background:#17291f}.genesis-controls:empty{display:none}.genesis-status{margin:0;padding:12px 16px;color:#475c45}.genesis-status:empty{display:none}.note{color:#a2af96;font-size:12px;line-height:1.6}.preview-note{margin:12px 0 20px}.help{border:1px solid #3d5140;padding:14px 18px;margin-top:12px}.help summary{font-weight:600;cursor:pointer}.help p{line-height:1.6}.help dl{display:grid;grid-template-columns:max-content 1fr;gap:10px 22px;font-size:13px}.help dd{margin:0;color:#a2af96}.diagnostics{display:grid;grid-template-columns:1fr 1fr;gap:24px}pre{font:11px ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere;color:#a2af96}[hidden]{display:none!important}@media(max-width:620px){.preview-header{padding:16px;flex-wrap:wrap;gap:10px}.preview-heading{min-width:180px}h1{font-size:17px}main{padding:0 10px 24px}.genesis-panel iframe{height:820px}.help dl,.diagnostics{grid-template-columns:1fr}.help dd{margin-bottom:6px}.preview-brand{font-size:10px}}`;
 /** Author preview only. Loopback binding, issued participant tokens, and strict same-origin writes. */
 export async function startGenesisDevServer(directory: string, port = 4173) {
   directory = await realpath(directory);
   const project = await loadGenesisProject(directory);
   const fixture = JSON.parse(await readFile(resolve(dirname(fileURLToPath(import.meta.url)), '../examples/fixtures/arena-moves.json'), 'utf8'));
-  const host = await new GenesisHost('local-preview', project, { storage: new FileGenesisStorage(resolve(directory, '.genesis')), policy: { ...defaultGenesisHostPolicy, capabilities: [...defaultGenesisHostPolicy.capabilities, 'tool.llm.generate'] }, providers: [createLlmProvider({ id: 'prepared-llm-fixture', generate: async () => fixture }), createCachedProvider([{ imageUrl: '/assets/end.jpg', videoUrl: '/assets/scene.mp4' }])] }).initialize();
+  const makeHost = (storageDirectory: string) => new GenesisHost('local-preview', project, { storage: new FileGenesisStorage(storageDirectory), policy: { ...defaultGenesisHostPolicy, capabilities: [...defaultGenesisHostPolicy.capabilities, 'tool.llm.generate'] }, providers: [createLlmProvider({ id: 'prepared-llm-fixture', generate: async () => fixture }), createCachedProvider([{ imageUrl: '/assets/end.jpg', videoUrl: '/assets/scene.mp4' }])] }).initialize();
+  let host: GenesisHost;
+  try { host = await makeHost(resolve(directory, '.genesis')); }
+  catch (error: any) {
+    if (!String(error.message).includes('pins a different project version')) throw error;
+    const version = createHash('sha256').update(JSON.stringify(project)).digest('hex');
+    host = await makeHost(resolve(directory, '.genesis', 'versions', version));
+  }
   const tokens = new Map<string, string>();
   const actors = host.diagnostics().state.participants;
   if (!actors.length) for (let i = 0; i < Math.min(project.definition.participation.maxPlayers + (project.definition.participation.seats ? 1 : 0), project.definition.participation.mode === 'group' ? 4 : project.definition.participation.seats ? 3 : 2); i++) await host.join(`player_${i}`, `Player ${i + 1}`);
@@ -30,7 +37,7 @@ export async function startGenesisDevServer(directory: string, port = 4173) {
       if (req.headers.host !== `127.0.0.1:${address.port}` && req.headers.host !== `localhost:${address.port}`) return json(403, { error: 'Open the loopback preview URL.' });
       const url = new URL(req.url || '/', origin);
       if (url.pathname === '/' && req.method === 'GET') {
-        const html = `<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Genesis local preview</title><style>${css}</style></head><body><header><h1 id="title">Genesis local preview</h1><select id="actor" aria-label="Preview player"></select><button id="refresh">Refresh preview</button></header><main><div id="player"></div><aside><h2>Event timeline</h2><p class="note">Local author preview. Prepared media and LLM JSON fixture, no generation charges.</p><pre id="timeline"></pre><h2>Public state</h2><pre id="state"></pre></aside></main><script type="module" src="/browser/devClient.js"></script></body></html>`;
+        const html = `<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Genesis local playground</title><style>${css}</style></head><body><header class="preview-header"><div class="preview-heading"><span class="preview-brand">GENESIS / LOCAL PLAYGROUND</span><h1 id="title">Your world is ready</h1></div><select id="actor" aria-label="Preview player"></select><button id="refresh">Refresh</button></header><main><div id="player"></div><p class="note preview-note" id="preview-note">Local preview. Prepared media, no generation charges.</p><p class="note" id="player-help" hidden>For multiplayer, switch the preview player above to fill each seat.</p><details class="help"><summary>Make this game yours</summary><p>Edit your project, restart the preview command, and this page reconnects. Previous versions keep their saved progress.</p><dl><dt>genesis.json</dt><dd>Change the world name, settings and difficulty.</dd><dt>interface.html</dt><dd>Change the look, controls and animations.</dd><dt>controller.js</dt><dd>Change the shared rules, inventory and outcomes.</dd></dl></details><details class="help" id="developer-tools"><summary>Developer tools</summary><p class="note">Media and LLM tools use local fixtures. Live generation needs a connected provider.</p><div class="diagnostics"><section><h2>Event timeline</h2><pre id="timeline"></pre></section><section><h2>Public state</h2><pre id="state"></pre></section></div></details></main><script type="module" src="/browser/devClient.js"></script></body></html>`;
         res.writeHead(200, { 'Content-Type': 'text/html', 'Cache-Control': 'no-store', 'Content-Security-Policy': "frame-ancestors 'none'; frame-src 'self'; object-src 'none'; base-uri 'none'" }); return res.end(html);
       }
       if (url.pathname === '/project' && req.method === 'GET') return json(200, { project: { ...project, definition: publicExperienceDefinition(project.definition), controllerSource: '' }, actors: [...tokens].map(([token, id]) => ({ token, id, name: host.diagnostics().state.participants.find(p => p.id === id)?.name || id })) });
@@ -60,8 +67,17 @@ export async function startGenesisDevServer(directory: string, port = 4173) {
       res.writeHead(200, { 'Content-Type': type, 'Content-Length': bytes.length, 'X-Content-Type-Options': 'nosniff', 'Cache-Control': 'no-store', ...(extname(file) === '.svg' ? { 'Content-Security-Policy': "sandbox; default-src 'none'; style-src 'unsafe-inline'" } : {}) }); res.end(bytes);
     } catch (error: any) { json(400, { error: String(error.message || 'Preview request failed.').slice(0, 240) }); }
   });
-  await new Promise<void>(done => server.listen(port, '127.0.0.1', done));
-  let ticking = false; const timer = setInterval(async () => { if (ticking) return; ticking = true; try { for (const actor of host.diagnostics().state.participants) await host.read(actor.id); await host.tick(); } catch {} finally { ticking = false; } }, 500);
+  await new Promise<void>((done, reject) => {
+    server.once('error', reject);
+    server.listen(port, '127.0.0.1', () => { server.off('error', reject); done(); });
+  });
+  let ticking = false; const timer = setInterval(async () => { if (ticking) return; ticking = true; try {
+    for (const actor of host.diagnostics().state.participants) await host.read(actor.id);
+    const state = host.diagnostics().state, actor = state.participants.find(p => p.role === 'player');
+    const job = state.genesis!.jobs.find(j => j.status === 'queued' && ['scene.request', 'image.request', 'tool.llm.generate'].includes(j.effect.type === 'tool.request' ? j.effect.toolId || '' : j.effect.type));
+    if (actor && job) await host.runJob(actor.id, job.id);
+    await host.tick();
+  } catch {} finally { ticking = false; } }, 500);
   const url = `http://127.0.0.1:${(server.address() as any).port}`;
   return { url, host, close: async () => { clearInterval(timer); server.closeAllConnections(); await new Promise<void>(done => server.close(() => done())); } };
 }

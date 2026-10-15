@@ -20,6 +20,15 @@ test('local runner serves module dependencies, real assets and authenticated act
     const headers = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
     assert.equal((await fetch(server.url + '/api/action', { method: 'POST', headers, body: JSON.stringify(payload) })).status, 403);
     const acted = await fetch(server.url + '/api/action', { method: 'POST', headers: { ...headers, Origin: server.url }, body: JSON.stringify(payload) }); assert.equal(acted.status, 200); assert.equal((await acted.json()).actorId, 'player_0');
+    // Free preview fixtures advance automatically, while playback still gates the next move.
+    const deadline = Date.now() + 3000;
+    while (server.host.view('player_0').genesis.stage.mode !== 'playing' && Date.now() < deadline) await new Promise(done => setTimeout(done, 25));
+    assert.equal(server.host.view('player_0').genesis.stage.mode, 'playing');
+    assert.equal(server.host.view('player_0').genesis.actions[0].canSubmit, false);
+    const playback = server.host.view('player_0').genesis.stage.playbackId;
+    const completed = await fetch(server.url + '/api/playback', { method: 'POST', headers: { ...headers, Origin: server.url }, body: JSON.stringify({ playbackId: playback }) });
+    assert.equal(completed.status, 200); assert.equal((await completed.json()).genesis.actions[0].canSubmit, true);
+    await assert.rejects(startGenesisDevServer(dir, Number(new URL(server.url).port)), { code: 'EADDRINUSE' });
     assert.equal((await fetch(server.url + '/assets/%2e%2e%2fgenesis.json')).status, 403);
     const denied = await new Promise(resolve => { const req = request(server.url + '/project', { headers: { Host: 'evil.example' } }, response => { response.resume(); resolve(response.statusCode); }); req.end(); }); assert.equal(denied, 403);
   } finally { await server?.close(); await rm(dir, { recursive: true, force: true }); }

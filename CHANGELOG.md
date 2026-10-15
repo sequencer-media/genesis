@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+One-command `npm run play` setup creates or reopens a complete solo quest with immediate choices, inventory, endings and replay. The local playground emphasizes the game, runs free fixture jobs automatically, and preserves progress across authored project versions. Agent and creator quickstarts now lead with a playable game and a short remix path.
+
 Browser playback restarts when a new playback ID reuses the same video URL, allowing repeated prepared-media turns to complete.
 
 Security: update ZIP and JSON Schema dependencies, enforce host media policy for initial project assets, bound and contain manifest reads, reject escaping asset-directory symlinks, sandbox local SVG documents and restrict preview frame navigation. Insert the bridge and content policy before all creator markup, including misleading head tags inside comments. Document the browser sandbox's outbound media allowance. Regression coverage includes malformed ZIP64 input, controller isolation and local file boundaries.

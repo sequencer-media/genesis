@@ -1,5 +1,7 @@
 # Authoring Genesis projects
 
+Use descriptive branch names without tool names. Keep commit subjects and pull request titles focused on the change. Use the configured maintainer identity for commits.
+
 When asked to build a world from an idea, use skills/create-world-stream/SKILL.md. Deliver a playable local project with its interface, controller and complete asset bundle. Use the nearest starter and preserve the user's chosen provider.
 
 Read docs/api.md and the appropriate example before editing. Author settings in genesis.json with interfaceFile and controllerFile references. Keep browser code in interface.html and shared rules in controller.js. Archive exports include the three entry files, their JSON Schema and complete declared media. Transport JSON can inline both sources. Keep product records and host authority outside the manifest; unknown fields are rejected. Keep HTML/CSS/browser JavaScript separate from the synchronous server onEvent controller.

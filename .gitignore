@@ -6,3 +6,4 @@ dist/
 .env.*
 *.tgz
 .cache/
+my-world/

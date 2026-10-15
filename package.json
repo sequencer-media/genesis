@@ -59,6 +59,7 @@
     "genesis": "./dist/cli.js"
   },
   "scripts": {
+    "play": "node scripts/play.mjs",
     "build": "tsc && node scripts/write-schema.mjs",
     "test": "npm run build && node --test --test-concurrency=1 test/*.test.mjs",
     "dev": "npm run build && node dist/cli.js dev examples/exploration",

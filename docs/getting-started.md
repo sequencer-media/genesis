@@ -1,37 +1,41 @@
 # Run a starter locally
 
-Play an included world, customize its rules and connect generation. Requires Node 20 or later.
+Play a complete game, customize its rules and connect generation. Requires Node 20 or later.
 
 Want your coding agent to build an original world? Start with the [Genesis skill quickstart](agent-skill.md).
 
 ## Start the preview
 
-Clone Genesis, build the tools and start the vintage battle example:
+Clone Genesis and start a solo adventure:
 
 ```sh
 git clone https://github.com/sequencer-media/genesis.git
 cd genesis
-npm ci
-npm run build
-node dist/cli.js init ./my-world --template arena-llm
-node dist/cli.js dev ./my-world
+npm run play
 ```
 
-Open the printed local URL. Play a turn, switch preview players and inspect the accepted state. The runner uses labeled prepared video and an arena move fixture.
+The command installs dependencies, builds the tools and creates `my-world/`. Open the printed local URL and play **Mosslight: Lantern Run**. Find three stars and bring them home before your lantern fades. Your first choice is available immediately. Use the mouse or **1, 2, 3** keys. A finished run offers **Play again**.
 
-The local preview runs without a Sequencer account, Worldstreams API key or generation service. `genesis dev` always uses its prepared providers, including when a key is present in the environment. Live AI generation requires a custom host connected to your chosen provider. Continuous streaming also requires that provider's playback and session integration.
+The game works without an account, API key or generation service. Your choices and inventory save locally. The preview uses prepared providers for media and LLM tools, including when a key is present in the environment. Live AI generation requires a custom host connected to your chosen provider. Continuous streaming also requires that provider's playback and session integration.
 
 ## Choose an experience
 
 | Template | Starting point |
 | --- | --- |
+| quest | A solo forest adventure with inventory, a tactical encounter, endings and replay. |
 | arena-llm | Two players, shared health, structured LLM move definitions and a vintage interface. |
 | exploration | Generated scene progression and end-frame continuity. |
 | decisions | Branching choices and collective decisions. |
 | timing | A bounded input window and a repeatable starting scene. |
 | arena | Fixed server-resolved moves, inventory, seats and spectator queues. |
 
-Pass the template name with `--template`. For an original world, [give your coding agent a prompt](agent-skill.md).
+Pass the template name with `--template` and a new directory:
+
+```sh
+npm run play -- ./my-battle --template arena-llm
+```
+
+For a multiplayer preview, switch the player dropdown to claim each seat. Prepared tool jobs run automatically. For an original world, [give your coding agent a prompt](agent-skill.md).
 
 ## Make the world yours
 
@@ -41,7 +45,17 @@ Pass the template name with `--template`. For an original world, [give your codi
 
 The browser submits intentions. The controller commits the result. Model and media jobs return as events; the controller chooses the next state.
 
-Restart the local runner after changing the project. Sessions pin their project contents. Remove the generated `.genesis/` directory inside your world when you want a fresh development session.
+For a quick remix, find `definition.genesis.config` in `my-world/genesis.json`:
+
+```json
+"config": {
+  "worldName": "Moonmoth",
+  "lanternTurns": 8,
+  "difficulty": "hard"
+}
+```
+
+Restart `npm run play` after changing the project. The browser reconnects automatically. Each project version has its own saved progress, so an edited game starts fresh while earlier versions keep their progress. The **Make this game yours** panel shows which file controls settings, visuals and shared rules.
 
 ## Validate and export
 

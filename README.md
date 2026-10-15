@@ -1,6 +1,4 @@
-<img src="docs/assets/genesis-logo.jpg" alt="GENESIS globe logo" width="128" height="128">
-
-# Create infinite experiences, in minutes.
+# Create infinite experiences.
 
 [![CI: Node 20 and 22](docs/assets/badges/ci.svg)](https://github.com/sequencer-media/genesis/actions/workflows/ci.yml)
 [![Apache 2.0 license](docs/assets/badges/license.svg)](LICENSE)
@@ -16,6 +14,20 @@ Open source, licensed under [Apache 2.0](LICENSE).
 [Website](https://sequencer.media/genesis) · [Demos](https://sequencer.media/genesis/demos) · [Skill quickstart](https://sequencer.media/genesis/agent-skill) · [Documentation](https://sequencer.media/genesis/getting-started)
 
 [Watch the demos](#what-is-a-worldstream) · [What can you build?](#what-can-you-build) · [Build from a prompt](#one-prompt-an-infinite-experience) · [Documentation](docs/getting-started.md) · [SDK API](docs/api.md) · [Connect your models](#connect-your-own-world-models) · [Worldstreams API](#worldstreams-api-instant-setup)
+
+## Play a game now
+
+Requires Node 20 or later. Start with a complete solo adventure:
+
+```sh
+git clone https://github.com/sequencer-media/genesis.git
+cd genesis
+npm run play
+```
+
+Open the printed local URL. **Mosslight: Lantern Run** is ready for your first choice. Collect three stars, befriend a fox, manage your inventory and outwit the thorn sentinel. Play with your mouse or the **1, 2, 3** keys, then try another route.
+
+The command installs the tools, builds Genesis and creates an editable `my-world/` project. The game runs locally with no account, API key or generation charges. Open **Make this game yours** below the game to find its three source files. Use the [world-building skill](docs/agent-skill.md) to turn your own idea into a different game.
 
 ![Three pixel worlds: a floating forest, a castle arena and a lunar outpost](docs/assets/genesis-worlds.svg)
 
@@ -115,30 +127,26 @@ The skill wires backend requests, declares assets, validates the bundle and exer
 
 Start with labeled local fixtures. With a configured provider and budget, the agent can create and attach images, audio and video for your worldstream.
 
-## Play your first world
+## Choose another starter
 
-Requires Node 20 or later. Clone the repository and run:
+From your Genesis checkout, create a different world with one command:
 
 ```sh
-git clone https://github.com/sequencer-media/genesis.git
-cd genesis
-npm ci
-npm run build
-node dist/cli.js init ./my-world --template arena-llm
-node dist/cli.js dev ./my-world
+npm run play -- ./my-battle --template arena-llm
 ```
 
-Open the printed local URL. Play the vintage pixel battle, switch preview players and take a turn. The starter uses four structured move definitions, shared health and authoritative turns. Local moves and video use prepared fixtures; a connected Worldstreams host requests real backend LLM results.
+Open the printed local URL. In multiplayer starters, switch preview players to fill both seats. Prepared tool responses run automatically. The arena uses local move and media fixtures; live generation connects through a provider on your host.
 
 | Starter | Create your experience |
 | --- | --- |
+| `quest` | A complete solo forest adventure with inventory, tactical choices, endings and replay. |
 | `arena-llm` | A vintage battle with LLM-created moves and shared player seats. |
 | `exploration` | An evolving world where each completed scene becomes the next starting point. |
 | `decisions` | Branching choices and collective decisions. |
 | `timing` | A challenge with a defined input window and repeatable starting scene. |
 | `arena` | A battle with fixed server-resolved moves, inventory and spectator queues. |
 
-Choose another starter with `--template`. Edit the project files, then restart the runner. Sessions pin their project version; remove the generated `.genesis/` directory inside your world to start a fresh development session after code changes.
+Choose another starter with `--template` and a new directory. To reopen your first game, run `npm run play`. After editing its files, restart the command and the page reconnects. Each project version keeps its own saved preview, so earlier progress remains available when you return to that version.
 
 <details>
 <summary>See the vintage arena on mobile</summary>
