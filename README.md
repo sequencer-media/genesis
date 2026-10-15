@@ -1,4 +1,4 @@
-![GENESIS ASCII wordmark](docs/assets/genesis-wordmark.svg)
+<img src="docs/assets/genesis-logo.jpg" alt="GENESIS globe logo" width="128" height="128">
 
 # Create infinite experiences, in minutes.
 

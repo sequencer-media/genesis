@@ -97,6 +97,12 @@ for (const page of pages) {
     image({href, title, text}) {
       return '<img src="' + escape(rewriteUrl(href, page.source)) + '" alt="' + escape(text) + '"' + (title ? ' title="' + escape(title) + '"' : '') + ' loading="lazy">';
     },
+    html({text}) {
+      return text.replace(/\b(href|src|poster)="([^"]+)"/g, (attribute, name, url) => {
+        const rewritten = rewriteUrl(url, page.source);
+        return rewritten === url ? attribute : name + '="' + escape(rewritten) + '"';
+      });
+    },
     code({text, lang}) {
       const language = /^[a-z0-9_-]+$/i.test(lang || '') ? lang : 'text';
       return '<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-' + language + '">' + escape(text) + '</code></pre></div>\n';

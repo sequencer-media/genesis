@@ -13,7 +13,9 @@ button,summary{cursor:pointer}
 .skip-link:focus{top:12px}
 .site-header{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:24px;padding:16px 32px;border-bottom:1px solid var(--line);background:var(--paper);font-family:var(--font-mono)}
 .home-page .site-header{border-bottom:3px solid transparent;background:var(--gradient) bottom/100% 3px no-repeat,var(--paper)}
-.brand{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0;color:var(--ink);font:bold 23px/1.2 var(--font-mono);letter-spacing:2px;text-decoration:none;white-space:nowrap}
+.brand{display:flex;align-items:center;gap:12px;min-width:0;color:var(--ink);font:bold 23px/1.2 var(--font-mono);letter-spacing:2px;text-decoration:none;white-space:nowrap}
+.brand-logo{display:block;flex:none;width:44px;height:44px;object-fit:contain}
+.brand-copy{display:flex;flex-direction:column;gap:3px;min-width:0}
 .brand-subtitle{max-width:220px;color:var(--muted);font:400 11px/1.4 var(--font-mono);letter-spacing:0;white-space:normal}
 .license-badge,.source-link{font-size:12px;color:var(--muted);white-space:nowrap}.source-link{color:var(--accent)}
 .search{position:relative;margin-left:auto;width:min(310px,34vw)}
