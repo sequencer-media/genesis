@@ -19,6 +19,8 @@ node dist/cli.js dev ./my-world
 
 Open the printed local URL. Play a turn, switch preview players and inspect the accepted state. The runner uses labeled prepared video and an arena move fixture.
 
+The local preview runs without a Sequencer account, Worldstreams API key or generation service. `genesis dev` always uses its prepared providers, including when a key is present in the environment. Live AI generation requires a custom host connected to your chosen provider. Continuous streaming also requires that provider's playback and session integration.
+
 ## Choose an experience
 
 | Template | Starting point |

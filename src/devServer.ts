@@ -14,6 +14,7 @@ const runtimeDirectory = dirname(fileURLToPath(import.meta.url));
 const css = `*{box-sizing:border-box}body{margin:0;background:#09090b;color:#fafafa;font:14px system-ui}button,select,input{font:inherit;color:inherit;background:#18181b;border:1px solid #3f3f46;border-radius:10px;padding:10px 14px}button{cursor:pointer}button:disabled{opacity:.45;cursor:default}header{display:flex;align-items:center;gap:16px;max-width:1160px;margin:auto;padding:24px 20px}h1{font-size:23px;margin:0;flex:1}main{max-width:1160px;margin:auto;padding:0 20px 32px;display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:16px}.genesis-player,aside{border:1px solid #27272a;border-radius:18px;background:#111113;overflow:hidden}.genesis-stage{position:relative;aspect-ratio:16/9;background:#09090b}.genesis-stage img,.genesis-stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}.genesis-overlay{position:absolute;inset:0;transition:opacity .2s}.genesis-overlay iframe{height:100%;width:100%;border:0;background:transparent}.genesis-panel iframe{width:100%;height:280px;border:0}.genesis-controls{display:flex;gap:8px;flex-wrap:wrap;padding:12px}.genesis-status{padding:0 14px;color:#a1a1aa}aside{padding:16px}aside h2{font-size:15px;margin:0 0 12px}pre{font:11px ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere;color:#a1a1aa}.note{color:#a1a1aa;font-size:12px}[hidden]{display:none!important}@media(max-width:800px){main{grid-template-columns:1fr}header{flex-wrap:wrap}h1{width:100%;flex:auto}}`;
 /** Author preview only. Loopback binding, issued participant tokens, and strict same-origin writes. */
 export async function startGenesisDevServer(directory: string, port = 4173) {
+  directory = await realpath(directory);
   const project = await loadGenesisProject(directory);
   const fixture = JSON.parse(await readFile(resolve(dirname(fileURLToPath(import.meta.url)), '../examples/fixtures/arena-moves.json'), 'utf8'));
   const host = await new GenesisHost('local-preview', project, { storage: new FileGenesisStorage(resolve(directory, '.genesis')), policy: { ...defaultGenesisHostPolicy, capabilities: [...defaultGenesisHostPolicy.capabilities, 'tool.llm.generate'] }, providers: [createLlmProvider({ id: 'prepared-llm-fixture', generate: async () => fixture }), createCachedProvider([{ imageUrl: '/assets/end.jpg', videoUrl: '/assets/scene.mp4' }])] }).initialize();
@@ -30,7 +31,7 @@ export async function startGenesisDevServer(directory: string, port = 4173) {
       const url = new URL(req.url || '/', origin);
       if (url.pathname === '/' && req.method === 'GET') {
         const html = `<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Genesis local preview</title><style>${css}</style></head><body><header><h1 id="title">Genesis local preview</h1><select id="actor" aria-label="Preview player"></select><button id="refresh">Refresh preview</button></header><main><div id="player"></div><aside><h2>Event timeline</h2><p class="note">Local author preview. Prepared media and LLM JSON fixture, no generation charges.</p><pre id="timeline"></pre><h2>Public state</h2><pre id="state"></pre></aside></main><script type="module" src="/browser/devClient.js"></script></body></html>`;
-        res.writeHead(200, { 'Content-Type': 'text/html', 'Cache-Control': 'no-store' }); return res.end(html);
+        res.writeHead(200, { 'Content-Type': 'text/html', 'Cache-Control': 'no-store', 'Content-Security-Policy': "frame-ancestors 'none'; frame-src 'self'; object-src 'none'; base-uri 'none'" }); return res.end(html);
       }
       if (url.pathname === '/project' && req.method === 'GET') return json(200, { project: { ...project, definition: publicExperienceDefinition(project.definition), controllerSource: '' }, actors: [...tokens].map(([token, id]) => ({ token, id, name: host.diagnostics().state.participants.find(p => p.id === id)?.name || id })) });
       if (url.pathname.startsWith('/api/')) {
@@ -49,14 +50,14 @@ export async function startGenesisDevServer(directory: string, port = 4173) {
       if (url.pathname === '/dev-client.js') file = resolve(runtimeDirectory, 'browser/devClient.js');
       else if (url.pathname.startsWith('/browser/') && /^\/browser\/[A-Za-z]+\.js$/.test(url.pathname)) file = resolve(runtimeDirectory, url.pathname.slice(1));
       else if (url.pathname.startsWith('/assets/')) {
-        const base = await realpath(resolve(directory, 'assets')), candidate = await realpath(resolve(directory, '.' + decodeURIComponent(url.pathname)));
+        const base = resolve(directory, 'assets'), candidate = await realpath(resolve(directory, '.' + decodeURIComponent(url.pathname)));
         if (!candidate.startsWith(base + sep)) return json(403, { error: 'Choose a project asset.' });
         if (!['.svg', '.png', '.jpg', '.jpeg', '.webp', '.mp4', '.webm', '.mp3', '.wav'].includes(extname(candidate))) return json(403, { error: 'Unsupported asset type.' });
         file = candidate;
       }
       if (!file) return json(404, { error: 'Not found.' });
       const bytes = await readFile(file), type = ({ '.js': 'text/javascript', '.svg': 'image/svg+xml', '.mp4': 'video/mp4', '.jpg': 'image/jpeg', '.png': 'image/png', '.webm': 'video/webm' } as any)[extname(file)] || 'application/octet-stream';
-      res.writeHead(200, { 'Content-Type': type, 'Content-Length': bytes.length, 'X-Content-Type-Options': 'nosniff', 'Cache-Control': 'no-store' }); res.end(bytes);
+      res.writeHead(200, { 'Content-Type': type, 'Content-Length': bytes.length, 'X-Content-Type-Options': 'nosniff', 'Cache-Control': 'no-store', ...(extname(file) === '.svg' ? { 'Content-Security-Policy': "sandbox; default-src 'none'; style-src 'unsafe-inline'" } : {}) }); res.end(bytes);
     } catch (error: any) { json(400, { error: String(error.message || 'Preview request failed.').slice(0, 240) }); }
   });
   await new Promise<void>(done => server.listen(port, '127.0.0.1', done));

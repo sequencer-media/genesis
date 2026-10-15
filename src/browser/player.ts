@@ -14,7 +14,7 @@ export function mountGenesisPlayer(container: HTMLElement, project: GenesisProje
   container.replaceChildren(root);
   const stage = root.querySelector<HTMLElement>('.genesis-stage')!, image = root.querySelector<HTMLImageElement>('img')!, video = root.querySelector<HTMLVideoElement>('video')!, overlay = root.querySelector<HTMLElement>('.genesis-overlay')!, panel = root.querySelector<HTMLElement>('.genesis-panel')!, controls = root.querySelector<HTMLElement>('.genesis-controls')!, status = root.querySelector<HTMLElement>('.genesis-status')!;
   stage.style.aspectRatio = String(normalizeStageAspectRatio(project.definition.interface.stageAspectRatio));
-  let view: any, destroyed = false, busy = false, sentPlayback = '';
+  let view: any, destroyed = false, busy = false, sentPlayback = '', startedPlayback = '';
   const frame = project.definition.interface.mode === 'custom' ? document.createElement('iframe') : null;
   if (frame) {
     frame.title = 'Genesis interface'; frame.sandbox.add('allow-scripts'); frame.referrerPolicy = 'no-referrer';
@@ -39,7 +39,11 @@ export function mountGenesisPlayer(container: HTMLElement, project: GenesisProje
     const showStage = project.definition.worldVideo.enabled || g.stage.visible === true || g.stage.mode === 'generating' || playing;
     stage.hidden = !showStage; image.hidden = playing; video.hidden = !playing;
     if (g.anchor?.imageUrl && image.getAttribute('src') !== g.anchor.imageUrl) image.src = g.anchor.imageUrl;
-    if (playing && video.getAttribute('src') !== g.stage.videoUrl) { video.src = g.stage.videoUrl; sentPlayback = ''; void video.play().catch(() => {}); }
+    if (playing && (video.getAttribute('src') !== g.stage.videoUrl || startedPlayback !== g.stage.playbackId)) {
+      if (video.getAttribute('src') !== g.stage.videoUrl) video.src = g.stage.videoUrl;
+      else video.currentTime = 0;
+      startedPlayback = g.stage.playbackId; sentPlayback = ''; void video.play().catch(() => {});
+    }
     if (!playing) video.pause(); overlay.style.opacity = g.stage.overlays ? '1' : '0'; overlay.style.pointerEvents = g.stage.overlays ? 'auto' : 'none';
     if (frame && project.definition.interface.placement === 'overlay' && !showStage && frame.parentElement !== panel) panel.append(frame);
     else if (frame && project.definition.interface.placement === 'overlay' && showStage && frame.parentElement !== overlay) overlay.append(frame);

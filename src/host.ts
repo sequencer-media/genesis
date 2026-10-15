@@ -21,6 +21,8 @@ export class GenesisHost {
     if (!/^[A-Za-z0-9_-]{1,80}$/.test(sessionId)) throw new Error('Use a safe session ID.');
     this.project = validateGenesisProject(structuredClone(project)); this.storage = options.storage || new MemoryGenesisStorage();
     this.policy = { ...defaultGenesisHostPolicy, ...options.policy, capabilities: [...(options.policy?.capabilities || defaultGenesisHostPolicy.capabilities)] };
+    const media = [this.project.startImageUrl, this.project.coverImageUrl, ...this.project.definition.scenes.flatMap(scene => [scene.imageUrl, scene.videoUrl])];
+    if (media.some(url => url && !this.policy.validateAssetUrl(url))) throw new Error('Project media must satisfy the host media policy.');
     this.services = options.services || {}; this.providers = options.providers || [];
     if (this.project.definition.participation.maxPlayers > this.policy.maxPlayers) throw new Error('The project exceeds the host player limit.');
   }

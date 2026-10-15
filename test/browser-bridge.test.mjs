@@ -1,7 +1,15 @@
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import { test } from 'node:test';
-import { EXPERIENCE_BRIDGE_MESSAGE, experienceInterfaceBridgeScript } from '../dist/browser/bridge.js';
+import { EXPERIENCE_BRIDGE_MESSAGE, experienceInterfaceBridgeScript, injectExperienceBridge } from '../dist/browser/bridge.js';
+
+test('the host bridge precedes creator markup even with a misleading head tag or no head', () => {
+  for (const source of ['<!-- <head> --><html><head></head><body>World</body></html>', '<body>World</body>']) {
+    const injected = injectExperienceBridge(source, 'owned-prelude', []);
+    assert.ok(injected.startsWith('<!doctype html><html><head><script data-sequencer-experience-bridge>'));
+    assert.ok(injected.indexOf('owned-prelude') < injected.indexOf(source));
+  }
+});
 
 function bridge() {
   const callbacks = {}, parent = { postMessage() {} };
