@@ -76,7 +76,7 @@
 <a href="license.html">Apache 2.0 license</a>
 <a href="readme.html" aria-current="page" class="active">Project README</a></nav></aside>
     <main id="main" tabindex="-1">
-      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#your-world-model-needs-an-engine">Your World Model needs an Engine.</a><a href="#what-is-a-worldstream">What is a Worldstream?</a><a href="#rick-and-morty--multiplayer-worldstream">Rick and Morty · Multiplayer Worldstream</a><a href="#how-genesis-works">How GENESIS works</a><a href="#what-can-you-build">What can you build?</a><a href="#what-genesis-handles">What GENESIS handles</a><a href="#one-prompt-an-infinite-experience">One prompt. An infinite experience.</a><a href="#play-your-first-world">Play your first world</a><a href="#three-files-your-whole-world">Three files. Your whole world.</a><a href="#development-preview">Development preview</a><a href="#example-projects">Example projects</a><a href="#connect-your-own-world-models">Connect your own World Models</a><a href="#worldstreams-api-instant-setup">Worldstreams API: instant setup</a><a href="#build-with-us">Build with us</a></nav></details><img src="assets/genesis-logo.jpg" alt="GENESIS globe logo" width="128" height="128">
+      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#play-a-game-now">Play a game now</a><a href="#your-world-model-needs-an-engine">Your World Model needs an Engine.</a><a href="#what-is-a-worldstream">What is a Worldstream?</a><a href="#rick-and-morty--multiplayer-worldstream">Rick and Morty · Multiplayer Worldstream</a><a href="#how-genesis-works">How GENESIS works</a><a href="#what-can-you-build">What can you build?</a><a href="#what-genesis-handles">What GENESIS handles</a><a href="#one-prompt-an-infinite-experience">One prompt. An infinite experience.</a><a href="#choose-another-starter">Choose another starter</a><a href="#three-files-your-whole-world">Three files. Your whole world.</a><a href="#development-preview">Development preview</a><a href="#example-projects">Example projects</a><a href="#connect-your-own-world-models">Connect your own World Models</a><a href="#worldstreams-api-instant-setup">Worldstreams API: instant setup</a><a href="#build-with-us">Build with us</a></nav></details><img src="assets/genesis-logo.jpg" alt="GENESIS globe logo" width="128" height="128">
 
 <h1 id="create-infinite-experiences-in-minutes">Create infinite experiences, in minutes.</h1>
 <p><a href="https://github.com/sequencer-media/genesis/actions/workflows/ci.yml"><img src="assets/badges/ci.svg" alt="CI: Node 20 and 22" loading="lazy"></a>
@@ -89,6 +89,13 @@
 <p>Open source, licensed under <a href="license.html">Apache 2.0</a>.</p>
 <p><a href="https://sequencer.media/genesis">Website</a> · <a href="https://sequencer.media/genesis/demos">Demos</a> · <a href="https://sequencer.media/genesis/agent-skill">Skill quickstart</a> · <a href="https://sequencer.media/genesis/getting-started">Documentation</a></p>
 <p><a href="#what-is-a-worldstream">Watch the demos</a> · <a href="#what-can-you-build">What can you build?</a> · <a href="#one-prompt-an-infinite-experience">Build from a prompt</a> · <a href="getting-started.html">Documentation</a> · <a href="api.html">SDK API</a> · <a href="#connect-your-own-world-models">Connect your models</a> · <a href="#worldstreams-api-instant-setup">Worldstreams API</a></p>
+<h2 id="play-a-game-now">Play a game now</h2>
+<p>Requires Node 20 or later. Start with a complete solo adventure:</p>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-sh">git clone https://github.com/sequencer-media/genesis.git
+cd genesis
+npm run play</code></pre></div>
+<p>Open the printed local URL. <strong>Mosslight: Lantern Run</strong> is ready for your first choice. Collect three stars, befriend a fox, manage your inventory and outwit the thorn sentinel. Play with your mouse or the <strong>1, 2, 3</strong> keys, then try another route.</p>
+<p>The command installs the tools, builds Genesis and creates an editable <code>my-world/</code> project. The game runs locally with no account, API key or generation charges. Open <strong>Make this game yours</strong> below the game to find its three source files. Use the <a href="agent-skill.html">world-building skill</a> to turn your own idea into a different game.</p>
 <p><img src="assets/genesis-worlds.svg" alt="Three pixel worlds: a floating forest, a castle arena and a lunar outpost" loading="lazy"></p>
 <h2 id="your-world-model-needs-an-engine">Your World Model needs an Engine.</h2>
 <p>In a tabletop game, the dungeon master remembers what you carry, who you met and what changed. GENESIS gives infinite experiences that same foundation.</p>
@@ -254,15 +261,10 @@ Remember their inventory, health and progress. Give me a working
 local preview and an exportable world.</code></pre></div>
 <p>The skill wires backend requests, declares assets, validates the bundle and exercises the player flow. <a href="authoring-rules.html">AGENTS.md</a> points repo-aware agents to it; other skill-capable agents can load its SKILL.md directly.</p>
 <p>Start with labeled local fixtures. With a configured provider and budget, the agent can create and attach images, audio and video for your worldstream.</p>
-<h2 id="play-your-first-world">Play your first world</h2>
-<p>Requires Node 20 or later. Clone the repository and run:</p>
-<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-sh">git clone https://github.com/sequencer-media/genesis.git
-cd genesis
-npm ci
-npm run build
-node dist/cli.js init ./my-world --template arena-llm
-node dist/cli.js dev ./my-world</code></pre></div>
-<p>Open the printed local URL. Play the vintage pixel battle, switch preview players and take a turn. The starter uses four structured move definitions, shared health and authoritative turns. Local moves and video use prepared fixtures; a connected Worldstreams host requests real backend LLM results.</p>
+<h2 id="choose-another-starter">Choose another starter</h2>
+<p>From your Genesis checkout, create a different world with one command:</p>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-sh">npm run play -- ./my-battle --template arena-llm</code></pre></div>
+<p>Open the printed local URL. In multiplayer starters, switch preview players to fill both seats. Prepared tool responses run automatically. The arena uses local move and media fixtures; live generation connects through a provider on your host.</p>
 <table>
 <thead>
 <tr>
@@ -271,6 +273,10 @@ node dist/cli.js dev ./my-world</code></pre></div>
 </tr>
 </thead>
 <tbody><tr>
+<td><code>quest</code></td>
+<td>A complete solo forest adventure with inventory, tactical choices, endings and replay.</td>
+</tr>
+<tr>
 <td><code>arena-llm</code></td>
 <td>A vintage battle with LLM-created moves and shared player seats.</td>
 </tr>
@@ -291,7 +297,7 @@ node dist/cli.js dev ./my-world</code></pre></div>
 <td>A battle with fixed server-resolved moves, inventory and spectator queues.</td>
 </tr>
 </tbody></table>
-<p>Choose another starter with <code>--template</code>. Edit the project files, then restart the runner. Sessions pin their project version; remove the generated <code>.genesis/</code> directory inside your world to start a fresh development session after code changes.</p>
+<p>Choose another starter with <code>--template</code> and a new directory. To reopen your first game, run <code>npm run play</code>. After editing its files, restart the command and the page reconnects. Each project version keeps its own saved preview, so earlier progress remains available when you return to that version.</p>
 <details>
 <summary>See the vintage arena on mobile</summary>
 

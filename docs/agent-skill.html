@@ -80,16 +80,15 @@
 <p>Describe your world, then let your coding agent build its interface, memory and rules. The included <strong>create-world-stream</strong> skill takes it through a local preview and a complete project export.</p>
 <p>Requires a coding agent that can read local files and run commands, plus Node 20 or later.</p>
 <h2 id="get-genesis-ready">Get Genesis ready</h2>
-<p>Clone the repository and build the local tools:</p>
+<p>Clone the repository and try its first game:</p>
 <div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-sh">git clone https://github.com/sequencer-media/genesis.git
 cd genesis
-npm ci
-npm run build</code></pre></div>
-<p>Open the <code>genesis</code> folder in your coding agent. The skill is already included at <code>skills/create-world-stream/SKILL.md</code>. Repo-aware agents can also discover it through <code>AGENTS.md</code>.</p>
+npm run play</code></pre></div>
+<p>Open the printed URL and play a few choices in Mosslight. Stop the preview when you are ready to build your own world. Open the <code>genesis</code> folder in your coding agent. The skill is already included at <code>skills/create-world-stream/SKILL.md</code>. Repo-aware agents can also discover it through <code>AGENTS.md</code>.</p>
 <h2 id="describe-your-world">Describe your world</h2>
 <p>Paste this prompt into your agent. Change the setting, interactions and visual style to match your idea.</p>
 <div class="prompt-card">
-<pre><code>Read skills/create-world-stream/SKILL.md and use it to build Mosslight, a forest battle worldstream with a cream pixel interface.&#10;&#10;Let two players take turns. Have the backend LLM create four moves per encounter. Remember inventory, health and progress.&#10;&#10;Start with labeled local fixtures. Validate the project, test the controls, and give me a playable local preview and a complete ZIP export.</code></pre>
+<pre><code>Read skills/create-world-stream/SKILL.md and build Moonmoth, a solo game about a courier crossing floating islands. Start from the quest template.&#10;&#10;Give it an original interface, meaningful route choices, an inventory, a clear win/lose goal and replay. Keep the first version instantly playable with local rules.&#10;&#10;Validate and export the project, play a complete run, and give me the local preview URL and ZIP.</code></pre>
 <button type="button" data-copy-prompt>Copy world-building prompt</button>
 </div>
 
@@ -119,6 +118,8 @@ npm run build</code></pre></div>
 
 <p>Turn the user&#39;s idea into a working world, a local preview and a validated exportable bundle. Choose mechanics, presentation and reasonable defaults from the prompt. Ask only for information that blocks the requested behavior. Preserve the user&#39;s chosen provider and existing world behavior. Sequencer is the default managed integration when a provider has not been chosen.</p>
 <p>Read the package&#39;s README and docs/api.md. Use <code>genesis init</code> with the nearest template, then implement the requested world in genesis.json, interface.html and controller.js. Adapt the actual controls, rules and scene context to the idea. Use the local runner&#39;s labeled fixtures for an immediate preview; connect live generation when the provider is configured and spending is authorized.</p>
+<p>For a solo game, start with <code>quest</code>. It has a complete objective, branching decisions, inventory, tactical choices, win/lose endings and replay. Replace its setting, story, visuals and rules to match the request. Make the first meaningful action available immediately. For multiplayer or model-specific requests, use the matching starter and preserve that requirement. Use <code>npm run play -- ./your-world</code> from the checkout to create or open a project and start its preview. New projects use quest unless a template is specified. The command installs and builds the local tools as needed.</p>
+<p>Keep the local play loop fast. Free prepared media and LLM jobs run automatically in the reference preview. A new project version starts its own saved preview without deleting older progress. After edits, restart the preview command; the page reconnects. Test a full ending and replay, not just the first action. Keep setup and diagnostics outside the game UI, and give the user the preview URL plus two simple first-play instructions.</p>
 <p>The stock local runner returns the arena move fixture for LLM requests. For a different responseSchema, supply matching fixture data through a local host provider using createLlmProvider; keep preview-only providers outside the portable project. Do not present a fixture response as live generation.</p>
 <p>Use <code>window.Genesis</code> for browser actions, state subscriptions, seats and assets. Read actor eligibility from the accepted host view. Keep health, turn order, vote outcomes and permitted state transitions in synchronous <code>onEvent(context)</code>. Render LLM names as text; never evaluate model output as HTML or JavaScript.</p>
 <p>For generated moves or world choices, request <code>tool.llm.generate</code> with a bounded object responseSchema, a cost ceiling and a guard against stale battle or scene IDs. Consume job.ready&#39;s event.data.data. Generate a move set once per encounter. Commit game outcomes before scene.request and wait for actual playback.completed before opening a visual turn. The arena-llm example covers four generated moves and player replacement.</p>

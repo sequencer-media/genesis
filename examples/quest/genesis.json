@@ -1,0 +1,191 @@
+{
+  "$schema": "./genesis.schema.json",
+  "format": "genesis-project",
+  "version": 1,
+  "title": "Mosslight: Lantern Run",
+  "startImageUrl": "",
+  "definition": {
+    "schemaVersion": 2,
+    "presetId": "open_world",
+    "genesis": {
+      "version": 1,
+      "packageVersion": "",
+      "controller": "custom",
+      "capabilities": [],
+      "actions": [
+        {
+          "id": "choose",
+          "inputBindingId": "game_controls",
+          "label": "Choose your next move",
+          "fields": {
+            "optionId": {
+              "type": "string",
+              "required": true,
+              "maxLength": 40
+            }
+          }
+        }
+      ],
+      "initialState": {},
+      "configSchema": {
+        "worldName": {
+          "type": "string",
+          "label": "World name",
+          "default": "Mosslight",
+          "maxLength": 40
+        },
+        "lanternTurns": {
+          "type": "number",
+          "label": "Starting lantern light",
+          "default": 10,
+          "min": 6,
+          "max": 24
+        },
+        "difficulty": {
+          "type": "string",
+          "label": "Sentinel difficulty",
+          "default": "normal",
+          "options": [
+            {
+              "value": "normal",
+              "label": "Normal"
+            },
+            {
+              "value": "hard",
+              "label": "Hard"
+            }
+          ]
+        }
+      },
+      "config": {
+        "worldName": "Mosslight",
+        "lanternTurns": 10,
+        "difficulty": "normal"
+      },
+      "limits": {
+        "maxJobs": 2,
+        "maxSessionCostUsd": 5,
+        "maxActionCostUsd": 0.5
+      },
+      "playbackCompletion": "first_player"
+    },
+    "contentPolicy": {
+      "violence": "mild",
+      "nudity": "none",
+      "sexualThemes": "none",
+      "language": "mild",
+      "substances": "none",
+      "frighteningContent": "mild"
+    },
+    "participation": {
+      "mode": "single",
+      "minPlayers": 1,
+      "maxPlayers": 1,
+      "spectators": true,
+      "turnPolicy": "sequential",
+      "joinPolicy": "round_boundary"
+    },
+    "worldVideo": {
+      "chunkIntervalSeconds": 14,
+      "enabled": false,
+      "pacing": "input_gated",
+      "source": "generated",
+      "idlePresentation": "hold_frame",
+      "continuity": "continue_scene",
+      "modelId": "prunaai-p-video-2-pro",
+      "maxCostUsd": 0.5
+    },
+    "inputs": [
+      {
+        "id": "game_controls",
+        "kind": "game",
+        "purpose": "game_command",
+        "scope": "player",
+        "lifetime": "one_action",
+        "activePhases": [
+          "action"
+        ],
+        "required": false,
+        "maxLength": 1200,
+        "advanceBehavior": "submit_readiness"
+      }
+    ],
+    "characters": {
+      "selectionEnabled": true,
+      "display": "grid",
+      "allowPhoto": false,
+      "appearanceLifetime": "session",
+      "conversationHistory": "persistent"
+    },
+    "interface": {
+      "mode": "custom",
+      "layout": "stage",
+      "theme": {
+        "primaryColor": "#FAFAFA",
+        "backgroundColor": "#09090B",
+        "textColor": "#FAFAFA"
+      },
+      "placement": "panel",
+      "controls": [
+        {
+          "id": "control_game_controls",
+          "inputBindingId": "game_controls",
+          "component": "auto",
+          "label": ""
+        }
+      ],
+      "packageVersion": "",
+      "fallback": "default",
+      "handledInputBindingIds": [
+        "game_controls"
+      ],
+      "overlayRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1
+      }
+    },
+    "rules": {
+      "resolver": "narrative",
+      "roundSeconds": 20,
+      "voteOptions": [
+        "Explore further",
+        "Meet a character",
+        "Follow the unexpected"
+      ],
+      "tieBreak": "first",
+      "shotsPerPlayer": 5
+    },
+    "flow": {
+      "entryPhase": "action",
+      "phases": [
+        {
+          "id": "action",
+          "title": "Interact",
+          "inputBindingIds": [
+            "game_controls"
+          ],
+          "next": "action",
+          "completion": "manual"
+        }
+      ]
+    },
+    "scenes": [],
+    "gameBindings": []
+  },
+  "assets": [
+    {
+      "path": "assets/end.jpg",
+      "mimeType": "image/jpeg",
+      "sizeBytes": 6440
+    },
+    {
+      "path": "assets/scene.mp4",
+      "mimeType": "video/mp4",
+      "sizeBytes": 7027
+    }
+  ],
+  "interfaceFile": "interface.html",
+  "controllerFile": "controller.js"
+}

@@ -57,6 +57,6 @@ export function validateGenesisProject(raw: unknown): GenesisProject {
 }
 export function createGenesisProject(exampleId = 'exploration'): GenesisProject {
   const example = GENESIS_EXAMPLES.find(e => e.id === exampleId);
-  if (!example) throw new Error('Choose exploration, timing, decisions, arena or arena-llm.');
-  return validateGenesisProject({ format: 'genesis-project', version: 1, title: example.label, definition: example.definition(createGenesisDefinition()), interfaceSource: example.interfaceSource, controllerSource: example.controllerSource, startImageUrl: '/assets/end.jpg' });
+  if (!example) throw new Error('Choose quest, exploration, timing, decisions, arena or arena-llm.');
+  return validateGenesisProject({ format: 'genesis-project', version: 1, title: example.label, definition: example.definition(createGenesisDefinition()), interfaceSource: example.interfaceSource, controllerSource: example.controllerSource, startImageUrl: example.startImageUrl ?? '/assets/end.jpg' });
 }

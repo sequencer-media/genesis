@@ -6,23 +6,22 @@ Requires a coding agent that can read local files and run commands, plus Node 20
 
 ## Get Genesis ready
 
-Clone the repository and build the local tools:
+Clone the repository and try its first game:
 
 ```sh
 git clone https://github.com/sequencer-media/genesis.git
 cd genesis
-npm ci
-npm run build
+npm run play
 ```
 
-Open the `genesis` folder in your coding agent. The skill is already included at `skills/create-world-stream/SKILL.md`. Repo-aware agents can also discover it through `AGENTS.md`.
+Open the printed URL and play a few choices in Mosslight. Stop the preview when you are ready to build your own world. Open the `genesis` folder in your coding agent. The skill is already included at `skills/create-world-stream/SKILL.md`. Repo-aware agents can also discover it through `AGENTS.md`.
 
 ## Describe your world
 
 Paste this prompt into your agent. Change the setting, interactions and visual style to match your idea.
 
 <div class="prompt-card">
-<pre><code>Read skills/create-world-stream/SKILL.md and use it to build Mosslight, a forest battle worldstream with a cream pixel interface.&#10;&#10;Let two players take turns. Have the backend LLM create four moves per encounter. Remember inventory, health and progress.&#10;&#10;Start with labeled local fixtures. Validate the project, test the controls, and give me a playable local preview and a complete ZIP export.</code></pre>
+<pre><code>Read skills/create-world-stream/SKILL.md and build Moonmoth, a solo game about a courier crossing floating islands. Start from the quest template.&#10;&#10;Give it an original interface, meaningful route choices, an inventory, a clear win/lose goal and replay. Keep the first version instantly playable with local rules.&#10;&#10;Validate and export the project, play a complete run, and give me the local preview URL and ZIP.</code></pre>
 <button type="button" data-copy-prompt>Copy world-building prompt</button>
 </div>
 

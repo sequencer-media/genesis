@@ -2,6 +2,12 @@
 
 Explore GENESIS worlds with real interfaces, shared rules and persistent state.
 
+## Mosslight: Lantern Run
+
+Run `npm run play` for a complete solo adventure. Find three stars, choose a route, manage your lantern and outwit a thorn sentinel. A run takes six or more choices and ends with a result you can replay. Everything runs locally without an account, API key or model provider.
+
+The [`quest` starter](https://github.com/sequencer-media/genesis/tree/main/examples/quest) includes the interface, authoritative rules and editable settings. Change the world name, lantern duration or difficulty in `genesis.json`, then restart the preview. [Start playing and remixing](getting-started.md).
+
 ## Pokémon Stadium
 
 [Open Pokémon Stadium on Sequencer](https://sequencer.media/worldstreams/S_R5xijO8Pjv).
@@ -28,4 +34,4 @@ Publish your finished world using [My Worlds](https://sequencer.media/worldstrea
 
 ## Included starter projects
 
-The repository includes runnable starters for exploration, battles, crowd voting, shared state and custom tools. [Run a starter locally](getting-started.md) or [watch the Worldstream demos](demos.md).
+The repository includes runnable starters for solo adventures, exploration, battles, crowd voting, shared state and custom tools. [Run a starter locally](getting-started.md) or [watch the Worldstream demos](demos.md).
