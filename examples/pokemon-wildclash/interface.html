@@ -1716,7 +1716,7 @@
       var empty=currentGame.phase==='battle'?(Object.keys(currentGame.commandReady||{}).length?(active&&active.id==='trainer_red'?'RED':'BLUE')+' CHOOSES A COMMAND':'BOTH TRAINERS CHOOSE A COMMAND'):currentGame.phase==='setup'?'BOTH TRAINERS READY UP':'CHOOSE A POKÉMON OR PRACTICE';
       var labels=queue.map(function(item){
         var wait=item.estimatedStartAt==null?null:Math.ceil((item.estimatedStartAt-clock)/1000);
-        return item.status==='playing'?'PLAYING':item.targetStatus==='missed'?'DELAYED':wait>0?'IN ~'+wait+'S':({'preparing image':'SETTING SCENE','queued for video':'QUEUED',queued:'QUEUED',preparing:'PREPARING',waiting:'UP NEXT'})[item.status]||item.status;
+        return item.status==='playing'?'PLAYING':item.waitingForFrame?'NEW FRAME':item.targetStatus==='missed'?'DELAYED':wait>0?'IN ~'+wait+'S':({'preparing image':'SETTING SCENE','queued for video':'QUEUED',queued:'QUEUED',preparing:'PREPARING',waiting:'UP NEXT'})[item.status]||item.status;
       });
       var signature=JSON.stringify([queue,labels,empty]);if(signature===queueSignature)return;queueSignature=signature;
       var list=el('actionQueue'),opened=new Set();

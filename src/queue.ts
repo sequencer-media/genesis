@@ -1,4 +1,5 @@
 import {genesisDispatchOrder} from './scheduling.js';
+import {genesisRequiredFrameStatus} from './frameLibrary.js';
 import type {GenesisState, GenesisJob} from './genesisCore.js';
 
 /** Public display metadata supplied only after an action is committed. */
@@ -14,7 +15,7 @@ export interface GenesisStreamChunk {
 export interface GenesisQueueView {
  version:1; revision:number; serverNow:number; estimated:true;
  items:Array<{id:string; jobId:string|null; actionId:string|null; kind:string; label:string; prompt:string|null; position:number;
-  source:'action'|'genesis';chunkSequence:number|null; status:'queued'|'preparing'|'playing'; queuedAt:number|null; durationMs:number;
+  source:'action'|'genesis';chunkSequence:number|null; status:'queued'|'preparing'|'playing'; waitingForFrame?:boolean; queuedAt:number|null; durationMs:number;
   estimatedStartAt:number|null; estimatedEndAt:number|null; estimatedWaitMs:number|null;
   priority:'urgent'|'queued'|'mergeable';targetStartAt:number|null;targetLatencyMs:number|null;
   targetStatus:'unknown'|'on-track'|'at-risk'|'missed'|'playing';mergedEffectIds:string[]}>;
@@ -46,11 +47,12 @@ export function genesisQueueView(state:GenesisState,timing:{now?:number;duration
  let next=candidate&&candidate>now?candidate:null;
  let items:GenesisQueueView['items']=records.map(({plan,job},index)=>{
   const isPlaying=job?playing(job):plan?.status==='playing';
-  const status=isPlaying?'playing' as const:job?.status==='running'||plan?.status==='preparing'?'preparing' as const:'queued' as const;
+  const waitingForFrame=!!job&&genesisRequiredFrameStatus(state,job,now)==='waiting';
+  const status=isPlaying?'playing' as const:waitingForFrame||job?.status==='running'||plan?.status==='preparing'?'preparing' as const:'queued' as const;
   const span=job?.playbackDurationMs||plan?.durationMs||(job?.effect.duration?job.effect.duration*1000:duration);
   const supplied=job?.estimatedPlaybackAt;
   const scheduled=supplied!==undefined?(supplied>now?(index===0?supplied:Math.max(supplied,next??supplied)):null):next;
-  const start=isPlaying?(job?.id===timing.playingJobId?timing.playingStartedAt:job?.playbackStartedAt)||now:scheduled;
+  const start=isPlaying?(job?.id===timing.playingJobId?timing.playingStartedAt:job?.playbackStartedAt)||now:waitingForFrame?null:scheduled;
   const predictedEnd=start===null?null:start+span;
   const end=predictedEnd!==null&&predictedEnd>now?predictedEnd:null;
   next=end===null?null:end+(timing.gapMs??duration);
@@ -58,7 +60,7 @@ export function genesisQueueView(state:GenesisState,timing:{now?:number;duration
   const targetStatus=isPlaying?'playing' as const:target===null?'unknown' as const:now>target?'missed' as const:start===null?'unknown' as const:start<=target?'on-track' as const:'at-risk' as const;
   return {priority:job?.effect.delivery?.priority||'queued',targetStartAt:target,targetLatencyMs:job?.effect.delivery?.targetLatencyMs??null,targetStatus,mergedEffectIds:job?.mergedEffects?.map(e=>e.id)||[],id:plan?.id||job!.id,jobId:job?.id||plan?.jobId||null,actionId:plan?.actionId||job?.sourceActionId||null,kind:job?.effect.type||'action',
    label:plan?.label||job?.effect.label||'World action',prompt:plan?.prompt??job?.effect.displayPrompt??null,position:index+1,status,
-   source:'action',chunkSequence:null,queuedAt:plan?.queuedAt??job?.queuedAt??null,durationMs:span,estimatedStartAt:start,estimatedEndAt:end,estimatedWaitMs:isPlaying?0:start===null?null:Math.max(0,start-now)};
+   source:'action',chunkSequence:null,waitingForFrame,queuedAt:plan?.queuedAt??job?.queuedAt??null,durationMs:span,estimatedStartAt:start,estimatedEndAt:end,estimatedWaitMs:isPlaying?0:start===null?null:Math.max(0,start-now)};
  });
  const chunks=timing.chunks||[],seen=new Set<string>();
  if(chunks.length>12)throw Error('Provide at most 12 observed stream chunks.');

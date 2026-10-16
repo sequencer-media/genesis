@@ -42,6 +42,8 @@ const game=JSON.parse(JSON.stringify(old));
 const server=JSON.parse(JSON.stringify(state.server || {}));
 if (server.suppressAnimation && (jobs || []).every(job => !['queued','running'].includes(job.status))) server.suppressAnimation=false;
 server.rosterEpoch=server.rosterEpoch||game.rosterKey||'';
+server.redActor=seats.find(s=>s.id==='trainer_red')?.actorId||'';
+server.blueActor=seats.find(s=>s.id==='trainer_blue')?.actorId||'';
 const effects=[];
 const eventLog=[];
 function random() {
@@ -178,42 +180,27 @@ server.decision=Number(server.decision || 0) + 1;
 return {id:'setup:' + server.decision, mode:'individual', actionIds:['select_pokemon','ready_battle','practice_move'],
 actorIds:roster.map(s => s.actorId)};
 }
-function queueVisual(effect, label, keyframe) {
+function queueVisual(effect,label,keyframe) {
 effect.label=label;
 const kind=effect.requiredOutcome.kind,urgent=['pokemon.selected','battle.start','battle_move','use_item','practice.move'].includes(kind);
 effect.delivery=urgent?{priority:'urgent',replaceable:false,targetLatencyMs:5000,selectedAtMs:effect.requiredOutcome.selectedAtMs||now}:{priority:'mergeable',mergeKey:'arena-idle',replaceable:true};
-if(urgent)effect.guard={key:'rosterEpoch',value:server.rosterEpoch||''};
+if(urgent){const side=effect.requiredOutcome.side;effect.guard=['battle_move','use_item'].includes(kind)?{key:'visualId',value:effect.id}:side?{key:side==='trainer_red'?'redActor':'blueActor',value:side==='trainer_red'?server.redActor:server.blueActor}:{key:'rosterEpoch',value:server.rosterEpoch||''};}
 effect.displayPrompt='Show '+label+' once in the established scene.';
-const lineupKey=roster.map(s=>s.id+':'+s.actorId+':'+game.fighters[s.actorId].name).join('|');
-server.lineupKey=lineupKey;
-const needsFrame=config.settings.visualContext&&lineupKey&&lineupKey!==server.acceptedLineupKey;
-if(config.video.pacing==='continuous'){
-game.videoQueue={id:effect.id,kind:effect.requiredOutcome.kind,label,status:'queued for video'};
-const spawn=['pokemon.selected','battle.start'].includes(kind)&&effect.requiredOutcome.pokemon;
-const ref=frameIdentity(spawn?(effect.requiredOutcome.side==='trainer_red'?'spawn-red':'spawn-blue'):'ready',effect.requiredOutcome.beforeFighters);
-const entry=ref&&(frameLibrary||{})[ref.key],ready=keyframe&&entry?.status==='ready'&&entry.fingerprint===ref.fingerprint&&entry.expiresAtMs>now;
-effects.push({...effect,continuity:ready?'reanchor':'linked',frameMode:ready?'new-frame':'continue',...(ready?{frameRef:ref}:{})});
-if(keyframe&&ref&&(frameLibrary||{})[ref.key]?.status==='ready'){server.appliedFrameFingerprint=ref.fingerprint;server.appliedFrameAnchorId=frameLibrary[ref.key].anchorId;server.lastFrameAppliedAtMs=now;}
-return;
-}
-if(needsFrame){
-const pending=server.frameRequest, sameLineup=pending&&pending.lineupKey===lineupKey;
-server.frameRequest={effect,label,lineupKey};
-game.videoQueue={id:effect.id,kind:effect.requiredOutcome.kind,label,status:'preparing image'};
-if(!sameLineup){
-server.imageJobId=null;
-server.frameReady=false;server.frameTimerId='frame-wait:'+effect.id;
-effects.push({id:server.frameTimerId,type:'timer.set',delayMs:1500,data:{kind:'setup-frame',requestId:server.frameTimerId}});
-}
-startFrameRequest();
-}else if(server.frameRequest&&lineupKey!==server.acceptedLineupKey){
-server.frameRequest={...server.frameRequest,effect,label,lineupKey};
-game.videoQueue={id:effect.id,kind:effect.requiredOutcome.kind,label,status:'preparing image'};
-}else{
-server.frameRequest=null;server.frameTimerId=null;server.frameReady=false;
-game.videoQueue={id:effect.id,kind:effect.requiredOutcome.kind,label,status:'queued for video'};
-effects.push({...effect,continuity:'linked'});
-}
+game.videoQueue={id:effect.id,kind,label,status:'queued for video'};
+if(config.settings.visualContext&&(urgent||keyframe)){
+const spawn=['pokemon.selected','battle.start'].includes(kind)&&effect.requiredOutcome.pokemon?effect.requiredOutcome.side:'';
+const before=effect.requiredOutcome.beforeFighters||effect.requiredOutcome.fighters||fighterSnapshots();
+const ref={key:('cut:'+effect.id).slice(-64),fingerprint:'fresh-action-v1:'+effect.id,required:true};
+effects.push({id:'image:'+effect.id,type:'frame.prepare',frame:{key:ref.key,fingerprint:ref.fingerprint,refresh:true,ttlMs:120000,priority:100},
+anchorId:'start',referenceAnchorIds:['start'],modelId:config.settings.imageModel||'p-image-edit',maxCostUsd:.05,
+intent:battleCamera()+' Render a NEW clean before-action starting image for '+effect.id+'. Rebuild the physical arena from the original clean reference, never from a generated video frame. Use only the supplied BEFORE-action cast and posture. No attacks, release flash, damage effects, dialogue or UI. The next video performs the action.',
+requiredOutcome:{kind:'battle.start_frame',pose:spawn?'spawn-'+spawn:'before-action',
+fighters:before.filter(f=>f.sentOut!==false&&f.side!==spawn),
+unreleasedSides:before.filter(f=>f.sentOut===false&&f.side!==spawn).map(f=>f.side),
+...(spawn?{pendingSendOut:{side:spawn,pokemon:effect.requiredOutcome.pokemon}}:{}),emptySides:seats.filter(s=>!s.actorId).map(s=>s.id)},guard:effect.guard});
+game.videoQueue.status='preparing image';
+effects.push({...effect,frameRef:ref,frameMode:'new-frame',continuity:'reanchor'});
+}else effects.push({...effect,frameMode:'continue',continuity:'linked'});
 }
 function frameIdentity(pose,snapshot) {
 if(!roster.length)return null;
@@ -279,23 +266,6 @@ server.reanchorPending=false;
 effects.push({id,type:'live.direction',anchorId:server.acceptedAnchorId,continuity:'reanchor',frameMode:'new-frame',delivery:{priority:'mergeable',mergeKey:'arena-idle',replaceable:true},
 intent:directionIntent('Continue from this accepted scene-only frame. Hold the current fighters on their assigned sides with subtle breathing. This corrects composition only; do not replay any send-out, move or item.'),
 requiredOutcome:{kind:'lineup.ready',phase:game.phase,fighters:fighterSnapshots(),visualEventId:id},guard:{key:'visualId',value:id}});
-}
-function startFrameRequest() {
-if (!server.frameRequest || !server.frameReady || !roster.length) return;
-if(server.imageJobId){
-const current=(jobs||[]).find(j=>j.id===server.imageJobId);
-if(current&&['queued','running'].includes(current.status))return;
-server.imageJobId=null;
-}
-if ((jobs||[]).some(j=>['queued','running'].includes(j.status)&&j.type!=='live.direction'&&!(j.status==='queued'&&j.guard&&server[j.guard.key]!==j.guard.value))) return;
-const request=server.frameRequest, effect=request.effect;
-server.imageJobId='frame:'+effect.id;
-effects.push({id:server.imageJobId,type:'image.request',presentation:'background',anchorId:'start',
-referenceAnchorIds:['start'],modelId:config.settings.imageModel||'google-nano-banana-2-1',maxCostUsd:.05,
-intent:[config.settings.setupImagePrompt,config.settings.imageGenerationPolicy,'Prepare one scene-only starting frame for the changed fighter lineup. Show the accepted fighters and trainers in settled poses on their assigned sides. Preserve camera, materials, palette, lighting and landmarks. The next video chunk performs the accepted action.'].filter(Boolean).join('\n'),
-requiredOutcome:{kind:'lineup.start_frame',lineupKey:request.lineupKey,
-fighters:fighterSnapshots().map(f=>({name:f.name,side:f.side,appearance:f.appearance,posture:f.posture,trainerName:f.trainerName})),
-emptySides:seats.filter(s=>!s.actorId).map(s=>s.id)},guard:{key:'lineupKey',value:request.lineupKey}});
 }
 function lobbyDirection(kind, intent, outcome) {
 server.decision=Number(server.decision || 0) + 1;
@@ -467,10 +437,6 @@ if (config.video.pacing!=='continuous'&&stage.mode !== 'holding' && stage.anchor
 if (roster.length) lobbyDirection('lobby.roster','Keep the winner and trainer visible. Recall empties only the defeated side. Red near-left, blue far-right. One Pokémon per occupied side. Idle only.',{});
 return transition(setupWindow());
 }
-if(event.type==='timer'&&event.data.kind==='setup-frame'){
-if(event.data.requestId!==server.frameTimerId||!server.frameRequest)return {};
-server.frameTimerId=null;server.frameReady=true;startFrameRequest();return transition();
-}
 if(event.type==='timer'&&event.data.kind==='frame-check'){
 if(event.data.checkId!==server.frameCheckId)return {};
 server.frameCheckId=null;
@@ -519,27 +485,6 @@ if (game.phase === 'battle' && game.deadline > now) watchUntil(game.deadline);
 else if (game.phase === 'animating' && server.pending) watchUntil(server.pending.expiresAt);
 return {server,effects};
 }
-if (['job.ready','job.failed','job.skipped','job.cancelled'].includes(event.type) && event.data.jobId===server.imageJobId) {
-server.imageJobId=null;
-const request=server.frameRequest;
-if(!request||!roster.length)return transition();
-if(event.type==='job.cancelled'){startFrameRequest();return transition();}
-server.frameRequest=null;
-if(request.background){
-if(event.type==='job.ready'&&event.data.anchorId){server.acceptedAnchorId=event.data.anchorId;server.acceptedLineupKey=request.lineupKey;server.reanchorPending=true;}
-return transition();
-}
-if(event.type==='job.ready'&&event.data.anchorId){
-effects.push({...request.effect,anchorId:event.data.anchorId,continuity:'reanchor'});
-server.acceptedAnchorId=event.data.anchorId;
-server.acceptedLineupKey=request.lineupKey;
-}else{
-log('Setup image unavailable. The battle continues from its current frame.');
-effects.push({...request.effect,continuity:'linked'});
-}
-game.videoQueue={id:request.effect.id,kind:request.effect.requiredOutcome.kind,label:request.label,status:'queued for video'};
-return transition(game.phase==='animating'?null:undefined);
-}
 if (['job.ready','job.failed','job.skipped','job.cancelled','playback.completed'].includes(event.type)) {
 if(server.ending?.jobId&&event.data.jobId===server.ending.jobId){
 if(event.type==='job.ready'&&!event.data.data?.playbackCompleted)return {};
@@ -555,7 +500,6 @@ if(completed)announce('Battle begins!','battle.start');
 return (server.roundQueue||[]).length?advanceRound():transition(game.phase==='battle'?battleWindow(game.activeTurnActorId):undefined);
 }
 if(server.startRequested&&!game.videoQueue&&roster.length===2&&roster.every(s=>game.fighters[s.actorId].ready))return startBattle();
-if(server.frameRequest&&!server.imageJobId){startFrameRequest();if(!server.frameRequest.background)return transition();}
 if (game.phase !== 'animating' || !server.pending) return transition();
 if (event.data.jobId !== server.pending.jobId) return {};
 if (event.type === 'job.ready' && event.data.videoUrl) {

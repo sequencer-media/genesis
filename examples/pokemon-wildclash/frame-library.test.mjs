@@ -1,3 +1,4 @@
+import {genesisRequiredFrameStatus} from '../../dist/frameLibrary.js';
 import test from 'node:test';import assert from 'node:assert/strict';
 import {GenesisHost} from '../../dist/host.js';
 import {loadGenesisProject} from '../../dist/projectFiles.js';
@@ -13,7 +14,7 @@ test('matchup and fainting checkpoints prepare before battle and a knockout fram
  await host.join('red','Red');await host.join('blue','Blue');
  const state=()=>host.diagnostics().state.genesis;
  const action=(who,id,data)=>host.action(who,crypto.randomUUID(),id,data,host.view(who).genesis.revision);
- const drain=async(limit=15)=>{for(let i=0;i<limit;i++){const queued=state().jobs.find(j=>j.status==='queued'&&j.effect.type==='live.direction');if(queued){const actor=host.diagnostics().state.participation.seats.find(s=>s.actorId)?.actorId;if(actor)await host.runJob(actor,queued.id);}await host.tick();if(!state().jobs.some(j=>['queued','running'].includes(j.status)))break;}};
+ const drain=async(limit=15)=>{for(let i=0;i<limit;i++){const queued=state().jobs.find(j=>j.status==='queued'&&j.effect.type==='live.direction'&&genesisRequiredFrameStatus(state(),j)!=='waiting');if(queued){const actor=host.diagnostics().state.participation.seats.find(s=>s.actorId)?.actorId;if(actor)await host.runJob(actor,queued.id);}await host.tick();if(!state().jobs.some(j=>['queued','running'].includes(j.status)))break;}};
  await host.players('red',{operation:'claim',seatId:'trainer_red'});await host.players('blue',{operation:'claim',seatId:'trainer_blue'});await drain();
  const library=state().frameLibrary;
  assert.equal(library['kanto:0:1:ready'].status,'ready');assert.equal(library['kanto:0:1:red-fainted'].status,'ready');assert.equal(library['kanto:0:1:blue-fainted'].status,'ready');
@@ -49,7 +50,7 @@ test('idle frames regenerate after 30 seconds and each accepted anchor cuts in o
   const host=await new GenesisHost('fresh-frames',project,{providers:[provider]}).initialize();
   await host.join('red','Red');await host.players('red',{operation:'claim',seatId:'trainer_red'});
   const state=()=>host.diagnostics().state.genesis;
-  const drain=async()=>{for(let i=0;i<12;i++){for(const j of state().jobs.filter(j=>j.status==='queued'&&j.effect.type==='live.direction'))await host.runJob('red',j.id);await host.tick(now);if(!state().jobs.some(j=>['queued','running'].includes(j.status)))break;}};
+  const drain=async()=>{for(let i=0;i<12;i++){for(const j of state().jobs.filter(j=>j.status==='queued'&&j.effect.type==='live.direction'&&genesisRequiredFrameStatus(state(),j)!=='waiting'))await host.runJob('red',j.id);await host.tick(now);if(!state().jobs.some(j=>['queued','running'].includes(j.status)))break;}};
   await drain();
   assert.equal(submitted.filter(e=>e.requiredOutcome?.kind==='lineup.ready').length,0,'A forecast cannot summon an unsent Pokémon');
   await host.action('red',crypto.randomUUID(),'ready_battle',{pokemonIndex:0},host.view('red').genesis.revision);await drain();

@@ -89,3 +89,19 @@ test('reference host prepares frames automatically through its authorized provid
  const restored=await new GenesisHost('frame-auto',p,{storage,providers:[provider]}).initialize();
  assert.equal(restored.diagnostics().state.genesis.frameLibrary.auto.status,'ready');
 });
+
+test('required frames gate dispatch and survive later urgent preemption',async()=>{
+ const {def,state}=setup();
+ const direction=(id,key)=>({id,type:'live.direction',intent:'Accepted action',delivery:{priority:'urgent',replaceable:false},frameMode:'new-frame',frameRef:{key,fingerprint:key+':v1',required:true}});
+ let next=reduce(def,state,[prepare('first'),direction('first-action','first')]);
+ const imageJob=next.genesis.jobs.find(j=>j.effect.frame);assert.ok(imageJob);
+ assert.equal(next.genesis.jobs.find(j=>j.id==='first-action').effect.anchorId,undefined,'No stale stage anchor is substituted');
+ imageJob.status='running';
+ next=reduce(def,next,[prepare('second'),direction('second-action','second')],'second',1001);
+ assert.equal(next.genesis.jobs.find(j=>j.id===imageJob.id).status,'running','A later urgent cannot cancel an earlier required image');
+ next=await settleGenesisJob(def,next,source,imageJob.id,{imageUrl:image},1002);
+ assert.equal(next.genesis.frameLibrary.first.status,'ready');
+ assert.ok(next.genesis.jobs.some(j=>j.effect.frame?.key==='second'),'The next required image can prepare alongside the queued first action');
+ assert.throws(()=>reduce(def,next,[direction('unknown','absent')],'missing-reference'),/Prepare the exact required frame/);
+ assert.throws(()=>reduce(def,next,[{...direction('invalid','first'),frameRef:{key:'first',fingerprint:'first:v1',required:'yes'}}],'invalid-reference'),/prepared frame/);
+});

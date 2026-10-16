@@ -48,8 +48,10 @@ export function prepareGenesisFrame(def: ExperienceDefinition, state: GenesisSta
     return;
   }
   if (!previous && Object.keys(library).length >= 16) {
-    const removable = Object.values(library).filter(f => f.status !== 'preparing' && f.anchorId !== state.stage.anchorId)
-      .sort((a,b) => Math.max(a.lastUsedAtMs,a.requestedAtMs)-Math.max(b.lastUsedAtMs,b.requestedAtMs))[0];
+    const removable = Object.values(library).filter(f => f.status !== 'preparing' && f.anchorId !== state.stage.anchorId
+      && !state.jobs.some(j=>active(j)&&j.effect.frameRef?.required&&j.effect.frameRef.key===f.key&&j.effect.frameRef.fingerprint===f.fingerprint))
+      .sort((a,b) => Number(a.request.frame?.refresh!==true)-Number(b.request.frame?.refresh!==true)
+        || Math.max(a.lastUsedAtMs,a.requestedAtMs)-Math.max(b.lastUsedAtMs,b.requestedAtMs))[0];
     if (!removable) return;
     delete library[removable.key];
   }
@@ -83,14 +85,18 @@ export function settleGenesisFrame(state: GenesisState, job: GenesisJob, anchorI
   if(!matchesGuard(state,job.effect)){deferGenesisFrame(state,job);return false;}
   entry.status=error ? 'failed' : 'ready'; entry.error=error.slice(0,240); entry.anchorId=error ? '' : anchorId;
   entry.readyAtMs=error ? 0 : now; entry.expiresAtMs=error ? 0 : Math.min(expiresAtMs ?? Infinity,now+(entry.request.frame!.ttlMs || 600_000));
+  if(error&&entry.attempts<2&&state.jobs.some(j=>active(j)&&j.effect.frameRef?.required&&j.effect.frameRef.key===entry.key&&j.effect.frameRef.fingerprint===entry.fingerprint)){
+    entry.status='pending';entry.generation++;entry.jobId='';
+  }
   return true;
 }
 
-/** A missing or obsolete frame falls back to linked video and requests a refresh. */
+/** Required references retain their dependency until dispatch; optional references can continue. */
 export function resolveGenesisFrame(state: GenesisState, effect: GenesisEffect, now: number): GenesisEffect {
   const ref=effect.frameRef;
   if (!ref) return effect;
   if (!['scene.request','live.direction'].includes(effect.type) || !safeKey(ref.key) || !fingerprint(ref.fingerprint)
+    || ref.required !== undefined && typeof ref.required !== 'boolean'
     || effect.useStartFrame === false) throw new Error('Reference a prepared frame from a linked scene or live direction.');
   const entry=state.frameLibrary?.[ref.key];
   if (entry?.fingerprint === ref.fingerprint && matchesGuard(state,entry.request)) {
@@ -98,9 +104,18 @@ export function resolveGenesisFrame(state: GenesisState, effect: GenesisEffect, 
       entry.lastUsedAtMs=now;
       return {...effect,anchorId:entry.anchorId,continuity:'reanchor'};
     }
-    if (entry.imported) return {...effect,continuity:'linked'};
+    if(entry.imported){
+      if(ref.required)throw new Error('The required saved frame expired. Cache a current image before requesting this action.');
+      const {frameRef:unusedRef,anchorId:unusedAnchor,...continuation}=effect;
+      return {...continuation,...(effect.frameMode?{frameMode:'continue' as const}:{}),continuity:'linked'};
+    }
     if (entry.status === 'ready' || entry.status === 'stale') {entry.status='pending';entry.generation++;entry.anchorId='';}
     entry.request.frame!.priority=100;
+  }
+  if(ref.required){
+    if(!entry||entry.fingerprint!==ref.fingerprint)throw new Error('Prepare the exact required frame before requesting its action.');
+    const {anchorId:unused,...waiting}=effect;
+    return {...waiting,frameMode:'new-frame',continuity:'reanchor'};
   }
   const {frameRef:unusedRef,anchorId:unusedAnchor,...continuation}=effect;
   return {...continuation,...(effect.frameMode?{frameMode:'continue' as const}:{}),continuity:'linked'};
@@ -115,14 +130,26 @@ export function scheduleGenesisFrame(def: ExperienceDefinition, state: GenesisSt
     }
   }
   const jobs=state.jobs.filter(active);
-  if (jobs.some(j => j.effect.type !== 'live.direction'||j.effect.delivery?.priority==='urgent') || jobs.length > 1) return;
+  const required=jobs.filter(j=>j.effect.frameRef?.required).map(j=>j.effect.frameRef!);
+  const needed=(f:GenesisPreparedFrame)=>required.some(r=>r.key===f.key&&r.fingerprint===f.fingerprint);
+  if (jobs.some(j => j.effect.type !== 'live.direction' && !(j.effect.type==='scene.request'&&j.status==='queued'&&j.effect.frameRef?.required))) return;
+  const urgent=jobs.some(j=>j.effect.delivery?.priority==='urgent');
   const remaining=Math.min(policy.maxSessionCostUsd,def.genesis!.limits.maxSessionCostUsd)-state.reservedCostUsd;
   const next=Object.values(library).filter(f => f.status === 'pending' && matchesGuard(state,f.request)
-    && (f.request.maxCostUsd || .05) <= remaining+1e-8).sort((a,b) => (b.request.frame!.priority || 0)-(a.request.frame!.priority || 0) || a.requestedAtMs-b.requestedAtMs)[0];
+    && (!urgent||needed(f)) && (f.request.maxCostUsd || .05) <= remaining+1e-8)
+    .sort((a,b) => Number(needed(b))-Number(needed(a)) || (b.request.frame!.priority || 0)-(a.request.frame!.priority || 0) || a.requestedAtMs-b.requestedAtMs)[0];
   if (!next) return;
   next.status='preparing';next.attempts++;state.frameSequence=(state.frameSequence || 0)+1;
   next.jobId=`frame:${next.key}:${state.frameSequence}`;
   return {...next.request,id:next.jobId,frameGeneration:next.generation};
+}
+
+/** Required action frames are a dispatch barrier, never a silent continuation fallback. */
+export function genesisRequiredFrameStatus(state:GenesisState,job:GenesisJob,now=Date.now()):'ready'|'waiting'|'failed'{
+  const ref=job.effect.frameRef;if(!ref?.required)return 'ready';
+  const entry=state.frameLibrary?.[ref.key];
+  if(!entry||entry.fingerprint!==ref.fingerprint||!matchesGuard(state,entry.request)||entry.status==='failed'||entry.imported&&entry.expiresAtMs<=now)return 'failed';
+  return entry.status==='ready'&&entry.expiresAtMs>now&&!!state.anchors[entry.anchorId]?.imageUrl?'ready':'waiting';
 }
 
 export function genesisFrameLibraryView(state: GenesisState) {

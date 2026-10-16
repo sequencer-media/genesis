@@ -1,3 +1,4 @@
+import {genesisRequiredFrameStatus} from '../../dist/frameLibrary.js';
 import test from 'node:test';import assert from 'node:assert/strict';
 import {GenesisHost}from'../../dist/host.js';import {loadGenesisProject}from'../../dist/projectFiles.js';
 const project=await loadGenesisProject(new URL('.',import.meta.url).pathname);
@@ -8,7 +9,7 @@ async function fixture(){
  const state=()=>host.diagnostics().state.genesis;let seq=0;
  const act=(actor,id,data)=>host.action(actor,'flow-'+seq++,id,data,host.view(actor).genesis.revision);
  async function drain(){for(let i=0;i<40;i++){
-  const job=state().jobs.find(j=>['queued','running'].includes(j.status));
+  const job=state().jobs.find(j=>j.status==='running'||j.status==='queued'&&genesisRequiredFrameStatus(state(),j)!=='waiting');
   if(job){if(job.status==='queued')await host.runJob(host.diagnostics().state.participation.seats.find(s=>s.actorId).actorId,job.id);await host.tick();continue;}
   const timer=state().timers.find(t=>t.data.kind==='setup-frame');if(timer){await host.tick(timer.dueAt+1);continue;}return;
  }throw Error('Pipeline did not drain');}

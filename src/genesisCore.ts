@@ -14,7 +14,7 @@ export interface GenesisWindow {
 }
 export interface GenesisEffect {
   id: string; type: 'scene.request' | 'image.request' | 'live.direction' | 'tool.request' | 'frame.prepare' | 'frame.invalidate' | 'stage.restore' | 'stage.show' | 'stage.play' | 'timer.set' | 'players.release';
-  frame?: GenesisFrameSpec; frameKey?: string; frameRef?: Pick<GenesisFrameSpec,'key'|'fingerprint'>;
+  frame?: GenesisFrameSpec; frameKey?: string; frameRef?: Pick<GenesisFrameSpec,'key'|'fingerprint'> & {required?: boolean};
   /** Assigned by the engine to a background image job. */
   frameGeneration?: number;
   seatId?: string; expectedActorId?: string; cooldownMs?: number;
@@ -192,7 +192,7 @@ export function applyGenesisTransition(def: ExperienceDefinition, previous: Gene
       if (effect.duration !== undefined && (!Number.isInteger(effect.duration) || effect.duration < 2 || effect.duration > 10)) throw new GenesisRequestError('Use clips from 2 to 10 seconds.');
       if (effect.anchorId && !Object.hasOwn(state.anchors, effect.anchorId)) throw new GenesisRequestError('Choose an existing scene anchor.');
       if (effect.presentation !== undefined && (effect.type !== 'image.request' || effect.presentation !== 'background')) throw new GenesisRequestError('Background presentation is for image requests.');
-      if (effect.continuity !== undefined && (!['live.direction', 'scene.request'].includes(effect.type) || !['linked', 'reanchor'].includes(effect.continuity) || effect.continuity === 'reanchor' && !effect.anchorId)) throw new GenesisRequestError('Reanchoring requires an accepted scene anchor.');
+      if (effect.continuity !== undefined && (!['live.direction', 'scene.request'].includes(effect.type) || !['linked', 'reanchor'].includes(effect.continuity) || effect.continuity === 'reanchor' && !effect.anchorId && !effect.frameRef?.required)) throw new GenesisRequestError('Reanchoring requires an accepted scene anchor.');
       if (effect.useStartFrame !== undefined && (effect.type !== 'scene.request' || typeof effect.useStartFrame !== 'boolean' || effect.useStartFrame === false && (effect.anchorId || effect.referenceAnchorIds?.length || effect.continuity))) throw new GenesisRequestError('Text-to-video scene requests omit anchors, references and continuity.');
       if (effect.referenceAnchorIds !== undefined && (!Array.isArray(effect.referenceAnchorIds) || effect.referenceAnchorIds.length > 4 || effect.referenceAnchorIds.some(id => !Object.hasOwn(state.anchors, id)))) throw new GenesisRequestError('Use up to four accepted reference anchors.');
       const ceiling = Math.min(policy.maxActionCostUsd, def.genesis.limits.maxActionCostUsd, effect.type === 'scene.request' ? def.worldVideo.maxCostUsd : 5);

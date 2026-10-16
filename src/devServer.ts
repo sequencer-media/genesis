@@ -4,6 +4,8 @@ import { dirname, extname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { randomUUID, createHash } from 'node:crypto';
 import { GenesisHost } from './host.js';
+import {genesisRequiredFrameStatus} from './frameLibrary.js';
+import {genesisDispatchOrder} from './scheduling.js';
 import { FileGenesisStorage } from './storage.js';
 import { createCachedProvider } from './cachedProvider.js';
 import { createLlmProvider } from './llm.js';
@@ -76,11 +78,12 @@ export async function startGenesisDevServer(directory: string, port = 4173) {
     server.listen(port, '127.0.0.1', () => { server.off('error', reject); done(); });
   });
   let ticking = false; const timer = setInterval(async () => { if (ticking) return; ticking = true; try {
+    await host.tick();
     for (const actor of host.diagnostics().state.participants) await host.read(actor.id);
     const state = host.diagnostics().state, actor = state.participants.find(p => genesisParticipantRole(state, p) === 'player');
-    const job = state.genesis!.jobs.find(j => j.status === 'queued' && ['scene.request', 'image.request', 'live.direction', 'tool.llm.generate'].includes(j.effect.type === 'tool.request' ? j.effect.toolId || '' : j.effect.type));
+    const ordered=genesisDispatchOrder(state.genesis!),firstDirection=ordered.find(j=>j.effect.type==='live.direction');
+    const job = ordered.find(j => j.status === 'queued' && genesisRequiredFrameStatus(state.genesis!,j)!=='waiting' && (j.effect.type!=='live.direction'||j.id===firstDirection?.id) && ['scene.request', 'image.request', 'live.direction', 'tool.llm.generate'].includes(j.effect.type === 'tool.request' ? j.effect.toolId || '' : j.effect.type));
     if (actor && job) await host.runJob(actor.id, job.id);
-    await host.tick();
   } catch {} finally { ticking = false; } }, 500);
   const url = `http://127.0.0.1:${(server.address() as any).port}`;
   return { url, host, close: async () => { clearInterval(timer); server.closeAllConnections(); await new Promise<void>(done => server.close(() => done())); } };

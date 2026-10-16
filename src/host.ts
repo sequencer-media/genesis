@@ -1,5 +1,6 @@
 import {genesisDispatchOrder, releaseGenesisReservation} from './scheduling.js';
 import {genesisQueueView} from './queue.js';
+import {genesisRequiredFrameStatus,resolveGenesisFrame} from './frameLibrary.js';
 import { createHash } from 'node:crypto';
 import { createExperienceSessionState, joinExperienceParticipant, type ExperienceSessionState } from './experienceSessionCore.js';
 import { createGenesisState, genesisView, GenesisRequestError, applyGenesisTransition, genesisActions, type GenesisEffect, type GenesisEvent } from './genesisCore.js';
@@ -125,7 +126,7 @@ export class GenesisHost {
   }
   private async dispatchUrgent(actorId?:string){
     await this.cancelSuperseded();
-    const next=genesisDispatchOrder(this.state.genesis!)[0];
+    const next=genesisDispatchOrder(this.state.genesis!).find(j=>genesisRequiredFrameStatus(this.state.genesis!,j)!=='waiting');
     const actor=actorId||this.state.participants.find(p=>genesisParticipantRole(this.state,p)==='player')?.id;
     const provider=next&&this.providers.find(p=>p.capabilities.includes((next.effect.type==='tool.request'?next.effect.toolId:next.effect.type) as any));
     if(!actor||!next||next.status!=='queued'||next.effect.delivery?.priority!=='urgent'||!provider||provider.paid&&!this.services.authorizeTool)return;
@@ -135,9 +136,15 @@ export class GenesisHost {
     await this.cancelSuperseded();
     if (genesisParticipantRole(this.state, this.state.participants.find(p => p.id === actorId)) !== 'player') throw new GenesisRequestError('Only players can run tools.');
     const job = this.state.genesis!.jobs.find(j => j.id === jobId); if (!job || job.status !== 'queued') return this.view(actorId);
+    const frameStatus=genesisRequiredFrameStatus(this.state.genesis!,job);
+    if(frameStatus==='waiting')throw new GenesisRequestError('This action is preparing its required fresh starting frame.');
+    if(frameStatus==='failed'){
+      this.state=await settleGenesisJob(this.project.definition,this.state,this.project.controllerSource,job.id,{error:'The required fresh starting frame failed. No continuation video was submitted.'},Date.now(),this.policy);
+      await this.persist('job.failed',job.id);return this.view(actorId);
+    }
     const ordered=genesisDispatchOrder(this.state.genesis!);
     const first=ordered.find(j=>!j.effect.frame);
-    const backgroundPair=job.effect.type==='image.request'&&job.effect.presentation==='background'&&ordered.filter(j=>j.id!==job.id).every(j=>j.effect.type==='live.direction')
+    const backgroundPair=job.effect.type==='image.request'&&job.effect.presentation==='background'&&ordered.filter(j=>j.id!==job.id).every(j=>j.effect.type==='live.direction'||j.status==='queued'&&j.effect.frameRef?.required)
       ||job.effect.type==='live.direction'&&ordered.filter(j=>j.id!==job.id&&j.status==='running').every(j=>j.effect.type==='image.request'&&j.effect.presentation==='background');
     if(job.effect.delivery&&first?.id!==job.id&&!backgroundPair||job.effect.type==='live.direction'&&ordered.find(j=>j.effect.type==='live.direction')?.id!==job.id
       ||ordered.some(j=>j.id!==job.id&&j.status==='running')&&!backgroundPair)throw new GenesisRequestError('This action is waiting for an earlier selection.');
@@ -149,7 +156,8 @@ export class GenesisHost {
       this.state = structuredClone(this.state); this.state.genesis!.jobs.find(j => j.id === jobId)!.status = 'running'; await this.persist('job.resumed', jobId); return this.view(actorId);
     }
     if (provider.paid && (!this.services.authorizeTool || !await this.services.authorizeTool({ sessionId: this.sessionId, actorId, job: structuredClone(job), provider }))) throw new GenesisRequestError('The host must authorize paid generation.');
-    this.state = structuredClone(this.state); const current = this.state.genesis!.jobs.find(j => j.id === jobId)!; current.status = 'running'; current.startedAt ||= Date.now();
+    this.state = structuredClone(this.state); const current = this.state.genesis!.jobs.find(j => j.id === jobId)!;
+    current.effect=resolveGenesisFrame(this.state.genesis!,current.effect,Date.now());current.status = 'running'; current.startedAt ||= Date.now();
     if(!['tool.request','live.direction'].includes(current.effect.type)&&current.effect.presentation!=='background'){this.state.genesis!.stage.ownerJobId=jobId;if(this.state.genesis!.stage.mode!=='playing'){this.state.genesis!.stage.mode='generating';this.state.genesis!.stage.overlays=false;}}
     await this.persist('job.started', jobId, provider.id);
     try {

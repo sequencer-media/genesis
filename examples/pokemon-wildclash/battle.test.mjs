@@ -34,7 +34,8 @@ test('battle begins is announced only after observed opening completion, with ur
  const sendouts=f.effects.filter(e=>['pokemon.selected','battle.start'].includes(e.requiredOutcome?.kind));
  assert.equal(sendouts.length,2);
  assert.ok(sendouts.every(e=>e.delivery.priority==='urgent'&&!e.delivery.replaceable&&e.delivery.targetLatencyMs===5000));
- assert.equal(sendouts[0].guard.value,sendouts[1].guard.value,'The second send-out cannot invalidate the earlier urgent action');
+ for(const effect of sendouts)assert.equal(f.state.server[effect.guard.key],effect.guard.value,'Each send-out remains valid for its own trainer');
+ assert.equal(sendouts[0].guard.key,'redActor');assert.equal(sendouts[1].guard.key,'blueActor');
  const begins=()=>f.state.public.announcements.filter(n=>n.kind==='battle.start').length;
  assert.equal(begins(),0);assert.equal(f.state.public.deadline,0);
  f.send('job.ready',{data:{jobId:opening}});assert.equal(begins(),0,'Generation readiness is not playback completion');
@@ -48,7 +49,7 @@ test('attack delivery keeps the trainer selection timestamp through simultaneous
  const f=fixture();f.act('red','battle_move',{moveIndex:3});f.time(2500);
  const effect=f.act('blue','battle_move',{moveIndex:0}).effects.find(e=>e.type==='live.direction');
  assert.equal(effect.delivery.priority,'urgent');assert.equal(effect.delivery.selectedAtMs,1_000_000);
- assert.equal(effect.delivery.replaceable,false);assert.equal(effect.frameMode,'continue','Missing cached frames never delay accepted attacks');
+ assert.equal(effect.delivery.replaceable,false);assert.equal(effect.frameMode,'continue','Disabling visual context explicitly uses continuation');
 });
 test('accepted moves carry one command from their acting trainer, while fainting uses the defeated trainer after impact',()=>{
  const f=fixture();f.act('red','battle_move',{moveIndex:0});

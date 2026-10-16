@@ -5,7 +5,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { randomBytes, createHash } from 'node:crypto';
 import {
   GenesisHost, FileGenesisStorage, createCachedProvider, createLlmProvider,
-  defaultGenesisHostPolicy, genesisParticipantRole, loadGenesisProject, publicExperienceDefinition,
+  defaultGenesisHostPolicy, genesisParticipantRole, loadGenesisProject, publicExperienceDefinition, genesisRequiredFrameStatus, genesisDispatchOrder,
 } from '../../dist/index.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -134,8 +134,8 @@ export async function startWorldServer({
     await host.tick();
     const state = host.diagnostics().state;
     const actor = state.participants.find(p => genesisParticipantRole(state, p) === 'player');
-    const firstDirection=state.genesis.jobs.find(j=>j.effect.type==='live.direction'&&['queued','running'].includes(j.status));
-    if (actor) for (const job of state.genesis.jobs.filter(j => j.status === 'queued')) {if(job.effect.type==='live.direction'&&job.id!==firstDirection?.id)continue;await host.runJob(actor.id, job.id);}
+    const ordered=genesisDispatchOrder(state.genesis),firstDirection=ordered.find(j=>j.effect.type==='live.direction');
+    if (actor) for (const job of ordered.filter(j => j.status === 'queued'&&genesisRequiredFrameStatus(state.genesis,j)!=='waiting')) {if(job.effect.type==='live.direction'&&job.id!==firstDirection?.id)continue;await host.runJob(actor.id, job.id);}
   };
   const timer = setInterval(() => {
     if (working || closing) return;
