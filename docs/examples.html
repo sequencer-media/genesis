@@ -87,7 +87,7 @@
 <p>The <a href="https://github.com/sequencer-media/genesis/tree/main/examples/quest"><code>quest</code> starter</a> includes the interface, authoritative rules and editable settings. Change the world name, lantern duration or difficulty in <code>genesis.json</code>, then restart the preview. <a href="getting-started.html">Start playing and remixing</a>.</p>
 <h2 id="pokémon-wildclash">Pokémon Wildclash</h2>
 <p><a href="https://sequencer.media/worldstreams/S_R5xijO8Pjv">Open Pokémon Wildclash on Sequencer</a> or <a href="https://github.com/sequencer-media/genesis/tree/main/examples/pokemon-wildclash">browse the complete project source</a>.</p>
-<p>This is the current Pokémon Worldstream project, including its actual controller, trainer interface, visual settings and bundled start artwork. Two trainers send out their chosen Pokémon and privately commit a move or item each round. Priority and Speed determine order. A challenger queue lets the next trainer join the action.</p>
+<p>This is the current Pokémon Worldstream project, including its actual controller, trainer interface, visual settings and bundled start artwork. Two trainers send out their chosen Pokémon, then take turns choosing a move or item. The next trainer’s menu and five-second decision cue open after observed attack playback. At zero, the game keeps waiting for their choice. A challenger queue lets the next trainer join the action.</p>
 <p><a href="https://sequencer.media/worldstreams/S_R5xijO8Pjv"><img src="assets/pokemon-wildclash-ui.jpg" alt="Pokémon battle interface showing trainer seats, health and battle controls" loading="lazy"></a></p>
 <table>
 <thead>
@@ -101,8 +101,8 @@
 <td>Player seats, eligible actions and a shared start condition.</td>
 </tr>
 <tr>
-<td>Private command rounds</td>
-<td>Authoritative priority, Speed, type effects, status, PP and battle outcomes.</td>
+<td>Sequential trainer decisions</td>
+<td>Playback-gated turns, a fresh decision countdown, type effects, status, PP and authoritative battle outcomes.</td>
 </tr>
 <tr>
 <td>Items, health and EXP</td>
@@ -118,7 +118,7 @@
 </tr>
 <tr>
 <td>Background frame library</td>
-<td>Prepare lineup and aftermath checkpoints ahead of events, then reanchor after observed playback.</td>
+<td>Prepare clean current-state checkpoints while retaining a ready image for the next attack. Required send-out images establish the exact before-state; fainting recall continues the actual video.</td>
 </tr>
 <tr>
 <td>PLAY BOTH</td>
