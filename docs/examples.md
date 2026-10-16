@@ -8,27 +8,46 @@ Run `npm run play` for a complete solo adventure. Find three stars, choose a rou
 
 The [`quest` starter](https://github.com/sequencer-media/genesis/tree/main/examples/quest) includes the interface, authoritative rules and editable settings. Change the world name, lantern duration or difficulty in `genesis.json`, then restart the preview. [Start playing and remixing](getting-started.md).
 
-## Pokémon Stadium
+## Pokémon Wildclash
 
-[Open Pokémon Stadium on Sequencer](https://sequencer.media/worldstreams/S_R5xijO8Pjv).
+[Open Pokémon Wildclash on Sequencer](https://sequencer.media/worldstreams/S_R5xijO8Pjv) or [browse the complete project source](https://github.com/sequencer-media/genesis/tree/main/examples/pokemon-wildclash).
 
-Two trainers choose their Pokémon, ready up and battle in the same Worldstream. A challenger queue lets the next trainer join the action.
+This is the current Pokémon Worldstream project, including its actual controller, trainer interface, visual settings and bundled start artwork. Two trainers send out their chosen Pokémon and privately commit a move or item each round. Priority and Speed determine order. A challenger queue lets the next trainer join the action.
 
-[![Pokémon Stadium interface showing trainer seats, health and battle controls](assets/pokemon-stadium-ui.webp)](https://sequencer.media/worldstreams/S_R5xijO8Pjv)
+[![Pokémon battle interface showing trainer seats, health and battle controls](assets/pokemon-wildclash-ui.jpg)](https://sequencer.media/worldstreams/S_R5xijO8Pjv)
 
 | Part of the experience | What it demonstrates |
 | --- | --- |
 | Trainer selection and readiness | Player seats, eligible actions and a shared start condition. |
-| Turns and combat | Authoritative rules for type effects, status conditions and battle outcomes. |
+| Private command rounds | Authoritative priority, Speed, type effects, status, PP and battle outcomes. |
 | Items, health and EXP | World variables that persist between actions. |
 | Challenger queue | Multiplayer participation and room state. |
 | Battle interface and Worldstream | Player controls around generated video. |
+| Background frame library | Prepare lineup and aftermath checkpoints ahead of events, then reanchor after observed playback. |
+| PLAY BOTH | One account can control two trainers for testing. |
 
-### Build something similar
+### Play the included project
 
-Use the [Genesis skill quickstart](agent-skill.md). Describe your own cast, battle rules and visual style. Start with the `arena-llm` example for generated move sets, or `arena` for controller-driven combat.
+```sh
+npm run build
+node dist/cli.js dev examples/pokemon-wildclash
+```
 
-Keep accepted game outcomes in `controller.js`. Ask the LLM for bounded move data, then validate it before opening actions. Use generated video to depict the committed outcome and advance the visual turn after playback completes. [Read the authoring contract](../AGENTS.md).
+Open the printed URL, choose a trainer or PLAY BOTH, then choose a Pokémon and press SEND OUT. The local preview runs the real rules and simulates continuous video directions with prepared fixtures. It makes no model requests.
+
+For separate browser connections with authenticated players and persistent shared state:
+
+```sh
+npm run serve:world
+```
+
+Open the server URL in two windows and use a different printed player token in each. The [server guide](hosting.md) explains provider configuration and deployment. A live continuous World Model requires its stream and presentation adapter.
+
+### Remix the project
+
+Edit the project's three entry files to change its cast, rules or visual style. Use the [Genesis skill quickstart](agent-skill.md) for an original world. The `arena-llm` starter demonstrates bounded generated move sets, and `arena` provides simpler fixed combat.
+
+Keep accepted game outcomes in `controller.js`. Use generated video to depict the committed outcome and advance the visual turn after playback completes. [Read the authoring contract](../AGENTS.md).
 
 Publish your finished world using [My Worlds](https://sequencer.media/worldstreams#my-worlds), or export a complete project for your own host.
 

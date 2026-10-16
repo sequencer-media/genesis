@@ -65,12 +65,16 @@
     "dev": "npm run build && node dist/cli.js dev examples/exploration",
     "docs:build": "node scripts/build-docs.mjs",
     "docs:dev": "npm run docs:build && node scripts/serve-docs.mjs",
-    "check": "npm test && npm run docs:build && npm pack --dry-run"
+    "check": "npm test && npm run docs:build && npm pack --dry-run",
+    "serve:world": "npm run build && node examples/server/server.mjs",
+    "mcp:world": "node examples/server/mcp.mjs"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.1",
     "ajv": "8.20.0",
     "fflate": "0.8.3",
-    "quickjs-emscripten": "0.31.0"
+    "quickjs-emscripten": "0.31.0",
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

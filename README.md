@@ -42,6 +42,8 @@ Two players direct Rick and Morty through their own character controls. Both act
 
 These are recorded Worldstreams examples. Preview choices illustrate the interaction flow around prepared World Model output. Live generation uses a connected provider. Read the [SDK reference](docs/api.md) and [world-building skill guide](docs/agent-skill.md), or run `npm run docs:dev` to open the searchable documentation site and video gallery locally.
 
+Agents can use the [Genesis MCP adapter](docs/mcp.md) to discover typed game actions, cache images, prepare future frames and change live start frames. The agent and browser share the same persistent world server.
+
 ## How GENESIS works
 
 The GENESIS Context Engine combines character memory, scenes, inventory, multiplayer rules and world settings into model context. An external LLM creates prompts and structured replies, and the World Model generates the next scene. Streaming delivery brings the video back to your interactive UI.
@@ -189,7 +191,7 @@ npm pack --dry-run
 
 The standalone preview verifies bounded clips, prepared media and structured tool data. Continuous worldstreams and avatar/audio sessions require a deployment-specific presentation adapter. The Replicate adapter has protocol-fixture coverage; live paid predictions still need validation. Current reference limits include 100 participants, 32 actions, 200 KB session state and 2–10 second clips.
 
-Portable continuous-stream settings accept 2–30 second chunk intervals. The current Worldstreams deployment accepts 14 seconds, with approximately 14.375 seconds of provider output. Hosts validate supported intervals.
+Portable continuous-stream settings accept 2–30 second chunk intervals. Fractional frame durations are preserved. The Worldstreams deployment supports approximately 5.17, 10.13 and 14.38 seconds of provider output. Hosts validate supported intervals.
 
 Private Worldstreams API sessions currently support 30–600 seconds and cost $40/hour of active streaming. The API quotes and reserves the maximum cost, then refunds unused credit on teardown. Startup is excluded. Viva includes built-in LLM direction; custom structured LLM requests and extra assets are priced separately. Always use the returned quote.
 
@@ -199,9 +201,19 @@ See [compatibility](docs/compatibility.md) and [integration](docs/integration.md
 
 ## Example projects
 
-[![Pokémon Stadium interface with trainer seats, health, inventory and battle controls](docs/assets/pokemon-stadium-ui.webp)](https://sequencer.media/worldstreams/S_R5xijO8Pjv)
+[![Pokémon Wildclash interface with trainer seats, health, inventory and battle controls](docs/assets/pokemon-wildclash-ui.jpg)](https://sequencer.media/worldstreams/S_R5xijO8Pjv)
 
-[**Pokémon Stadium**](https://sequencer.media/worldstreams/S_R5xijO8Pjv) brings two trainers into a shared battle Worldstream, with Pokémon selection, turns, type effects, status conditions, items, EXP and a challenger queue. [Explore the project](https://sequencer.media/genesis/examples).
+[**Pokémon Wildclash**](https://sequencer.media/worldstreams/S_R5xijO8Pjv) brings two trainers into a shared battle Worldstream, with Pokémon selection, turns, type effects, status conditions, items, EXP and a challenger queue. The repository includes its [current controller, interface and artwork](https://github.com/sequencer-media/genesis/tree/main/examples/pokemon-wildclash). Run `node dist/cli.js dev examples/pokemon-wildclash` for a local fixture preview. [Explore the project](docs/examples.md).
+
+## Run a shared world server
+
+Shared rules, private player choices, saved progress, timers and model requests run on the server. Start the included Node server with the current Pokémon Wildclash project:
+
+```sh
+npm run serve:world
+```
+
+Open the printed URL and enter a printed player token. Use another browser window and token for the second trainer. The server authenticates each player, saves the room and advances jobs in the background. Default fixtures simulate live directions without model charges. Connect your own providers for generation and stream delivery. [Server setup](docs/hosting.md) · [Server source and configuration](https://github.com/sequencer-media/genesis/tree/main/examples/server).
 
 ## Connect your own World Models
 

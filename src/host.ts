@@ -1,8 +1,10 @@
+import {genesisQueueView} from './queue.js';
 import { createHash } from 'node:crypto';
 import { createExperienceSessionState, joinExperienceParticipant, type ExperienceSessionState } from './experienceSessionCore.js';
-import { createGenesisState, genesisView, GenesisRequestError, type GenesisEvent } from './genesisCore.js';
+import { createGenesisState, genesisView, GenesisRequestError, applyGenesisTransition, genesisActions, type GenesisEffect, type GenesisEvent } from './genesisCore.js';
 import { dispatchGenesisEvent, submitGenesisAction, tickGenesis, settleGenesisJob, completeGenesisPlayback, retryGenesisJob, requestGenesisPlayer } from './genesisRuntime.js';
-import { registerGenesisIdentity, genesisParticipationView, genesisParticipantRole, touchGenesisParticipant, type GenesisPlayerRequest } from './participation.js';
+import { registerGenesisIdentity, prepareGenesisSeatControl, genesisParticipationView, genesisParticipantRole, touchGenesisParticipant, type GenesisPlayerRequest } from './participation.js';
+import {prepareGenesisFrame, genesisFrameLibraryView, type GenesisFrameSpec} from './frameLibrary.js';
 import { defaultGenesisHostPolicy, type GenesisHostPolicy } from './policy.js';
 import { validateGenesisProject, type GenesisProject } from './project.js';
 import { GenesisProviderSubmissionError, MemoryGenesisStorage, type GenesisProvider, type GenesisStorage, type GenesisSnapshot, type GenesisHostServices, type GenesisTrace } from './adapters.js';
@@ -47,6 +49,7 @@ export class GenesisHost {
   view(actorId: string) {
     const actor = this.state.participants.find(p => p.id === actorId); if (!actor) throw new GenesisRequestError('Join the session first.');
     const genesis = genesisView(this.project.definition, this.state.genesis!, actorId, genesisParticipantRole(this.state, actor), this.policy);
+    if(this.services.streamQueue)genesis.queue=genesisQueueView(this.state.genesis!,{durationMs:(this.project.definition.worldVideo.chunkIntervalSeconds||14.375)*1000,chunks:this.services.streamQueue()});
     if (this.state.status !== 'active') genesis.actions = genesis.actions.map(a => ({ ...a, canSubmit: false }));
     return { actorId, participation: genesisParticipationView(this.project.definition, this.state, actorId), participants: this.state.participants.map(({ id, name, role }) => ({ id, name, role })), status: this.state.status, inputs: this.project.definition.inputs.map(i => ({ ...i, canSubmit: genesis.actions.some(a => a.inputBindingId === i.id && a.canSubmit) })), phaseId: this.state.phaseId, round: Number(genesis.state.turn || 0) + 1, genesis };
   }
@@ -71,8 +74,9 @@ export class GenesisHost {
   }); }
   /** actorId and identityKey are supplied by authenticated host middleware. */
   async players(actorId: string, request: GenesisPlayerRequest) { return this.serial(async () => {
-    const next = await requestGenesisPlayer(this.project.definition, touchGenesisParticipant(this.state, actorId), this.project.controllerSource, actorId, request, Date.now(), this.policy);
-    this.state = next; await this.persist('participation.request', actorId, request.operation); return this.view(actorId);
+    const prepared=prepareGenesisSeatControl(this.project.definition,touchGenesisParticipant(this.state,actorId),actorId,request);
+    const next = await requestGenesisPlayer(this.project.definition, prepared.state, this.project.controllerSource, prepared.actorId, request, Date.now(), this.policy);
+    this.state = next; await this.persist('participation.request', prepared.actorId, request.operation); return this.view(prepared.actorId);
   }); }
   async read(actorId: string) { return this.serial(async () => {
     this.state = await tickGenesis(this.project.definition, touchGenesisParticipant(this.state, actorId), this.project.controllerSource, Date.now(), this.policy);
@@ -86,9 +90,11 @@ export class GenesisHost {
     await this.persist('action.accepted', eventId, actionId); return this.view(actorId);
   }); }
   async playback(actorId: string, playbackId: string) { return this.serial(async () => { this.state = await completeGenesisPlayback(this.project.definition, touchGenesisParticipant(this.state, actorId), this.project.controllerSource, actorId, playbackId, Date.now(), this.policy); await this.persist('playback.completed', playbackId); return this.view(actorId); }); }
-  async runJob(actorId: string, jobId: string) { return this.serial(async () => {
+  async runJob(actorId: string, jobId: string) { return this.serial(() => this.startJob(actorId,jobId)); }
+  private async startJob(actorId: string, jobId: string) {
     if (genesisParticipantRole(this.state, this.state.participants.find(p => p.id === actorId)) !== 'player') throw new GenesisRequestError('Only players can run tools.');
     const job = this.state.genesis!.jobs.find(j => j.id === jobId); if (!job || job.status !== 'queued') return this.view(actorId);
+    if(job.effect.type==='live.direction'&&this.state.genesis!.jobs.find(j=>j.effect.type==='live.direction'&&['queued','running'].includes(j.status))?.id!==job.id)throw new GenesisRequestError('This action is waiting for an earlier selection.');
     const provider = this.providers.find(p => p.capabilities.includes((job.effect.type === 'tool.request' ? job.effect.toolId : job.effect.type) as any)); if (!provider) throw new GenesisRequestError('The host has no provider for this tool.');
     if (provider.validate && !await provider.validate(structuredClone(job))) throw new GenesisRequestError('The host tool rejected these arguments.');
     const existingHandle = this.snapshot.providerJobs[jobId];
@@ -96,15 +102,15 @@ export class GenesisHost {
       this.state = structuredClone(this.state); this.state.genesis!.jobs.find(j => j.id === jobId)!.status = 'running'; await this.persist('job.resumed', jobId); return this.view(actorId);
     }
     if (provider.paid && (!this.services.authorizeTool || !await this.services.authorizeTool({ sessionId: this.sessionId, actorId, job: structuredClone(job), provider }))) throw new GenesisRequestError('The host must authorize paid generation.');
-    this.state = structuredClone(this.state); const current = this.state.genesis!.jobs.find(j => j.id === jobId)!; current.status = 'running';
+    this.state = structuredClone(this.state); const current = this.state.genesis!.jobs.find(j => j.id === jobId)!; current.status = 'running'; current.startedAt ||= Date.now();
     await this.persist('job.started', jobId, provider.id);
     try {
-      const started = await provider.start({ sessionId: this.sessionId, job: structuredClone(current), anchor: structuredClone(this.state.genesis!.anchors[current.effect.anchorId || this.state.genesis!.stage.anchorId]), idempotencyKey: `${this.sessionId}:${jobId}` });
+      const started = await provider.start({ sessionId: this.sessionId, job: structuredClone(current), anchor: current.effect.useStartFrame === false ? undefined : structuredClone(this.state.genesis!.anchors[current.effect.anchorId || this.state.genesis!.stage.anchorId]), referenceAnchors: (current.effect.referenceAnchorIds || []).map(id => structuredClone(this.state.genesis!.anchors[id])), idempotencyKey: `${this.sessionId}:${jobId}` });
       if (!provider.paid) this.state.genesis!.reservedCostUsd = Math.max(0, Math.round((this.state.genesis!.reservedCostUsd - current.maxCostUsd) * 10000) / 10000);
       this.snapshot.providerJobs[jobId] = { providerId: provider.id, id: started.id }; await this.persist('job.submitted', jobId);
     } catch (error) { const uncertain = provider.paid && !(error instanceof GenesisProviderSubmissionError && !error.ambiguous); this.state.genesis!.jobs.find(j => j.id === jobId)!.submissionUncertain = uncertain; this.state = await settleGenesisJob(this.project.definition, this.state, this.project.controllerSource, jobId, { error: uncertain ? 'Provider submission is uncertain. Ask the host to reconcile it before retrying.' : 'The provider could not start this job.' }, Date.now(), this.policy); await this.persist('job.failed', jobId); }
     return this.view(actorId);
-  }); }
+  }
   async tick(now = Date.now()) { return this.serial(async () => {
     this.state = await tickGenesis(this.project.definition, this.state, this.project.controllerSource, now, this.policy);
     for (const job of this.state.genesis!.jobs.filter(j => j.status === 'running')) {
@@ -114,9 +120,15 @@ export class GenesisHost {
       let status: Awaited<ReturnType<GenesisProvider['poll']>>;
       try { status = await provider.poll(handle.id, structuredClone(job)); }
       catch { await this.persist('job.poll.failed', job.id, 'Provider polling will resume.'); continue; }
+      const currentTiming=this.state.genesis!.jobs.find(j=>j.id===job.id)!;
+      const expectedStart=Number(status.result?.data?.estimatedPlaybackAtMs),chunkDuration=Number(status.result?.data?.playbackDurationMs);
+      if(Number.isFinite(expectedStart)&&expectedStart>0)currentTiming.estimatedPlaybackAt=expectedStart;
+      if(Number.isFinite(chunkDuration)&&chunkDuration>=1000&&chunkDuration<=120000)currentTiming.playbackDurationMs=chunkDuration;
+      const observedStart=Number(status.result?.data?.playbackStartedAtMs);
+      if(Number.isFinite(observedStart)&&observedStart>0&&observedStart<=now)this.state.genesis!.jobs.find(j=>j.id===job.id)!.playbackStartedAt ||= observedStart;
       if (status.status === 'running') continue;
       if (status.result?.data && JSON.stringify(status.result.data).length > 12000) { status.status = 'failed'; status.result = { error: 'The tool result exceeds its data limit.' }; }
-      if (status.status === 'ready' && job.effect.type !== 'tool.request' && (!status.result?.imageUrl || !this.policy.validateAssetUrl(status.result.imageUrl) || job.effect.type === 'scene.request' && (!status.result.videoUrl || !this.policy.validateAssetUrl(status.result.videoUrl)))) { status.status = 'failed'; status.result = { error: 'The provider must return valid saved media and an actual final-frame checkpoint.' }; }
+      if (status.status === 'ready' && !['tool.request', 'live.direction'].includes(job.effect.type) && (!status.result?.imageUrl || !this.policy.validateAssetUrl(status.result.imageUrl) || job.effect.type === 'scene.request' && (!status.result.videoUrl || !this.policy.validateAssetUrl(status.result.videoUrl)))) { status.status = 'failed'; status.result = { error: 'The provider must return valid saved media and an actual final-frame checkpoint.' }; }
       try {
         this.state = await settleGenesisJob(this.project.definition, this.state, this.project.controllerSource, job.id, status.status === 'failed' ? { error: status.result?.error || 'Provider failed.' } : status.result || { error: 'Provider returned no result.' }, now, this.policy);
         await this.persist(`job.${status.status}`, job.id);
@@ -127,14 +139,62 @@ export class GenesisHost {
         this.state.genesis!.revision++; this.state.revision++; await this.persist('controller.failed', job.id, current.error);
       }
     }
+    const prepared=this.state.genesis!.jobs.find(j=>j.status==='queued'&&j.effect.frame);
+    const actor=this.state.participants.find(p=>genesisParticipantRole(this.state,p)==='player');
+    const provider=prepared&&this.providers.find(p=>p.capabilities.includes('image.request'));
+    if(prepared&&actor&&provider&&(!provider.paid||this.services.authorizeTool))await this.startJob(actor.id,prepared.id);
     await this.persist();
   }); }
+  /** Trusted operator API. Keep this separate from participant routes and credentials. */
+  operatorView() {
+    const g=this.state.genesis!;
+    return {sessionId:this.sessionId, revision:g.revision, stage:structuredClone(g.stage),
+      anchors:structuredClone(g.anchors), frames:genesisFrameLibraryView(g),
+      actions:genesisActions(this.project.definition),
+      grants:this.policy.capabilities.filter(c=>this.project.definition.genesis?.capabilities.includes(c)),
+      providers:this.providers.map(p=>({id:p.id,paid:p.paid,capabilities:[...p.capabilities]})),
+      limits:{maxSessionCostUsd:Math.min(this.policy.maxSessionCostUsd,this.project.definition.genesis!.limits.maxSessionCostUsd),reservedCostUsd:g.reservedCostUsd},
+      jobs:g.jobs.map(j=>({id:j.id,type:j.effect.type,status:j.status,error:j.error,result:structuredClone(j.result)}))};
+  }
+  private operatorRequest(id:string, expectedRevision:number) {
+    if(!/^[A-Za-z0-9_.:-]{1,100}$/.test(id)||['__proto__','constructor','prototype'].includes(id))throw new GenesisRequestError('Use a unique operator request ID under 100 characters.');
+    if(this.state.genesis!.receipts.includes('operator:'+id))return false;
+    if(!Number.isInteger(expectedRevision)||expectedRevision!==this.state.genesis!.revision)throw new GenesisRequestError('The world changed. Read its current revision before applying an operator command.');
+    return true;
+  }
+  async applyOperatorEffect(effect:GenesisEffect,expectedRevision:number) {return this.serial(async()=>{
+    if(!this.operatorRequest(effect.id,expectedRevision))return this.operatorView();
+    if(!['frame.prepare','frame.invalidate','scene.request','image.request','live.direction','tool.request','stage.restore','stage.show','stage.play','timer.set'].includes(effect.type))throw new GenesisRequestError('Use a presentation, preparation or tool effect. Player release belongs to the game controller.');
+    const changesShot=['live.direction','scene.request','stage.restore','stage.show','stage.play'].includes(effect.type)||effect.type==='image.request'&&effect.presentation!=='background';
+    const mayQueue=effect.type==='live.direction'&&effect.queue===true&&this.state.genesis!.jobs.filter(j=>['queued','running'].includes(j.status)).every(j=>j.effect.type==='live.direction'&&j.effect.queue===true);
+    if(changesShot&&!mayQueue&&(this.state.genesis!.stage.mode==='playing'||this.state.genesis!.jobs.some(j=>['queued','running'].includes(j.status)&&['live.direction','scene.request'].includes(j.effect.type))))throw new GenesisRequestError('Wait for the accepted scene action and observed playback to finish before changing the shot.');
+    if(JSON.stringify(effect).length>16000)throw new GenesisRequestError('Keep operator effects below 16 KB.');
+    if(effect.frameRef){const f=this.state.genesis!.frameLibrary?.[effect.frameRef.key];if(!f||f.status!=='ready'||f.fingerprint!==effect.frameRef.fingerprint||f.expiresAtMs<=Date.now())throw new GenesisRequestError('Prepare this exact frame and wait until it is ready before using it.');}
+    const genesis=applyGenesisTransition(this.project.definition,this.state.genesis!,{id:'operator:'+effect.id,type:'operator.effect',data:{},now:Date.now()},{effects:[{...structuredClone(effect),id:'operator:'+effect.id}]},this.policy);
+    this.state={...this.state,revision:this.state.revision+1,genesis};
+    await this.persist('operator.effect',effect.id,effect.type);return this.operatorView();
+  });}
+  /** Accept existing saved media as a cache entry, with no generation call or charge. */
+  async cacheOperatorImage(id:string,expectedRevision:number,frame:GenesisFrameSpec,imageUrl:string) {return this.serial(async()=>{
+    if(!this.operatorRequest(id,expectedRevision))return this.operatorView();
+    if(typeof imageUrl!=='string'||imageUrl.length>4096||!this.policy.validateAssetUrl(imageUrl))throw new GenesisRequestError('Cache a saved image URL allowed by the host.');
+    const next=structuredClone(this.state.genesis!),now=Date.now();
+    prepareGenesisFrame(this.project.definition,next,{id,type:'frame.prepare',frame:{...frame,refresh:true},intent:'Saved operator image '+frame.key},now,this.policy);
+    const entry=next.frameLibrary?.[frame.key];
+    if(!entry||entry.fingerprint!==frame.fingerprint||entry.requestedAtMs!==now)throw new GenesisRequestError('The frame cache is full. Invalidate an unused frame first.');
+    const anchorId='cache:'+id;
+    next.anchors[anchorId]={id:anchorId,imageUrl,revision:next.revision+1};
+    Object.assign(entry,{status:'ready',imported:true,anchorId,jobId:'',readyAtMs:now,expiresAtMs:now+(frame.ttlMs||600000)});
+    const genesis=applyGenesisTransition(this.project.definition,next,{id:'operator:'+id,type:'operator.cache',data:{},now},{},this.policy);
+    this.state={...this.state,revision:this.state.revision+1,genesis};
+    await this.persist('operator.cache',id,frame.key);return this.operatorView();
+  });}
   /** Operator-only recovery. Never expose this method to creator actions or participant routes. */
   async reconcileProviderJob(jobId: string, providerId: string, predictionId: string) { return this.serial(async () => {
     const provider = this.providers.find(p => p.id === providerId), job = this.state.genesis!.jobs.find(j => j.id === jobId);
     if (!provider || !job?.submissionUncertain || job.status !== 'failed' || this.state.genesis!.jobs.some(j => ['queued', 'running'].includes(j.status)) || !predictionId || predictionId.length > 4096) throw new GenesisRequestError('Choose an uncertain job and a verified provider handle.');
     this.state = structuredClone(this.state); const current = this.state.genesis!.jobs.find(j => j.id === jobId)!; current.status = 'running'; current.error = ''; current.submissionUncertain = false; current.retryCount++;
-    if (job.effect.type !== 'tool.request') { this.state.genesis!.stage.mode = 'generating'; this.state.genesis!.stage.ownerJobId = jobId; this.state.genesis!.stage.overlays = false; }
+    if (!['tool.request', 'live.direction'].includes(job.effect.type) && job.effect.presentation !== 'background') { this.state.genesis!.stage.mode = 'generating'; this.state.genesis!.stage.ownerJobId = jobId; this.state.genesis!.stage.overlays = false; }
     this.snapshot.providerJobs[jobId] = { providerId, id: predictionId }; await this.persist('job.reconciled', jobId);
   }); }
   async retry(actorId: string, jobId: string) { return this.serial(async () => { if (genesisParticipantRole(this.state, this.state.participants.find(p => p.id === actorId)) !== 'player') throw new GenesisRequestError('Only players can retry jobs.'); if (this.state.genesis!.jobs.find(j => j.id === jobId)?.submissionUncertain) throw new GenesisRequestError('Reconcile the provider submission before retrying.'); this.state = retryGenesisJob(this.state, jobId); await this.persist('job.retry', jobId); return this.view(actorId); }); }
@@ -143,7 +203,7 @@ export class GenesisHost {
     const job = this.state.genesis!.jobs.find(j => j.id === jobId); if (!job || !['queued', 'failed'].includes(job.status)) throw new GenesisRequestError('Skip a queued or failed job.');
     this.state = structuredClone(this.state); const current = this.state.genesis!.jobs.find(j => j.id === jobId)!;
     if (current.status === 'queued' && !this.snapshot.providerJobs[jobId]) this.state.genesis!.reservedCostUsd -= current.maxCostUsd;
-    current.status = 'cancelled'; if (job.effect.type !== 'tool.request') { this.state.genesis!.stage.ownerJobId = ''; this.state.genesis!.stage.mode = 'holding'; }
+    current.status = 'cancelled'; if (this.state.genesis!.stage.ownerJobId === jobId) { this.state.genesis!.stage.ownerJobId = ''; this.state.genesis!.stage.mode = 'holding'; }
     this.state = await this.dispatch({ id: `skip:${jobId}`, type: 'job.skipped', data: { jobId }, now: Date.now() }); await this.persist('job.skipped', jobId); return this.view(actorId);
   }); }
 }

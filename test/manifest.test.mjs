@@ -34,11 +34,11 @@ test('chunk cadence defaults to 14 and travels through JSON and controller conte
   const p = createGenesisProject(), without = structuredClone(p.definition);
   delete without.worldVideo.chunkIntervalSeconds;
   assert.equal(normalizeExperienceDefinition(without).worldVideo.chunkIntervalSeconds, 14);
-  for (const seconds of [5, 10, 14]) {
+  for (const seconds of [5, 10, 14, 124 / 24, 14.375]) {
     const def = normalizeExperienceDefinition({ ...p.definition, worldVideo: { ...p.definition.worldVideo, chunkIntervalSeconds: seconds } });
     const context = genesisContext(def, createGenesisState(def), { id: 'test', type: 'session.started', data: {}, now: 1000 }, []);
     assert.equal(context.config.video.chunkIntervalSeconds, seconds);
     assert.equal(JSON.parse(JSON.stringify(def)).worldVideo.chunkIntervalSeconds, seconds);
   }
-  for (const invalid of [null, '14', 0, -1, 31, 14.375, NaN, Infinity]) assert.throws(() => normalizeStreamChunkIntervalSeconds(invalid), /chunk interval/);
+  for (const invalid of [null, '14', 0, -1, 31, NaN, Infinity]) assert.throws(() => normalizeStreamChunkIntervalSeconds(invalid), /chunk interval/);
 });

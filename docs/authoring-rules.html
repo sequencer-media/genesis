@@ -43,6 +43,8 @@
 <a href="demos.html">Worldstreams demos</a>
 <a href="examples.html">Example projects</a>
 <p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="hosting.html">Run a Worldstream server</a>
+<a href="mcp.html">Agent tools through MCP</a>
 <a href="providers.html">Your own models</a>
 <a href="models.html">Models and pricing</a>
 <p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
@@ -63,6 +65,8 @@
 <a href="demos.html">Worldstreams demos</a>
 <a href="examples.html">Example projects</a>
 <p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="hosting.html">Run a Worldstream server</a>
+<a href="mcp.html">Agent tools through MCP</a>
 <a href="providers.html">Your own models</a>
 <a href="models.html">Models and pricing</a>
 <p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
@@ -87,9 +91,10 @@
 <p>Validate the project and test repeated cycles, wrong actors, stale actions, duplicate submissions, failures and private state. Respect responsive layouts, keyboard controls and reduced motion. Run npm test after changing runtime contracts.</p>
 <p>For custom self-hosted services, use tool.request with a namespaced toolId and bounded data. Both manifest request and host grant are required. Register and validate the provider on the host. The Sequencer deployment currently grants scene.request, image.request, live.direction and tool.llm.generate.</p>
 <p>For custom vote rules, handle vote.cast and read context.ballots. Implement quorum or weighted aggregation in the controller. Read verified benefits from host events; never accept a client-supplied payment or weight claim.</p>
-<p>Use worldVideo.chunkIntervalSeconds for nominal continuous stream cadence, separate from scene.request.duration and vote deadlines. Respect the host supported intervals. Sequencer currently grants only 14 seconds for continuous streams.</p>
+<p>Use worldVideo.chunkIntervalSeconds for nominal continuous stream cadence, separate from scene.request.duration and vote deadlines. Respect the host supported intervals. Sequencer snaps requests from 5 to 15 seconds to supported continuous durations: 124/24 (5.17), 243/24 (10.13), or 345/24 (14.38) seconds. Store exact frame time and round only display labels.</p>
 <p>Use coverImageUrl for listing art and startImageUrl for the initial scene. Hosted package version IDs and saved-game connections stay outside portable exports. Namespaced extensions are inert configuration and never grant access. The editor has three file tabs; starter selection and import/export are project menu actions.</p>
 <p>For generated move sets, use tool.llm.generate with a bounded responseSchema, maxCostUsd and battleId guard. Render returned names as text. Keep damage and turn resolution in controller.js. The arena-llm template demonstrates this contract.</p>
+<p>For agent control of a running local world, read docs/mcp.md. Start with genesis_catalog and MCP tools/list for exact schemas and grants. Use declared game actions for canonical outcomes. Operator frame, scene and cache controls require the trusted operator connection and current revision. Newly declared actions become MCP tools when that project version loads.</p>
 </article>
       <footer class="site-footer">
         <p>GENESIS 0.1.0 · Open source World Model engine</p>

@@ -43,6 +43,8 @@
 <a href="demos.html">Worldstreams demos</a>
 <a href="examples.html">Example projects</a>
 <p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="hosting.html">Run a Worldstream server</a>
+<a href="mcp.html">Agent tools through MCP</a>
 <a href="providers.html">Your own models</a>
 <a href="models.html">Models and pricing</a>
 <p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
@@ -63,6 +65,8 @@
 <a href="demos.html">Worldstreams demos</a>
 <a href="examples.html">Example projects</a>
 <p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="hosting.html">Run a Worldstream server</a>
+<a href="mcp.html">Agent tools through MCP</a>
 <a href="providers.html">Your own models</a>
 <a href="models.html">Models and pricing</a>
 <p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
@@ -76,7 +80,7 @@
 <a href="license.html">Apache 2.0 license</a>
 <a href="readme.html" aria-current="page" class="active">Project README</a></nav></aside>
     <main id="main" tabindex="-1">
-      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#your-world-model-needs-an-engine">Your World Model needs an Engine.</a><a href="#what-is-a-worldstream">What is a Worldstream?</a><a href="#rick-and-morty--multiplayer-worldstream">Rick and Morty · Multiplayer Worldstream</a><a href="#how-genesis-works">How GENESIS works</a><a href="#what-can-you-build">What can you build?</a><a href="#what-genesis-handles">What GENESIS handles</a><a href="#one-prompt-an-infinite-experience">One prompt. An infinite experience.</a><a href="#play-a-game-now">Play a game now</a><a href="#choose-another-starter">Choose another starter</a><a href="#three-files-your-whole-world">Three files. Your whole world.</a><a href="#development-preview">Development preview</a><a href="#example-projects">Example projects</a><a href="#connect-your-own-world-models">Connect your own World Models</a><a href="#worldstreams-api-instant-setup">Worldstreams API: instant setup</a><a href="#build-with-us">Build with us</a></nav></details><h1 id="genesis-a-world-model-engine-for-creating-infinite-experiences">Genesis: A World Model Engine for Creating Infinite Experiences</h1>
+      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#your-world-model-needs-an-engine">Your World Model needs an Engine.</a><a href="#what-is-a-worldstream">What is a Worldstream?</a><a href="#rick-and-morty--multiplayer-worldstream">Rick and Morty · Multiplayer Worldstream</a><a href="#how-genesis-works">How GENESIS works</a><a href="#what-can-you-build">What can you build?</a><a href="#what-genesis-handles">What GENESIS handles</a><a href="#one-prompt-an-infinite-experience">One prompt. An infinite experience.</a><a href="#play-a-game-now">Play a game now</a><a href="#choose-another-starter">Choose another starter</a><a href="#three-files-your-whole-world">Three files. Your whole world.</a><a href="#development-preview">Development preview</a><a href="#example-projects">Example projects</a><a href="#run-a-shared-world-server">Run a shared world server</a><a href="#connect-your-own-world-models">Connect your own World Models</a><a href="#worldstreams-api-instant-setup">Worldstreams API: instant setup</a><a href="#build-with-us">Build with us</a></nav></details><h1 id="genesis-a-world-model-engine-for-creating-infinite-experiences">Genesis: A World Model Engine for Creating Infinite Experiences</h1>
 <p><a href="https://github.com/sequencer-media/genesis/actions/workflows/ci.yml"><img src="assets/badges/ci.svg" alt="CI: Node 20 and 22" loading="lazy"></a>
 <a href="license.html"><img src="assets/badges/license.svg" alt="Apache 2.0 license" loading="lazy"></a>
 <a href="compatibility.html"><img src="assets/badges/source-preview.svg" alt="Source preview 0.1.0" loading="lazy"></a>
@@ -115,6 +119,7 @@
 </tr>
 </tbody></table>
 <p>These are recorded Worldstreams examples. Preview choices illustrate the interaction flow around prepared World Model output. Live generation uses a connected provider. Read the <a href="api.html">SDK reference</a> and <a href="agent-skill.html">world-building skill guide</a>, or run <code>npm run docs:dev</code> to open the searchable documentation site and video gallery locally.</p>
+<p>Agents can use the <a href="mcp.html">Genesis MCP adapter</a> to discover typed game actions, cache images, prepare future frames and change live start frames. The agent and browser share the same persistent world server.</p>
 <h2 id="how-genesis-works">How GENESIS works</h2>
 <p>The GENESIS Context Engine combines character memory, scenes, inventory, multiplayer rules and world settings into model context. An external LLM creates prompts and structured replies, and the World Model generates the next scene. Streaming delivery brings the video back to your interactive UI.</p>
 <p><img src="assets/genesis-world-context.svg" alt="GENESIS Context Engine connects memory, settings and player actions to a World Model. Optional Visual Context sits inside GENESIS and supplies image context directly alongside text context. Streaming delivery returns scenes to the UI." loading="lazy"></p>
@@ -321,14 +326,18 @@ npm pack --dry-run</code></pre></div>
 <summary>Current runtime and provider limits</summary>
 
 <p>The standalone preview verifies bounded clips, prepared media and structured tool data. Continuous worldstreams and avatar/audio sessions require a deployment-specific presentation adapter. The Replicate adapter has protocol-fixture coverage; live paid predictions still need validation. Current reference limits include 100 participants, 32 actions, 200 KB session state and 2–10 second clips.</p>
-<p>Portable continuous-stream settings accept 2–30 second chunk intervals. The current Worldstreams deployment accepts 14 seconds, with approximately 14.375 seconds of provider output. Hosts validate supported intervals.</p>
+<p>Portable continuous-stream settings accept 2–30 second chunk intervals. Fractional frame durations are preserved. The Worldstreams deployment supports approximately 5.17, 10.13 and 14.38 seconds of provider output. Hosts validate supported intervals.</p>
 <p>Private Worldstreams API sessions currently support 30–600 seconds and cost $40/hour of active streaming. The API quotes and reserves the maximum cost, then refunds unused credit on teardown. Startup is excluded. Viva includes built-in LLM direction; custom structured LLM requests and extra assets are priced separately. Always use the returned quote.</p>
 <p>See <a href="compatibility.html">compatibility</a> and <a href="integration.html">integration</a> for versioning, stream leases and release checks.</p>
 </details>
 
 <h2 id="example-projects">Example projects</h2>
-<p><a href="https://sequencer.media/worldstreams/S_R5xijO8Pjv"><img src="assets/pokemon-stadium-ui.webp" alt="Pokémon Stadium interface with trainer seats, health, inventory and battle controls" loading="lazy"></a></p>
-<p><a href="https://sequencer.media/worldstreams/S_R5xijO8Pjv"><strong>Pokémon Stadium</strong></a> brings two trainers into a shared battle Worldstream, with Pokémon selection, turns, type effects, status conditions, items, EXP and a challenger queue. <a href="https://sequencer.media/genesis/examples">Explore the project</a>.</p>
+<p><a href="https://sequencer.media/worldstreams/S_R5xijO8Pjv"><img src="assets/pokemon-wildclash-ui.jpg" alt="Pokémon Wildclash interface with trainer seats, health, inventory and battle controls" loading="lazy"></a></p>
+<p><a href="https://sequencer.media/worldstreams/S_R5xijO8Pjv"><strong>Pokémon Wildclash</strong></a> brings two trainers into a shared battle Worldstream, with Pokémon selection, turns, type effects, status conditions, items, EXP and a challenger queue. The repository includes its <a href="https://github.com/sequencer-media/genesis/tree/main/examples/pokemon-wildclash">current controller, interface and artwork</a>. Run <code>node dist/cli.js dev examples/pokemon-wildclash</code> for a local fixture preview. <a href="examples.html">Explore the project</a>.</p>
+<h2 id="run-a-shared-world-server">Run a shared world server</h2>
+<p>Shared rules, private player choices, saved progress, timers and model requests run on the server. Start the included Node server with the current Pokémon Wildclash project:</p>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-sh">npm run serve:world</code></pre></div>
+<p>Open the printed URL and enter a printed player token. Use another browser window and token for the second trainer. The server authenticates each player, saves the room and advances jobs in the background. Default fixtures simulate live directions without model charges. Connect your own providers for generation and stream delivery. <a href="hosting.html">Server setup</a> · <a href="https://github.com/sequencer-media/genesis/tree/main/examples/server">Server source and configuration</a>.</p>
 <h2 id="connect-your-own-world-models">Connect your own World Models</h2>
 <p>GENESIS works with the providers you choose. Keep your LLM and World Model adapters separate so either can evolve independently.</p>
 <ol>

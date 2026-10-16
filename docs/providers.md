@@ -23,3 +23,7 @@ Protocol tests run without secrets. A deployment must test its chosen model's in
 A provider can declare tool.audio.speak or tool.maps.lookup alongside its own argument validator and server implementation. Controllers request tool.request with toolId and data. Grant tool IDs independently in host policy. Return bounded result.data; the controller chooses what to expose to participants. Generic tool completion does not automatically replace the video stage.
 
 Uncertain paid submissions block participant retry. An operator can reconcile an existing prediction with host.reconcileProviderJob(jobId,providerId,predictionId). Restrict this to authenticated operator infrastructure. GenesisProviderSubmissionError(message,false) identifies a confirmed rejected submission; other paid start failures remain uncertain. This prevents automatic repeat charges after ambiguous network failures.
+
+## Continuous playback timing
+
+While a live direction is running, a trusted provider may return `result.data` with `estimatedPlaybackAtMs` (expected start in the delivered feed), `playbackDurationMs` (1,000 to 120,000), and `playbackStartedAtMs` (observed start, never a submission acknowledgement). All timestamps use Unix milliseconds. The host validates and persists these values and publishes the standard queue estimate through browser, HTTP and MCP reads. Update forecasts when buffering changes. An overdue forecast becomes unknown until fresh timing arrives. Finish the job only after observed playback completes.

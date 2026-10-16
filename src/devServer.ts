@@ -10,6 +10,7 @@ import { createLlmProvider } from './llm.js';
 import { defaultGenesisHostPolicy } from './policy.js';
 import { loadGenesisProject } from './projectFiles.js';
 import { publicExperienceDefinition } from './experienceDefinition.js';
+import { genesisParticipantRole } from './participation.js';
 const runtimeDirectory = dirname(fileURLToPath(import.meta.url));
 const css = `*{box-sizing:border-box}body{margin:0;background:#101c18;color:#e9eddf;font:14px system-ui}button,select,input{font:inherit;color:inherit;background:#23352b;border:1px solid #516350;border-radius:6px;padding:10px 14px}button{cursor:pointer}button:disabled{opacity:.45;cursor:default}.preview-header{display:flex;align-items:center;gap:16px;max-width:1060px;margin:auto;padding:20px}.preview-brand{color:#9daa91;font-size:11px;letter-spacing:2px}.preview-heading{flex:1}h1{font-size:20px;margin:4px 0 0}main{max-width:1060px;margin:auto;padding:0 20px 32px}.genesis-player{border:1px solid #4a5b47;background:#f4efdf;overflow:hidden}.genesis-stage{position:relative;aspect-ratio:16/9;background:#172a21}.genesis-stage img,.genesis-stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}.genesis-overlay{position:absolute;inset:0;transition:opacity .2s}.genesis-overlay iframe{height:100%;width:100%;border:0;background:transparent}.genesis-panel iframe{display:block;width:100%;height:730px;border:0}.genesis-controls{display:flex;gap:8px;flex-wrap:wrap;padding:12px;background:#17291f}.genesis-controls:empty{display:none}.genesis-status{margin:0;padding:12px 16px;color:#475c45}.genesis-status:empty{display:none}.note{color:#a2af96;font-size:12px;line-height:1.6}.preview-note{margin:12px 0 20px}.help{border:1px solid #3d5140;padding:14px 18px;margin-top:12px}.help summary{font-weight:600;cursor:pointer}.help p{line-height:1.6}.help dl{display:grid;grid-template-columns:max-content 1fr;gap:10px 22px;font-size:13px}.help dd{margin:0;color:#a2af96}.diagnostics{display:grid;grid-template-columns:1fr 1fr;gap:24px}pre{font:11px ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere;color:#a2af96}[hidden]{display:none!important}@media(max-width:620px){.preview-header{padding:16px;flex-wrap:wrap;gap:10px}.preview-heading{min-width:180px}h1{font-size:17px}main{padding:0 10px 24px}.genesis-panel iframe{height:820px}.help dl,.diagnostics{grid-template-columns:1fr}.help dd{margin-bottom:6px}.preview-brand{font-size:10px}}`;
 /** Author preview only. Loopback binding, issued participant tokens, and strict same-origin writes. */
@@ -17,7 +18,7 @@ export async function startGenesisDevServer(directory: string, port = 4173) {
   directory = await realpath(directory);
   const project = await loadGenesisProject(directory);
   const fixture = JSON.parse(await readFile(resolve(dirname(fileURLToPath(import.meta.url)), '../examples/fixtures/arena-moves.json'), 'utf8'));
-  const makeHost = (storageDirectory: string) => new GenesisHost('local-preview', project, { storage: new FileGenesisStorage(storageDirectory), policy: { ...defaultGenesisHostPolicy, capabilities: [...defaultGenesisHostPolicy.capabilities, 'tool.llm.generate'] }, providers: [createLlmProvider({ id: 'prepared-llm-fixture', generate: async () => fixture }), createCachedProvider([{ imageUrl: '/assets/end.jpg', videoUrl: '/assets/scene.mp4' }])] }).initialize();
+  const makeHost = (storageDirectory: string) => new GenesisHost('local-preview', project, { storage: new FileGenesisStorage(storageDirectory), policy: { ...defaultGenesisHostPolicy, capabilities: [...defaultGenesisHostPolicy.capabilities, 'tool.llm.generate'] }, providers: [createLlmProvider({ id: 'prepared-llm-fixture', generate: async () => fixture }), createCachedProvider([{ imageUrl: '/assets/__genesis_fixture/end.jpg', videoUrl: '/assets/__genesis_fixture/scene.mp4' }], { simulateLiveDirections: true })] }).initialize();
   let host: GenesisHost;
   try { host = await makeHost(resolve(directory, '.genesis')); }
   catch (error: any) {
@@ -50,11 +51,14 @@ export async function startGenesisDevServer(directory: string, port = 4173) {
         if (req.method !== 'POST') return json(405, { error: 'Use POST.' });
         const input = await body(req);
         const result = url.pathname === '/api/players' ? await host.players(actorId, input) : url.pathname === '/api/action' ? await host.action(actorId, input.eventId, input.actionId, input.data, input.revision) : url.pathname === '/api/playback' ? await host.playback(actorId, input.playbackId) : url.pathname === '/api/run' ? await host.runJob(actorId, input.jobId) : url.pathname === '/api/skip' ? await host.skip(actorId, input.jobId) : url.pathname === '/api/retry' ? await host.retry(actorId, input.jobId) : null;
+        if (url.pathname === '/api/players' && result?.actorId) tokens.set(token, result.actorId);
         return result ? json(200, result) : json(404, { error: 'Unknown preview route.' });
       }
       if (req.method !== 'GET') return json(405, { error: 'Use GET.' });
       let file: string | undefined;
-      if (url.pathname === '/dev-client.js') file = resolve(runtimeDirectory, 'browser/devClient.js');
+      if (url.pathname === '/assets/__genesis_fixture/end.jpg') file = resolve(runtimeDirectory, '../examples/assets/end.jpg');
+      else if (url.pathname === '/assets/__genesis_fixture/scene.mp4') file = resolve(runtimeDirectory, '../examples/assets/scene.mp4');
+      else if (url.pathname === '/dev-client.js') file = resolve(runtimeDirectory, 'browser/devClient.js');
       else if (url.pathname.startsWith('/browser/') && /^\/browser\/[A-Za-z]+\.js$/.test(url.pathname)) file = resolve(runtimeDirectory, url.pathname.slice(1));
       else if (url.pathname.startsWith('/assets/')) {
         const base = resolve(directory, 'assets'), candidate = await realpath(resolve(directory, '.' + decodeURIComponent(url.pathname)));
@@ -73,8 +77,8 @@ export async function startGenesisDevServer(directory: string, port = 4173) {
   });
   let ticking = false; const timer = setInterval(async () => { if (ticking) return; ticking = true; try {
     for (const actor of host.diagnostics().state.participants) await host.read(actor.id);
-    const state = host.diagnostics().state, actor = state.participants.find(p => p.role === 'player');
-    const job = state.genesis!.jobs.find(j => j.status === 'queued' && ['scene.request', 'image.request', 'tool.llm.generate'].includes(j.effect.type === 'tool.request' ? j.effect.toolId || '' : j.effect.type));
+    const state = host.diagnostics().state, actor = state.participants.find(p => genesisParticipantRole(state, p) === 'player');
+    const job = state.genesis!.jobs.find(j => j.status === 'queued' && ['scene.request', 'image.request', 'live.direction', 'tool.llm.generate'].includes(j.effect.type === 'tool.request' ? j.effect.toolId || '' : j.effect.type));
     if (actor && job) await host.runJob(actor.id, job.id);
     await host.tick();
   } catch {} finally { ticking = false; } }, 500);

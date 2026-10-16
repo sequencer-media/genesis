@@ -52,11 +52,11 @@ A Worldstream is a generated video experience you can watch and interact with. I
 
 ## Example projects
 
-Explore worlds built with GENESIS. Start with Pokémon Stadium, a shared battle experience with persistent game state and its own player interface.
+Explore worlds built with GENESIS. Start with Pokémon Wildclash, a shared battle experience with persistent game state and its own player interface.
 
 <article class="project-example">
-<a href="https://sequencer.media/worldstreams/S_R5xijO8Pjv"><img src="assets/pokemon-stadium-ui.webp" alt="Pokémon Stadium interface with trainer seats, health and battle controls" loading="lazy" width="1600" height="878"></a>
-<div><h3>Pokémon Stadium</h3><p>Two trainers choose their Pokémon, ready up and battle in the same Worldstream.</p><ul><li>Shared turns and a challenger queue</li><li>Type effects, status conditions and items</li><li>Health, EXP and battle progress</li><li>Player controls around generated video</li></ul><a class="button primary" href="https://sequencer.media/worldstreams/S_R5xijO8Pjv">Open Pokémon Stadium</a> <a href="examples.html">Project walkthrough</a></div>
+<a href="https://sequencer.media/worldstreams/S_R5xijO8Pjv"><img src="assets/pokemon-wildclash-ui.jpg" alt="Pokémon Wildclash interface with trainer seats, health and battle controls" loading="lazy" width="1600" height="900"></a>
+<div><h3>Pokémon Wildclash</h3><p>Two trainers choose their Pokémon, ready up and battle in the same Worldstream.</p><ul><li>Shared turns and a challenger queue</li><li>Type effects, status conditions and items</li><li>Health, EXP and battle progress</li><li>Player controls around generated video</li></ul><a class="button primary" href="https://sequencer.media/worldstreams/S_R5xijO8Pjv">Open Pokémon Wildclash</a> <a href="examples.html">Project walkthrough</a></div>
 </article>
 
 ## How GENESIS works

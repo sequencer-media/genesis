@@ -1,0 +1,350 @@
+{
+  "$schema": "./genesis.schema.json",
+  "format": "genesis-project",
+  "version": 1,
+  "title": "Pokémon Wildclash",
+  "description": "Original Kanto Pokémon, cinematic live-action battles, classic commands and realistic elemental attacks.",
+  "coverImageUrl": "/assets/start.png",
+  "startImageUrl": "/assets/start.png",
+  "definition": {
+    "schemaVersion": 2,
+    "presetId": "open_world",
+    "genesis": {
+      "version": 1,
+      "packageVersion": "",
+      "controller": "custom",
+      "capabilities": [
+        "scene.request",
+        "image.request",
+        "live.direction"
+      ],
+      "actions": [
+        {
+          "id": "battle_move",
+          "inputBindingId": "battle_action",
+          "label": "Execute Move",
+          "fields": {
+            "moveIndex": {
+              "type": "number",
+              "required": true,
+              "min": 0,
+              "max": 3,
+              "maxLength": 1200
+            }
+          }
+        },
+        {
+          "id": "use_item",
+          "inputBindingId": "battle_action",
+          "label": "Use Item",
+          "fields": {
+            "itemIndex": {
+              "type": "number",
+              "required": true,
+              "min": 0,
+              "max": 7,
+              "maxLength": 1200
+            }
+          }
+        },
+        {
+          "id": "preview_move",
+          "inputBindingId": "battle_action",
+          "label": "Preview Move",
+          "fields": {
+            "moveIndex": {
+              "type": "number",
+              "required": true,
+              "min": 0,
+              "max": 3,
+              "maxLength": 1200
+            }
+          }
+        },
+        {
+          "id": "ready_battle",
+          "inputBindingId": "battle_action",
+          "label": "Send out Pokémon",
+          "fields": {
+            "pokemonIndex": {
+              "type": "number",
+              "required": true,
+              "min": 0,
+              "max": 7,
+              "maxLength": 1200
+            }
+          }
+        },
+        {
+          "id": "select_pokemon",
+          "inputBindingId": "battle_action",
+          "label": "Choose Pokémon",
+          "fields": {
+            "pokemonIndex": {
+              "type": "number",
+              "required": true,
+              "min": 0,
+              "max": 7,
+              "maxLength": 1200
+            }
+          }
+        },
+        {
+          "id": "practice_move",
+          "inputBindingId": "battle_action",
+          "label": "Practice Move",
+          "fields": {
+            "moveIndex": {
+              "type": "number",
+              "required": true,
+              "min": 0,
+              "max": 3,
+              "maxLength": 1200
+            }
+          }
+        }
+      ],
+      "initialState": {},
+      "worldPrompt": "High overhead 35mm camera pitched downward 65 degrees. Ground fills the frame, horizon above the crop. Red is the NEAR foreground Pokémon, LOWER-LEFT x25%, y70%, rear three-quarter facing upper-right. Blue is the FAR background Pokémon, UPPER-RIGHT x76%, y32%, front three-quarter facing lower-left, several body lengths farther from the lens. Keep both full bodies in their quadrants, trainers behind them, with open diagonal ground between. Exactly one Pokémon per occupied side, at most two total. Establish this angle at each fresh-frame cut. Dramatic, energetic, beautiful attacks: explosive acceleration, brilliant elemental light and particles, one clear crescendo and weighted recovery. Preserve the recorded hit, miss, immunity, HP and winner. Original Kanto anatomy with photographic natural materials in a woodland clearing. No duplicate bodies, UI, text or subtitles. Only the accepted English trainer line is spoken once; otherwise no words are spoken. Between accepted actions, explore fresh light, foliage, atmosphere and small idle gestures. Vary each shot while preserving camera, cast and game state.",
+      "configSchema": {
+        "animateBattles": {
+          "description": "Show accepted moves in the shared live video stream",
+          "label": "Animate Battles",
+          "type": "boolean",
+          "default": true
+        },
+        "rejoinCooldownSeconds": {
+          "type": "number",
+          "label": "Rejoin Cooldown",
+          "description": "Cooldown in seconds after fainting before rejoining",
+          "max": 60,
+          "default": 8,
+          "min": 2
+        },
+        "turnSeconds": {
+          "type": "number",
+          "label": "Command Timer",
+          "description": "Seconds to choose a command. At zero, use the selected available move. Zero disables the timer.",
+          "min": 0,
+          "max": 90,
+          "default": 5
+        },
+        "battleCamera": {
+          "type": "string",
+          "label": "Battle framing",
+          "description": "Elevated downward view keeps both Pokémon inside the lower-left and upper-right quadrants.",
+          "default": "High overhead 35mm battle camera pitched downward 65 degrees onto the clearing. Ground fills the frame; keep the horizon and sky above the crop. Red is the NEAR foreground Pokémon, LOWER-LEFT at x25%, y70%, rear three-quarter facing upper-right. Blue is the FAR background Pokémon, UPPER-RIGHT at x76%, y32%, front three-quarter facing lower-left. Blue stands several body lengths farther from the lens; perspective makes an equally sized creature smaller there. Show backs, heads and feet from above, with both full bodies inside their quadrants and open diagonal ground between them. Trainers stay behind their own Pokémon. Exactly one Pokémon per occupied side, at most two total. Preserve identities and scale through each shot. At a fresh-frame cut, establish this overhead composition immediately.",
+          "maxLength": 1200
+        },
+        "videoActionTiming": {
+          "type": "string",
+          "label": "Video action timing",
+          "description": "Action choreography across delayed continuous video chunks.",
+          "default": "Attacks are dramatic, energetic and beautiful: explosive acceleration, powerful windup, one clear elemental crescendo and impactful contact around two seconds, then weighted recovery. Use brilliant fire and embers, branching electricity, translucent water, glittering spray, crystalline frost, volumetric light and wind-driven dust as appropriate to the accepted move. Preserve the recorded hit, miss, immunity, HP and winner. Effects remain light, water, debris or energy; keep one creature body per side. One accepted move per 5.17-second shot. Trainer callout and windup start in the first second, contact around two seconds, then the recorded reaction. A knockout is followed by a separate full shot lingering beside the fainted Pokémon, then a separate full shot for an unhurried Poké Ball recall. Show gentle breathing and the trainer kneeling during the pause. During recall, spend the first two seconds aiming the ball, the middle of the shot drawing the whole Pokémon into soft red light, and the final second closing and holding the ball. Admit the next trainer after recall playback finishes. Idle shots show breathing, wind, foliage and settling dust. All speech is English. Wordless shots state: No words are spoken. Hold the high overhead view and near-left/far-right depth throughout.",
+          "maxLength": 1600
+        },
+        "visualContext": {
+          "type": "boolean",
+          "label": "Generate setup frames",
+          "description": "Prepare a library of scene-only lineup and aftermath checkpoints ahead of events, then apply matching frames at safe stream boundaries.",
+          "default": true
+        },
+        "imageModel": {
+          "type": "string",
+          "label": "Setup image model",
+          "default": "p-image-edit",
+          "maxLength": 100
+        },
+        "setupImagePrompt": {
+          "type": "string",
+          "label": "Scene start frame prompt",
+          "default": "High overhead 35mm battle camera pitched downward 65 degrees onto the clearing. Ground fills the frame; keep the horizon and sky above the crop. Red is the NEAR foreground Pokémon, LOWER-LEFT at x25%, y70%, rear three-quarter facing upper-right. Blue is the FAR background Pokémon, UPPER-RIGHT at x76%, y32%, front three-quarter facing lower-left. Blue stands several body lengths farther from the lens; perspective makes an equally sized creature smaller there. Show backs, heads and feet from above, with both full bodies inside their quadrants and open diagonal ground between them. Trainers stay behind their own Pokémon. Exactly one Pokémon per occupied side, at most two total. Preserve identities and scale through each shot. At a fresh-frame cut, establish this overhead composition immediately. Rebuild the reference from above. Hyperrealistic live-action fantasy cinematography. Recognizable first-generation Kanto Pokémon with believable biology, natural proportions, detailed scales, fur, wet skin, weathered shell and wing membranes. Rugged woodland clearing, wet earth, moss, distant mist, warm low sun and cool shadows. Real mass, inertia, contact shadows, physically grounded fire, turbulent water, branching electricity, airborne debris and environmental reactions. Photographic creature effects, cinematic contrast and restrained color. Show only the accepted lineup in settled poses. Match iconic species silhouettes with natural biological materials. Physical scene only, no UI, HUD, health bars, levels, numbers, text, labels, captions, menus, buttons, icons or watermark. Reconstruct clean scenery beneath reference graphics. Internal starting frame only.",
+          "maxLength": 2000
+        },
+        "imageGenerationPolicy": {
+          "type": "string",
+          "label": "When to generate start frames",
+          "default": "Prepare a fresh ready frame for every round and refresh idle ready frames after 30 seconds. Check every 15 seconds and cut to each newly accepted image at the next safe boundary. Keep actions responsive while images prepare. Each cut restores the steep overhead near-left/far-right composition with exactly one Pokémon per occupied side. Keep fainting forecasts ready. Ordinary attacks stay linked within a shot. After the fainting hold, recall remains linked and the Pokémon stays inside its ball. Internal start images never appear as still overlays.",
+          "maxLength": 2000
+        },
+        "actionDrivenVideo": {
+          "type": "boolean",
+          "label": "Prioritize battle actions",
+          "description": "Legacy setting. Continuous idle animation remains enabled by the host.",
+          "default": false
+        },
+        "damageMultiplier": {
+          "type": "number",
+          "label": "Attack damage",
+          "description": "Multiply calculated attack damage to give battles more rounds.",
+          "default": 0.4,
+          "min": 0.1,
+          "max": 1
+        },
+        "maxHitHpFraction": {
+          "type": "number",
+          "label": "Maximum damage per hit",
+          "description": "Cap one attack at this fraction of the target’s full HP, including critical and super-effective hits.",
+          "default": 0.3,
+          "min": 0.1,
+          "max": 1
+        }
+      },
+      "config": {
+        "animateBattles": true,
+        "rejoinCooldownSeconds": 8,
+        "turnSeconds": 5,
+        "battleCamera": "High overhead 35mm battle camera pitched downward 65 degrees onto the clearing. Ground fills the frame; keep the horizon and sky above the crop. Red is the NEAR foreground Pokémon, LOWER-LEFT at x25%, y70%, rear three-quarter facing upper-right. Blue is the FAR background Pokémon, UPPER-RIGHT at x76%, y32%, front three-quarter facing lower-left. Blue stands several body lengths farther from the lens; perspective makes an equally sized creature smaller there. Show backs, heads and feet from above, with both full bodies inside their quadrants and open diagonal ground between them. Trainers stay behind their own Pokémon. Exactly one Pokémon per occupied side, at most two total. Preserve identities and scale through each shot. At a fresh-frame cut, establish this overhead composition immediately.",
+        "videoActionTiming": "Attacks are dramatic, energetic and beautiful: explosive acceleration, powerful windup, one clear elemental crescendo and impactful contact around two seconds, then weighted recovery. Use brilliant fire and embers, branching electricity, translucent water, glittering spray, crystalline frost, volumetric light and wind-driven dust as appropriate to the accepted move. Preserve the recorded hit, miss, immunity, HP and winner. Effects remain light, water, debris or energy; keep one creature body per side. One accepted move per 5.17-second shot. Trainer callout and windup start in the first second, contact around two seconds, then the recorded reaction. A knockout is followed by a separate full shot lingering beside the fainted Pokémon, then a separate full shot for an unhurried Poké Ball recall. Show gentle breathing and the trainer kneeling during the pause. During recall, spend the first two seconds aiming the ball, the middle of the shot drawing the whole Pokémon into soft red light, and the final second closing and holding the ball. Admit the next trainer after recall playback finishes. Idle shots show breathing, wind, foliage and settling dust. All speech is English. Wordless shots state: No words are spoken. Hold the high overhead view and near-left/far-right depth throughout.",
+        "visualContext": true,
+        "imageModel": "p-image-edit",
+        "setupImagePrompt": "High overhead 35mm battle camera pitched downward 65 degrees onto the clearing. Ground fills the frame; keep the horizon and sky above the crop. Red is the NEAR foreground Pokémon, LOWER-LEFT at x25%, y70%, rear three-quarter facing upper-right. Blue is the FAR background Pokémon, UPPER-RIGHT at x76%, y32%, front three-quarter facing lower-left. Blue stands several body lengths farther from the lens; perspective makes an equally sized creature smaller there. Show backs, heads and feet from above, with both full bodies inside their quadrants and open diagonal ground between them. Trainers stay behind their own Pokémon. Exactly one Pokémon per occupied side, at most two total. Preserve identities and scale through each shot. At a fresh-frame cut, establish this overhead composition immediately. Rebuild the reference from above. Hyperrealistic live-action fantasy cinematography. Recognizable first-generation Kanto Pokémon with believable biology, natural proportions, detailed scales, fur, wet skin, weathered shell and wing membranes. Rugged woodland clearing, wet earth, moss, distant mist, warm low sun and cool shadows. Real mass, inertia, contact shadows, physically grounded fire, turbulent water, branching electricity, airborne debris and environmental reactions. Photographic creature effects, cinematic contrast and restrained color. Show only the accepted lineup in settled poses. Match iconic species silhouettes with natural biological materials. Physical scene only, no UI, HUD, health bars, levels, numbers, text, labels, captions, menus, buttons, icons or watermark. Reconstruct clean scenery beneath reference graphics. Internal starting frame only.",
+        "imageGenerationPolicy": "Prepare a fresh ready frame for every round and refresh idle ready frames after 30 seconds. Check every 15 seconds and cut to each newly accepted image at the next safe boundary. Keep actions responsive while images prepare. Each cut restores the steep overhead near-left/far-right composition with exactly one Pokémon per occupied side. Keep fainting forecasts ready. Ordinary attacks stay linked within a shot. After the fainting hold, recall remains linked and the Pokémon stays inside its ball. Internal start images never appear as still overlays.",
+        "actionDrivenVideo": false,
+        "damageMultiplier": 0.4,
+        "maxHitHpFraction": 0.3
+      },
+      "limits": {
+        "maxJobs": 2,
+        "maxSessionCostUsd": 5,
+        "maxActionCostUsd": 0.5
+      },
+      "playbackCompletion": "first_player"
+    },
+    "contentPolicy": {
+      "violence": "none",
+      "nudity": "none",
+      "sexualThemes": "none",
+      "language": "none",
+      "substances": "none",
+      "frighteningContent": "none"
+    },
+    "participation": {
+      "mode": "multiplayer",
+      "minPlayers": 1,
+      "maxPlayers": 2,
+      "spectators": true,
+      "turnPolicy": "simultaneous",
+      "joinPolicy": "drop_in",
+      "room": "shared",
+      "seats": {
+        "version": 1,
+        "slots": [
+          {
+            "id": "trainer_red",
+            "label": "Trainer 1 (Red)"
+          },
+          {
+            "id": "trainer_blue",
+            "label": "Trainer 2 (Blue)"
+          }
+        ],
+        "queue": true,
+        "maxSeatsPerIdentity": 2
+      }
+    },
+    "worldVideo": {
+      "chunkIntervalSeconds": 5.166666666666667,
+      "enabled": true,
+      "pacing": "continuous",
+      "source": "generated",
+      "idlePresentation": "hold_frame",
+      "continuity": "continue_scene",
+      "modelId": "prunaai-p-video-2-pro",
+      "maxCostUsd": 0.5
+    },
+    "inputs": [
+      {
+        "id": "battle_action",
+        "kind": "game",
+        "purpose": "game_command",
+        "scope": "player",
+        "lifetime": "one_action",
+        "activePhases": [
+          "action"
+        ],
+        "required": false,
+        "maxLength": 1200,
+        "advanceBehavior": "submit_readiness"
+      }
+    ],
+    "characters": {
+      "selectionEnabled": false,
+      "display": "grid",
+      "allowPhoto": false,
+      "appearanceLifetime": "session",
+      "conversationHistory": "persistent"
+    },
+    "interface": {
+      "stageAspectRatio": 1.77777777777778,
+      "mode": "custom",
+      "layout": "stage",
+      "theme": {
+        "primaryColor": "#88c070",
+        "backgroundColor": "#081820",
+        "textColor": "#e0f8d0"
+      },
+      "placement": "overlay",
+      "controls": [
+        {
+          "id": "ctrl_battle_action",
+          "inputBindingId": "battle_action",
+          "component": "auto",
+          "label": "Battle Command"
+        }
+      ],
+      "packageVersion": "",
+      "fallback": "default",
+      "handledInputBindingIds": [
+        "battle_action"
+      ],
+      "overlayRegion": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1
+      },
+      "chat": {
+        "presentation": "open",
+        "reactions": true
+      }
+    },
+    "rules": {
+      "resolver": "combat",
+      "roundSeconds": 20,
+      "voteOptions": [
+        "Attack",
+        "Defend",
+        "Special",
+        "Item"
+      ],
+      "tieBreak": "first",
+      "shotsPerPlayer": 5
+    },
+    "flow": {
+      "entryPhase": "action",
+      "phases": [
+        {
+          "id": "action",
+          "title": "Battle Turn",
+          "inputBindingIds": [
+            "battle_action"
+          ],
+          "next": "action",
+          "completion": "manual"
+        }
+      ]
+    },
+    "scenes": [],
+    "gameBindings": []
+  },
+  "interfaceFile": "interface.html",
+  "controllerFile": "controller.js",
+  "assets": [
+    {
+      "path": "assets/start.png",
+      "mimeType": "image/png",
+      "sizeBytes": 3086874
+    }
+  ]
+}

@@ -1,0 +1,1007 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:genesis:project:1",
+  "title": "Genesis project version 1",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "maxLength": 4096
+    },
+    "format": {
+      "const": "genesis-project"
+    },
+    "version": {
+      "const": 1
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 120,
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 4000
+    },
+    "coverImageUrl": {
+      "type": "string",
+      "maxLength": 4096
+    },
+    "startImageUrl": {
+      "type": "string",
+      "maxLength": 4096
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "maxLength": 240,
+            "pattern": "^assets/[A-Za-z0-9_/-]+\\.[a-z0-9]+$"
+          },
+          "mimeType": {
+            "type": "string",
+            "enum": [
+              "image/png",
+              "image/jpeg",
+              "image/webp",
+              "image/gif",
+              "video/mp4",
+              "video/webm",
+              "audio/mpeg",
+              "audio/wav",
+              "audio/ogg"
+            ]
+          },
+          "sizeBytes": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 52428800
+          }
+        },
+        "required": [
+          "path",
+          "mimeType",
+          "sizeBytes"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 64
+    },
+    "interfaceFile": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*\\.\\.)[A-Za-z0-9_./-]+\\.html$"
+    },
+    "controllerFile": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*\\.\\.)[A-Za-z0-9_./-]+\\.js$"
+    },
+    "interfaceSource": {
+      "type": "string",
+      "maxLength": 200000
+    },
+    "controllerSource": {
+      "type": "string",
+      "maxLength": 65536
+    },
+    "extensions": {
+      "type": "object",
+      "maxProperties": 16,
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)+$"
+      },
+      "additionalProperties": {
+        "type": "object"
+      }
+    },
+    "definition": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 2
+        },
+        "presetId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "contentPolicy": {
+          "type": "object",
+          "properties": {
+            "violence": {
+              "type": "string",
+              "enum": [
+                "none",
+                "mild",
+                "moderate"
+              ]
+            },
+            "nudity": {
+              "type": "string",
+              "enum": [
+                "none",
+                "non_explicit"
+              ]
+            },
+            "sexualThemes": {
+              "type": "string",
+              "enum": [
+                "none",
+                "mild"
+              ]
+            },
+            "language": {
+              "type": "string",
+              "enum": [
+                "none",
+                "mild",
+                "strong"
+              ]
+            },
+            "substances": {
+              "type": "string",
+              "enum": [
+                "none",
+                "mild"
+              ]
+            },
+            "frighteningContent": {
+              "type": "string",
+              "enum": [
+                "none",
+                "mild",
+                "intense"
+              ]
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "participation": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "type": "string",
+              "enum": [
+                "single",
+                "multiplayer",
+                "group"
+              ]
+            },
+            "minPlayers": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "maxPlayers": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "spectators": {
+              "type": "boolean"
+            },
+            "turnPolicy": {
+              "type": "string",
+              "enum": [
+                "sequential",
+                "simultaneous",
+                "first_input"
+              ]
+            },
+            "joinPolicy": {
+              "type": "string",
+              "enum": [
+                "lobby",
+                "round_boundary",
+                "drop_in"
+              ]
+            },
+            "room": {
+              "type": "string",
+              "enum": [
+                "shared",
+                "private"
+              ]
+            },
+            "seats": {
+              "type": "object",
+              "properties": {
+                "version": {
+                  "const": 1
+                },
+                "slots": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9_-]{1,128}$",
+                        "maxLength": 80
+                      },
+                      "label": {
+                        "type": "string",
+                        "maxLength": 60,
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "label"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "maxItems": 100,
+                  "minItems": 1
+                },
+                "queue": {
+                  "type": "boolean"
+                },
+                "maxSeatsPerIdentity": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 8
+                }
+              },
+              "required": [
+                "version",
+                "slots"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "worldVideo": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "pacing": {
+              "type": "string",
+              "enum": [
+                "continuous",
+                "input_gated"
+              ]
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "generated",
+                "cached",
+                "hybrid"
+              ]
+            },
+            "idlePresentation": {
+              "type": "string",
+              "enum": [
+                "hold_frame",
+                "image",
+                "loop"
+              ]
+            },
+            "continuity": {
+              "type": "string",
+              "enum": [
+                "continue_scene",
+                "reset_turn"
+              ]
+            },
+            "modelId": {
+              "type": "string",
+              "maxLength": 128
+            },
+            "maxCostUsd": {
+              "type": "number",
+              "minimum": 0.01,
+              "maximum": 5
+            },
+            "chunkIntervalSeconds": {
+              "type": "number",
+              "minimum": 2,
+              "maximum": 30
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{1,128}$"
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "text",
+                  "vote",
+                  "voice",
+                  "image",
+                  "click",
+                  "game"
+                ]
+              },
+              "purpose": {
+                "type": "string",
+                "enum": [
+                  "world_action",
+                  "conversation",
+                  "social_chat",
+                  "character_appearance",
+                  "scene_reference",
+                  "vote",
+                  "navigation",
+                  "game_command",
+                  "player_instruction"
+                ]
+              },
+              "scope": {
+                "type": "string",
+                "enum": [
+                  "player",
+                  "world",
+                  "conversation"
+                ]
+              },
+              "lifetime": {
+                "type": "string",
+                "enum": [
+                  "one_action",
+                  "phase",
+                  "session",
+                  "until_replaced",
+                  "profile"
+                ]
+              },
+              "activePhases": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,128}$"
+                },
+                "maxItems": 16
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "maxLength": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 4000
+              },
+              "advanceBehavior": {
+                "type": "string",
+                "enum": [
+                  "context_only",
+                  "submit_readiness"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "kind"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 16
+        },
+        "characters": {
+          "type": "object",
+          "properties": {
+            "selectionEnabled": {
+              "type": "boolean"
+            },
+            "display": {
+              "type": "string",
+              "enum": [
+                "grid",
+                "carousel",
+                "room"
+              ]
+            },
+            "allowPhoto": {
+              "type": "boolean"
+            },
+            "appearanceLifetime": {
+              "type": "string",
+              "enum": [
+                "session",
+                "profile"
+              ]
+            },
+            "conversationHistory": {
+              "type": "string",
+              "enum": [
+                "session",
+                "persistent"
+              ]
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "interface": {
+          "type": "object",
+          "properties": {
+            "stageAspectRatio": {
+              "type": "number",
+              "minimum": 0.25,
+              "maximum": 4,
+              "default": 1.7777777777777777,
+              "description": "Media stage width divided by height. 1.7777777777777777 is 16:9; 0.5625 is 9:16; 1 is square. Media is contained within this shape."
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "default",
+                "composed",
+                "custom"
+              ]
+            },
+            "layout": {
+              "type": "string",
+              "enum": [
+                "stage",
+                "gallery",
+                "carousel",
+                "room",
+                "split"
+              ]
+            },
+            "theme": {
+              "type": "object",
+              "properties": {
+                "primaryColor": {
+                  "type": "string",
+                  "maxLength": 7
+                },
+                "backgroundColor": {
+                  "type": "string",
+                  "maxLength": 7
+                },
+                "textColor": {
+                  "type": "string",
+                  "maxLength": 7
+                }
+              },
+              "required": [],
+              "additionalProperties": false
+            },
+            "placement": {
+              "type": "string",
+              "enum": [
+                "overlay",
+                "panel",
+                "stage"
+              ]
+            },
+            "controls": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{1,128}$"
+                  },
+                  "inputBindingId": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{1,128}$"
+                  },
+                  "component": {
+                    "type": "string",
+                    "enum": [
+                      "auto",
+                      "text",
+                      "voice",
+                      "upload",
+                      "vote",
+                      "hotspots",
+                      "game"
+                    ]
+                  },
+                  "label": {
+                    "type": "string",
+                    "maxLength": 100
+                  }
+                },
+                "required": [
+                  "id",
+                  "inputBindingId"
+                ],
+                "additionalProperties": false
+              },
+              "maxItems": 24
+            },
+            "packageVersion": {
+              "const": ""
+            },
+            "fallback": {
+              "const": "default"
+            },
+            "handledInputBindingIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{1,128}$"
+              },
+              "maxItems": 16
+            },
+            "overlayRegion": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "y": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "width": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 1
+                },
+                "height": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 1
+                }
+              },
+              "required": [
+                "x",
+                "y",
+                "width",
+                "height"
+              ],
+              "additionalProperties": false
+            },
+            "chat": {
+              "type": "object",
+              "properties": {
+                "presentation": {
+                  "type": "string",
+                  "enum": [
+                    "minimized",
+                    "open",
+                    "disabled"
+                  ]
+                },
+                "reactions": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "presentation",
+                "reactions"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "genesis": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "const": 1
+            },
+            "packageVersion": {
+              "const": ""
+            },
+            "controller": {
+              "type": "string",
+              "enum": [
+                "default",
+                "custom"
+              ]
+            },
+            "capabilities": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^(scene\\.request|image\\.request|live\\.direction|tool\\.[A-Za-z][A-Za-z0-9_.-]{0,79})$"
+              },
+              "maxItems": 32
+            },
+            "actions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{1,128}$"
+                  },
+                  "inputBindingId": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{1,128}$"
+                  },
+                  "label": {
+                    "type": "string",
+                    "maxLength": 100
+                  },
+                  "fields": {
+                    "type": "object",
+                    "maxProperties": 16,
+                    "additionalProperties": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "string",
+                            "number",
+                            "boolean"
+                          ]
+                        },
+                        "required": {
+                          "type": "boolean"
+                        },
+                        "min": {
+                          "type": "number"
+                        },
+                        "max": {
+                          "type": "number"
+                        },
+                        "maxLength": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 4000
+                        }
+                      },
+                      "required": [
+                        "type"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "id",
+                  "inputBindingId"
+                ],
+                "additionalProperties": false
+              },
+              "maxItems": 32
+            },
+            "initialState": {
+              "type": "object"
+            },
+            "worldPrompt": {
+              "type": "string",
+              "maxLength": 1200
+            },
+            "configSchema": {
+              "type": "object",
+              "maxProperties": 32,
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "string",
+                      "number",
+                      "boolean"
+                    ]
+                  },
+                  "label": {
+                    "type": "string",
+                    "maxLength": 100
+                  },
+                  "description": {
+                    "type": "string",
+                    "maxLength": 240
+                  },
+                  "default": {
+                    "type": [
+                      "string",
+                      "number",
+                      "boolean"
+                    ]
+                  },
+                  "min": {
+                    "type": "number"
+                  },
+                  "max": {
+                    "type": "number"
+                  },
+                  "maxLength": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 4000
+                  },
+                  "options": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": [
+                            "string",
+                            "number"
+                          ]
+                        },
+                        "label": {
+                          "type": "string",
+                          "maxLength": 100
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "label"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "maxItems": 24
+                  }
+                },
+                "required": [
+                  "type",
+                  "label",
+                  "default"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "config": {
+              "type": "object",
+              "maxProperties": 32,
+              "additionalProperties": {
+                "type": [
+                  "string",
+                  "number",
+                  "boolean"
+                ]
+              }
+            },
+            "limits": {
+              "type": "object",
+              "properties": {
+                "maxJobs": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 4
+                },
+                "maxSessionCostUsd": {
+                  "type": "number",
+                  "minimum": 0.01,
+                  "maximum": 1000000
+                },
+                "maxActionCostUsd": {
+                  "type": "number",
+                  "minimum": 0.01,
+                  "maximum": 1000000
+                }
+              },
+              "required": [],
+              "additionalProperties": false
+            },
+            "playbackCompletion": {
+              "type": "string",
+              "enum": [
+                "first_player",
+                "all_players"
+              ]
+            }
+          },
+          "required": [
+            "version"
+          ],
+          "additionalProperties": false
+        },
+        "rules": {
+          "type": "object",
+          "properties": {
+            "resolver": {
+              "type": "string",
+              "enum": [
+                "narrative",
+                "shootout",
+                "tennis",
+                "combat",
+                "adventure",
+                "conversation"
+              ]
+            },
+            "roundSeconds": {
+              "type": "integer",
+              "minimum": 5,
+              "maximum": 120
+            },
+            "voteOptions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 160
+              },
+              "maxItems": 6
+            },
+            "tieBreak": {
+              "type": "string",
+              "enum": [
+                "first",
+                "seeded"
+              ]
+            },
+            "shotsPerPlayer": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "flow": {
+          "type": "object",
+          "properties": {
+            "entryPhase": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,128}$"
+            },
+            "phases": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{1,128}$"
+                  },
+                  "title": {
+                    "type": "string",
+                    "maxLength": 120
+                  },
+                  "inputBindingIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9_-]{1,128}$"
+                    },
+                    "maxItems": 16
+                  },
+                  "next": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{1,128}$"
+                  },
+                  "completion": {
+                    "type": "string",
+                    "enum": [
+                      "first_input",
+                      "all_players",
+                      "vote_deadline",
+                      "manual"
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "next"
+                ],
+                "additionalProperties": false
+              },
+              "maxItems": 12
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "scenes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{1,128}$"
+              },
+              "title": {
+                "type": "string",
+                "maxLength": 120
+              },
+              "imageUrl": {
+                "type": "string",
+                "maxLength": 4096
+              },
+              "videoUrl": {
+                "type": "string",
+                "maxLength": 4096
+              },
+              "hotspots": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9_-]{1,128}$"
+                    },
+                    "label": {
+                      "type": "string",
+                      "maxLength": 100
+                    },
+                    "x": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "y": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "targetSceneId": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9_-]{1,128}$"
+                    },
+                    "action": {
+                      "type": "string",
+                      "maxLength": 500
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "targetSceneId"
+                  ],
+                  "additionalProperties": false
+                },
+                "maxItems": 16
+              }
+            },
+            "required": [
+              "id"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 64
+        },
+        "gameBindings": {
+          "type": "array",
+          "maxItems": 0,
+          "description": "Saved game IDs are host connections. Implement portable game behavior in the interface and controller."
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "genesis"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "format",
+    "version",
+    "title",
+    "definition",
+    "startImageUrl"
+  ],
+  "additionalProperties": false,
+  "anyOf": [
+    {
+      "required": [
+        "interfaceFile",
+        "controllerFile"
+      ]
+    },
+    {
+      "required": [
+        "interfaceSource",
+        "controllerSource"
+      ]
+    }
+  ]
+}

@@ -43,6 +43,8 @@
 <a href="demos.html">Worldstreams demos</a>
 <a href="examples.html">Example projects</a>
 <p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="hosting.html">Run a Worldstream server</a>
+<a href="mcp.html">Agent tools through MCP</a>
 <a href="providers.html" aria-current="page" class="active">Your own models</a>
 <a href="models.html">Models and pricing</a>
 <p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
@@ -63,6 +65,8 @@
 <a href="demos.html">Worldstreams demos</a>
 <a href="examples.html">Example projects</a>
 <p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="hosting.html">Run a Worldstream server</a>
+<a href="mcp.html">Agent tools through MCP</a>
 <a href="providers.html" aria-current="page" class="active">Your own models</a>
 <a href="models.html">Models and pricing</a>
 <p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
@@ -76,7 +80,7 @@
 <a href="license.html">Apache 2.0 license</a>
 <a href="readme.html">Project README</a></nav></aside>
     <main id="main" tabindex="-1">
-      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#prepared-media">Prepared media</a><a href="#replicate">Replicate</a><a href="#custom-services">Custom services</a></nav></details><h1 id="provider-integration">Provider integration</h1>
+      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#prepared-media">Prepared media</a><a href="#replicate">Replicate</a><a href="#custom-services">Custom services</a><a href="#continuous-playback-timing">Continuous playback timing</a></nav></details><h1 id="provider-integration">Provider integration</h1>
 <p>A provider is a host module. Projects submit semantic effects and never receive provider credentials. Register providers and allowed capabilities when creating GenesisHost. Paid providers require services.authorizeTool, even when the creator requests access in the manifest.</p>
 <h2 id="prepared-media">Prepared media</h2>
 <p>createCachedProvider([{videoUrl,imageUrl}]) exercises queue, completion, playback and checkpoints with owned prepared assets. The image must represent the clip&#39;s actual last frame. Starter assets are included for no-cost local development.</p>
@@ -89,6 +93,8 @@
 <h2 id="custom-services">Custom services</h2>
 <p>A provider can declare tool.audio.speak or tool.maps.lookup alongside its own argument validator and server implementation. Controllers request tool.request with toolId and data. Grant tool IDs independently in host policy. Return bounded result.data; the controller chooses what to expose to participants. Generic tool completion does not automatically replace the video stage.</p>
 <p>Uncertain paid submissions block participant retry. An operator can reconcile an existing prediction with host.reconcileProviderJob(jobId,providerId,predictionId). Restrict this to authenticated operator infrastructure. GenesisProviderSubmissionError(message,false) identifies a confirmed rejected submission; other paid start failures remain uncertain. This prevents automatic repeat charges after ambiguous network failures.</p>
+<h2 id="continuous-playback-timing">Continuous playback timing</h2>
+<p>While a live direction is running, a trusted provider may return <code>result.data</code> with <code>estimatedPlaybackAtMs</code> (expected start in the delivered feed), <code>playbackDurationMs</code> (1,000 to 120,000), and <code>playbackStartedAtMs</code> (observed start, never a submission acknowledgement). All timestamps use Unix milliseconds. The host validates and persists these values and publishes the standard queue estimate through browser, HTTP and MCP reads. Update forecasts when buffering changes. An overdue forecast becomes unknown until fresh timing arrives. Finish the job only after observed playback completes.</p>
 </article>
       <footer class="site-footer">
         <p>GENESIS 0.1.0 · Open source World Model engine</p>

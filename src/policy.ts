@@ -2,6 +2,7 @@ import type { GenesisCapability } from './experienceDefinition.js';
 /** Host-owned grants. Never populate these from a creator manifest or browser request. */
 export interface GenesisHostPolicy {
   capabilities: readonly GenesisCapability[]; maxPlayers: number; maxJobs: number;
+  maxQueuedDirections?: number;
   maxSessionCostUsd: number; maxActionCostUsd: number; validateAssetUrl: (url: string) => boolean;
 }
 export const portableAssetUrl = (url: string) => {

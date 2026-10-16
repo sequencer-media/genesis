@@ -4,6 +4,7 @@ import type { ExperienceSessionState } from './experienceSessionCore.js';
 import { applyGenesisTransition, GenesisRequestError, defaultGenesisController, genesisActions, genesisContext, genesisView, validateGenesisAction, type GenesisEvent, type GenesisState } from './genesisCore.js';
 import { runGenesisController } from './genesisController.js';
 import { applyGenesisPlayerRequest, genesisParticipantRole, tickGenesisParticipation, releaseGenesisSeat, type GenesisPlayerRequest, type GenesisSeatEvent } from './participation.js';
+import {nextGenesisFrameRefreshAt, settleGenesisFrame} from './frameLibrary.js';
 
 export async function dispatchGenesisEvent(def: ExperienceDefinition, previous: ExperienceSessionState, source: string, event: GenesisEvent, policy: GenesisHostPolicy = defaultGenesisHostPolicy, depth = 0): Promise<ExperienceSessionState> {
   if (depth > 8) throw new GenesisRequestError('The controller created too many participation transitions.');
@@ -47,10 +48,16 @@ export function withGenesisView(def: ExperienceDefinition, state: ExperienceSess
   return { genesis: view };
 }
 export async function submitGenesisAction(def: ExperienceDefinition, state: ExperienceSessionState, source: string, actorId: string, eventId: string, actionId: string, payload: unknown, expectedRevision: number, now = Date.now(), policy: GenesisHostPolicy = defaultGenesisHostPolicy) {
+  const revisionBeforeTick = state.genesis!.revision;
+  const windowBeforeTick = JSON.stringify(state.genesis!.window);
   state = await tickGenesis(def, state, source, now, policy);
   const genesis = state.genesis!, actor = state.participants.find(p => p.id === actorId), role = genesisParticipantRole(state, actor, now);
   if (!actor || state.status !== 'active') throw new GenesisRequestError('Join the active experience first.');
-  const data = validateGenesisAction(def, genesis, actorId, role, actionId, payload, expectedRevision, now, policy);
+  // A due background timer may advance the revision inside this request. A
+  // fresh click remains valid when its exact decision window is unchanged.
+  const actionRevision = expectedRevision === revisionBeforeTick && windowBeforeTick === JSON.stringify(genesis.window)
+    ? genesis.revision : expectedRevision;
+  const data = validateGenesisAction(def, genesis, actorId, role, actionId, payload, actionRevision, now, policy);
   const action = genesisActions(def).find(a => a.id === actionId)!;
   if (genesis.window?.mode === 'collective') {
     if (payload && (payload as any).windowId !== genesis.window.id) throw new GenesisRequestError('This voting window changed. Choose from the current options.');
@@ -84,27 +91,33 @@ export async function tickGenesis(def: ExperienceDefinition, previous: Experienc
     state = { ...state, genesis: { ...state.genesis!, timers: state.genesis!.timers.filter(t => t.id !== timer.id) } };
     state = await dispatchGenesisEvent(def, state, source, { id: `timer:${timer.id}`, type: 'timer', data: { timerId: timer.id, ...timer.data }, now }, policy);
   }
+  const refreshAt=nextGenesisFrameRefreshAt(state.genesis!);
+  if (refreshAt !== undefined && refreshAt <= now) state={...state,revision:state.revision+1,
+    genesis:applyGenesisTransition(def,state.genesis!,{id:`frame-refresh:${state.genesis!.revision}:${now}`,type:'frame.refresh',data:{},now},{},policy)};
   return state;
 }
-export async function settleGenesisJob(def: ExperienceDefinition, previous: ExperienceSessionState, source: string, jobId: string, result: { imageUrl?: string; videoUrl?: string; error?: string; mediaId?: string; data?: Record<string, unknown> }, now = Date.now(), policy: GenesisHostPolicy = defaultGenesisHostPolicy) {
+export async function settleGenesisJob(def: ExperienceDefinition, previous: ExperienceSessionState, source: string, jobId: string, result: { imageUrl?: string; videoUrl?: string; error?: string; mediaId?: string; reused?: boolean; frameExpiresAtMs?: number; data?: Record<string, unknown> }, now = Date.now(), policy: GenesisHostPolicy = defaultGenesisHostPolicy) {
   const job = previous.genesis!.jobs.find(j => j.id === jobId);
   if (!job || !['queued', 'running'].includes(job.status)) return previous;
   let state = JSON.parse(JSON.stringify(previous)) as ExperienceSessionState;
   const current = state.genesis!.jobs.find(j => j.id === jobId)!;
-  if (job.effect.guard && state.genesis!.server[job.effect.guard.key] !== job.effect.guard.value) {
+  if(job.effect.frame&&!result.error&&(!result.imageUrl||!policy.validateAssetUrl(result.imageUrl)))result={error:'The frame provider must return a saved scene image.'};
+  const anchorId = result.imageUrl ? `anchor:${jobId}` : '';
+  const acceptedFrame=settleGenesisFrame(state.genesis!,job,anchorId,result.error || '',now,result.frameExpiresAtMs);
+  if (!acceptedFrame || job.effect.guard && state.genesis!.server[job.effect.guard.key] !== job.effect.guard.value) {
     current.status = 'cancelled'; state.genesis!.revision++; state.revision++;
     if (state.genesis!.stage.ownerJobId === jobId) { state.genesis!.stage.ownerJobId = ''; state.genesis!.stage.mode = 'holding'; }
     return dispatchGenesisEvent(def, state, source, { id: `cancel:${jobId}:${job.retryCount}`, type: 'job.cancelled', data: { jobId }, now }, policy);
   }
   current.status = result.error ? 'failed' : 'ready'; current.error = result.error || '';
-  const anchorId = result.imageUrl ? `anchor:${jobId}` : '';
+  if (job.effect.frame && result.reused) state.genesis!.reservedCostUsd=Math.max(0,state.genesis!.reservedCostUsd-job.maxCostUsd);
   if (anchorId) state.genesis!.anchors[anchorId] = { id: anchorId, imageUrl: result.imageUrl!, revision: state.genesis!.revision + 1, sourceMediaId: result.mediaId || '', ...(result.videoUrl ? { time: 'end' as const } : {}) };
   current.result = { imageUrl: result.imageUrl || '', videoUrl: result.videoUrl || '', anchorId, ...(result.data ? { data: result.data } : {}) };
   // Explicit restore/show during a running job cancels its authority over the stage.
-  if (job.effect.type !== 'tool.request' && state.genesis!.stage.ownerJobId !== jobId) { current.status = 'cancelled'; state.genesis!.revision++; state.revision++; return state; }
-  if (job.effect.type !== 'tool.request') { state.genesis!.stage.mode = 'holding'; state.genesis!.stage.ownerJobId = ''; }
+  if (!['tool.request', 'live.direction'].includes(job.effect.type) && job.effect.presentation !== 'background' && state.genesis!.stage.ownerJobId !== jobId) { current.status = 'cancelled'; state.genesis!.revision++; state.revision++; return state; }
+  if (job.effect.type !== 'tool.request' && job.effect.presentation !== 'background') { state.genesis!.stage.mode = 'holding'; state.genesis!.stage.ownerJobId = ''; }
   if (job.effect.type !== 'tool.request' && anchorId && result.videoUrl) state.genesis!.stage.anchorId = anchorId;
-  return dispatchGenesisEvent(def, state, source, { id: `job:${jobId}:${job.retryCount}`, type: result.error ? 'job.failed' : 'job.ready', data: { jobId, ...current.result, error: current.error }, now }, policy);
+  return dispatchGenesisEvent(def, state, source, { id: `job:${jobId}:${job.retryCount}`, type: result.error ? 'job.failed' : 'job.ready', data: { jobId, ...current.result, error: current.error, ...(job.effect.frame ? {frameKey:job.effect.frame.key,frameFingerprint:job.effect.frame.fingerprint} : {}) }, now }, policy);
 }
 export async function completeGenesisPlayback(def: ExperienceDefinition, previous: ExperienceSessionState, source: string, actorId: string, playbackId: string, now = Date.now(), policy: GenesisHostPolicy = defaultGenesisHostPolicy) {
   previous = await tickGenesis(def, previous, source, now, policy);
@@ -122,6 +135,6 @@ export function retryGenesisJob(previous: ExperienceSessionState, jobId: string)
   const state = JSON.parse(JSON.stringify(previous)) as ExperienceSessionState, job = state.genesis!.jobs.find(j => j.id === jobId);
   if (!job || job.status !== 'failed') throw new GenesisRequestError('Choose a failed job.');
   if (job.retryCount >= 2) throw new GenesisRequestError('This job has reached its retry limit.');
-  job.status = 'queued'; job.error = ''; job.retryCount++; if (job.effect.type !== 'tool.request') { state.genesis!.stage.mode = 'generating'; state.genesis!.stage.ownerJobId = jobId; state.genesis!.stage.overlays = false; } state.genesis!.revision++; state.revision++;
+  job.status = 'queued'; job.error = ''; job.retryCount++; if (!['tool.request', 'live.direction'].includes(job.effect.type) && job.effect.presentation !== 'background') { state.genesis!.stage.mode = 'generating'; state.genesis!.stage.ownerJobId = jobId; state.genesis!.stage.overlays = false; } state.genesis!.revision++; state.revision++;
   return state;
 }

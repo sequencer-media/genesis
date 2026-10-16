@@ -81,3 +81,11 @@ Read the [integration guide](integration.md) to upload a local project with the 
 ## Take it into production
 
 Embed `mountGenesisPlayer` in your app and run `GenesisHost` behind authenticated routes. Choose persistent storage and a background worker for the room. Distributed deployments need transactional storage and durable scheduling. Read [host authority](host-authority.md) and [the API reference](api.md) before deployment.
+
+## Play the current Pokémon project
+
+```sh
+node dist/cli.js dev examples/pokemon-wildclash
+```
+
+This includes the current Wildclash controller, trainer interface and bundled artwork. The local preview simulates continuous video directions while running the actual battle rules. For two browser connections with separate identities and saved shared state, use `npm run serve:world`. See [server setup](hosting.md).

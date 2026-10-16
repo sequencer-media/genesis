@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+Wildclash uses a steeper downward battle camera and a longer knockout ending: a dedicated fainting hold, followed by a linked Poké Ball recall before the defeated seat is released. Prepared scene fingerprints refresh for the new composition, and stale completion and timeout events cannot skip or replay the ending.
+
+Ship the current Pokémon Wildclash Worldstream as a complete portable project, including its controller, interface, artwork and battle regressions. Add a small authenticated Node world server with persistence, independent job processing and configurable providers. Local previews simulate continuous directions explicitly.
+
+Bring over background frame preparation, guarded reanchoring, simultaneous image/direction jobs, exact fractional chunk cadence, same-account trainer switching and action acceptance across unchanged background-timer windows. Preserve the public checkout's media policy and browser sandbox protections.
+
 One-command `npm run play` setup creates or reopens a complete solo quest with immediate choices, inventory, endings and replay. The local playground emphasizes the game, runs free fixture jobs automatically, and preserves progress across authored project versions. Agent and creator quickstarts now lead with a playable game and a short remix path.
 
 Browser playback restarts when a new playback ID reuses the same video URL, allowing repeated prepared-media turns to complete.

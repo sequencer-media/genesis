@@ -22,6 +22,8 @@ const pages = [
   {source:'docs/demos.md', file:'demos.html', title:'Worldstreams demos', group:'Start here'},
   {source:'docs/examples.md', file:'examples.html', title:'Example projects', group:'Start here'},
   {source:'docs/integration.md', file:'integration.html', title:'Worldstreams API', group:'Connect'},
+  {source:'docs/hosting.md', file:'hosting.html', title:'Run a Worldstream server', group:'Connect'},
+  {source:'docs/mcp.md', file:'mcp.html', title:'Agent tools through MCP', group:'Connect'},
   {source:'docs/providers.md', file:'providers.html', title:'Your own models', group:'Connect'},
   {source:'docs/models.md', file:'models.html', title:'Models and pricing', group:'Connect'},
   {source:'docs/api.md', file:'api.html', title:'SDK API reference', group:'Reference'},

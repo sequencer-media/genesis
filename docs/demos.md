@@ -4,7 +4,7 @@
 
 [Skill quickstart](agent-skill.md) · [Run a starter](getting-started.md) · [Read the license](license.html)
 
-For a playable project with shared turns, items and persistent battle state, [explore Pokémon Stadium](examples.md#pokémon-stadium).
+For a playable project with shared turns, items and persistent battle state, [explore Pokémon Wildclash](examples.md#pokémon-wildclash).
 
 <div class="demo-gallery">
 <section class="demo-card featured">
@@ -30,11 +30,11 @@ For a playable project with shared turns, items and persistent battle state, [ex
 </section>
 </div>
 
-## Pokémon Stadium
+## Pokémon Wildclash
 
-<a href="https://sequencer.media/worldstreams/S_R5xijO8Pjv"><img src="assets/pokemon-stadium-ui.webp" alt="Pokémon Stadium interface with trainer seats, health, inventory and battle controls" loading="lazy" width="1600" height="878"></a>
+<a href="https://sequencer.media/worldstreams/S_R5xijO8Pjv"><img src="assets/pokemon-wildclash-ui.jpg" alt="Pokémon Wildclash interface with trainer seats, health, inventory and battle controls" loading="lazy" width="1600" height="900"></a>
 
-Two trainers share a battle Worldstream, with player controls, inventory and persistent progress. [Open Pokémon Stadium](https://sequencer.media/worldstreams/S_R5xijO8Pjv) · [Project walkthrough](examples.md#pokémon-stadium).
+Two trainers share a battle Worldstream, with player controls, inventory and persistent progress. [Open Pokémon Wildclash](https://sequencer.media/worldstreams/S_R5xijO8Pjv) · [Project walkthrough](examples.md#pokémon-wildclash).
 
 ## Build your own infinite experience
 

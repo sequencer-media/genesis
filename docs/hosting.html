@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Run a Worldstream server. GENESIS open source World Model engine documentation.">
+  <title>Run a Worldstream server · GENESIS</title>
+  <link rel="canonical" href="https://sequencer.media/genesis/hosting">
+  <link rel="icon" type="image/jpeg" href="assets/genesis-logo.jpg">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Run a Worldstream server · GENESIS">
+  <meta property="og:description" content="Run a Worldstream server. GENESIS open source World Model engine documentation.">
+  <meta property="og:url" content="https://sequencer.media/genesis/hosting">
+  <meta property="og:image" content="https://sequencer.media/genesis/assets/genesis-social.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="GENESIS, World Model Engine. Create infinite experiences, in minutes.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Run a Worldstream server · GENESIS">
+  <meta name="twitter:description" content="Run a Worldstream server. GENESIS open source World Model engine documentation.">
+  <meta name="twitter:image" content="https://sequencer.media/genesis/assets/genesis-social.png">
+  <meta name="twitter:image:alt" content="GENESIS, World Model Engine. Create infinite experiences, in minutes.">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Run a Worldstream server","url":"https://sequencer.media/genesis/hosting","isPartOf":{"@type":"WebSite","name":"GENESIS","url":"https://sequencer.media/genesis"}}</script>
+  <link rel="stylesheet" href="site/site.css">
+  <script src="site/site.js" defer></script>
+</head>
+<body class="guide-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="GENESIS home"><img class="brand-logo" src="assets/genesis-logo.jpg" alt="" width="44" height="44"><span class="brand-copy"><span>GENESIS</span><span class="brand-subtitle">Open source World Model engine</span></span></a>
+    <a class="license-badge" href="license.html">Apache 2.0</a>
+    <a class="source-link" href="https://github.com/sequencer-media/genesis">GitHub</a>
+    <form class="search" role="search">
+      <label class="sr-only" for="docs-search">Search Genesis documentation</label>
+      <input id="docs-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results">
+      <div id="search-results" class="search-results" role="region" aria-label="Documentation search results" hidden></div>
+    </form>
+  </header>
+  <details class="mobile-navigation"><summary>Documentation menu</summary><nav aria-label="Mobile documentation"><p class="nav-group">Start here</p><a href="index.html">Overview</a>
+<a href="agent-skill.html">Quickstart with the skill</a>
+<a href="getting-started.html">Run a starter locally</a>
+<a href="world-memory.html">World memory</a>
+<a href="demos.html">Worldstreams demos</a>
+<a href="examples.html">Example projects</a>
+<p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="hosting.html" aria-current="page" class="active">Run a Worldstream server</a>
+<a href="mcp.html">Agent tools through MCP</a>
+<a href="providers.html">Your own models</a>
+<a href="models.html">Models and pricing</a>
+<p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
+<a href="architecture.html">Architecture</a>
+<a href="host-authority.html">Hosting and authority</a>
+<a href="project-boundary.html">Portable projects</a>
+<a href="compatibility.html">Compatibility</a>
+<a href="authoring-rules.html">Authoring contract</a>
+<p class="nav-group">Open source</p><a href="contributing.html">Contributing</a>
+<a href="security.html">Security</a>
+<a href="license.html">Apache 2.0 license</a>
+<a href="readme.html">Project README</a></nav></details>
+  <div class="site-layout">
+    <aside class="sidebar"><nav aria-label="Documentation"><p class="nav-group">Start here</p><a href="index.html">Overview</a>
+<a href="agent-skill.html">Quickstart with the skill</a>
+<a href="getting-started.html">Run a starter locally</a>
+<a href="world-memory.html">World memory</a>
+<a href="demos.html">Worldstreams demos</a>
+<a href="examples.html">Example projects</a>
+<p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="hosting.html" aria-current="page" class="active">Run a Worldstream server</a>
+<a href="mcp.html">Agent tools through MCP</a>
+<a href="providers.html">Your own models</a>
+<a href="models.html">Models and pricing</a>
+<p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
+<a href="architecture.html">Architecture</a>
+<a href="host-authority.html">Hosting and authority</a>
+<a href="project-boundary.html">Portable projects</a>
+<a href="compatibility.html">Compatibility</a>
+<a href="authoring-rules.html">Authoring contract</a>
+<p class="nav-group">Open source</p><a href="contributing.html">Contributing</a>
+<a href="security.html">Security</a>
+<a href="license.html">Apache 2.0 license</a>
+<a href="readme.html">Project README</a></nav></aside>
+    <main id="main" tabindex="-1">
+      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#server-responsibilities">Server responsibilities</a><a href="#export-or-use-managed-hosting">Export or use managed hosting</a></nav></details><h1 id="run-a-worldstream-server">Run a Worldstream server</h1>
+<p>Shared rules, private choices, persistent world state, timers and model credentials belong on a server. Genesis includes a runnable single-room Node server with the browser player, player authentication, file persistence and a background worker.</p>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-sh">npm ci
+npm run serve:world</code></pre></div>
+<p>Open the printed URL and enter a printed player token. Use another window and token for a second player. The default world is the current Pokémon Wildclash project, including its real battle controller and interface. Prepared fixtures exercise the shared game without model requests. Continuous video directions are simulated in this mode.</p>
+<p>To serve your own project:</p>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-sh">npm run build
+node examples/server/server.mjs ./my-world</code></pre></div>
+<p>The <a href="https://github.com/sequencer-media/genesis/tree/main/examples/server">server example</a> documents stable player credentials, server-side providers, spending authorization, HTTPS deployment and the route contract. The <a href="https://github.com/sequencer-media/genesis/tree/main/examples/pokemon-wildclash">Pokémon project</a> includes the complete source and bundled start artwork.</p>
+<h2 id="server-responsibilities">Server responsibilities</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Server responsibility</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Shared rules and private choices</td>
+<td>Run the controller and send each actor a filtered view.</td>
+</tr>
+<tr>
+<td>World memory and progress</td>
+<td>Persist the room state and durable provider handles.</td>
+</tr>
+<tr>
+<td>Timers and generation jobs</td>
+<td>Advance the worker independently of browser reads.</td>
+</tr>
+<tr>
+<td>Player seats and queues</td>
+<td>Authenticate players, enforce ownership and renew active leases.</td>
+</tr>
+<tr>
+<td>Model access and budgets</td>
+<td>Register permitted providers and authorize paid requests.</td>
+</tr>
+<tr>
+<td>Video presentation</td>
+<td>Deliver saved clips or connect a continuous stream adapter with observed playback.</td>
+</tr>
+</tbody></table>
+<p>The example supports one process and one room. Distributed hosting needs transactional storage, worker leases and durable scheduling. Continuous streaming also needs model admission, video delivery, idle animation, prompt updates, reconnection and teardown. Those operations belong to your provider and presentation adapters. See the <a href="api.html">API</a>, <a href="providers.html">providers</a> and <a href="host-authority.html">host authority</a>.</p>
+<h2 id="export-or-use-managed-hosting">Export or use managed hosting</h2>
+<p>Validate the project and export its complete bundle:</p>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-sh">node dist/cli.js validate ./my-world
+node dist/cli.js export ./my-world --out ./my-world.zip</code></pre></div>
+<p>Upload the ZIP in the <a href="https://sequencer.media/worldstreams#my-worlds">Sequencer Worldstream editor</a>, or serve it in your own app. The <a href="integration.html">Worldstreams API</a> provides managed model services for your backend.</p>
+</article>
+      <footer class="site-footer">
+        <p>GENESIS 0.1.0 · Open source World Model engine</p>
+        <nav aria-label="Footer resources"><a href="license.html">Apache 2.0</a><a href="agent-skill.html">World-building skill</a><a href="contributing.html">Contribute</a></nav>
+        <p class="release-note"><a href="https://github.com/sequencer-media/genesis">Source on GitHub</a>. Version 0.1 source preview. npm publication and the wider launch are being prepared.</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

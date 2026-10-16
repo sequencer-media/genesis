@@ -1,3 +1,4 @@
+import type {GenesisStreamChunk} from './queue.js';
 import type { GenesisAnchor, GenesisJob } from './genesisCore.js';
 import type { GenesisCapability } from './experienceDefinition.js';
 import type { ExperienceSessionState } from './experienceSessionCore.js';
@@ -5,7 +6,7 @@ export interface GenesisToolResult { imageUrl?: string; videoUrl?: string; media
 export class GenesisProviderSubmissionError extends Error { constructor(message: string, readonly ambiguous: boolean) { super(message); } }
 export interface GenesisProvider {
   id: string; paid: boolean; capabilities: readonly GenesisCapability[];
-  start(request: { sessionId: string; job: GenesisJob; anchor?: GenesisAnchor; idempotencyKey: string }): Promise<{ id: string }>;
+  start(request: { sessionId: string; job: GenesisJob; anchor?: GenesisAnchor; referenceAnchors?: GenesisAnchor[]; idempotencyKey: string }): Promise<{ id: string }>;
   poll(id: string, job: GenesisJob): Promise<{ status: 'running' | 'ready' | 'failed'; result?: GenesisToolResult }>;
   validate?(job: GenesisJob): Promise<boolean> | boolean;
   cancel?(id: string): Promise<void>;
@@ -16,6 +17,7 @@ export interface GenesisStorage { load(sessionId: string): Promise<GenesisSnapsh
 export interface GenesisToolAuthorization { sessionId: string; actorId: string; job: GenesisJob; provider: GenesisProvider; }
 /** A host may attach authoritative identity, moderation, billing and verified commerce here. */
 export interface GenesisHostServices {
+  streamQueue?: () => GenesisStreamChunk[];
   authorizeTool?: (request: GenesisToolAuthorization) => Promise<boolean>;
   moderateAction?: (request: { actorId: string; actionId: string; payload: unknown }) => Promise<boolean>;
 }

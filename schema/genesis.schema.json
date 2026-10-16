@@ -301,7 +301,7 @@
               "maximum": 5
             },
             "chunkIntervalSeconds": {
-              "type": "integer",
+              "type": "number",
               "minimum": 2,
               "maximum": 30
             }

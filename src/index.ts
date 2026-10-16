@@ -7,6 +7,7 @@ export * from './genesisController.js';
 export * from './host.js';
 export * from './adapters.js';
 export * from './cachedProvider.js';
+export * from './frameLibrary.js';
 export * from './storage.js';
 export * from './experienceDefinition.js';
 export * from './genesisExamples.js';

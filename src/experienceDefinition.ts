@@ -153,7 +153,7 @@ export function normalizeStageAspectRatio(value: unknown): number {
 }
 export function normalizeStreamChunkIntervalSeconds(value: unknown): number {
   if (value === undefined) return DEFAULT_STREAM_CHUNK_INTERVAL_SECONDS;
-  if (typeof value !== 'number' || !Number.isInteger(value) || value < 2 || value > 30) throw new Error('Use a stream chunk interval from 2 to 30 whole seconds.');
+  if (typeof value !== 'number' || !Number.isFinite(value) || value < 2 || value > 30) throw new Error('Use a stream chunk interval from 2 to 30 seconds.');
   return value;
 }
 export function experienceGameActionType(def: ExperienceDefinition): string {

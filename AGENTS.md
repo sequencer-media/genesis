@@ -20,8 +20,10 @@ For custom self-hosted services, use tool.request with a namespaced toolId and b
 
 For custom vote rules, handle vote.cast and read context.ballots. Implement quorum or weighted aggregation in the controller. Read verified benefits from host events; never accept a client-supplied payment or weight claim.
 
-Use worldVideo.chunkIntervalSeconds for nominal continuous stream cadence, separate from scene.request.duration and vote deadlines. Respect the host supported intervals. Sequencer currently grants only 14 seconds for continuous streams.
+Use worldVideo.chunkIntervalSeconds for nominal continuous stream cadence, separate from scene.request.duration and vote deadlines. Respect the host supported intervals. Sequencer snaps requests from 5 to 15 seconds to supported continuous durations: 124/24 (5.17), 243/24 (10.13), or 345/24 (14.38) seconds. Store exact frame time and round only display labels.
 
 Use coverImageUrl for listing art and startImageUrl for the initial scene. Hosted package version IDs and saved-game connections stay outside portable exports. Namespaced extensions are inert configuration and never grant access. The editor has three file tabs; starter selection and import/export are project menu actions.
 
 For generated move sets, use tool.llm.generate with a bounded responseSchema, maxCostUsd and battleId guard. Render returned names as text. Keep damage and turn resolution in controller.js. The arena-llm template demonstrates this contract.
+
+For agent control of a running local world, read docs/mcp.md. Start with genesis_catalog and MCP tools/list for exact schemas and grants. Use declared game actions for canonical outcomes. Operator frame, scene and cache controls require the trusted operator connection and current revision. Newly declared actions become MCP tools when that project version loads.

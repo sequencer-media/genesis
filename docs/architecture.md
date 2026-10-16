@@ -2,6 +2,8 @@
 
 Genesis is a portable runtime and project format. A world has a browser interface, a synchronous sandboxed server controller, accepted state and asynchronous host effects. The host owns authentication, provider credentials, permissions, spending, publication and storage. Sequencer implements that host with managed media, LLM requests, versioned assets and stream infrastructure.
 
+The [MCP adapter](mcp.md) exposes the engine to agents through discoverable tool schemas. It delegates state changes and generation to the same host used by the browser.
+
 ## A universal World Model Context Protocol
 
 The GENESIS Context Engine connects structured world state, settings and player actions to your World Model. Its optional Visual Context component prepares starting and reference images, supplying image context directly alongside text context. The tinted LLM and World Model are external services connected through host adapters. Streaming delivery returns generated video to the player's interface.

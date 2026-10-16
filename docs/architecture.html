@@ -43,6 +43,8 @@
 <a href="demos.html">Worldstreams demos</a>
 <a href="examples.html">Example projects</a>
 <p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="hosting.html">Run a Worldstream server</a>
+<a href="mcp.html">Agent tools through MCP</a>
 <a href="providers.html">Your own models</a>
 <a href="models.html">Models and pricing</a>
 <p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
@@ -63,6 +65,8 @@
 <a href="demos.html">Worldstreams demos</a>
 <a href="examples.html">Example projects</a>
 <p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="hosting.html">Run a Worldstream server</a>
+<a href="mcp.html">Agent tools through MCP</a>
 <a href="providers.html">Your own models</a>
 <a href="models.html">Models and pricing</a>
 <p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
@@ -78,6 +82,7 @@
     <main id="main" tabindex="-1">
       <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#a-universal-world-model-context-protocol">A universal World Model Context Protocol</a><a href="#visual-context">Visual Context</a><a href="#the-action-and-generation-loop">The action and generation loop</a></nav></details><h1 id="architecture">Architecture</h1>
 <p>Genesis is a portable runtime and project format. A world has a browser interface, a synchronous sandboxed server controller, accepted state and asynchronous host effects. The host owns authentication, provider credentials, permissions, spending, publication and storage. Sequencer implements that host with managed media, LLM requests, versioned assets and stream infrastructure.</p>
+<p>The <a href="mcp.html">MCP adapter</a> exposes the engine to agents through discoverable tool schemas. It delegates state changes and generation to the same host used by the browser.</p>
 <h2 id="a-universal-world-model-context-protocol">A universal World Model Context Protocol</h2>
 <p>The GENESIS Context Engine connects structured world state, settings and player actions to your World Model. Its optional Visual Context component prepares starting and reference images, supplying image context directly alongside text context. The tinted LLM and World Model are external services connected through host adapters. Streaming delivery returns generated video to the player&#39;s interface.</p>
 <p class="diagram-hint">Scroll the diagram horizontally to explore the full loop.</p>

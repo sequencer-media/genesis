@@ -14,10 +14,15 @@ export function mountGenesisPlayer(container: HTMLElement, project: GenesisProje
   container.replaceChildren(root);
   const stage = root.querySelector<HTMLElement>('.genesis-stage')!, image = root.querySelector<HTMLImageElement>('img')!, video = root.querySelector<HTMLVideoElement>('video')!, overlay = root.querySelector<HTMLElement>('.genesis-overlay')!, panel = root.querySelector<HTMLElement>('.genesis-panel')!, controls = root.querySelector<HTMLElement>('.genesis-controls')!, status = root.querySelector<HTMLElement>('.genesis-status')!;
   stage.style.aspectRatio = String(normalizeStageAspectRatio(project.definition.interface.stageAspectRatio));
-  let view: any, destroyed = false, busy = false, sentPlayback = '', startedPlayback = '';
+  const fillBattle = project.definition.rules.resolver === 'combat';
+  image.style.objectFit = video.style.objectFit = fillBattle ? 'cover' : 'contain';
+  const fill=project.definition.rules.resolver==='combat';
+  Object.assign(stage.style,{position:'relative',overflow:'hidden',padding:'0'});
+  for(const media of [image,video])Object.assign(media.style,{position:'absolute',inset:'0',width:'100%',height:'100%',objectFit:fill?'cover':'contain'});
+  let view: any, destroyed = false, busy = false, sentPlayback = '', startedPlayback = '', mutationEpoch = 0;
   const frame = project.definition.interface.mode === 'custom' ? document.createElement('iframe') : null;
   if (frame) {
-    frame.title = 'Genesis interface'; frame.sandbox.add('allow-scripts'); frame.referrerPolicy = 'no-referrer';
+    frame.title = 'Genesis interface'; frame.sandbox.add('allow-scripts'); frame.allow = 'autoplay'; frame.referrerPolicy = 'no-referrer';
     const source = injectExperienceBridge(project.interfaceSource, nonce, project.definition.inputs.map(i => i.id));
     // The host inserts its CSP first and strips creator CSP declarations.
     const clean = source.replace(/<meta\b[^>]*http-equiv\s*=\s*["']?Content-Security-Policy[^>]*>/gi, '');
@@ -30,7 +35,7 @@ export function mountGenesisPlayer(container: HTMLElement, project: GenesisProje
   const publish = () => { if (!frame?.contentWindow || !view) return; frame.contentWindow.postMessage({ type: EXPERIENCE_BRIDGE_MESSAGE, v: 1, nonce, op: 'state', view: { ...view, assetSources: { ...Object.fromEntries((project.assets || []).map(a => [a.path, new URL(a.path, location.origin + '/').href])), ...view.assetSources }, stageGeometry: geometry(), stageViewport: { x: 0, y: 0, width: 1, height: 1 } } }, '*'); };
   const geometry = () => {
     const box = stage.getBoundingClientRect(), width = video.videoWidth || image.naturalWidth || 16, height = video.videoHeight || image.naturalHeight || 9;
-    const scale = Math.min(box.width / width, box.height / height); return { x: (box.width - width * scale) / (2 * (box.width || 1)), y: (box.height - height * scale) / (2 * (box.height || 1)), width: width * scale / (box.width || 1), height: height * scale / (box.height || 1) };
+    const scale = (fillBattle ? Math.max : Math.min)(box.width / width, box.height / height); return { x: (box.width - width * scale) / (2 * (box.width || 1)), y: (box.height - height * scale) / (2 * (box.height || 1)), width: width * scale / (box.width || 1), height: height * scale / (box.height || 1) };
   };
   image.onload = publish; video.onloadedmetadata = publish;
   const button = (label: string, fn: () => Promise<any>, disabled = false) => { const b = document.createElement('button'); b.textContent = label; b.disabled = disabled || busy; b.onclick = () => void perform(fn); controls.append(b); return b; };
@@ -65,20 +70,23 @@ export function mountGenesisPlayer(container: HTMLElement, project: GenesisProje
     status.textContent = view.status === 'waiting_players' ? 'Waiting for more players.' : g.stage.mode === 'generating' ? 'Preparing the scene.' : '';
     publish();
   };
-  const perform = async (fn: () => Promise<any>) => { if (busy) return; busy = true; try { const next = await fn(); busy = false; render(next); } catch (error: any) { busy = false; status.textContent = error.message || 'The action failed.'; } };
+  const perform = async (fn: () => Promise<any>) => { if (busy) return; mutationEpoch++; busy = true; try { const next = await fn(); busy = false; render(next); } catch (error: any) { busy = false; status.textContent = error.message || 'The action failed.'; } };
   const act = (actionId: string, data: Record<string, unknown>) => transport.action(crypto.randomUUID(), actionId, { ...data, ...(view.genesis.window?.mode === 'collective' ? { windowId: view.genesis.window.id } : {}) }, view.genesis.revision);
   const receive = async (event: MessageEvent) => {
     const msg = event.data; if (!frame || event.source !== frame.contentWindow || msg?.type !== EXPERIENCE_BRIDGE_MESSAGE || msg.nonce !== nonce || msg.v !== 1 || typeof msg.requestId !== 'string') return;
     if (msg.op === 'players' && transport.players) {
+      mutationEpoch++;
       try { const next = await transport.players(msg.payload); render(next); frame.contentWindow?.postMessage({ type: EXPERIENCE_BRIDGE_MESSAGE, v: 1, nonce, requestId: msg.requestId, result: { accepted: true } }, '*'); } catch (e: any) { frame.contentWindow?.postMessage({ type: EXPERIENCE_BRIDGE_MESSAGE, v: 1, nonce, requestId: msg.requestId, error: e.message }, '*'); } return;
     }
     if (msg.op !== 'genesis_action') { frame.contentWindow?.postMessage({ ...msg, error: 'This local player supports typed Genesis actions.' }, '*'); return; }
+    mutationEpoch++;
     if (!view.genesis.actions.some((a: any) => a.id === msg.bindingId)) { frame.contentWindow?.postMessage({ ...msg, error: 'Use a declared action.' }, '*'); return; }
     try { const next = await act(msg.bindingId, msg.payload); render(next); frame.contentWindow?.postMessage({ ...msg, result: { accepted: true } }, '*'); } catch (e: any) { frame.contentWindow?.postMessage({ ...msg, error: e.message }, '*'); }
   };
   window.addEventListener('message', receive);
   video.onended = () => { const id = view.genesis.stage.playbackId; if (id === sentPlayback) return; sentPlayback = id; void perform(() => transport.playback(id)); };
-  let polling = false; const timer = setInterval(async () => { if (polling || busy || destroyed) return; polling = true; try { render(await transport.read()); } catch { status.textContent = 'Reconnecting…'; } finally { polling = false; } }, 1000);
-  void transport.read().then(render).catch(e => { status.textContent = e.message; });
-  return { refresh: async () => render(await transport.read()), destroy() { destroyed = true; clearInterval(timer); window.removeEventListener('message', receive); video.pause(); container.replaceChildren(); } };
+  const refresh = async () => { const epoch = mutationEpoch; const next = await transport.read(); if (!destroyed && epoch === mutationEpoch) render(next); };
+  let polling = false; const timer = setInterval(async () => { if (polling || busy || destroyed) return; polling = true; try { await refresh(); } catch { status.textContent = 'Reconnecting…'; } finally { polling = false; } }, 1000);
+  void refresh().catch(e => { status.textContent = e.message; });
+  return { refresh, destroy() { destroyed = true; clearInterval(timer); window.removeEventListener('message', receive); video.pause(); container.replaceChildren(); } };
 }

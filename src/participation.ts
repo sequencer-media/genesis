@@ -87,8 +87,11 @@ export function touchGenesisParticipant(previous: ExperienceSessionState, actorI
   const state = clone(previous), actor = state.participants.find(p => p.id === actorId);
   if (!actor) throw new Error('Join this room first.');
   actor.lastSeenAt = now;
+  const identity=state.participation!.identities[actorId];
+  const controlled=state.participants.filter(p=>identity&&state.participation!.identities[p.id]===identity);
+  for(const participant of controlled)participant.lastSeenAt=now;
   // A late heartbeat never revives an expired seat.
-  for (const seat of state.participation!.seats) if (seat.actorId === actorId && seat.leaseUntil > now) seat.leaseUntil = now + LEASE_MS;
+  for (const seat of state.participation!.seats) if (controlled.some(p=>p.id===seat.actorId) && seat.leaseUntil > now) seat.leaseUntil = now + LEASE_MS;
   return state;
 }
 export function applyGenesisPlayerRequest(def: ExperienceDefinition, previous: ExperienceSessionState, actorId: string, request: GenesisPlayerRequest, now = Date.now()) {
@@ -113,6 +116,23 @@ export function applyGenesisPlayerRequest(def: ExperienceDefinition, previous: E
   promote(def, state, now, events); state.revision++;
   return { state, events };
 }
+
+/** Opt-in same-identity testing keeps one actor per seat and switches only the caller's control. */
+export function prepareGenesisSeatControl(def: ExperienceDefinition, previous: ExperienceSessionState, actorId: string, request: GenesisPlayerRequest, now = Date.now()) {
+  if(request?.operation!=='claim'||!def.participation.seats||def.participation.seats.maxSeatsPerIdentity<2||!previous.participation)return {state:previous,actorId};
+  const registry=previous.participation,identity=registry.identities[actorId],seat=registry.seats.find(s=>s.id===request.seatId);
+  if(!identity||!seat)return {state:previous,actorId};
+  if(seat.actorId&&registry.identities[seat.actorId]===identity)return {state:previous,actorId:seat.actorId};
+  if(seat.actorId||!registry.seats.some(s=>s.actorId===actorId))return {state:previous,actorId};
+  if(registry.seats.filter(s=>s.actorId&&registry.identities[s.actorId]===identity).length>=def.participation.seats.maxSeatsPerIdentity)throw new Error('Your account already controls its allowed seats.');
+  const state=clone(previous),root=state.participants.find(p=>registry.identities[p.id]===identity)!;
+  const secondaryId=root.id.slice(0,48)+'_seat_'+seat.id.slice(0,40);
+  const existing=state.participants.find(p=>p.id===secondaryId);
+  if(existing&&registry.identities[secondaryId]!==identity)throw new Error('This trainer identity is unavailable.');
+  if(!existing)state.participants.push({...root,id:secondaryId,name:(root.name+' ('+def.participation.seats.slots.find(s=>s.id===seat.id)!.label+')').slice(0,60),role:'spectator',joinedAt:now,lastSeenAt:now});
+  state.participation!.identities[secondaryId]=identity;
+  return {state,actorId:secondaryId};
+}
 /** Controller-only operation. Expected owner prevents removing a replacement player. */
 export function releaseGenesisSeat(def: ExperienceDefinition, previous: ExperienceSessionState, seatId: string, expectedActorId: string, cooldownMs: number, now = Date.now()) {
   if (!def.participation.seats || !previous.participation || !Number.isInteger(cooldownMs) || cooldownMs < 0 || cooldownMs > 60_000) throw new Error('Use a declared seat and cooldown from 0 to 60 seconds.');
@@ -126,7 +146,13 @@ export function genesisParticipationView(def: ExperienceDefinition, state: Exper
   if (!state.participation || !def.participation.seats) return undefined;
   const registry = state.participation, identity = registry.identities[actorId], canClaim = eligible(def, state, actorId, now);
   return { version: 1 as const, capabilities: [...GENESIS_PARTICIPATION_CAPABILITIES],
-    seats: registry.seats.map(s => ({ id: s.id, label: def.participation.seats!.slots.find(slot => slot.id === s.id)!.label, actorId: s.leaseUntil > now ? s.actorId : '', canClaim: canClaim && !s.actorId && !registry.queue.some(id => id !== actorId && eligible(def, state, id, now)), canRelease: s.actorId === actorId && s.leaseUntil > now })),
+    seats: registry.seats.map(s => {
+      let claimable=canClaim;
+      if(!s.actorId&&identity&&def.participation.seats!.maxSeatsPerIdentity>1&&registry.seats.filter(seat=>seat.actorId&&registry.identities[seat.actorId]===identity).length<def.participation.seats!.maxSeatsPerIdentity){
+        const prepared=prepareGenesisSeatControl(def,state,actorId,{operation:'claim',seatId:s.id},now);claimable=eligible(def,prepared.state,prepared.actorId,now);
+      }
+      return {id:s.id,label:def.participation.seats!.slots.find(slot=>slot.id===s.id)!.label,actorId:s.leaseUntil>now?s.actorId:'',canClaim:claimable&&!s.actorId&&!registry.queue.some(id=>id!==actorId&&eligible(def,state,id,now)),canRelease:s.actorId===actorId&&s.leaseUntil>now,canControl:def.participation.seats!.maxSeatsPerIdentity>1&&Boolean(identity&&s.actorId&&s.actorId!==actorId&&registry.identities[s.actorId]===identity&&s.leaseUntil>now)};
+    }),
     queueEnabled: def.participation.seats.queue, queueLength: registry.queue.length, queuePosition: registry.queue.indexOf(actorId) + 1,
     canQueue: def.participation.seats.queue && canClaim, cooldownUntil: identity ? registry.cooldowns[identity] || 0 : 0 };
 }

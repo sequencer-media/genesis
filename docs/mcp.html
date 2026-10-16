@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Agent tools through MCP. GENESIS open source World Model engine documentation.">
+  <title>Agent tools through MCP · GENESIS</title>
+  <link rel="canonical" href="https://sequencer.media/genesis/mcp">
+  <link rel="icon" type="image/jpeg" href="assets/genesis-logo.jpg">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Agent tools through MCP · GENESIS">
+  <meta property="og:description" content="Agent tools through MCP. GENESIS open source World Model engine documentation.">
+  <meta property="og:url" content="https://sequencer.media/genesis/mcp">
+  <meta property="og:image" content="https://sequencer.media/genesis/assets/genesis-social.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="GENESIS, World Model Engine. Create infinite experiences, in minutes.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Agent tools through MCP · GENESIS">
+  <meta name="twitter:description" content="Agent tools through MCP. GENESIS open source World Model engine documentation.">
+  <meta name="twitter:image" content="https://sequencer.media/genesis/assets/genesis-social.png">
+  <meta name="twitter:image:alt" content="GENESIS, World Model Engine. Create infinite experiences, in minutes.">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Agent tools through MCP","url":"https://sequencer.media/genesis/mcp","isPartOf":{"@type":"WebSite","name":"GENESIS","url":"https://sequencer.media/genesis"}}</script>
+  <link rel="stylesheet" href="site/site.css">
+  <script src="site/site.js" defer></script>
+</head>
+<body class="guide-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="GENESIS home"><img class="brand-logo" src="assets/genesis-logo.jpg" alt="" width="44" height="44"><span class="brand-copy"><span>GENESIS</span><span class="brand-subtitle">Open source World Model engine</span></span></a>
+    <a class="license-badge" href="license.html">Apache 2.0</a>
+    <a class="source-link" href="https://github.com/sequencer-media/genesis">GitHub</a>
+    <form class="search" role="search">
+      <label class="sr-only" for="docs-search">Search Genesis documentation</label>
+      <input id="docs-search" type="search" placeholder="Search documentation" autocomplete="off" aria-controls="search-results">
+      <div id="search-results" class="search-results" role="region" aria-label="Documentation search results" hidden></div>
+    </form>
+  </header>
+  <details class="mobile-navigation"><summary>Documentation menu</summary><nav aria-label="Mobile documentation"><p class="nav-group">Start here</p><a href="index.html">Overview</a>
+<a href="agent-skill.html">Quickstart with the skill</a>
+<a href="getting-started.html">Run a starter locally</a>
+<a href="world-memory.html">World memory</a>
+<a href="demos.html">Worldstreams demos</a>
+<a href="examples.html">Example projects</a>
+<p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="hosting.html">Run a Worldstream server</a>
+<a href="mcp.html" aria-current="page" class="active">Agent tools through MCP</a>
+<a href="providers.html">Your own models</a>
+<a href="models.html">Models and pricing</a>
+<p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
+<a href="architecture.html">Architecture</a>
+<a href="host-authority.html">Hosting and authority</a>
+<a href="project-boundary.html">Portable projects</a>
+<a href="compatibility.html">Compatibility</a>
+<a href="authoring-rules.html">Authoring contract</a>
+<p class="nav-group">Open source</p><a href="contributing.html">Contributing</a>
+<a href="security.html">Security</a>
+<a href="license.html">Apache 2.0 license</a>
+<a href="readme.html">Project README</a></nav></details>
+  <div class="site-layout">
+    <aside class="sidebar"><nav aria-label="Documentation"><p class="nav-group">Start here</p><a href="index.html">Overview</a>
+<a href="agent-skill.html">Quickstart with the skill</a>
+<a href="getting-started.html">Run a starter locally</a>
+<a href="world-memory.html">World memory</a>
+<a href="demos.html">Worldstreams demos</a>
+<a href="examples.html">Example projects</a>
+<p class="nav-group">Connect</p><a href="integration.html">Worldstreams API</a>
+<a href="hosting.html">Run a Worldstream server</a>
+<a href="mcp.html" aria-current="page" class="active">Agent tools through MCP</a>
+<a href="providers.html">Your own models</a>
+<a href="models.html">Models and pricing</a>
+<p class="nav-group">Reference</p><a href="api.html">SDK API reference</a>
+<a href="architecture.html">Architecture</a>
+<a href="host-authority.html">Hosting and authority</a>
+<a href="project-boundary.html">Portable projects</a>
+<a href="compatibility.html">Compatibility</a>
+<a href="authoring-rules.html">Authoring contract</a>
+<p class="nav-group">Open source</p><a href="contributing.html">Contributing</a>
+<a href="security.html">Security</a>
+<a href="license.html">Apache 2.0 license</a>
+<a href="readme.html">Project README</a></nav></aside>
+    <main id="main" tabindex="-1">
+      <article><details class="page-toc"><summary>On this page</summary><nav aria-label="Page sections"><a href="#discover-available-operations">Discover available operations</a><a href="#cache-an-image-and-change-the-start-frame">Cache an image and change the start frame</a><a href="#add-a-game-action">Add a game action</a><a href="#embed-the-adapter">Embed the adapter</a></nav></details><h1 id="connect-an-agent-through-mcp">Connect an agent through MCP</h1>
+<p>Genesis keeps the world&#39;s state, resolves its rules and coordinates providers. The Model Context Protocol (MCP) exposes those capabilities as discoverable tools with typed inputs. The included adapter connects an agent and browser to the same <code>GenesisHost</code>, persistent room and background worker.</p>
+<p>Build once, then use the MCP entry instead of the ordinary server entry:</p>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-sh">npm ci
+npm run build
+GENESIS_MCP_OPERATOR=1 node examples/server/mcp.mjs ./examples/pokemon-wildclash</code></pre></div>
+<p>This starts a loopback browser server and an MCP stdio connection. Protocol messages use stdout; startup messages use stderr. An MCP client launches this process and communicates through its standard input and output. Default providers use prepared fixtures without model calls or charges. Use <code>GENESIS_PROVIDER_MODULE</code> to load your server-side providers, services and policy.</p>
+<p>A client configuration looks like this (replace the absolute paths):</p>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;genesis&quot;: {
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;/absolute/path/to/genesis/examples/server/mcp.mjs&quot;,
+        &quot;/absolute/path/to/genesis/examples/pokemon-wildclash&quot;
+      ],
+      &quot;env&quot;: { &quot;GENESIS_MCP_OPERATOR&quot;: &quot;1&quot; }
+    }
+  }
+}</code></pre></div>
+<p><code>GENESIS_MCP_OPERATOR=1</code> explicitly grants author controls to this local MCP connection. With the setting omitted, the connection receives player tools and the current actor&#39;s filtered view. Browser tokens always remain participant credentials. Operator controls are available through stdio and the trusted Node host API.</p>
+<p>Use the same <code>GENESIS_PLAYERS_FILE</code> format as the <a href="hosting.html">server guide</a> for browser players. Set <code>GENESIS_MCP_ACTOR_ID</code> to the configured player controlled by the agent (default <code>agent</code>). A claim on another seat owned by that identity switches this connection to the corresponding actor. Start one server entry per room storage directory. The MCP entry already includes the browser server.</p>
+<h2 id="discover-available-operations">Discover available operations</h2>
+<p>Start with <code>genesis_catalog</code> and MCP <code>tools/list</code>. The catalog reports declared action fields, eligibility, host grants, configured providers, frame readiness, current revision and spending limits according to the connection&#39;s scope. <code>tools/list</code> supplies the complete input schemas.</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>genesis_read_queue</code></td>
+<td>Read ordered actions, public prompts, display nicknames, status and estimated clocks.</td>
+</tr>
+<tr>
+<td><code>genesis_read_world</code></td>
+<td>Read the current actor&#39;s permitted world state and revision.</td>
+</tr>
+<tr>
+<td><code>genesis_action_&lt;actionId&gt;</code></td>
+<td>Submit a typed action declared by this project, such as <code>genesis_action_battle_move</code>.</td>
+</tr>
+<tr>
+<td><code>genesis_players</code></td>
+<td>Claim, leave or switch an owned seat, or enter or leave the queue.</td>
+</tr>
+<tr>
+<td><code>genesis_run_job</code>, <code>genesis_retry_job</code>, <code>genesis_skip_job</code></td>
+<td>Request an allowed job transition.</td>
+</tr>
+<tr>
+<td><code>genesis_observe_playback</code></td>
+<td>Report video playback that actually completed.</td>
+</tr>
+<tr>
+<td><code>genesis_cache_image</code></td>
+<td>Operator: register an existing saved image as a ready frame reference.</td>
+</tr>
+<tr>
+<td><code>genesis_prepare_frame</code></td>
+<td>Operator: generate and cache a future scene-only frame asynchronously.</td>
+</tr>
+<tr>
+<td><code>genesis_use_frame</code></td>
+<td>Operator: install an exact ready frame at the next live generation boundary.</td>
+</tr>
+<tr>
+<td><code>genesis_invalidate_frame</code></td>
+<td>Operator: retire an obsolete cached frame.</td>
+</tr>
+<tr>
+<td><code>genesis_direct_scene</code></td>
+<td>Operator: submit a new visual direction to the running stream.</td>
+</tr>
+<tr>
+<td><code>genesis_apply_effect</code></td>
+<td>Operator: use the complete typed effect interface for image, scene, direction, registered tool, frame, stage or timer operations.</td>
+</tr>
+</tbody></table>
+<p>Long or unusual action IDs receive stable shortened tool names; the catalog returns the exact mapping. <code>players.release</code> stays in the controller, where defeat and queue rules determine who leaves. Custom provider capabilities appear in the catalog; registered <code>tool.*</code> calls use <code>tool.request</code> through <code>genesis_apply_effect</code>.</p>
+<h2 id="cache-an-image-and-change-the-start-frame">Cache an image and change the start frame</h2>
+<p>Read the current revision, then call <code>genesis_cache_image</code> with a unique request ID, exact scene fingerprint and saved image URL:</p>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-json">{
+  &quot;requestId&quot;: &quot;cache-clearing-v1&quot;,
+  &quot;expectedRevision&quot;: 12,
+  &quot;frame&quot;: {
+    &quot;key&quot;: &quot;clearing-ready&quot;,
+    &quot;fingerprint&quot;: &quot;charizard-blastoise:overhead65:ready:v1&quot;,
+    &quot;ttlMs&quot;: 600000
+  },
+  &quot;imageUrl&quot;: &quot;https://example.com/saved-clearing.png&quot;
+}</code></pre></div>
+<p>Caching records a saved image reference and leaves the displayed scene unchanged. It downloads no media and requests no generation. Imported images expire without automatic regeneration. Replace or cache them again explicitly when needed.</p>
+<p>After the current accepted action and its observed playback finish, read the latest revision and call <code>genesis_use_frame</code>:</p>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-json">{
+  &quot;requestId&quot;: &quot;use-clearing-v1&quot;,
+  &quot;expectedRevision&quot;: 13,
+  &quot;frame&quot;: {
+    &quot;key&quot;: &quot;clearing-ready&quot;,
+    &quot;fingerprint&quot;: &quot;charizard-blastoise:overhead65:ready:v1&quot;
+  },
+  &quot;intent&quot;: &quot;Hold the accepted two-fighter lineup. Preserve the overhead angle and near-left/far-right depth. Subtle breathing and wind only.&quot;
+}</code></pre></div>
+<p>The exact frame must be ready and unexpired. Its accepted anchor becomes a reanchor direction. Provider and playback adapters carry that command into the stream; the fixture provider simulates delivery.</p>
+<p>For a new generated frame, use <code>genesis_prepare_frame</code> with <code>requestId</code>, <code>expectedRevision</code>, <code>frame</code>, scene-only <code>intent</code>, accepted references and <code>maxCostUsd</code>. Preparation is asynchronous and governed by both project limits and host grants. Read readiness before using the image.</p>
+<h2 id="add-a-game-action">Add a game action</h2>
+<p>Declare the action ID, label and typed fields in <code>genesis.json</code>, and implement its <code>onEvent</code> handler in <code>controller.js</code>. Load that project version into the host. The MCP adapter creates its action tool automatically from the declaration. Canonical health, winners, inventory and turn order continue to come from the controller.</p>
+<p>A running room pins its project version. Use a new <code>GENESIS_SESSION_ID</code> or storage directory when loading an edited project, preserving the old saved room. Live presentation controls change the current scene through the existing runtime.</p>
+<h2 id="embed-the-adapter">Embed the adapter</h2>
+<div class="code-block"><button type="button" data-copy-code aria-label="Copy code">Copy</button><pre><code class="language-ts">import {createGenesisMcpServer} from '@genesis-worlds/runtime/mcp';
+import {StdioServerTransport} from '@modelcontextprotocol/sdk/server/stdio.js';
+
+const server = createGenesisMcpServer(host, {
+  actorId: authenticatedActorId,
+  operator: true,
+});
+await server.connect(new StdioServerTransport());</code></pre></div>
+<p>Supply a joined, server-verified actor. Keep <code>operator</code> as a trusted host setting. Trusted operator calls use <code>host.operatorView()</code>, <code>host.cacheOperatorImage(...)</code> and <code>host.applyOperatorEffect(...)</code>. These methods serialize and persist commands, require the current revision and preserve the existing grants, budgets, job validation and playback boundaries. Player routes expose filtered state and typed actions.</p>
+<p>The reference adapter uses the <a href="https://ts.sdk.modelcontextprotocol.io/server">official MCP TypeScript SDK</a>. Applications can use the same adapter with another SDK transport and their own authentication.</p>
+<p>Scene effects accept <code>label</code> and <code>displayPrompt</code> for the standard public queue. Opt into a bounded FIFO direction queue with <code>queue:true</code>. The server delivers one direction at a time. Read <a href="api.html#standard-action-queue">the standard action queue</a> for the shared browser, API and MCP data format.</p>
+</article>
+      <footer class="site-footer">
+        <p>GENESIS 0.1.0 · Open source World Model engine</p>
+        <nav aria-label="Footer resources"><a href="license.html">Apache 2.0</a><a href="agent-skill.html">World-building skill</a><a href="contributing.html">Contribute</a></nav>
+        <p class="release-note"><a href="https://github.com/sequencer-media/genesis">Source on GitHub</a>. Version 0.1 source preview. npm publication and the wider launch are being prepared.</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
