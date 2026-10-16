@@ -124,7 +124,7 @@
         "turnSeconds": {
           "type": "number",
           "label": "Command Timer",
-          "description": "Seconds to choose a command. At zero, use the selected available move. Zero disables the timer.",
+          "description": "Seconds shown for each decision. Sequential turns keep waiting at zero. Zero hides the timer.",
           "min": 0,
           "max": 90,
           "default": 5
@@ -188,6 +188,12 @@
           "default": 0.3,
           "min": 0.1,
           "max": 1
+        },
+        "sequentialTurns": {
+          "type": "boolean",
+          "label": "One trainer at a time",
+          "default": true,
+          "description": "After each attack finishes playing, open the next trainer’s menu and five-second decision cue. Expiry keeps waiting for a choice. Disable for simultaneous classic rounds."
         }
       },
       "config": {
@@ -202,7 +208,8 @@
         "imageGenerationPolicy": "Send-outs require a newly generated clean BEFORE-action image. First entrances start empty. Replacements start with the previous same-side creature and its trainer holding the replacement ball; recall the old body completely before releasing the new one. Compatible queued releases share one image and chunk. Attack checkpoints match visible species, sides, posture and status, independently of numeric HP and turn counters. Keep two image slots: retain the latest ready checkpoint while regenerating its replacement, about every 15 seconds or accepted turn. Image generation uses the original clean reference and may finish alongside urgent video. Do not cancel a useful image on each attack. Attack video uses the newest matching ready image or starts linked immediately. Skip unused speculative fainting images. Recall stays linked and keeps the winner visible.",
         "actionDrivenVideo": false,
         "damageMultiplier": 0.4,
-        "maxHitHpFraction": 0.3
+        "maxHitHpFraction": 0.3,
+        "sequentialTurns": true
       },
       "limits": {
         "maxJobs": 2,

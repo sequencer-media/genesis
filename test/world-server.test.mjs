@@ -67,6 +67,8 @@ test('world server authenticates isolated players, runs jobs and persists a shar
     const blueView = (await call(blue, '/api/view')).data;
     assert.ok(!('commands' in blueView.genesis.state));
     assert.ok(!('server' in blueView.genesis));
+    assert.equal(blueView.genesis.state.sequentialTurns, true);
+    await wait(() => { const game = room.host.diagnostics().state.genesis.public; return game.phase === 'battle' && game.activeTurnActorId === 'blue'; });
     assert.equal((await act(blue, 'battle_move', { moveIndex: 3 })).status, 200);
     await wait(() => room.host.diagnostics().state.genesis.public.round === 2);
     const state = room.host.diagnostics().state.genesis.public;

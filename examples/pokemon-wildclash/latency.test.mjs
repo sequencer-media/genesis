@@ -1,12 +1,14 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {GenesisHost} from '../../dist/host.js';import {loadGenesisProject} from '../../dist/projectFiles.js';
 const project=()=>loadGenesisProject(new URL('.',import.meta.url).pathname);
-async function fixture({imagesReady=false,videoReady=true,authorize=true}={}){
+async function fixture({imagesReady=false,videoReady=true,authorize=true,sequentialTurns=false}={}){
  const submitted=[];const flags={imagesReady,videoReady,authorize};
  const provider={id:'latency-fixture',paid:true,capabilities:['image.request','live.direction'],
   async start({job,anchor}){submitted.push({effect:structuredClone(job.effect),anchor:structuredClone(anchor),at:Date.now()});return{id:job.id};},
   async poll(id,job){return (job.effect.type==='image.request'?!flags.imagesReady:!flags.videoReady)?{status:'running'}:{status:'ready',result:job.effect.type==='image.request'?{imageUrl:'https://storage.googleapis.com/example/'+id.replaceAll(':','-')+'.png'}:{data:{playbackCompleted:true}}};}};
- const host=await new GenesisHost('latency-'+crypto.randomUUID(),await project(),{providers:[provider],services:{authorizeTool:async({job})=>job.effect.type==='image.request'||flags.authorize}}).initialize();
+ // Legacy two-command fixtures remain alongside explicit sequential integration tests.
+ const definition=await project();definition.definition.genesis.config.sequentialTurns=sequentialTurns;
+ const host=await new GenesisHost('latency-'+crypto.randomUUID(),definition,{providers:[provider],services:{authorizeTool:async({job})=>job.effect.type==='image.request'||flags.authorize}}).initialize();
  const state=()=>host.diagnostics().state.genesis;
  const action=(who,id,data)=>host.action(who,crypto.randomUUID(),id,data,host.view(who).genesis.revision);
  const drain=async(n=30)=>{for(let i=0;i<n;i++)await host.tick();};
@@ -63,4 +65,26 @@ test('Pikachu replaces the same-side Venusaur, with its previous body preserved 
  const outcome=job.effect.requiredOutcome;assert.equal(outcome.previousPokemon,'Venusaur');assert.equal(outcome.beforeFighters.find(x=>x.side==='trainer_red').name,'Venusaur');assert.match(outcome.beforeFighters.find(x=>x.side==='trainer_red').appearance,/giant pink flower/);
  const image=f.state().frameLibrary[job.effect.frameRef.key].request.requiredOutcome;assert.equal(image.pendingSendOuts[0].previousPokemon,'Venusaur');assert.equal(image.pendingSendOuts[0].pokemon,'Pikachu');assert.equal(image.fighters.find(x=>x.side==='trainer_red').name,'Venusaur');
  await f.drain();assert.equal(f.state().public.fighters.red.name,'Pikachu');assert.equal(Object.keys(f.state().public.fighters).length,2);
+});
+
+
+test('published sequential rules grant only the active trainer and hold handoff until actual attack playback',async()=>{
+ const f=await fixture({imagesReady:true,sequentialTurns:true});
+ await f.action('red','ready_battle',{pokemonIndex:3});await f.action('blue','ready_battle',{pokemonIndex:1});
+ assert.equal(f.host.view('red').genesis.actions.find(a=>a.id==='battle_move').canSubmit,false);
+ await f.drain();assert.equal(f.host.view('red').genesis.actions.find(a=>a.id==='battle_move').canSubmit,true);
+ assert.equal(f.host.view('blue').genesis.actions.find(a=>a.id==='battle_move').canSubmit,false);
+ f.flags.videoReady=false;const at=Date.now();await f.action('red','battle_move',{moveIndex:0});
+ const attack=f.submitted.find(x=>x.effect.requiredOutcome?.kind==='battle_move');assert.ok(attack);assert.ok(attack.at-at<5000);
+ assert.equal(f.state().public.phase,'animating');assert.equal(f.state().public.deadline,0);
+ await assert.rejects(f.action('blue','battle_move',{moveIndex:0}),/available|eligible|window|turn|closed/i);
+ f.flags.videoReady=true;await f.drain();
+ assert.equal(f.state().public.activeTurnActorId,'blue');assert.equal(f.host.view('blue').genesis.actions.find(a=>a.id==='battle_move').canSubmit,true);
+ assert.equal(f.host.view('red').genesis.actions.find(a=>a.id==='battle_move').canSubmit,false);
+ await f.action('blue','battle_move',{moveIndex:0});await f.drain();assert.equal(f.state().public.activeTurnActorId,'red');
+});
+test('the hosted sequential decision remains playable after the five-second cue expires',async()=>{
+ const f=await fixture({imagesReady:true,sequentialTurns:true});await f.action('red','ready_battle',{pokemonIndex:3});await f.action('blue','ready_battle',{pokemonIndex:1});await f.drain();
+ const deadline=f.state().public.deadline,realNow=Date.now;Date.now=()=>deadline+1000;
+ try{await f.host.tick();assert.equal(f.state().public.turn,0);assert.equal(f.host.view('red').genesis.actions.find(a=>a.id==='battle_move').canSubmit,true);await f.action('red','battle_move',{moveIndex:3});assert.equal(f.state().public.lastAction.name,'Quick Attack');}finally{Date.now=realNow;}
 });

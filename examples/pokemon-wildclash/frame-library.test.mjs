@@ -2,6 +2,7 @@ import test from 'node:test';import assert from 'node:assert/strict';
 import {GenesisHost} from '../../dist/host.js';import {loadGenesisProject} from '../../dist/projectFiles.js';
 async function fixture(){
  const project=await loadGenesisProject(new URL('.',import.meta.url).pathname),submitted=[],flags={imagesReady:true,videoReady:true,holdKnockout:false};
+ project.definition.genesis.config.sequentialTurns=false;
  project.controllerSource=project.controllerSource.replace('Math.floor(Math.random() * 4294967295) || 1','12345');
  const host=await new GenesisHost('fresh-'+crypto.randomUUID(),project,{providers:[{id:'frames',paid:false,capabilities:['image.request','live.direction'],
  async start({job,anchor}){submitted.push({effect:structuredClone(job.effect),anchor:structuredClone(anchor)});return{id:job.id}},

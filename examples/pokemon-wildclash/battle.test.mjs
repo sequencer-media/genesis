@@ -4,9 +4,9 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 const source=fs.readFileSync(new URL('./controller.js',import.meta.url),'utf8');
 const onEvent=vm.runInNewContext(source+';onEvent');
-function fixture({animate=true,red=3,blue=1,seed=12345,turnSeconds=60,opening=false,classicDamage=false}={}){
+function fixture({animate=true,red=3,blue=1,seed=12345,turnSeconds=60,opening=false,classicDamage=false,sequentialTurns=false}={}){
  let time=1_000_000,seq=0,state={public:{},server:{}};const effects=[];
- const config={worldPrompt:'Woodland',video:{pacing:'continuous',chunkIntervalSeconds:124/24},settings:{animateBattles:animate,visualContext:false,turnSeconds,...(classicDamage?{damageMultiplier:1,maxHitHpFraction:1}:{})}};
+ const config={worldPrompt:'Woodland',video:{pacing:'continuous',chunkIntervalSeconds:124/24},settings:{animateBattles:animate,visualContext:false,turnSeconds,sequentialTurns,...(classicDamage?{damageMultiplier:1,maxHitHpFraction:1}:{})}};
  const seats=[{id:'trainer_red',actorId:'red'},{id:'trainer_blue',actorId:'blue'}];
  const send=(type,extra={})=>{const t=onEvent({state,event:{id:'event'+seq++,type,data:{},now:time,...extra},participants:[{id:'red',name:'Red'},{id:'blue',name:'Blue'}],participation:{seats},stage:{mode:'holding',anchorId:'start'},config,jobs:[]});for(const k of ['public','server'])if(t[k])state[k]=t[k];effects.push(...(t.effects||[]));return t;};
  const act=(actorId,actionId,data)=>send('action',{actorId,actionId,data});
@@ -276,4 +276,73 @@ test('five-second selection starts after opening playback and automatically lock
 test('timeout preserves a submitted command and falls back when the selected move has no PP',()=>{
  const f=fixture({turnSeconds:5});f.act('red','battle_move',{moveIndex:3});f.act('blue','preview_move',{moveIndex:0});f.state.public.fighters.blue.moves[0].pp=0;
  f.time(5000);f.send('timer',{data:{kind:'command-timeout'}});assert.equal(f.state.public.lastAction.name,'Quick Attack');assert.equal(f.state.server.roundQueue[0].data.moveIndex,1);assert.equal(f.state.public.phase,'animating');
+});
+
+
+test('sequential decisions open only for the next trainer after observed send-out completion',()=>{
+ const f=fixture({sequentialTurns:true,opening:true,turnSeconds:5});
+ assert.equal(f.state.public.sequentialTurns,true);assert.equal(f.state.public.deadline,0);
+ for(const who of ['red','blue'])assert.throws(()=>f.act(who,'battle_move',{moveIndex:0}),/turn/);
+ const id=f.state.server.opening.jobId;
+ f.send('job.ready',{data:{jobId:id}});assert.equal(f.state.public.deadline,0);
+ f.send('playback.started',{data:{jobId:id}});assert.equal(f.state.public.deadline,0);
+ const t=f.send('playback.completed',{data:{jobId:id}});
+ assert.deepEqual(Array.from(t.window.actorIds),['red']);assert.equal(t.window.deadline,undefined);
+ assert.equal(f.state.public.deadline,1_005_000);
+ assert.throws(()=>f.act('blue','preview_move',{moveIndex:1}),/turn/);
+});
+test('a sequential choice immediately generates one urgent attack and blocks choices through playback',()=>{
+ const f=fixture({sequentialTurns:true,turnSeconds:5});
+ const t=f.act('red','battle_move',{moveIndex:0});
+ assert.equal(t.window,null);assert.equal(f.state.public.phase,'animating');
+ assert.equal(t.effects.filter(e=>e.requiredOutcome?.kind==='battle_move').length,1);
+ const move=t.effects.find(e=>e.requiredOutcome?.kind==='battle_move');assert.equal(move.delivery.priority,'urgent');
+ assert.equal(move.delivery.selectedAtMs,1_000_000);assert.equal(f.state.server.roundQueue.length,0);
+ for(const who of ['red','blue'])assert.throws(()=>f.act(who,'battle_move',{moveIndex:0}),/turn/);
+ f.time(20000);f.send('job.ready',{data:{jobId:f.state.server.pending.jobId}});
+ assert.equal(f.state.public.phase,'animating');assert.equal(f.state.public.deadline,0);
+ f.play();f.impact();assert.equal(f.state.public.phase,'animating');
+ const id=f.state.server.pending.jobId;
+ const next=f.send('playback.completed',{data:{jobId:id}});
+ assert.deepEqual(Array.from(next.window.actorIds),['blue']);assert.equal(f.state.public.activeTurnActorId,'blue');
+ assert.equal(f.state.public.deadline,1_026_801);assert.equal(f.state.public.round,1);
+ f.send('playback.completed',{data:{jobId:id}});assert.equal(f.state.public.activeTurnActorId,'blue');
+ f.act('blue','battle_move',{moveIndex:0});f.complete();
+ assert.equal(f.state.public.activeTurnActorId,'red');assert.equal(f.state.public.round,2);
+});
+test('sequential timer expiry keeps the choice open without spending PP, damage or an automatic move',()=>{
+ const f=fixture({sequentialTurns:true,turnSeconds:5}),before=JSON.stringify(f.state.public.fighters);
+ f.act('red','preview_move',{moveIndex:3});const clock={data:{kind:'command-timeout',decisionAt:f.state.public.deadline}};
+ f.time(6000);const t=f.send('timer',{data:clock.data});
+ assert.equal(f.state.public.phase,'battle');assert.equal(f.state.public.turn,0);
+ assert.equal(JSON.stringify(f.state.public.fighters),before);assert.equal(t.effects.some(e=>e.requiredOutcome?.kind==='battle_move'),false);
+ const chosen=f.act('red','battle_move',{moveIndex:1});assert.equal(f.state.public.lastAction.name,'Thunder');
+ assert.equal(chosen.effects.filter(e=>e.requiredOutcome?.kind==='battle_move').length,1);
+});
+test('each sequential trainer gets an independent timer and stale timers cannot select a move',()=>{
+ const f=fixture({sequentialTurns:true,turnSeconds:5});const first={data:{kind:'command-timeout',decisionAt:f.state.public.deadline}};
+ f.act('red','battle_move',{moveIndex:0});f.time(20000);f.complete();
+ const next={data:{kind:'command-timeout',decisionAt:f.state.public.deadline}};
+ assert.notEqual(first.data.decisionAt,next.data.decisionAt);
+ assert.equal(f.effects.some(e=>e.data?.kind==='command-timeout'),false,'A visual cue needs no auto-submit timer');assert.equal(f.state.public.deadline,1_025_000);
+ assert.deepEqual(Object.keys(f.send('timer',{data:first.data})),[]);
+ assert.equal(f.state.public.activeTurnActorId,'blue');assert.equal(f.state.public.turn,1);
+ f.time(6000);f.send('timer',{data:next.data});assert.equal(f.state.public.turn,1);
+ f.act('blue','battle_move',{moveIndex:0});assert.equal(f.state.public.lastAction.actorId,'blue');
+});
+test('sequential recovery opens only the opposing trainer and a finished battle opens no next command',()=>{
+ for(const failure of ['job.failed','job.cancelled','timeout']){
+  const f=fixture({sequentialTurns:true,turnSeconds:5});f.act('red','battle_move',{moveIndex:0});
+  if(failure==='timeout'){f.time(120001);f.send('timer',{data:{kind:'watch'}});}else f.send(failure,{data:{jobId:f.state.server.pending.jobId}});
+  assert.equal(f.state.public.activeTurnActorId,'blue');assert.equal(f.state.public.turn,1);
+ }
+ const f=fixture({sequentialTurns:true,red:3,blue:6});f.state.public.fighters.blue.hp=1;
+ f.act('red','battle_move',{moveIndex:3});f.complete();
+ assert.equal(f.state.public.activeTurnActorId,null);assert.ok(f.state.server.ending);
+});
+test('sequential items use the same playback handoff and untimed games still alternate',()=>{
+ const f=fixture({sequentialTurns:true,turnSeconds:0});
+ f.act('red','use_item',{itemIndex:2});assert.equal(f.state.public.lastAction.kind,'use_item');f.complete();
+ assert.equal(f.state.public.activeTurnActorId,'blue');assert.equal(f.state.public.deadline,0);
+ assert.throws(()=>f.act('red','battle_move',{moveIndex:0}),/turn/);
 });

@@ -70,3 +70,32 @@ test('the queue countdown uses server time and elapsed time, then follows playba
  queue.items[0].status='playing';context.renderActionQueue(null);assert.equal(status(),'PLAYING');
  queue.items=[];context.renderActionQueue(null);assert.equal(el('queueCount').textContent,'0');assert.equal(el('actionQueue').children.length,0);assert.equal(el('queueEmpty').hidden,false);
 });
+
+
+test('sequential command menus follow the active trainer and wait through opening and attack playback',()=>{
+ const a=source.indexOf('    function commandMenuVisible('),b=source.indexOf('    function showMoveMenu(',a);
+ const context={currentGame:{phase:'battle',sequentialTurns:true,activeTurnActorId:'red',battleIntro:{status:'preparing'}},mySeat:{actorId:'red'},beforeBattle(){return ['waiting','setup'].includes(this.currentGame.phase);}};
+ context.beforeBattle=()=>['waiting','setup'].includes(context.currentGame.phase);vm.createContext(context);vm.runInContext(source.slice(a,b),context);
+ assert.equal(context.commandMenuVisible(),false);context.currentGame.battleIntro.status='playing';assert.equal(context.commandMenuVisible(),false);
+ context.currentGame.battleIntro.status='complete';assert.equal(context.commandMenuVisible(),true);
+ context.mySeat.actorId='blue';assert.equal(context.commandMenuVisible(),false);
+ context.currentGame.phase='animating';context.currentGame.activeTurnActorId=null;assert.equal(context.commandMenuVisible(),false);
+ context.currentGame.phase='battle';context.currentGame.activeTurnActorId='blue';assert.equal(context.commandMenuVisible(),true);
+ context.currentGame.phase='setup';assert.equal(context.commandMenuVisible(),true);
+});
+test('one account follows the next owned trainer only after playback, with one control request',async()=>{
+ const a=source.indexOf('    var autoSwitching=false;'),b=source.indexOf('    async function submitSendOut',a);
+ let calls=0,finish;
+ const context={currentGame:{sequentialTurns:true,phase:'battle',activeTurnActorId:'blue',battleIntro:{status:'complete'}},busy:false,mySeat:{actorId:'red'},playerState:{seats:[{actorId:'blue',id:'trainer_blue',canControl:true}]},handoffControl:()=>{calls++;return new Promise(resolve=>finish=resolve);},request:operation=>operation()};
+ vm.createContext(context);vm.runInContext(source.slice(a,b),context);
+ context.currentGame.phase='animating';context.followActiveTrainer();assert.equal(calls,0);
+ context.currentGame.phase='battle';context.currentGame.battleIntro.status='playing';context.followActiveTrainer();assert.equal(calls,0);
+ context.currentGame.battleIntro.status='complete';context.followActiveTrainer();context.followActiveTrainer();assert.equal(calls,1);
+ context.mySeat.actorId='blue';finish();await Promise.resolve();context.followActiveTrainer();assert.equal(calls,1);
+ context.mySeat.actorId='red';context.playerState.seats[0].canControl=false;context.followActiveTrainer();assert.equal(calls,1,'Another account’s trainer is never claimed');
+});
+test('the sequential decision timer reaches CHOOSE and never submits an automatic action',()=>{
+ const a=source.indexOf('    function renderCommandTimer('),b=source.indexOf('    function renderActionQueue',a),elements=new Map();
+ const context={Date,currentGame:{phase:'battle',sequentialTurns:true,deadline:5000},mySeat:{actorId:'red'},myFighter:{name:'Pikachu'},commandMenuVisible:()=>true,serverClock:()=>6000,el:id=>{if(!elements.has(id))elements.set(id,{});return elements.get(id);}};
+ vm.createContext(context);vm.runInContext(source.slice(a,b),context);context.renderCommandTimer();assert.equal(context.el('commandTimer').textContent,'CHOOSE');
+});

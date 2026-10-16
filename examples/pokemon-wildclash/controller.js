@@ -46,6 +46,8 @@ server.redActor=seats.find(s=>s.id==='trainer_red')?.actorId||'';
 server.blueActor=seats.find(s=>s.id==='trainer_blue')?.actorId||'';
 server.deploys=(server.deploys||[]).filter(b=>{const live=(jobs||[]).some(j=>j.id===b.id&&['queued','running'].includes(j.status));if(!live||b.actors.some(a=>!seats.some(s=>s.id===a.side&&s.actorId===a.id)))delete server[b.guard];return live;});
 if(event.data?.mergedEffectIds){const ids=event.data.mergedEffectIds;const id=server.opening?.jobId||game.videoQueue?.id;if(ids.includes(id))event.data.jobId=id;}
+const sequential=config.settings.sequentialTurns===true;
+game.sequentialTurns=sequential;
 const effects=[];
 const eventLog=[];
 function random() {
@@ -172,6 +174,7 @@ game.deadline=0;
 return battleWindow(roster.slice().sort((a,b)=>speed(game.fighters[b.actorId])-speed(game.fighters[a.actorId]))[0].actorId);
 }
 function advanceRound() {
+if(sequential){server.commands={};game.commandReady={};game.deadline=0;server.commandWatchAt=0;game.round=Math.floor(game.turn/2)+1;return transition(battleWindow(roster.find(s=>s.actorId!==game.lastAction.actorId).actorId));}
 const command=(server.roundQueue||[]).shift();
 if(command)return resolveCommand(command);
 return transition(nextRound());
@@ -312,7 +315,7 @@ server.startRequested=false;game.practiceUntil=0;
 game.turn=0;game.battleNumber++;server.battleId='match:'+game.battleNumber;
 roster.forEach(s=>{game.fighters[s.actorId].flinched=false;});
 server.commands={};server.previews={};server.roundQueue=[];game.commandReady={};game.round=0;
-log('BATTLE '+game.battleNumber+' STARTS! Both trainers choose a command.');
+log('BATTLE '+game.battleNumber+' STARTS! '+(sequential?'Trainers take turns.':'Both trainers choose a command.'));
 game.battleIntro={id:server.battleId,status:config.settings.animateBattles?'preparing':'complete',durationMs:Math.round(config.video.chunkIntervalSeconds*1000)};
 if(!config.settings.animateBattles)announce('Battle begins!','battle.start');
 lobbyDirection('battle.start','Complete the accepted send-out. Both Pokémon face each other in their fixed quadrants, trainers behind. Ready poses only.',opening?{...opening,visualAction:opening.visualAction+' By three seconds both Pokémon face each other in battle-ready poses in the lower-left and upper-right quadrants. Low wind lifts dust and leaves, natural light catches their realistic surfaces, and they plant their weight with a tense breath. The battle is starting. No attack yet.'}:{visualAction:'Both accepted Pokémon lower into battle-ready stances, facing each other from the lower-left and upper-right quadrants. Their trainers make one confident command gesture. No attack, throw or summoning.'});
@@ -323,11 +326,12 @@ function battleWindow(actorId) {
 server.decision=Number(server.decision || 0) + 1;
 game.phase='battle'; game.activeTurnActorId=actorId;
 const turnSeconds=Number(config.settings.turnSeconds || 0);
-if(!game.deadline&&turnSeconds>0&&!server.opening){game.deadline=now+Math.max(5,Math.min(90,turnSeconds))*1000;commandClock();}
-return {id:'battle:' + server.decision, mode:'individual', actorIds:roster.filter(s=>!(server.commands||{})[s.actorId]).map(s=>s.actorId),
-actionIds:['battle_move','use_item','preview_move'], ...(game.deadline?{deadline:game.deadline}:{})};
+if(!game.deadline&&turnSeconds>0&&!server.opening){game.deadline=now+Math.max(5,Math.min(90,turnSeconds))*1000;if(!sequential)commandClock();}
+if(sequential&&server.opening)return null;
+return {id:'battle:' + server.decision, mode:'individual', actorIds:sequential?[actorId]:roster.filter(s=>!(server.commands||{})[s.actorId]).map(s=>s.actorId),
+actionIds:['battle_move','use_item','preview_move'], ...(!sequential&&game.deadline?{deadline:game.deadline}:{})};
 }
-function commandClock(){if(server.commandWatchAt>now)return;server.commandWatchAt=game.deadline;effects.push({id:'command:'+game.battleNumber+':'+game.round,type:'timer.set',delayMs:Math.max(1000,game.deadline-now),data:{kind:'command-timeout'}});}
+function commandClock(){if(server.commandWatchAt>now)return;server.commandWatchAt=game.deadline;effects.push({id:'command:'+game.battleNumber+':'+game.round,type:'timer.set',delayMs:Math.max(1000,game.deadline-now),data:{kind:'command-timeout',decisionAt:game.deadline}});}
 function watchUntil(deadline) {
 server.watch=Number(server.watch || 0) + 1;
 server.watching=true;
@@ -480,9 +484,10 @@ if(server.revealPending&&server.revealPending.jobId===event.data.jobId)reveal();
 return transition();
 }
 if(event.type==='timer'&&['watch','command-timeout'].includes(event.data.kind)){
-if(event.data.kind==='command-timeout')server.commandWatchAt=0;
+if(event.data.kind==='command-timeout'){if(sequential&&event.data.decisionAt&&event.data.decisionAt!==game.deadline)return {};server.commandWatchAt=0;}
 if(event.data.kind==='watch')server.watching=false;
 if (game.phase === 'battle' && game.deadline && now >= game.deadline && roster.length === 2) {
+if(sequential)return transition();
 roster.filter(s=>!server.commands[s.actorId]).forEach(s=>{const f=game.fighters[s.actorId],choice=(server.previews||{})[s.actorId];const moveIndex=f.chargingMove?f.chargingMove.index:f.moves[choice]?.pp>0?choice:Math.max(0,f.moves.findIndex(m=>m.pp>0));server.commands[s.actorId]={actorId:s.actorId,actionId:'battle_move',data:{moveIndex}};game.commandReady[s.actorId]=true;});
 return commitCommands();
 }
@@ -576,6 +581,7 @@ if(changed)lobbyDirection('pokemon.selected','Send out '+self.name+' on '+seat.i
 return transition(setupWindow());
 }
 if (roster.length !== 2) throw new Error('Two trainers must claim seats to battle.');
+if(sequential&&(server.opening||game.activeTurnActorId!==event.actorId))throw new Error('Wait for your trainer’s turn.');
 if (game.phase !== 'battle' || (server.commands||{})[event.actorId]) throw new Error('Your command is already locked. Wait for the next round.');
 const f=game.fighters[event.actorId];
 if(event.actionId==='preview_move'){server.previews=server.previews||{};server.previews[event.actorId]=indexed(event.data.moveIndex,f.moves.length);return transition();}
@@ -596,6 +602,7 @@ server.commands[event.actorId]={actorId:event.actorId,actionId:event.actionId,da
 game.commandReady=game.commandReady||{};game.commandReady[event.actorId]=true;
 return commitCommands();
 function commitCommands(){
+if(sequential)return resolveCommand(server.commands[game.activeTurnActorId]);
 const waiting=roster.find(s=>!server.commands[s.actorId]);
 if(waiting)return transition(battleWindow(waiting.actorId));
 const commands=roster.map(s=>server.commands[s.actorId]);
@@ -656,7 +663,7 @@ if (move.name === 'Submission' && actualDamage) {const recoil=damage(self,actual
 if (struggle&&actualDamage) {const recoil=damage(self,Math.max(1,actualDamage/2));recoilDamage+=recoil;log(self.name.toUpperCase() + ' lost ' + recoil + ' HP from Struggle.');}
 if (move.name === 'Close Combat'&&actualDamage) {self.defenseStage=Math.max(-6,self.defenseStage-1);self.specialStage=Math.max(-6,(self.specialStage||0)-1);log(self.name.toUpperCase()+' DEFENSE and SPECIAL fell!');}
 if (enemy.hp > 0 && actualDamage > 0) {
-if(['Air Slash','Dark Pulse'].includes(move.name)&&(server.roundQueue||[]).some(c=>c.actorId===opponentSeat.actorId&&c.actionId==='battle_move')&&random()<(move.name==='Air Slash'?.3:.2))enemy.flinched=true;
+if(['Air Slash','Dark Pulse'].includes(move.name)&&(sequential||(server.roundQueue||[]).some(c=>c.actorId===opponentSeat.actorId&&c.actionId==='battle_move'))&&random()<(move.name==='Air Slash'?.3:.2))enemy.flinched=true;
 if(['Psychic','Moonblast','Shadow Ball','Flash Cannon','Sludge Wave','Earth Power','Energy Ball','Focus Blast'].includes(move.name)&&random()<(move.name==='Psychic'?.33:move.name==='Moonblast'?.3:move.name==='Shadow Ball'?.2:.1)){enemy.specialStage=Math.max(-6,(enemy.specialStage||0)-1);log(enemy.name.toUpperCase()+' SPECIAL fell!');}
 if(move.name==='Iron Tail'&&random()<.3){enemy.defenseStage=Math.max(-6,enemy.defenseStage-1);log(enemy.name.toUpperCase()+' DEFENSE fell!');}
 if (['Flamethrower','Fire Blast','Heat Wave'].includes(move.name) && random() < .1) inflict(enemy,'burn');

@@ -1471,6 +1471,14 @@
     .move-heading {position:absolute;bottom:calc(100% - 2px);left:8px;display:flex;gap:12px;align-items:center;padding:3px 12px 1px;background:#585870;color:#fffdf0;border:2px solid #303038;border-bottom:0;border-radius:14px 14px 0 0;box-shadow:inset 0 2px 0 #a0a0b0;font:21px/1 var(--pixel-font);}
     #commandTimer {color:#fff0b0;min-width:1.5em;text-align:right;}
     @media(max-width:600px),(max-height:380px){.move-heading{left:6px;font-size:15px;padding:2px 9px 1px;gap:8px;border-radius:11px 11px 0 0;}}
+    .battle-top #nextAction.pixel-panel {max-height:none;overflow:visible;}
+    #nextAction .action-queue {max-height:calc(32vh - 19px);overflow:auto;scrollbar-width:thin;}
+    #commandDeck[hidden] {display:none!important;}
+    .pixel-panel {position:relative;isolation:isolate;--pixel-border:2px;}
+    #nextAction.pixel-panel,.direction-wait.pixel-panel,.battle-announcement-card.pixel-panel {border:0;background:#303830;box-shadow:none;}
+    .pixel-panel::after {content:'';position:absolute;inset:var(--pixel-border);z-index:-1;background:#f8f8e0;clip-path:polygon(0 4px,2px 4px,2px 2px,4px 2px,4px 0,calc(100% - 4px) 0,calc(100% - 4px) 2px,calc(100% - 2px) 2px,calc(100% - 2px) 4px,100% 4px,100% calc(100% - 4px),calc(100% - 2px) calc(100% - 4px),calc(100% - 2px) calc(100% - 2px),calc(100% - 4px) calc(100% - 2px),calc(100% - 4px) 100%,4px 100%,4px calc(100% - 2px),2px calc(100% - 2px),2px calc(100% - 4px),0 calc(100% - 4px));pointer-events:none;}
+    .battle-announcement-card.pixel-panel {--pixel-border:3px;}
+    @media(max-width:600px),(max-height:380px){.battle-announcement-card.pixel-panel {--pixel-border:2px;}}
   </style>
 </head>
 <body>
@@ -1478,11 +1486,11 @@
     <div class="battle-top">
       <div class="battle-status-stack">
         <div id="battleIntro" class="battle-intro" aria-hidden="true" hidden><div class="intro-matchup"><span id="introRed"></span><strong>VS</strong><span id="introBlue"></span></div></div>
-        <div id="directionWait" class="direction-wait" role="status" hidden><span class="preparing-dot" aria-hidden="true"></span><span id="directionWaitText"></span></div>
+        <div id="directionWait" class="direction-wait pixel-panel pixel-cut-hp" role="status" hidden><span class="preparing-dot" aria-hidden="true"></span><span id="directionWaitText"></span></div>
       </div>
     <!-- Top Bar: Turn Notification Banner with Off-White BG and Stepped Pixel Corners -->
     <div class="top-control-bar">
-      <section id="nextAction" aria-label="Battle action queue" aria-live="polite" aria-atomic="false">
+      <section id="nextAction" class="pixel-panel pixel-cut-hp" aria-label="Battle action queue" aria-live="polite" aria-atomic="false">
         <div class="queue-heading">QUEUE <span id="queueCount">0</span></div>
         <ol id="actionQueue" class="action-queue"></ol>
         <p id="queueEmpty">WAITING FOR TRAINERS</p>
@@ -1490,7 +1498,7 @@
     </div>
     </div>
     <div id="battleAnnouncement" class="battle-announcement" role="status" aria-live="polite" aria-atomic="true" hidden>
-      <button type="button" class="battle-announcement-card" id="announcementContinue" aria-label="Continue battle message"><span id="battleAnnouncementText"></span></button>
+      <button type="button" class="battle-announcement-card pixel-panel pixel-cut-hp" id="announcementContinue" aria-label="Continue battle message"><span id="battleAnnouncementText"></span></button>
     </div>
 
     <!-- Battle Stage with Opponent (Top-Left) and Player (Bottom-Right) -->
@@ -1711,7 +1719,7 @@
     }
     var queueReceivedAt=performance.now(),queueServerNow=null,queueActive=null;
     function serverClock(){var q=window.Genesis&&Genesis.queue&&Genesis.queue.get?Genesis.queue.get():null;if(q&&q.version===1){if(queueServerNow!==q.serverNow){queueServerNow=q.serverNow;queueReceivedAt=performance.now();}return q.serverNow+Math.max(0,performance.now()-queueReceivedAt);}return Date.now();}
-    function renderCommandTimer(){var error=typeof uiError==='string'&&uiError&&Date.now()<errorUntil?uiError:'';el('commandError').hidden=!error;el('commandError').textContent=error;var locked=(currentGame.commandReady||{})[mySeat&&mySeat.actorId],active=currentGame.phase==='battle'&&myFighter;var remaining=Math.max(0,Math.ceil((Number(currentGame.deadline||0)-serverClock())/1000));el('commandTimer').textContent=active?(locked?'LOCKED':currentGame.deadline?(remaining?remaining+'S':'CHOOSING…'):'') : '';}
+    function renderCommandTimer(){var error=typeof uiError==='string'&&uiError&&Date.now()<errorUntil?uiError:'';el('commandError').hidden=!error;el('commandError').textContent=error;var locked=(currentGame.commandReady||{})[mySeat&&mySeat.actorId],active=currentGame.phase==='battle'&&myFighter&&(!currentGame.sequentialTurns||commandMenuVisible());var remaining=Math.max(0,Math.ceil((Number(currentGame.deadline||0)-serverClock())/1000));el('commandTimer').textContent=active?(locked?'LOCKED':currentGame.deadline?(remaining?remaining+'S':currentGame.sequentialTurns?'CHOOSE':'CHOOSING…'):'') : '';}
 
     function renderActionQueue(active) {
       queueActive=active;
@@ -1720,7 +1728,7 @@
       var queue=standard?shared.items:Array.isArray(currentGame.actionQueue)?currentGame.actionQueue:currentGame.videoQueue?[currentGame.videoQueue]:[];
       var clock=serverClock(),activeCount=queue.length;
       if(standard)queue=queue.concat((shared.cancelledItems||[]).filter(function(item){return clock-item.cancelledAt<12000;}));
-      var empty=currentGame.phase==='battle'?(Object.keys(currentGame.commandReady||{}).length?(active&&active.id==='trainer_red'?'RED':'BLUE')+' CHOOSES A COMMAND':'BOTH TRAINERS CHOOSE A COMMAND'):currentGame.phase==='setup'?'BOTH TRAINERS READY UP':'CHOOSE A POKÉMON OR PRACTICE';
+      var empty=currentGame.sequentialTurns&&currentGame.phase==='battle'?(currentGame.battleIntro&&['preparing','playing'].includes(currentGame.battleIntro.status)?'PREPARING BATTLE':(active&&active.id==='trainer_red'?'RED':'BLUE')+' CHOOSES A MOVE'):currentGame.phase==='battle'?(Object.keys(currentGame.commandReady||{}).length?(active&&active.id==='trainer_red'?'RED':'BLUE')+' CHOOSES A COMMAND':'BOTH TRAINERS CHOOSE A COMMAND'):currentGame.phase==='setup'?'BOTH TRAINERS READY UP':'CHOOSE A POKÉMON OR PRACTICE';
       var labels=queue.map(function(item){
         var wait=item.estimatedStartAt==null?null:Math.ceil((item.estimatedStartAt-clock)/1000);
         return item.status==='cancelled'?'REPLACED':item.status==='playing'?'PLAYING':item.waitingForFrame?'NEW FRAME':item.targetStatus==='missed'?'DELAYED':wait>0?'IN ~'+wait+'S':({'preparing image':'SETTING SCENE','queued for video':'QUEUED',queued:'QUEUED',preparing:'PREPARING',waiting:'UP NEXT'})[item.status]||item.status;
@@ -1744,6 +1752,7 @@
     setInterval(function(){if(window.Genesis&&Genesis.state&&Genesis.state.get())renderActionQueue(queueActive);},1000);
     function beforeBattle(){return ['waiting','setup'].includes(currentGame.phase);}
     function canPractice(){return !!(myFighter&&myFighter.sentOut&&beforeBattle());}
+    function commandMenuVisible(){return !currentGame.sequentialTurns||beforeBattle()||!!(currentGame.phase==='battle'&&mySeat&&mySeat.actorId===currentGame.activeTurnActorId&&!(currentGame.battleIntro&&['preparing','playing'].includes(currentGame.battleIntro.status)));}
     function showMoveMenu(){return ['battle','animating'].includes(currentGame.phase)||!!(myFighter&&myFighter.sentOut&&!choosingPokemon);}
     el('changePokemon').onclick=function(){choosingPokemon=!choosingPokemon;deckMode='fight';renderGame();};
     el('playBothBtn').onclick=function(){
@@ -1793,8 +1802,15 @@
     function shownGame(){return currentGame.presentation||currentGame;}
     async function handoffControl(){
       if(currentGame.phase!=='battle')return;
-      var other=(Genesis.players.get().seats||[]).find(function(s){return s.canControl&&!(currentGame.commandReady||{})[s.actorId];});
-      if(other)await claimSeat(other.id);
+      var other=(Genesis.players.get().seats||[]).find(function(s){return s.canControl&&(currentGame.sequentialTurns?s.actorId===currentGame.activeTurnActorId:!(currentGame.commandReady||{})[s.actorId]);});
+      if(other&&(!mySeat||other.actorId!==mySeat.actorId))await claimSeat(other.id);
+    }
+    var autoSwitching=false;
+    function followActiveTrainer(){
+      if(!currentGame.sequentialTurns||busy||autoSwitching||currentGame.phase!=='battle'||!currentGame.activeTurnActorId||currentGame.battleIntro&&['preparing','playing'].includes(currentGame.battleIntro.status))return;
+      var next=(playerState.seats||[]).find(function(s){return s.canControl&&s.actorId===currentGame.activeTurnActorId;});
+      if(!next||mySeat&&next.actorId===mySeat.actorId)return;
+      autoSwitching=true;request(function(){return handoffControl();}).finally(function(){autoSwitching=false;});
     }
     async function submitSendOut(choice,actor) {
       var revision=Genesis.context.revision;
@@ -1902,7 +1918,7 @@
         var button = document.createElement('button'); button.id = 'moveSlot' + index; button.type = 'button';
         button.className = 'gba-move-item' + (index === selectedMoveIndex ? ' selected' : '');
         button.setAttribute('aria-pressed',String(index === selectedMoveIndex));
-        button.disabled = busy || move.pp <= 0 || !!(myFighter&&myFighter.chargingMove&&myFighter.chargingMove.index!==index); if (button.disabled) button.classList.add('disabled');
+        button.disabled = busy || currentGame.phase==='battle'&&!ability('battle_move') || move.pp <= 0 || !!(myFighter&&myFighter.chargingMove&&myFighter.chargingMove.index!==index); if (button.disabled) button.classList.add('disabled');
         var text = document.createElement('span'); text.className = 'gba-move-text'; text.textContent = move.name.toUpperCase();
         button.appendChild(text); button.onclick = function() { chooseMove(index); }; panel.appendChild(button);
       });
@@ -1916,7 +1932,7 @@
       el('statPpVal').textContent=setup?(choice?'50':'--'):move?(move.struggle?'--':move.pp+'/'+move.maxPp):'--';
       el('statTypeBadge').textContent=setup?(choice?choice.types[0].toUpperCase():'--'):move?move.type.toUpperCase():'--';
       el('selectionDetail').hidden=true;
-      var canAttack=!!(mySeat&&ability('battle_move')&&move&&move.pp>0&&(!currentGame.deadline||serverClock()<currentGame.deadline));
+      var canAttack=!!(mySeat&&ability('battle_move')&&move&&move.pp>0&&(currentGame.sequentialTurns||!currentGame.deadline||serverClock()<currentGame.deadline));
       var canSend=!!(setup&&myFighter&&beforeBattle()&&ability('ready_battle'));
       var queued=currentGame.videoQueue&&currentGame.videoQueue.kind==='practice.move';
       var canTrain=!!(practicing&&move&&ability('practice_move')&&!queued&&Date.now()>=Number(currentGame.practiceUntil||0));
@@ -1961,7 +1977,7 @@
       el('oppBox').classList.toggle('active-turn-ring',!!(active&&active.actorId===((playerState.seats.find(function(s){return s.id==='trainer_red';}))||{}).actorId));
       el('playerBoxInner').classList.toggle('active-turn-ring',!!(active&&active.actorId===((playerState.seats.find(function(s){return s.id==='trainer_blue';}))||{}).actorId));
       if(canPractice())renderStats();
-      if(currentGame.phase==='battle'&&currentGame.deadline&&remaining===0)el('attackBtn').disabled=true;
+      if(!currentGame.sequentialTurns&&currentGame.phase==='battle'&&currentGame.deadline&&remaining===0)el('attackBtn').disabled=true;
     }
     function renderGame() {
       var seats=playerState.seats||[];
@@ -1988,11 +2004,13 @@
       el('changePokemon').hidden=!canPractice();el('changePokemon').textContent=choosingPokemon?'BACK':'POKÉMON';el('changePokemon').disabled=busy;
       el('moveHeading').hidden=!showMoveMenu();el('movePokemonName').textContent=displayedFighter?displayedFighter.name:'';
       if(showMoveMenu())renderMoves();else renderLobby();
+      el('commandDeck').hidden=!commandMenuVisible();
       el('commandDeck').classList.toggle('selecting',!showMoveMenu());
       renderStats();if(deckMode==='bag')renderBag();renderStatus();renderAnnouncements();renderFreshOpening();
       var action=shownGame().lastAction;
       if(action&&action.id!==previousAction){previousAction=action.id;if(action.damage>0){var box=action.opponentId===blue.actorId?el('playerBoxInner'):el('oppBox');box.classList.add('hp-hit');setTimeout(function(){box.classList.remove('hp-hit');},400);}}
       if(!el('battleHistory').hidden)renderHistory();
+      followActiveTrainer();
     }
     function renderHistory() {
       var log=el('battleHistoryLines');log.replaceChildren();

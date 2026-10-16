@@ -2,10 +2,13 @@ import {genesisRequiredFrameStatus} from '../../dist/frameLibrary.js';
 import test from 'node:test';import assert from 'node:assert/strict';
 import {GenesisHost}from'../../dist/host.js';import {loadGenesisProject}from'../../dist/projectFiles.js';
 const project=await loadGenesisProject(new URL('.',import.meta.url).pathname);
+// These fixtures verify the optional simultaneous command mode.
+project.definition.genesis.config.sequentialTurns=false;
 project.controllerSource=project.controllerSource.replace('Math.floor(Math.random() * 4294967295) || 1','12345');
-async function fixture(){
+async function fixture({sequentialTurns=false}={}){
+ const configured=structuredClone(project);configured.definition.genesis.config.sequentialTurns=sequentialTurns;
  const submitted=[];
- const host=await new GenesisHost('trainer-flow-'+Math.floor(Math.random()*1e9),project,{providers:[{id:'fixtures',paid:false,capabilities:['image.request','live.direction'],start:async({job})=>{submitted.push(structuredClone(job.effect));return{id:job.id}},poll:async(_id,job)=>job.effect.type==='image.request'?{status:'ready',result:{imageUrl:'https://storage.googleapis.com/example/accepted.png'}}:{status:'ready',result:{data:{playbackCompleted:true}}}}]}).initialize();
+ const host=await new GenesisHost('trainer-flow-'+Math.floor(Math.random()*1e9),configured,{providers:[{id:'fixtures',paid:false,capabilities:['image.request','live.direction'],start:async({job})=>{submitted.push(structuredClone(job.effect));return{id:job.id}},poll:async(_id,job)=>job.effect.type==='image.request'?{status:'ready',result:{imageUrl:'https://storage.googleapis.com/example/accepted.png'}}:{status:'ready',result:{data:{playbackCompleted:true}}}}]}).initialize();
  await host.join('one','Test trainer','spectator','verified:one');await host.join('watcher','Other trainer','spectator','verified:other');
  const state=()=>host.diagnostics().state.genesis;let seq=0;
  const act=(actor,id,data)=>host.action(actor,'flow-'+seq++,id,data,host.view(actor).genesis.revision);
@@ -64,4 +67,16 @@ test('the winner stays sent out and in their seat while only the defeated traine
  assert.equal(state().public.fighters[winner].sentOut,true);assert.equal(state().public.fighters[winner].ready,true);
  assert.equal(state().public.fighters[winner].name,champion.name);assert.equal(state().public.fighters[winner].hp,champion.hp);
  await act('next','ready_battle',{pokemonIndex:2});assert.equal(state().public.phase,'battle','The champion stays ready for the next challenger');
+});
+
+
+test('a verified account retains both seats across sequential playback and active-trainer handoffs',async()=>{
+ const {host,state,act,drain}=await fixture({sequentialTurns:true});await host.players('one',{operation:'claim',seatId:'trainer_red'});await act('one','ready_battle',{pokemonIndex:3});
+ const selected=await host.players('one',{operation:'claim',seatId:'trainer_blue'}),blue=selected.actorId;
+ await act(blue,'ready_battle',{pokemonIndex:1});await drain();
+ assert.equal(state().public.activeTurnActorId,'one');await host.players(blue,{operation:'claim',seatId:'trainer_red'});
+ await act('one','battle_move',{moveIndex:0});assert.equal(state().public.phase,'animating');await drain();
+ assert.equal(state().public.activeTurnActorId,blue);const switched=await host.players('one',{operation:'claim',seatId:'trainer_blue'});
+ assert.equal(switched.participation.seats.filter(s=>s.actorId).length,2);assert.equal(switched.actorId,blue);
+ await act(blue,'battle_move',{moveIndex:0});await drain();assert.equal(state().public.activeTurnActorId,'one');
 });
