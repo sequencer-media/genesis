@@ -164,3 +164,9 @@ test('urgent replaces playing disposable filler but preserves the urgent already
  Object.assign(state.jobs.find(j=>j.id==='urgent'),{status:'running',playbackStartedAt:1001});
  state=add(def,state,'next',{priority:'urgent'});assert.equal(state.jobs.find(j=>j.id==='urgent').status,'running');assert.deepEqual(genesisDispatchOrder(state).map(j=>j.id),['urgent','next']);
 });
+
+test('an important guarded clean frame finishes alongside urgent video instead of restarting on every action',()=>{
+ const def=project().definition;let state=applyGenesisTransition(def,createGenesisState(def),{id:'frame',type:'action',data:{},now:1000},{server:{cast:'current'},effects:[{id:'clean',type:'frame.prepare',frame:{key:'clean',fingerprint:'current',priority:95},guard:{key:'cast',value:'current'},intent:'Clean current cast',maxCostUsd:.01}]});
+ const frame=state.jobs.find(j=>j.effect.frame);frame.status='running';frame.startedAt=1000;
+ state=add(def,state,'attack',{priority:'urgent'});assert.equal(state.jobs.find(j=>j.id===frame.id).status,'running');assert.equal(state.frameLibrary.clean.generation,1);
+});

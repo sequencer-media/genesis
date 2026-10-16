@@ -67,6 +67,8 @@ export function preemptGenesisJobs(state:GenesisState,effect:GenesisEffect,now:n
   const ids:string[]=[];
   for(const job of state.jobs.filter(j=>isGenesisReplaceable(j,state))){
     const frame=job.effect.frame;
+    // Important clean scene images use a separate provider and may finish alongside urgent video.
+    if(frame&&(frame.priority||0)>=90&&(!job.effect.guard||state.server[job.effect.guard.key]===job.effect.guard.value))continue;
     if(frame&&[effect,...state.jobs.filter(j=>['queued','running'].includes(j.status)).map(j=>j.effect)]
       .some(e=>e.frameRef&&e.frameRef.key===frame.key&&e.frameRef.fingerprint===frame.fingerprint))continue;
     const queued=job.status==='queued';job.status='cancelled';job.supersededBy=effect.id;job.cancelledAt=now;

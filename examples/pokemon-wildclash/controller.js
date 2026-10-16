@@ -192,35 +192,41 @@ game.videoQueue={id:effect.id,kind,label,status:'queued for video'};
 if(config.settings.visualContext&&(urgent||keyframe)){
 const spawn=['pokemon.selected','battle.start'].includes(kind)&&effect.requiredOutcome.pokemon?effect.requiredOutcome.side:'';
 const before=effect.requiredOutcome.beforeFighters||effect.requiredOutcome.fighters||fighterSnapshots();
-let ref=frameIdentity(spawn?(spawn==='trainer_red'?'spawn-red':'spawn-blue'):'ready',before,['battle_move','use_item'].includes(kind)?game.turn-1:game.turn);
-let releases=spawn?[{side:spawn,pokemon:effect.requiredOutcome.pokemon}]:[];
+let ref=spawn?{...frameIdentity(spawn==='trainer_red'?'spawn-red':'spawn-blue',before),required:true}:readyFrame(before)||frameIdentity('ready',before);
+let releases=spawn?[{side:spawn,pokemon:effect.requiredOutcome.pokemon,previousPokemon:before.find(f=>f.side===spawn&&f.sentOut)?.name||''}]:[];
 if(spawn&&effect.type==='live.direction'){
 let batch=server.deploys.find(b=>server[b.guard]&&!b.releases.some(r=>r.side===spawn)&&(jobs||[]).some(j=>j.id===b.id&&j.status==='queued'));
 if(!batch){batch={id:effect.id,guard:'deploy:'+effect.id,key:ref.key,releases:[],actors:[]};server.deploys.push(batch);server[batch.guard]=true;}
 batch.releases.push(releases[0]);batch.actors.push({side:spawn,id:seats.find(s=>s.id===spawn).actorId});releases=batch.releases;
-ref=releases.length===1?ref:{key:batch.key,fingerprint:'deploy-v2:'+batch.id+':'+releases.map(r=>r.side).join(':')};
+ref={key:batch.key,fingerprint:'deploy-v4:'+batch.id+':'+releases.map(r=>r.side).join(':'),required:true};
 effect.guard={key:batch.guard,value:true};effect.delivery.mergeKey=batch.guard;effect.delivery.mergeFrames=true;
-effect.intent='Show the accepted send-out of '+effect.requiredOutcome.pokemon+' on '+spawn+' once. Use the shared prepared image if ready, otherwise continue immediately. Compatible send-outs happen together in this chunk.';
-const brief=f=>({name:f.name,side:f.side,sentOut:f.sentOut,posture:f.posture});
-effect.requiredOutcome={kind,pokemon:effect.requiredOutcome.pokemon,side:spawn,fighters:effect.requiredOutcome.fighters.map(brief),beforeFighters:before.map(brief),trainerDialogue:effect.requiredOutcome.trainerDialogue};
+effect.intent='Show the accepted send-out of '+effect.requiredOutcome.pokemon+' on '+spawn+' once. Use the required clean before-action image. Recall the previous creature on this side before releasing its replacement. Compatible send-outs happen together in this chunk.';
+const brief=f=>({name:f.name,side:f.side,sentOut:f.sentOut,posture:f.posture,appearance:f.appearance});
+effect.requiredOutcome={kind,pokemon:effect.requiredOutcome.pokemon,side:spawn,previousPokemon:releases.find(r=>r.side===spawn).previousPokemon,fighters:effect.requiredOutcome.fighters.map(brief),beforeFighters:before.map(brief),trainerDialogue:effect.requiredOutcome.trainerDialogue};
 }
 if(spawn)effects.push({id:'image:'+effect.id,type:'frame.prepare',frame:{key:ref.key,fingerprint:ref.fingerprint,ttlMs:30000,priority:100},
 anchorId:'start',referenceAnchorIds:['start'],modelId:config.settings.imageModel||'p-image-edit',maxCostUsd:.05,
 intent:battleCamera()+' Render a NEW clean before-action starting image for '+effect.id+'. Rebuild the physical arena from the original clean reference, never from a generated video frame. Use only the supplied BEFORE-action cast and posture. No attacks, release flash, damage effects, dialogue or UI. The next video performs the action.',
 requiredOutcome:{kind:'battle.start_frame',pose:spawn?'spawn-'+spawn:'before-action',
-fighters:before.filter(f=>f.sentOut!==false&&!releases.some(r=>r.side===f.side)),
+fighters:before.filter(f=>f.sentOut!==false&&!releases.some(r=>r.side===f.side&&!r.previousPokemon)),
 unreleasedSides:before.filter(f=>f.sentOut===false&&!releases.some(r=>r.side===f.side)).map(f=>f.side),
 ...(spawn?{pendingSendOuts:releases}:{}),emptySides:seats.filter(s=>!s.actorId).map(s=>s.id)},guard:effect.guard});
-game.videoQueue.status='starting video';
-effects.push({...effect,frameRef:ref,frameMode:'new-frame',continuity:'reanchor'});
+game.videoQueue.status=spawn?'preparing image':'starting video';
+const cached=!spawn&&(frameLibrary||{})[ref.key];
+effects.push({...effect,...(cached?.status==='ready'&&cached.fingerprint===ref.fingerprint?{anchorId:cached.anchorId}:{frameRef:ref}),frameMode:'new-frame',continuity:'reanchor'});
 }else effects.push({...effect,frameMode:'continue',continuity:'linked'});
 }
-function frameIdentity(pose,snapshot,turn) {
+function readyFrame(snapshot){
+const prefix=frameIdentity('ready',snapshot)?.fingerprint+':p:';
+const entry=Object.values(frameLibrary||{}).filter(f=>f.status==='ready'&&f.expiresAtMs>now&&f.fingerprint.startsWith(prefix)).sort((a,b)=>b.readyAtMs-a.readyAtMs)[0];
+return entry?{key:entry.key,fingerprint:entry.fingerprint}:null;
+}
+function frameIdentity(pose,snapshot) {
 if(!roster.length)return null;
 const cast=seats.map(s=>s.actorId&&game.fighters[s.actorId]?game.fighters[s.actorId].pokemonIndex:'empty').join(':');
 const key='kanto:'+cast+':'+pose;
-const stamp=pose==='ready'?':'+(snapshot||fighterSnapshots()).map(f=>f.hp+'.'+(f.status||'')).join(':'):pose.startsWith('spawn-')?':'+roster.filter(s=>s.id!==(pose==='spawn-red'?'trainer_red':'trainer_blue')).map(s=>!!game.fighters[s.actorId].sentOut).join(':'):'';
-return {key,fingerprint:key+':overhead-v5'+stamp+(pose==='ready'?':'+game.battleNumber+':'+game.round+':'+(turn??game.turn)+':'+Math.floor(now/30000):pose.startsWith('spawn-')?':'+Math.floor(now/30000):'')};
+const stamp=(snapshot||fighterSnapshots()).map(f=>f.sentOut?f.name+'.'+(f.posture==='fainted'?3:f.posture.startsWith('slow')?2:f.posture.startsWith('tired')?1:0)+'.'+(f.status||''):'empty').join(':');
+return {key,fingerprint:key+':overhead-v6:'+stamp};
 }
 function desiredFramePose() {
 const fallen=roster.filter(s=>game.fighters[s.actorId].hp<=0);
@@ -229,25 +235,32 @@ return fallen.length===2?'both-fainted':fallen.length?(fallen[0].id==='trainer_r
 function planBattleFrames() {
 if(!config.settings.visualContext||config.video.pacing!=='continuous'||!roster.length)return;
 const cast=frameIdentity('ready').key;
-server.frameCast=cast;
-const poses=['ready',...(roster.length===2?['red-fainted','blue-fainted']:[]),...(['waiting','setup'].includes(game.phase)?roster.filter(s=>!game.fighters[s.actorId].sentOut).map(s=>s.id==='trainer_red'?'spawn-red':'spawn-blue'):[])];
-if(desiredFramePose()==='both-fainted')poses.push('both-fainted');
+server.frameCast=cast;server.frameScene=frameIdentity('ready').fingerprint;
+const poses=['ready'];
 for(const pose of poses){
-const ref=frameIdentity(pose),entry=(frameLibrary||{})[ref.key];
+let ref=frameIdentity(pose);
+if(pose==='ready'){
+const prefix=ref.fingerprint+':p:',cycle=game.battleNumber+':'+game.round+':'+game.turn+':'+Math.floor(now/15000);
+if(Object.values(frameLibrary||{}).some(f=>f.fingerprint.startsWith(prefix)&&['pending','preparing'].includes(f.status)))continue;
+if(server.freshCycle===cycle&&readyFrame())continue;
+const ready=readyFrame();server.freshCycle=cycle;
+ref={key:ready?.key===ref.key?ref.key+':next':ref.key,fingerprint:prefix+cycle};
+}
+const entry=(frameLibrary||{})[ref.key];
 const faintSide=pose==='red-fainted'?'trainer_red':pose==='blue-fainted'?'trainer_blue':'';
 const spawnSide=pose==='spawn-red'?'trainer_red':pose==='spawn-blue'?'trainer_blue':'';
-const fighters=fighterSnapshots().filter(f=>!spawnSide||f.side!==spawnSide&&game.fighters[f.actorId].sentOut).map(f=>({name:f.name,side:f.side,appearance:f.appearance,
+const fighters=fighterSnapshots().filter(f=>f.sentOut&&(!spawnSide||f.side!==spawnSide)).map(f=>({name:f.name,side:f.side,appearance:f.appearance,
 posture:pose==='both-fainted'||f.side===faintSide?'fainted, lying safely on the ground, eyes closed, gently breathing; trainer kneels beside it':f.posture+', breathing naturally'}));
 const atRisk=roster.some(s=>s.id===faintSide&&game.fighters[s.actorId].hp/game.fighters[s.actorId].maxHp<=.35);
 const priority=pose===desiredFramePose()?95:spawnSide?90:atRisk?85:30;
 if(entry&&entry.fingerprint===ref.fingerprint&&(entry.status==='ready'||['pending','preparing'].includes(entry.status)&&entry.priority>=priority))continue;
 const id='prepare:'+ref.fingerprint+':'+priority+':'+Number(server.decision||0)+':'+Math.floor(now/15000);
 if(effects.some(e=>e.id===id))continue;
-effects.push({id,type:'frame.prepare',frame:{...ref,ttlMs:pose==='ready'||spawnSide?30000:600000,priority},
+effects.push({id,type:'frame.prepare',frame:{...ref,ttlMs:90000,priority},
 anchorId:'start',referenceAnchorIds:['start'],modelId:config.settings.imageModel||'p-image-edit',maxCostUsd:.05,
 intent:battleCamera()+' Fresh scene cut '+ref.fingerprint+'. Prepare the cast in a hyperrealistic '+pose+' checkpoint from above, preserving anatomy, surfaces, lighting and landmarks. Use the specified poses. scene-only checkpoint. No attack, effects, dialogue, text or UI. Forecast only; game state stays unchanged.',
-requiredOutcome:{kind:'battle.start_frame',pose,fighters,...(spawnSide?{pendingSendOut:{side:spawnSide,pokemon:game.fighters[seats.find(s=>s.id===spawnSide).actorId].name}}:{}),emptySides:seats.filter(s=>!s.actorId).map(s=>s.id)},
-guard:{key:'frameCast',value:cast}});
+requiredOutcome:{kind:'battle.start_frame',pose,fighters,unreleasedSides:fighterSnapshots().filter(f=>!f.sentOut&&f.side!==spawnSide).map(f=>f.side),...(spawnSide?{pendingSendOut:{side:spawnSide,pokemon:game.fighters[seats.find(s=>s.id===spawnSide).actorId].name}}:{}),emptySides:seats.filter(s=>!s.actorId).map(s=>s.id)},
+guard:{key:'frameScene',value:server.frameScene}});
 }
 if(!server.frameCheckId){
 server.frameCheckId='frame-check:'+now+':'+Number(server.decision||0);
@@ -259,7 +272,7 @@ if(roster.some(s=>!game.fighters[s.actorId]?.sentOut))return;
 if(game.phase==='finished'&&game.lastResult?.reason==='fainted')return;
 if(config.video.pacing==='continuous'&&config.settings.visualContext){
 if(server.pending||server.opening||game.videoQueue||!roster.length)return;
-const ref=frameIdentity(desiredFramePose()),entry=ref&&(frameLibrary||{})[ref.key];
+const ref=readyFrame(),entry=ref&&(frameLibrary||{})[ref.key];
 if(!entry||entry.status!=='ready'||entry.fingerprint!==ref.fingerprint||entry.expiresAtMs<=now)return;
 if(server.appliedFrameAnchorId===entry.anchorId)return;
 server.decision=Number(server.decision||0)+1;

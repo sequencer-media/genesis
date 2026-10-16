@@ -1,83 +1,37 @@
-import {genesisRequiredFrameStatus} from '../../dist/frameLibrary.js';
 import test from 'node:test';import assert from 'node:assert/strict';
-import {GenesisHost} from '../../dist/host.js';
-import {loadGenesisProject} from '../../dist/projectFiles.js';
-
-test('matchup and fainting checkpoints prepare before battle and recall stays linked after observed knockout completion',async()=>{
- const project=await loadGenesisProject(new URL('.',import.meta.url).pathname),submitted=[];
+import {GenesisHost} from '../../dist/host.js';import {loadGenesisProject} from '../../dist/projectFiles.js';
+async function fixture(){
+ const project=await loadGenesisProject(new URL('.',import.meta.url).pathname),submitted=[],flags={imagesReady:true,videoReady:true,holdKnockout:false};
  project.controllerSource=project.controllerSource.replace('Math.floor(Math.random() * 4294967295) || 1','12345');
- let holdKnockout=false;
- const provider={id:'checkpoint-fixture',paid:false,capabilities:['image.request','live.direction'],
-  async start({job}){submitted.push(structuredClone(job.effect));return{id:job.id}},
-  async poll(id,job){if(holdKnockout&&job.effect.requiredOutcome?.reason==='fainted')return{status:'running'};
-   return{status:'ready',result:job.effect.type==='image.request'?{imageUrl:'https://storage.googleapis.com/example/'+id.replaceAll(':','-')+'.png'}:{data:{playbackCompleted:true}}}}};
- const host=await new GenesisHost('checkpoint-battle',project,{providers:[provider]}).initialize();
- await host.join('red','Red');await host.join('blue','Blue');
- const state=()=>host.diagnostics().state.genesis;
- const action=(who,id,data)=>host.action(who,crypto.randomUUID(),id,data,host.view(who).genesis.revision);
- const drain=async(limit=15)=>{for(let i=0;i<limit;i++){const queued=state().jobs.find(j=>j.status==='queued'&&j.effect.type==='live.direction'&&genesisRequiredFrameStatus(state(),j)!=='waiting');if(queued){const actor=host.diagnostics().state.participation.seats.find(s=>s.actorId)?.actorId;if(actor)await host.runJob(actor,queued.id);}await host.tick();if(!state().jobs.some(j=>['queued','running'].includes(j.status)))break;}};
- await host.players('red',{operation:'claim',seatId:'trainer_red'});await host.players('blue',{operation:'claim',seatId:'trainer_blue'});await drain();
- const library=state().frameLibrary;
- assert.equal(library['kanto:0:1:ready'].status,'ready');assert.equal(library['kanto:0:1:red-fainted'].status,'ready');assert.equal(library['kanto:0:1:blue-fainted'].status,'ready');
- assert.equal(state().public.battleNumber,0,'Forecasts do not start the battle');
- await action('red','ready_battle',{pokemonIndex:0});await drain();await action('blue','ready_battle',{pokemonIndex:1});await drain();
- assert.ok(submitted.some(e=>e.requiredOutcome?.kind==='battle.start'),'Opening remains responsive while its new frame prepares');
- assert.ok(submitted.some(e=>e.requiredOutcome?.kind==='lineup.ready'&&e.continuity==='reanchor'),'The new battle frame cuts in once ready');
- holdKnockout=true;
- for(let round=0;round<30&&state().public.phase!=='animating';round++){
-  for(const who of ['red','blue'])await action(who,'battle_move',{moveIndex:Math.max(0,state().public.fighters[who].moves.findIndex(m=>m.pp>0))});await drain();
+ const host=await new GenesisHost('fresh-'+crypto.randomUUID(),project,{providers:[{id:'frames',paid:false,capabilities:['image.request','live.direction'],
+ async start({job,anchor}){submitted.push({effect:structuredClone(job.effect),anchor:structuredClone(anchor)});return{id:job.id}},
+ async poll(id,job){return (job.effect.type==='image.request'?!flags.imagesReady:!flags.videoReady||flags.holdKnockout&&job.effect.requiredOutcome?.reason==='fainted')?{status:'running'}:{status:'ready',result:job.effect.type==='image.request'?{imageUrl:'https://storage.googleapis.com/example/'+id.replaceAll(':','-')+'.png'}:{data:{playbackCompleted:true}}};}}]}).initialize();
+ const state=()=>host.diagnostics().state.genesis,act=(who,id,data)=>host.action(who,crypto.randomUUID(),id,data,host.view(who).genesis.revision),drain=async(n=20)=>{for(let i=0;i<n;i++)await host.tick();};
+ await host.join('red','Red');await host.join('blue','Blue');return {host,state,act,drain,flags,submitted};
+}
+test('current lineups get fresh checkpoints without speculative fainting jobs, and recall stays linked',async()=>{
+ const f=await fixture();for(const [who,seatId]of[['red','trainer_red'],['blue','trainer_blue']])await f.host.players(who,{operation:'claim',seatId});await f.drain();
+ assert.equal(f.state().frameLibrary['kanto:0:1:red-fainted'],undefined,'Unused fainting predictions cannot occupy the image worker');
+ await f.act('red','ready_battle',{pokemonIndex:0});await f.drain();await f.act('blue','ready_battle',{pokemonIndex:1});await f.drain();f.flags.holdKnockout=true;
+ for(let round=0;round<30&&f.state().public.phase!=='animating';round++){
+  for(const who of ['red','blue'])await f.act(who,'battle_move',{moveIndex:Math.max(0,f.state().public.fighters[who].moves.findIndex(m=>m.pp>0))});await f.drain();
  }
- assert.equal(state().public.phase,'animating');
- const active=state().jobs.find(j=>j.status==='running'&&j.effect.requiredOutcome?.reason==='fainted');assert.ok(active);
- assert.ok(!submitted.some(e=>e.frameRef?.key.endsWith('-fainted')),'Fainted frames cannot precede the accepted knockout playback');
- holdKnockout=false;await drain();
- const recall=submitted.find(e=>e.requiredOutcome?.kind==='battle.recall');assert.ok(recall);assert.equal(recall.continuity,'linked');assert.equal(recall.frameRef,undefined,'A forecast cannot resurrect the fainted Pokémon during recall');
- const images=submitted.filter(e=>e.type==='image.request'&&e.frame?.key.startsWith('kanto:0:1:'));
- assert.equal(images.filter(e=>e.frame.key.endsWith('-fainted')).length,2,'Faint forecasts remain reusable');
- const ready=images.filter(e=>e.frame.key.endsWith(':ready'));
- assert.ok(new Set(ready.map(e=>e.frame.fingerprint)).size>=2,'Lobby and battle start get separate fresh frames');
- assert.ok(ready.every(e=>e.frame.ttlMs===30000));
- assert.ok(ready.every(e=>e.requiredOutcome.fighters.length===2));
- assert.equal(new Set(ready.map(e=>e.intent)).size,ready.length,'Fresh round fingerprints also produce distinct generation prompts');
+ assert.equal(f.state().public.phase,'animating');assert.equal(f.submitted.some(x=>x.effect.requiredOutcome?.kind==='battle.recall'),false);
+ f.flags.holdKnockout=false;await f.drain();const recall=f.submitted.find(x=>x.effect.requiredOutcome?.kind==='battle.recall');assert.ok(recall);assert.equal(recall.effect.continuity,'linked');
+ const images=f.submitted.filter(x=>x.effect.requiredOutcome?.pose==='ready');assert.ok(images.length>=3);assert.ok(images.every(x=>x.effect.frame.ttlMs===90000));assert.ok(new Set(images.map(x=>x.effect.frame.fingerprint)).size>=3);
+ const attacks=f.submitted.filter(x=>x.effect.requiredOutcome?.kind==='battle_move');const fresh=attacks.filter(x=>x.effect.frameMode==='new-frame').length;assert.ok(fresh>=attacks.length-2,`Fresh physical-state checkpoints covered ${fresh}/${attacks.length} attacks, including changing postures`);
 });
-
-test('idle frames regenerate after 30 seconds and each accepted anchor cuts in once',async()=>{
+test('a ready clean image stays available while a slow replacement generates and urgent practice cannot cancel it',async()=>{
  const realNow=Date.now;let now=1_000_000;Date.now=()=>now;
  try{
-  const project=await loadGenesisProject(new URL('.',import.meta.url).pathname),submitted=[];
-  const provider={id:'fresh-frame-fixture',paid:false,capabilities:['image.request','live.direction'],
-   async start({job}){submitted.push(structuredClone(job.effect));return{id:job.id}},
-   async poll(id,job){return{status:'ready',result:job.effect.type==='image.request'?{imageUrl:'https://storage.googleapis.com/example/'+id.replaceAll(':','-')+'.png'}:{data:{playbackCompleted:true}}}}};
-  const host=await new GenesisHost('fresh-frames',project,{providers:[provider]}).initialize();
-  await host.join('red','Red');await host.players('red',{operation:'claim',seatId:'trainer_red'});
-  const state=()=>host.diagnostics().state.genesis;
-  const drain=async()=>{for(let i=0;i<12;i++){for(const j of state().jobs.filter(j=>j.status==='queued'&&j.effect.type==='live.direction'&&genesisRequiredFrameStatus(state(),j)!=='waiting'))await host.runJob('red',j.id);await host.tick(now);if(!state().jobs.some(j=>['queued','running'].includes(j.status)))break;}};
-  await drain();
-  assert.equal(submitted.filter(e=>e.requiredOutcome?.kind==='lineup.ready').length,0,'A forecast cannot summon an unsent Pokémon');
-  await host.action('red',crypto.randomUUID(),'ready_battle',{pokemonIndex:0},host.view('red').genesis.revision);await drain();
-  const sendOut=submitted.find(e=>e.requiredOutcome?.kind==='pokemon.selected');assert.equal(sendOut.frameMode,'new-frame','A ready pre-send-out frame is used by the accepted urgent chunk');
-  const allImages=()=>submitted.filter(e=>e.type==='image.request');
-  const images=()=>allImages().filter(e=>e.frame?.key.endsWith(':ready'));
-  const cuts=()=>submitted.filter(e=>e.requiredOutcome?.kind==='lineup.ready');
-  assert.equal(images().length,1);assert.equal(cuts().length,1);
-  const spawn=allImages().find(e=>e.requiredOutcome?.pose==='spawn-red');assert.ok(spawn);
-  assert.equal(spawn.requiredOutcome.pendingSendOut.side,'trainer_red');assert.equal(spawn.requiredOutcome.fighters.length,0,'The pre-send-out image leaves the releasing battle position empty');
-  const first=images()[0];await host.tick(now);await drain();assert.equal(cuts().length,1);
-  now+=31000;await host.tick(now);await drain();
-  assert.equal(images().length,2);assert.equal(cuts().length,2);
-  assert.notEqual(images()[1].frame.fingerprint,first.frame.fingerprint);
-  assert.notEqual(images()[1].intent,first.intent,'Provider input changes so the image cache cannot replay the old frame');
-  assert.equal(state().public.fighters.red.hp,state().public.fighters.red.maxHp,'Refresh changes no battle stats');
-  await host.tick(now);await drain();assert.equal(cuts().length,2,'A settled anchor is never cut in twice');
-  await host.join('blue','Blue');await host.players('blue',{operation:'claim',seatId:'trainer_blue'});await drain();
-  const action=(who,id,data)=>host.action(who,crypto.randomUUID(),id,data,host.view(who).genesis.revision);
-  await action('red','ready_battle',{pokemonIndex:0});await drain();await action('blue','ready_battle',{pokemonIndex:1});await drain();
-  const opening=images().filter(e=>e.frame.key.endsWith(':ready')).at(-1);
-  await action('red','use_item',{itemIndex:2});await action('blue','use_item',{itemIndex:2});await drain();
-  assert.equal(state().public.round,2,'Non-damaging items safely advance a complete round');
-  const nextRound=images().filter(e=>e.frame.key.endsWith(':ready')).at(-1);
-  assert.notEqual(nextRound.frame.fingerprint,opening.frame.fingerprint);
-  assert.notEqual(nextRound.intent,opening.intent,'Each new round renders a fresh provider input even within the same 30-second window');
-
+  const f=await fixture();await f.host.players('red',{operation:'claim',seatId:'trainer_red'});await f.drain();await f.act('red','ready_battle',{pokemonIndex:0});await f.drain();
+  const ready=Object.values(f.state().frameLibrary).find(e=>e.status==='ready'&&e.key.includes(':ready')&&e.fingerprint.includes('Charizard'));assert.ok(ready);
+  f.flags.imagesReady=false;now+=16000;await f.host.tick();
+  const image=f.state().jobs.find(j=>j.status==='running'&&j.effect.frame);assert.ok(image);assert.notEqual(image.effect.frame.key,ready.key);
+  assert.equal(f.state().frameLibrary[ready.key].status,'ready');assert.equal(f.state().frameLibrary[ready.key].anchorId,ready.anchorId);
+  f.flags.videoReady=false;await f.act('red','practice_move',{moveIndex:0});assert.equal(f.state().jobs.find(j=>j.id===image.id).status,'running');
+  const practice=f.submitted.find(x=>x.effect.requiredOutcome?.kind==='practice.move');assert.equal(practice.effect.anchorId,ready.anchorId);
+  f.flags.imagesReady=true;await f.host.tick();assert.equal(f.state().frameLibrary[image.effect.frame.key].status,'ready');
+  assert.equal(f.state().public.fighters.red.hp,f.state().public.fighters.red.maxHp);
  }finally{Date.now=realNow;}
 });
