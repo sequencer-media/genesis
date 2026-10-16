@@ -1,61 +1,59 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {GenesisHost} from '../../dist/host.js';import {loadGenesisProject} from '../../dist/projectFiles.js';
-import {genesisRequiredFrameStatus} from '../../dist/frameLibrary.js';
-
-test('send-outs and every attack wait for unique clean starting images, preserving urgent FIFO',async()=>{
- const project=await loadGenesisProject(new URL('.',import.meta.url).pathname),submitted=[];let imagesReady=false;
- const provider={id:'required-image-fixture',paid:false,capabilities:['image.request','live.direction'],
-  async start({job,anchor}){submitted.push({effect:structuredClone(job.effect),anchor:structuredClone(anchor)});return{id:job.id};},
-  async poll(id,job){return job.effect.type==='image.request'&&!imagesReady?{status:'running'}:{status:'ready',result:job.effect.type==='image.request'?{imageUrl:'https://storage.googleapis.com/example/'+id.replaceAll(':','-')+'.png'}:{data:{playbackCompleted:true}}};}};
- const host=await new GenesisHost('required-images',project,{providers:[provider]}).initialize();
+const project=()=>loadGenesisProject(new URL('.',import.meta.url).pathname);
+async function fixture({imagesReady=false,videoReady=true,authorize=true}={}){
+ const submitted=[];const flags={imagesReady,videoReady,authorize};
+ const provider={id:'latency-fixture',paid:true,capabilities:['image.request','live.direction'],
+  async start({job,anchor}){submitted.push({effect:structuredClone(job.effect),anchor:structuredClone(anchor),at:Date.now()});return{id:job.id};},
+  async poll(id,job){return (job.effect.type==='image.request'?!flags.imagesReady:!flags.videoReady)?{status:'running'}:{status:'ready',result:job.effect.type==='image.request'?{imageUrl:'https://storage.googleapis.com/example/'+id.replaceAll(':','-')+'.png'}:{data:{playbackCompleted:true}}};}};
+ const host=await new GenesisHost('latency-'+crypto.randomUUID(),await project(),{providers:[provider],services:{authorizeTool:async({job})=>job.effect.type==='image.request'||flags.authorize}}).initialize();
  const state=()=>host.diagnostics().state.genesis;
  const action=(who,id,data)=>host.action(who,crypto.randomUUID(),id,data,host.view(who).genesis.revision);
- const drain=async(limit=35)=>{for(let n=0;n<limit;n++){const job=state().jobs.find(j=>j.status==='queued'&&j.effect.type==='live.direction'&&genesisRequiredFrameStatus(state(),j)!=='waiting');if(job)await host.runJob('red',job.id);await host.tick();if(!state().jobs.some(j=>['queued','running'].includes(j.status)))break;}};
+ const drain=async(n=30)=>{for(let i=0;i<n;i++)await host.tick();};
  await host.join('red','Red');await host.join('blue','Blue');
  await host.players('red',{operation:'claim',seatId:'trainer_red'});await host.players('blue',{operation:'claim',seatId:'trainer_blue'});
- await action('red','ready_battle',{pokemonIndex:0});await action('blue','ready_battle',{pokemonIndex:1});
- for(let n=0;n<3;n++)await host.tick();
- const waiting=state().jobs.filter(j=>j.effect.frameRef?.required&&j.status==='queued');assert.equal(waiting.length,1);assert.equal(waiting[0].mergedEffects.length,2);
- assert.equal(submitted.filter(x=>['pokemon.selected','battle.start'].includes(x.effect.requiredOutcome?.kind)||!!x.effect.requiredOutcome?.mergedOutcomes).length,0,'No send-out video can bypass image generation');
- const frameJob=state().jobs.find(j=>j.effect.frame?.key===waiting[0].effect.frameRef.key&&j.status==='running');assert.ok(frameJob,'The oldest required image runs despite the urgent video queue');
- const view=host.view('red').genesis.queue.items.find(i=>i.jobId===waiting[0].id);assert.deepEqual(view.mergedActions.map(x=>x.label),['Send out Charizard','Send out Blastoise']);assert.equal(view.waitingForFrame,true);assert.equal(view.estimatedStartAt,null);
- imagesReady=true;await drain();
- const sends=submitted.filter(x=>!!x.effect.requiredOutcome?.mergedOutcomes);assert.equal(sends.length,1);
- const batch=sends[0];assert.deepEqual(batch.effect.requiredOutcome.mergedOutcomes.map(x=>x.requiredOutcome.side),['trainer_red','trainer_blue']);
- assert.equal(batch.effect.frameMode,'new-frame');assert.equal(batch.effect.continuity,'reanchor');assert.match(batch.anchor.imageUrl,/frame-cut/);
- const image=submitted.findLast(x=>x.effect.frame?.fingerprint===batch.effect.frameRef.fingerprint).effect;
- assert.equal(image.requiredOutcome.fighters.length,0);assert.deepEqual(image.requiredOutcome.pendingSendOuts.map(x=>x.side),['trainer_red','trainer_blue']);assert.deepEqual(image.referenceAnchorIds,['start']);assert.equal(image.frame.refresh,true);
- assert.equal(state().public.battleIntro.status,'complete','The shared completion advances the battle opening');
- for(const who of ['red','blue'])await action(who,'battle_move',{moveIndex:0});await drain();
- const attacks=submitted.filter(x=>x.effect.requiredOutcome?.kind==='battle_move');assert.equal(attacks.length,2);
- for(const {effect,anchor} of attacks){assert.equal(effect.frameMode,'new-frame');assert.equal(effect.continuity,'reanchor');const image=submitted.find(x=>x.effect.frame?.key===effect.frameRef.key).effect;assert.deepEqual(image.referenceAnchorIds,['start']);assert.deepEqual(image.requiredOutcome.fighters,effect.requiredOutcome.beforeFighters);assert.match(anchor.imageUrl,/frame-cut/);}
- assert.equal(new Set([...sends,...attacks].map(x=>x.effect.frameRef.fingerprint)).size,3,'Each chunk uses a newly generated image, including the combined deployment');
+ return {host,state,action,submitted,flags,drain};
+}
+test('slow images never block urgent send-outs or committed attacks, earlier urgent playback stays protected',async()=>{
+ const f=await fixture({videoReady:false});
+ await f.action('red','ready_battle',{pokemonIndex:0});
+ const first=f.submitted.find(x=>x.effect.requiredOutcome?.kind==='pokemon.selected');assert.ok(first);assert.equal(first.effect.frameMode,'continue');
+ await f.action('blue','ready_battle',{pokemonIndex:1});
+ assert.equal(f.submitted.filter(x=>x.effect.requiredOutcome?.kind==='battle.start').length,0,'The earlier urgent keeps its slot');
+ assert.equal(f.state().jobs.find(j=>j.id===first.effect.id).status,'running');
+ f.flags.videoReady=true;await f.drain();
+ assert.ok(f.submitted.some(x=>x.effect.requiredOutcome?.kind==='battle.start'));
+ const selectedAt=Date.now();for(const who of ['red','blue'])await f.action(who,'battle_move',{moveIndex:0});
+ const attack=f.submitted.find(x=>x.effect.requiredOutcome?.kind==='battle_move');assert.ok(attack,'Video submits during the action request with image generation still unfinished');
+ assert.ok(attack.at-selectedAt<5000);assert.equal(attack.effect.frameMode,'continue');
+ await f.drain();assert.equal(f.submitted.filter(x=>x.effect.requiredOutcome?.kind==='battle_move').length,2);
+ assert.ok(!f.submitted.some(x=>x.effect.frameRef?.required));
 });
-
-test('a failed required image retries once and never submits a continuation video',async()=>{
- const project=await loadGenesisProject(new URL('.',import.meta.url).pathname),submitted=[];
- const provider={id:'failed-image-fixture',paid:false,capabilities:['image.request','live.direction'],
-  async start({job}){submitted.push(structuredClone(job.effect));return{id:job.id};},
-  async poll(id,job){return job.effect.frame?.key.startsWith('cut:')?{status:'failed',result:{error:'Image fixture failure'}}:{status:'ready',result:job.effect.type==='image.request'?{imageUrl:'https://storage.googleapis.com/example/frame.png'}:{data:{playbackCompleted:true}}};}};
- const host=await new GenesisHost('failed-required-image',project,{providers:[provider]}).initialize();await host.join('red','Red');await host.players('red',{operation:'claim',seatId:'trainer_red'});
- await host.action('red','send-red','ready_battle',{pokemonIndex:0},host.view('red').genesis.revision);
- for(let i=0;i<12;i++)await host.tick();
- const state=host.diagnostics().state.genesis,action=state.jobs.find(j=>j.effect.requiredOutcome?.kind==='pokemon.selected');
- assert.equal(action.status,'failed');assert.match(action.error,/required fresh starting frame failed/);
- assert.equal(submitted.filter(e=>e.frame?.key===action.effect.frameRef.key).length,2);
- assert.equal(submitted.some(e=>e.requiredOutcome?.kind==='pokemon.selected'),false);
+test('ready clean frames are used and new before-action checkpoints prepare while an urgent video is running',async()=>{
+ const f=await fixture({imagesReady:true});await f.drain();
+ await f.action('red','ready_battle',{pokemonIndex:0});await f.drain();
+ const send=f.submitted.find(x=>x.effect.requiredOutcome?.kind==='pokemon.selected');assert.equal(send.effect.frameMode,'new-frame');assert.match(send.anchor.imageUrl,/frame-kanto/);
+ await f.action('blue','ready_battle',{pokemonIndex:1});await f.drain();f.flags.videoReady=false;
+ for(const who of ['red','blue'])await f.action(who,'battle_move',{moveIndex:0});
+ const attack=f.submitted.find(x=>x.effect.requiredOutcome?.kind==='battle_move');assert.equal(attack.effect.frameMode,'new-frame');assert.match(attack.anchor.imageUrl,/frame-kanto/);
+ await f.host.tick();
+ assert.ok(f.state().jobs.some(j=>j.status==='running'&&j.effect.frame),'A fresh next checkpoint prepares concurrently with the accepted video');
+ const ready=f.submitted.filter(x=>x.effect.requiredOutcome?.pose==='ready');assert.ok(ready.length>=2);
+ assert.ok(ready.every(x=>x.effect.referenceAnchorIds[0]==='start'));
 });
-
-test('a second trainer joining preserves the first trainer\'s pending send-out image and animation',async()=>{
- const project=await loadGenesisProject(new URL('.',import.meta.url).pathname);let ready=false;
- const provider={id:'joining-trainer-fixture',paid:false,capabilities:['image.request','live.direction'],start:async({job})=>({id:job.id}),poll:async(id,job)=>job.effect.type==='image.request'&&!ready?{status:'running'}:{status:'ready',result:job.effect.type==='image.request'?{imageUrl:'https://storage.googleapis.com/example/frame.png'}:{data:{playbackCompleted:true}}}};
- const host=await new GenesisHost('joining-trainer',project,{providers:[provider]}).initialize();await host.join('red','Red');await host.players('red',{operation:'claim',seatId:'trainer_red'});
- await host.action('red','send-red','ready_battle',{pokemonIndex:0},host.view('red').genesis.revision);await host.tick();
- const state=()=>host.diagnostics().state.genesis;
- const send=state().jobs.find(j=>j.effect.requiredOutcome?.kind==='pokemon.selected');
- const image=state().jobs.find(j=>j.effect.frame?.key===send.effect.frameRef.key);assert.ok(image);
- await host.join('blue','Blue');await host.players('blue',{operation:'claim',seatId:'trainer_blue'});
- assert.equal(state().jobs.find(j=>j.id===send.id).status,'queued');assert.equal(state().jobs.find(j=>j.id===image.id).status,'running');
- ready=true;for(let i=0;i<5;i++)await host.tick();
- assert.equal(state().jobs.find(j=>j.id===send.id).status,'ready','The first send-out completes even after the opposite trainer joins');
+test('two compatible unsubmitted send-outs merge without waiting for their revised joint image',async()=>{
+ const f=await fixture({authorize:false});
+ await f.action('red','ready_battle',{pokemonIndex:0});await f.action('blue','ready_battle',{pokemonIndex:1});
+ const batch=f.state().jobs.find(j=>j.mergedEffects?.length===2);assert.ok(batch);assert.equal(batch.effect.frameRef.required,undefined);
+ const frame=f.state().frameLibrary[batch.effect.frameRef.key];assert.deepEqual(frame.request.requiredOutcome.pendingSendOuts.map(r=>r.side),['trainer_red','trainer_blue']);assert.equal(frame.request.requiredOutcome.fighters.length,0);
+ const view=f.host.view('red').genesis.queue.items.find(i=>i.jobId===batch.id);assert.equal(view.mergedActions.length,2);assert.notEqual(view.waitingForFrame,true);
+ f.flags.authorize=true;await f.host.tick();
+ const send=f.submitted.find(x=>x.effect.requiredOutcome?.mergedOutcomes);assert.ok(send);assert.equal(send.effect.frameMode,'continue');assert.equal(send.effect.requiredOutcome.mergedOutcomes.length,2);
+});
+test('a later trainer joining preserves an accepted send-out while its image is still preparing',async()=>{
+ const f=await fixture({videoReady:false});await f.host.players('blue',{operation:'release',seatId:'trainer_blue'});await f.action('red','ready_battle',{pokemonIndex:0});
+ const send=f.state().jobs.find(j=>j.effect.requiredOutcome?.kind==='pokemon.selected');
+ assert.equal(send.status,'running');assert.equal(send.effect.frameMode,'continue');
+ await f.host.join('new-blue','New Blue');await f.host.players('new-blue',{operation:'claim',seatId:'trainer_blue'});assert.equal(f.state().jobs.find(j=>j.id===send.id).status,'running');
+ f.flags.videoReady=true;await f.drain();assert.equal(f.state().jobs.find(j=>j.id===send.id).status,'ready');
 });

@@ -156,3 +156,11 @@ test('a host resumes its prepared frame after urgent work drains using a new pro
  await host.action('one','urgent','choose',{optionId:'attack'},host.view('one').genesis.revision);await host.tick();await host.tick();
  const frame=host.diagnostics().state.genesis.frameLibrary.arena;assert.equal(frame.status,'ready');assert.deepEqual(starts.map(s=>s.type),['image.request','live.direction','image.request']);assert.ok(starts[2].generation>starts[0].generation);assert.notEqual(starts[2].id,old.id);
 });
+
+test('urgent replaces playing disposable filler but preserves the urgent already playing',()=>{
+ const def=project().definition;let state=add(def,createGenesisState(def),'idle',{priority:'mergeable',mergeKey:'idle'});
+ Object.assign(state.jobs[0],{status:'running',startedAt:1000,playbackStartedAt:1000});Object.assign(state.stage,{ownerJobId:'idle',mode:'playing',videoUrl:'/assets/idle.mp4'});
+ state=add(def,state,'urgent',{priority:'urgent'});assert.equal(state.jobs.find(j=>j.id==='idle').status,'cancelled');assert.equal(state.stage.mode,'holding');
+ Object.assign(state.jobs.find(j=>j.id==='urgent'),{status:'running',playbackStartedAt:1001});
+ state=add(def,state,'next',{priority:'urgent'});assert.equal(state.jobs.find(j=>j.id==='urgent').status,'running');assert.deepEqual(genesisDispatchOrder(state).map(j=>j.id),['urgent','next']);
+});

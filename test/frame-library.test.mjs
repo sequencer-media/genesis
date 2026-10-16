@@ -105,3 +105,12 @@ test('required frames gate dispatch and survive later urgent preemption',async()
  assert.throws(()=>reduce(def,next,[direction('unknown','absent')],'missing-reference'),/Prepare the exact required frame/);
  assert.throws(()=>reduce(def,next,[{...direction('invalid','first'),frameRef:{key:'first',fingerprint:'first:v1',required:'yes'}}],'invalid-reference'),/prepared frame/);
 });
+
+test('a ready optional image stays pinned when the next checkpoint replaces its library key',async()=>{
+ const {def,state}=setup();let next=reduce(def,state,[prepare('faint')]);const imageJob=next.genesis.jobs[0];
+ next=await settleGenesisJob(def,next,source,imageJob.id,{imageUrl:image},1001);
+ const anchorId=next.genesis.frameLibrary.faint.anchorId;
+ next=reduce(def,next,[{id:'accepted',type:'live.direction',intent:'Accepted before-state',frameMode:'new-frame',frameRef:{key:'faint',fingerprint:'faint:v1'},delivery:{priority:'urgent'}},{...prepare('faint'),id:'next-image',frame:{key:'faint',fingerprint:'faint:v2'}}],'accept',1002);
+ const video=next.genesis.jobs.find(j=>j.id==='accepted');assert.equal(video.effect.anchorId,anchorId);assert.equal(video.effect.frameRef,undefined);
+ assert.equal(next.genesis.frameLibrary.faint.fingerprint,'faint:v2');assert.equal(next.genesis.anchors[anchorId].imageUrl,image);
+});

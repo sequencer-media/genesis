@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+Urgent Pokémon actions reuse prepared clean frames or submit linked video immediately. Fresh checkpoints prepare alongside submitted video. Playing disposable filler can yield to urgent work; earlier urgent actions remain protected. Fainting leads directly into one urgent Poké Ball recall before the defeated seat leaves. Pin ready optional anchors so preparing the next checkpoint cannot remove an accepted start frame.
+
 Wildclash uses a steeper downward battle camera and a longer knockout ending: a dedicated fainting hold, followed by a linked Poké Ball recall before the defeated seat is released. Prepared scene fingerprints refresh for the new composition, and stale completion and timeout events cannot skip or replay the ending.
 
 Ship the current Pokémon Wildclash Worldstream as a complete portable project, including its controller, interface, artwork and battle regressions. Add a small authenticated Node world server with persistence, independent job processing and configurable providers. Local previews simulate continuous directions explicitly.

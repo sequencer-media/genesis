@@ -64,42 +64,35 @@ test('accepted moves carry one command from their acting trainer, while fainting
  assert.match(knockout.visualAction,/After the accepted impact, Gyarados on trainer_red wobbles/);assert.match(knockout.visualAction,/kneels beside it on the same side/);
  assert.equal(knockout.fighters.find(f=>f.side==='trainer_red').hp,0);assert.equal(knockout.result.pokemon,'Pikachu');
 });
-test('a knockout lingers, completes a linked Poké Ball recall, then releases the defeated trainer',()=>{
+test('fainting flows directly into one protected recall, then releases only the loser',()=>{
  const f=fixture({red:6,blue:3});f.state.public.fighters.red.hp=1;
  f.act('red','battle_move',{moveIndex:0});f.act('blue','battle_move',{moveIndex:3});
  assert.equal(f.effects.some(e=>e.type==='players.release'),false);
  f.complete();
- const hold=f.effects.find(e=>e.requiredOutcome?.kind==='battle.fainted_hold');assert.ok(hold);
- assert.equal(hold.requiredOutcome.delivery.chunkDurationSeconds,124/24);
- assert.match(hold.requiredOutcome.visualAction,/entire 5.17-second shot/);
- assert.match(hold.requiredOutcome.visualAction,/gentle|gently breathes/);
- assert.equal(f.effects.some(e=>e.requiredOutcome?.kind==='battle.recall'),false);
- f.send('job.ready',{data:{jobId:hold.id,data:{playbackCompleted:false}}});
- assert.equal(f.state.server.ending.jobId,hold.id,'Preparing a shot cannot count as observed playback');
- f.complete();
  const recall=f.effects.find(e=>e.requiredOutcome?.kind==='battle.recall');assert.ok(recall);
+ assert.equal(f.effects.some(e=>e.requiredOutcome?.kind==='battle.fainted_hold'),false);
+ assert.equal(recall.delivery.priority,'urgent');assert.equal(recall.delivery.replaceable,false);
+ assert.equal(recall.requiredOutcome.delivery.chunkDurationSeconds,124/24);
  assert.equal(recall.continuity,'linked');assert.equal(recall.frameRef,undefined);
- assert.match(recall.requiredOutcome.visualAction,/First two seconds/);assert.match(recall.requiredOutcome.visualAction,/flows|flowing completely into the ball/);
- assert.match(recall.requiredOutcome.visualAction,/Final second: the ball closes/);
+ assert.match(recall.requiredOutcome.visualAction,/First second/);assert.match(recall.requiredOutcome.visualAction,/From one to four seconds/);
+ assert.match(recall.requiredOutcome.visualAction,/entire Pokémon into the ball/);assert.match(recall.requiredOutcome.visualAction,/Final second: the ball closes/);
+ assert.match(recall.requiredOutcome.visualAction,/winner remains visible/);
  assert.deepEqual(Array.from(recall.requiredOutcome.recalledSides),['trainer_red']);
- assert.equal(f.effects.some(e=>e.type==='players.release'),false);
- f.send('timer',{data:{kind:'result-release',jobId:hold.id}});
- assert.equal(f.state.server.ending.jobId,recall.id,'An old hold timeout cannot interrupt recall');
+ f.send('job.ready',{data:{jobId:recall.id,data:{playbackCompleted:false}}});
+ assert.equal(f.state.server.ending.jobId,recall.id);assert.equal(f.effects.some(e=>e.type==='players.release'),false);
  f.complete();
  assert.deepEqual(Array.from(f.effects.filter(e=>e.type==='players.release'),e=>e.seatId),['trainer_red']);
- assert.equal(f.state.server.ending.step,2);
+ assert.equal(f.state.server.ending.step,1);
 });
-test('failed or timed-out ending shots have a bounded path to the next challenger',()=>{
+test('failed or timed-out recall has a bounded path and stale completions cannot release twice',()=>{
  for(const failure of ['job.failed','job.skipped','job.cancelled','timeout']){
   const f=fixture({red:6,blue:3});f.state.public.fighters.red.hp=1;
   f.act('red','battle_move',{moveIndex:0});f.act('blue','battle_move',{moveIndex:3});f.complete();
-  const hold=f.state.server.ending.jobId;
-  if(failure==='timeout'){f.time(90001);f.send('timer',{data:{kind:'result-release',jobId:hold}});}else f.send(failure,{data:{jobId:hold}});
-  assert.equal(f.state.public.videoQueue.kind,'battle.recall');assert.equal(f.effects.some(e=>e.type==='players.release'),false);
-  const recall=f.state.server.ending.jobId;f.time(90001);f.send('timer',{data:{kind:'result-release',jobId:recall}});
+  const recall=f.state.server.ending.jobId;
+  if(failure==='timeout'){f.time(90001);f.send('timer',{data:{kind:'result-release',jobId:recall}});}else f.send(failure,{data:{jobId:recall}});
   assert.equal(f.effects.filter(e=>e.type==='players.release').length,1);
-  f.send('timer',{data:{kind:'result-release',jobId:recall}});f.send('job.ready',{data:{jobId:hold,data:{playbackCompleted:true}}});
-  assert.equal(f.effects.filter(e=>e.type==='players.release').length,1,'Late completions cannot replay the ending or release twice');
+  f.send('timer',{data:{kind:'result-release',jobId:recall}});f.send('job.ready',{data:{jobId:recall,data:{playbackCompleted:true}}});
+  assert.equal(f.effects.filter(e=>e.type==='players.release').length,1);
  }
 });
 test('battle shots and setup settings retain an elevated downward camera and opposite quadrants',()=>{
@@ -142,7 +135,6 @@ test('full action queue stays private before lock-in and follows actual resoluti
  f.complete();assert.deepEqual(Array.from(f.state.public.actionQueue,item=>item.label),['Blastoise · Surf']);
  f.complete();
  if(f.state.public.lastResult){
-  assert.equal(f.state.public.actionQueue[0].kind,'battle.fainted_hold');f.complete();
   assert.equal(f.state.public.actionQueue[0].kind,'battle.recall');f.complete();
  }
  assert.equal(f.state.public.actionQueue.length,0);

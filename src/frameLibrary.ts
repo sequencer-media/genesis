@@ -99,17 +99,19 @@ export function settleGenesisFrame(state: GenesisState, job: GenesisJob, anchorI
 }
 
 /** Required references retain their dependency until dispatch; optional references can continue. */
-export function resolveGenesisFrame(state: GenesisState, effect: GenesisEffect, now: number): GenesisEffect {
+export function resolveGenesisFrame(state: GenesisState, effect: GenesisEffect, now: number, deferOptional = false): GenesisEffect {
   const ref=effect.frameRef;
   if (!ref) return effect;
   if (!['scene.request','live.direction'].includes(effect.type) || !safeKey(ref.key) || !fingerprint(ref.fingerprint)
     || ref.required !== undefined && typeof ref.required !== 'boolean'
     || effect.useStartFrame === false) throw new Error('Reference a prepared frame from a linked scene or live direction.');
+  if (deferOptional && !ref.required && effect.delivery?.mergeFrames) return effect;
   const entry=state.frameLibrary?.[ref.key];
   if (entry?.fingerprint === ref.fingerprint && matchesGuard(state,entry.request)) {
     if (entry.status === 'ready' && entry.expiresAtMs > now && state.anchors[entry.anchorId]) {
       entry.lastUsedAtMs=now;
-      return {...effect,anchorId:entry.anchorId,continuity:'reanchor'};
+      const {frameRef:unused,...accepted}=effect;
+      return {...(ref.required?effect:accepted),anchorId:entry.anchorId,continuity:'reanchor'};
     }
     if(entry.imported){
       if(ref.required)throw new Error('The required saved frame expired. Cache a current image before requesting this action.');
@@ -140,7 +142,7 @@ export function scheduleGenesisFrame(def: ExperienceDefinition, state: GenesisSt
   const required=jobs.filter(j=>j.effect.frameRef?.required).map(j=>j.effect.frameRef!);
   const needed=(f:GenesisPreparedFrame)=>required.some(r=>r.key===f.key&&r.fingerprint===f.fingerprint);
   if (jobs.some(j => j.effect.type !== 'live.direction' && !(j.effect.type==='scene.request'&&j.status==='queued'&&j.effect.frameRef?.required))) return;
-  const urgent=jobs.some(j=>j.effect.delivery?.priority==='urgent');
+  const urgent=jobs.some(j=>j.status==='queued'&&j.effect.delivery?.priority==='urgent');
   const remaining=Math.min(policy.maxSessionCostUsd,def.genesis!.limits.maxSessionCostUsd)-state.reservedCostUsd;
   const next=Object.values(library).filter(f => f.status === 'pending' && matchesGuard(state,f.request)
     && (!urgent||needed(f)) && (f.request.maxCostUsd || .05) <= remaining+1e-8)

@@ -192,35 +192,35 @@ game.videoQueue={id:effect.id,kind,label,status:'queued for video'};
 if(config.settings.visualContext&&(urgent||keyframe)){
 const spawn=['pokemon.selected','battle.start'].includes(kind)&&effect.requiredOutcome.pokemon?effect.requiredOutcome.side:'';
 const before=effect.requiredOutcome.beforeFighters||effect.requiredOutcome.fighters||fighterSnapshots();
-let ref={key:('cut:'+effect.id).slice(-64),fingerprint:'fresh-action-v1:'+effect.id,required:true};
+let ref=frameIdentity(spawn?(spawn==='trainer_red'?'spawn-red':'spawn-blue'):'ready',before,['battle_move','use_item'].includes(kind)?game.turn-1:game.turn);
 let releases=spawn?[{side:spawn,pokemon:effect.requiredOutcome.pokemon}]:[];
 if(spawn&&effect.type==='live.direction'){
 let batch=server.deploys.find(b=>server[b.guard]&&!b.releases.some(r=>r.side===spawn)&&(jobs||[]).some(j=>j.id===b.id&&j.status==='queued'));
 if(!batch){batch={id:effect.id,guard:'deploy:'+effect.id,key:ref.key,releases:[],actors:[]};server.deploys.push(batch);server[batch.guard]=true;}
 batch.releases.push(releases[0]);batch.actors.push({side:spawn,id:seats.find(s=>s.id===spawn).actorId});releases=batch.releases;
-ref={key:batch.key,fingerprint:'deploy-v2:'+batch.id+':'+releases.map(r=>r.side).join(':'),required:true};
+ref=releases.length===1?ref:{key:batch.key,fingerprint:'deploy-v2:'+batch.id+':'+releases.map(r=>r.side).join(':')};
 effect.guard={key:batch.guard,value:true};effect.delivery.mergeKey=batch.guard;effect.delivery.mergeFrames=true;
-effect.intent='Show the accepted send-out of '+effect.requiredOutcome.pokemon+' on '+spawn+' once, using the shared clean starting image. Compatible send-outs happen together in this chunk.';
+effect.intent='Show the accepted send-out of '+effect.requiredOutcome.pokemon+' on '+spawn+' once. Use the shared prepared image if ready, otherwise continue immediately. Compatible send-outs happen together in this chunk.';
 const brief=f=>({name:f.name,side:f.side,sentOut:f.sentOut,posture:f.posture});
 effect.requiredOutcome={kind,pokemon:effect.requiredOutcome.pokemon,side:spawn,fighters:effect.requiredOutcome.fighters.map(brief),beforeFighters:before.map(brief),trainerDialogue:effect.requiredOutcome.trainerDialogue};
 }
-effects.push({id:'image:'+effect.id,type:'frame.prepare',frame:{key:ref.key,fingerprint:ref.fingerprint,refresh:true,ttlMs:120000,priority:100},
+if(spawn)effects.push({id:'image:'+effect.id,type:'frame.prepare',frame:{key:ref.key,fingerprint:ref.fingerprint,ttlMs:30000,priority:100},
 anchorId:'start',referenceAnchorIds:['start'],modelId:config.settings.imageModel||'p-image-edit',maxCostUsd:.05,
 intent:battleCamera()+' Render a NEW clean before-action starting image for '+effect.id+'. Rebuild the physical arena from the original clean reference, never from a generated video frame. Use only the supplied BEFORE-action cast and posture. No attacks, release flash, damage effects, dialogue or UI. The next video performs the action.',
 requiredOutcome:{kind:'battle.start_frame',pose:spawn?'spawn-'+spawn:'before-action',
 fighters:before.filter(f=>f.sentOut!==false&&!releases.some(r=>r.side===f.side)),
 unreleasedSides:before.filter(f=>f.sentOut===false&&!releases.some(r=>r.side===f.side)).map(f=>f.side),
 ...(spawn?{pendingSendOuts:releases}:{}),emptySides:seats.filter(s=>!s.actorId).map(s=>s.id)},guard:effect.guard});
-game.videoQueue.status='preparing image';
+game.videoQueue.status='starting video';
 effects.push({...effect,frameRef:ref,frameMode:'new-frame',continuity:'reanchor'});
 }else effects.push({...effect,frameMode:'continue',continuity:'linked'});
 }
-function frameIdentity(pose,snapshot) {
+function frameIdentity(pose,snapshot,turn) {
 if(!roster.length)return null;
 const cast=seats.map(s=>s.actorId&&game.fighters[s.actorId]?game.fighters[s.actorId].pokemonIndex:'empty').join(':');
 const key='kanto:'+cast+':'+pose;
 const stamp=pose==='ready'?':'+(snapshot||fighterSnapshots()).map(f=>f.hp+'.'+(f.status||'')).join(':'):pose.startsWith('spawn-')?':'+roster.filter(s=>s.id!==(pose==='spawn-red'?'trainer_red':'trainer_blue')).map(s=>!!game.fighters[s.actorId].sentOut).join(':'):'';
-return {key,fingerprint:key+':overhead-v5'+stamp+(pose==='ready'?':'+game.battleNumber+':'+game.round+':'+Math.floor(now/30000):pose.startsWith('spawn-')?':'+Math.floor(now/30000):'')};
+return {key,fingerprint:key+':overhead-v5'+stamp+(pose==='ready'?':'+game.battleNumber+':'+game.round+':'+(turn??game.turn)+':'+Math.floor(now/30000):pose.startsWith('spawn-')?':'+Math.floor(now/30000):'')};
 }
 function desiredFramePose() {
 const fallen=roster.filter(s=>game.fighters[s.actorId].hp<=0);
@@ -336,27 +336,17 @@ delivery:{showOnce:true,chunkDurationSeconds:config.video.chunkIntervalSeconds,s
 if (!server.watching) watchUntil(server.pending.expiresAt);
 return true;
 }
-function endingShot(recall) {
+function endingShot() {
 server.decision=Number(server.decision||0)+1;
-const id='ending:'+game.battleNumber+':'+(recall?'recall':'hold')+':'+server.decision;
-server.visualId=id;
-server.ending={step:recall?1:0,jobId:id};
-const fallen=fighterSnapshots().filter(f=>f.hp<=0);
-const seconds=config.video.chunkIntervalSeconds;
-const cast=fallen.map(f=>f.name+' in the '+(f.side==='trainer_red'?'lower-left':'upper-right')+' quadrant').join(' and ');
-const visualAction='Keep the elevated 65-degree downward view and both quadrants fixed. '+cast+'. '+(recall
-? 'Fill this '+seconds.toFixed(2)+'-second shot with a slow Poké Ball recall. First two seconds: aim the ball. Then a soft red beam slowly shrinks the resting Pokémon into light flowing completely into the ball. Final second: the ball closes and is held still. Keep the Pokémon inside.'
-: 'Linger for this entire '+seconds.toFixed(2)+'-second shot. The fainted Pokémon gently breathes, eyes closed. Its trainer kneels beside it, pauses with a reassuring hand, then reaches for the ball at the end. Keep the Pokémon visible throughout.')+(game.lastResult.winnerId?' The winner waits on its own side.':'')+' No words are spoken.';
-const ref=!recall&&config.settings.visualContext?frameIdentity(desiredFramePose()):null;
-const entry=ref&&(frameLibrary||{})[ref.key];
-const ready=entry&&entry.status==='ready'&&entry.fingerprint===ref.fingerprint&&entry.expiresAtMs>now;
-game.videoQueue={id,kind:recall?'battle.recall':'battle.fainted_hold',label:recall?'Return to Poké Ball':'Stay with the fainted Pokémon',status:'queued for video'};
-effects.push({id,type:'live.direction',delivery:{priority:'queued',replaceable:false},frameMode:!recall&&ready?'new-frame':'continue',continuity:!recall&&ready?'reanchor':'linked',...(!recall&&ready?{frameRef:ref}:{}),
-intent:directionIntent('Complete this ending shot before the next trainer enters.',visualAction),
-requiredOutcome:{kind:game.videoQueue.kind,visualAction,visualEventId:id,fighters:fighterSnapshots(),
-...(recall?{recalledSides:fallen.map(f=>f.side)}:{}),
-delivery:{showOnce:true,chunkDurationSeconds:seconds,startActionEarly:false},result:game.lastResult},
-guard:{key:'visualId',value:id}});
+const id='ending:'+game.battleNumber+':recall:'+server.decision;
+server.visualId=id;server.ending={step:0,jobId:id};
+const fallen=fighterSnapshots().filter(f=>f.hp<=0),seconds=config.video.chunkIntervalSeconds;
+const visualAction='Continue immediately after the fainting animation. Keep the elevated 65-degree downward view and both quadrants fixed. '+fallen.map(f=>f.name+' resting safely in the '+(f.side==='trainer_red'?'lower-left':'upper-right')+' quadrant').join(' and ')+'. First second: the fainted Pokémon gently breathes, eyes closed; its trainer kneels beside it and aims a red-and-white Poké Ball. From one to four seconds: a soft red beam draws the entire Pokémon into the ball, shrinking its silhouette into flowing red light until no part remains outside. Final second: the ball closes and the trainer holds it still. Keep the Pokémon inside.'+(game.lastResult.winnerId?' The winner remains visible on its own side.':'')+' No words are spoken.';
+game.videoQueue={id,kind:'battle.recall',label:'Return to Poké Ball',status:'starting video'};
+effects.push({id,type:'live.direction',delivery:{priority:'urgent',replaceable:false,targetLatencyMs:5000},frameMode:'continue',continuity:'linked',
+intent:directionIntent('Complete the faint-to-Poké Ball recall before the next trainer enters.',visualAction),
+requiredOutcome:{kind:'battle.recall',visualAction,visualEventId:id,fighters:fighterSnapshots(),recalledSides:fallen.map(f=>f.side),
+delivery:{showOnce:true,chunkDurationSeconds:seconds,startActionEarly:true},result:game.lastResult},guard:{key:'visualId',value:id}});
 effects.push({id:'result-release:'+id,type:'timer.set',delayMs:90000,data:{kind:'result-release',jobId:id}});
 }
 function settleBattleEnding(jobId) {
@@ -367,7 +357,7 @@ releaseFinished();return true;
 function releaseFinished() {
 if(config.settings.animateBattles&&config.video.pacing==='continuous'&&game.lastResult?.reason==='fainted'){
 const ending=server.ending||{step:0};
-if(ending.step<2){if(!ending.jobId)endingShot(ending.step===1);return;}
+if(ending.step<1){if(!ending.jobId)endingShot();return;}
 }
 const winnerId=game.lastResult && game.lastResult.winnerId;
 const cooldownMs=Math.round(Math.max(2, Math.min(60, Number(config.settings.rejoinCooldownSeconds || 8))) * 1000);

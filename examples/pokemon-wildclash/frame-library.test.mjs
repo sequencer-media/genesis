@@ -3,7 +3,7 @@ import test from 'node:test';import assert from 'node:assert/strict';
 import {GenesisHost} from '../../dist/host.js';
 import {loadGenesisProject} from '../../dist/projectFiles.js';
 
-test('matchup and fainting checkpoints prepare before battle and a knockout frame waits for observed completion',async()=>{
+test('matchup and fainting checkpoints prepare before battle and recall stays linked after observed knockout completion',async()=>{
  const project=await loadGenesisProject(new URL('.',import.meta.url).pathname),submitted=[];
  project.controllerSource=project.controllerSource.replace('Math.floor(Math.random() * 4294967295) || 1','12345');
  let holdKnockout=false;
@@ -31,7 +31,7 @@ test('matchup and fainting checkpoints prepare before battle and a knockout fram
  const active=state().jobs.find(j=>j.status==='running'&&j.effect.requiredOutcome?.reason==='fainted');assert.ok(active);
  assert.ok(!submitted.some(e=>e.frameRef?.key.endsWith('-fainted')),'Fainted frames cannot precede the accepted knockout playback');
  holdKnockout=false;await drain();
- const checkpoint=submitted.find(e=>e.frameRef?.key.endsWith('-fainted'));assert.ok(checkpoint,'The ready aftermath frame is inserted after completion');assert.equal(checkpoint.continuity,'reanchor');
+ const recall=submitted.find(e=>e.requiredOutcome?.kind==='battle.recall');assert.ok(recall);assert.equal(recall.continuity,'linked');assert.equal(recall.frameRef,undefined,'A forecast cannot resurrect the fainted Pokémon during recall');
  const images=submitted.filter(e=>e.type==='image.request'&&e.frame?.key.startsWith('kanto:0:1:'));
  assert.equal(images.filter(e=>e.frame.key.endsWith('-fainted')).length,2,'Faint forecasts remain reusable');
  const ready=images.filter(e=>e.frame.key.endsWith(':ready'));

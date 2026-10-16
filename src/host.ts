@@ -126,7 +126,7 @@ export class GenesisHost {
   }
   private async dispatchUrgent(actorId?:string){
     await this.cancelSuperseded();
-    const next=genesisDispatchOrder(this.state.genesis!).find(j=>genesisRequiredFrameStatus(this.state.genesis!,j)!=='waiting');
+    const next=genesisDispatchOrder(this.state.genesis!).find(j=>j.effect.delivery?.priority==='urgent'&&genesisRequiredFrameStatus(this.state.genesis!,j)!=='waiting');
     const actor=actorId||this.state.participants.find(p=>genesisParticipantRole(this.state,p)==='player')?.id;
     const provider=next&&this.providers.find(p=>p.capabilities.includes((next.effect.type==='tool.request'?next.effect.toolId:next.effect.type) as any));
     if(!actor||!next||next.status!=='queued'||next.effect.delivery?.priority!=='urgent'||!provider||provider.paid&&!this.services.authorizeTool)return;

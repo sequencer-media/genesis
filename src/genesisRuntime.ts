@@ -94,6 +94,10 @@ export async function tickGenesis(def: ExperienceDefinition, previous: Experienc
   const refreshAt=nextGenesisFrameRefreshAt(state.genesis!);
   if (refreshAt !== undefined && refreshAt <= now) state={...state,revision:state.revision+1,
     genesis:applyGenesisTransition(def,state.genesis!,{id:`frame-refresh:${state.genesis!.revision}:${now}`,type:'frame.refresh',data:{},now},{},policy)};
+  if (Object.values(state.genesis!.frameLibrary || {}).some(f=>f.status==='pending')) {
+    const genesis=applyGenesisTransition(def,state.genesis!,{id:`frame-pump:${state.genesis!.revision}:${now}`,type:'frame.refresh',data:{},now},{},policy);
+    if(genesis.frameSequence!==state.genesis!.frameSequence)state={...state,revision:state.revision+1,genesis};
+  }
   return state;
 }
 export async function settleGenesisJob(def: ExperienceDefinition, previous: ExperienceSessionState, source: string, jobId: string, result: { imageUrl?: string; videoUrl?: string; error?: string; mediaId?: string; reused?: boolean; frameExpiresAtMs?: number; data?: Record<string, unknown> }, now = Date.now(), policy: GenesisHostPolicy = defaultGenesisHostPolicy) {
