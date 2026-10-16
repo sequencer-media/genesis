@@ -5,6 +5,7 @@ import {loadGenesisProject} from '../../dist/projectFiles.js';
 
 test('matchup and fainting checkpoints prepare before battle and a knockout frame waits for observed completion',async()=>{
  const project=await loadGenesisProject(new URL('.',import.meta.url).pathname),submitted=[];
+ project.controllerSource=project.controllerSource.replace('Math.floor(Math.random() * 4294967295) || 1','12345');
  let holdKnockout=false;
  const provider={id:'checkpoint-fixture',paid:false,capabilities:['image.request','live.direction'],
   async start({job}){submitted.push(structuredClone(job.effect));return{id:job.id}},

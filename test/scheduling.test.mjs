@@ -27,9 +27,30 @@ test('mergeable directions combine compatible intents and preserve immutable sou
  assert.deepEqual(state.jobs[0].effect.requiredOutcome.mergedOutcomes,[{effectId:'sun',requiredOutcome:{sun:true}},{effectId:'wind',requiredOutcome:{wind:true}}]);
  assert.match(state.jobs[0].effect.intent,/Show sun[\s\S]*Show wind/);
  assert.deepEqual(genesisQueueView(state).items[0].mergedEffectIds,['sun','wind']);
+ assert.deepEqual(genesisQueueView(state).items[0].mergedActions.map(a=>a.id),['sun','wind']);
+ state.queuePlan=[{id:'wind',label:'Wind',queuedAt:1000}];assert.equal(genesisQueueView(state).items.length,1,'Later controller plans still resolve merged source IDs to the shared chunk');
  state=add(def,state,'different-guard',delivery,{guard:{key:'roster',value:2}});assert.equal(state.jobs.length,2);
  state.jobs[0].status='running';state=add(def,state,'later',delivery);assert.equal(state.jobs.length,3);
  const repeated=applyGenesisTransition(def,state,{id:'event:wind',type:'action',data:{},now:9999},{effects:[]});assert.equal(repeated,state);
+});
+test('urgent batches revise one shared required image and keep submitted videos separate',()=>{
+ const def=project().definition;let state=createGenesisState(def);
+ const request=(id,fingerprint)=>({id,type:'frame.prepare',frame:{key:'deploy',fingerprint,refresh:true},intent:'Empty positions for accepted send-outs',maxCostUsd:.01});
+ const direction=(id,fingerprint)=>({id,type:'live.direction',label:id,intent:'Deploy '+id,frameRef:{key:'deploy',fingerprint,required:true},frameMode:'new-frame',guard:{key:'batch',value:true},delivery:{priority:'urgent',mergeKey:'deploy',mergeFrames:true,replaceable:false}});
+ state=applyGenesisTransition(def,state,{id:'one',type:'action',data:{},now:1000},{server:{batch:true},effects:[request('frame1','one'),direction('red','one')]});
+ const old=state.jobs.find(j=>j.effect.frame);old.status='running';old.startedAt=1000;
+ state=applyGenesisTransition(def,state,{id:'two',type:'action',data:{},now:1001},{effects:[request('frame2','both'),direction('blue','both')]});
+ const videos=state.jobs.filter(j=>j.effect.type==='live.direction');assert.equal(videos.length,1);assert.deepEqual(videos[0].mergedEffects.map(e=>e.id),['red','blue']);assert.equal(videos[0].effect.frameRef.fingerprint,'both');
+ assert.equal(state.jobs.find(j=>j.id===old.id).status,'cancelled');assert.equal(state.frameLibrary.deploy.fingerprint,'both');
+ videos[0].status='running';videos[0].startedAt=1002;
+ state=add(def,state,'later',{priority:'urgent',mergeKey:'deploy',mergeFrames:true,replaceable:false},{frameRef:{key:'deploy',fingerprint:'both',required:true},frameMode:'new-frame',guard:{key:'batch',value:true}});
+ assert.equal(state.jobs.filter(j=>j.effect.type==='live.direction').length,2);
+});
+test('queue exposes bounded cancellation notices with public text and the replacing action',()=>{
+ const def=project().definition;let state=add(def,createGenesisState(def),'filler',{priority:'mergeable',mergeKey:'idle'},{label:'Leaves in the breeze',intent:'Private instructions',displayPrompt:'Leaves sway'});
+ state=add(def,state,'attack',{priority:'urgent'});
+ const queue=genesisQueueView(state,{now:1100});assert.equal(queue.cancelledItems.length,1);assert.equal(queue.cancelledItems[0].label,'Leaves in the breeze');assert.equal(queue.cancelledItems[0].supersededBy,'attack');assert.equal(JSON.stringify(queue).includes('Private instructions'),false);
+ assert.equal(genesisQueueView(state,{now:14000}).cancelledItems.length,0);
 });
 test('merge groups and delivery contracts have deterministic bounds',()=>{
  const def=project().definition;let state=createGenesisState(def);

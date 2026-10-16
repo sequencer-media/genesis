@@ -5,6 +5,8 @@ import type {GenesisEffect, GenesisJob, GenesisState} from './genesisCore.js';
 export interface GenesisDelivery {
   priority: 'urgent' | 'queued' | 'mergeable';
   mergeKey?: string;
+  /** The controller supplies a revised shared required frame when extending a batch. */
+  mergeFrames?: boolean;
   replaceable?: boolean;
   targetLatencyMs?: number;
   /** Server-recorded user selection time, before a shared lock-in barrier if applicable. */
@@ -19,14 +21,16 @@ const safe=(x:unknown):x is string=>typeof x==='string'&&/^[A-Za-z0-9_.:-]{1,128
 export function normalizeGenesisScheduling(input:GenesisEffect,now?:number):GenesisEffect {
   const effect=structuredClone(input), d=effect.delivery;
   if(d!==undefined){
-    if(!d||typeof d!=='object'||Array.isArray(d)||Object.keys(d).some(k=>!['priority','mergeKey','replaceable','targetLatencyMs','selectedAtMs'].includes(k))
+    if(!d||typeof d!=='object'||Array.isArray(d)||Object.keys(d).some(k=>!['priority','mergeKey','mergeFrames','replaceable','targetLatencyMs','selectedAtMs'].includes(k))
       ||!['urgent','queued','mergeable'].includes(d.priority)
       ||d.replaceable!==undefined&&typeof d.replaceable!=='boolean'
       ||d.targetLatencyMs!==undefined&&(!Number.isInteger(d.targetLatencyMs)||d.targetLatencyMs<1000||d.targetLatencyMs>120000)
       ||d.selectedAtMs!==undefined&&(!Number.isSafeInteger(d.selectedAtMs)||d.selectedAtMs<=0||now!==undefined&&d.selectedAtMs>now)
       ||d.mergeKey!==undefined&&!safe(d.mergeKey)
       ||d.priority==='mergeable'&&(!d.mergeKey||effect.type!=='live.direction')
-      ||d.priority!=='mergeable'&&d.mergeKey!==undefined
+      ||d.priority==='queued'&&d.mergeKey!==undefined
+      ||d.mergeKey!==undefined&&effect.type!=='live.direction'
+      ||d.mergeFrames!==undefined&&(typeof d.mergeFrames!=='boolean'||!d.mergeKey||!effect.frameRef?.required||effect.frameMode!=='new-frame')
       ||d.priority==='urgent'&&d.replaceable===true
       ||!['scene.request','live.direction','image.request','tool.request'].includes(effect.type))throw Error('Use valid delivery priority, replacement policy, merge key and latency target. Mergeable delivery is for live directions.');
     effect.delivery={...d,replaceable:d.replaceable??d.priority==='mergeable'};
@@ -66,7 +70,7 @@ export function preemptGenesisJobs(state:GenesisState,effect:GenesisEffect,now:n
     const frame=job.effect.frame;
     if(frame&&[effect,...state.jobs.filter(j=>['queued','running'].includes(j.status)).map(j=>j.effect)]
       .some(e=>e.frameRef?.required&&e.frameRef.key===frame.key&&e.frameRef.fingerprint===frame.fingerprint))continue;
-    const queued=job.status==='queued';job.status='cancelled';job.supersededBy=effect.id;
+    const queued=job.status==='queued';job.status='cancelled';job.supersededBy=effect.id;job.cancelledAt=now;
     if(queued&&!job.startedAt)releaseGenesisReservation(state,job);
     else job.providerCancellation='pending';
     deferGenesisFrame(state,job);
@@ -77,11 +81,11 @@ export function preemptGenesisJobs(state:GenesisState,effect:GenesisEffect,now:n
   return ids;
 }
 const source=(job:GenesisJob):GenesisMergedEffect=>({id:job.id,intent:job.effect.intent||'',...(job.effect.requiredOutcome!==undefined?{requiredOutcome:job.effect.requiredOutcome}:{}),...(job.effect.label?{label:job.effect.label}:{}),...(job.effect.displayPrompt!==undefined?{displayPrompt:job.effect.displayPrompt}:{}),sourceEventId:job.sourceEventId,sourceActionId:job.sourceActionId,queuedAt:job.queuedAt||0});
-const signature=(e:GenesisEffect)=>JSON.stringify([e.type,e.modelId||'',e.anchorId||'',e.frameRef||null,e.frameMode||'',e.continuity||'',e.useStartFrame??null,e.referenceAnchorIds||[],e.guard||null,e.duration||0,e.delivery?.replaceable]);
+const signature=(e:GenesisEffect)=>JSON.stringify([e.type,e.modelId||'',e.delivery?.mergeFrames?'':e.anchorId||'',e.delivery?.mergeFrames?{key:e.frameRef?.key,required:true}:e.frameRef||null,e.frameMode||'',e.continuity||'',e.useStartFrame??null,e.referenceAnchorIds||[],e.guard||null,e.duration||0,e.delivery?.replaceable,!!e.delivery?.mergeFrames]);
 /** Combines only explicitly mergeable, compatible, unstarted directions, before any LLM call. */
 export function mergeGenesisJob(state:GenesisState,incoming:GenesisJob):GenesisJob|undefined {
-  if(incoming.effect.delivery?.priority!=='mergeable')return;
-  const leader=state.jobs.find(j=>j.status==='queued'&&!j.startedAt&&j.effect.delivery?.priority==='mergeable'
+  if(!incoming.effect.delivery?.mergeKey)return;
+  const leader=state.jobs.find(j=>j.status==='queued'&&!j.startedAt&&j.effect.delivery?.priority===incoming.effect.delivery!.priority
     &&j.effect.delivery.mergeKey===incoming.effect.delivery!.mergeKey&&signature(j.effect)===signature(incoming.effect));
   if(!leader)return;
   const sources=[...(leader.mergedEffects||[source(leader)]),source(incoming)];
@@ -92,6 +96,7 @@ export function mergeGenesisJob(state:GenesisState,incoming:GenesisJob):GenesisJ
   const labels=sources.map(s=>s.label).filter(Boolean);if(labels.length)leader.effect.label=labels.join(' + ').slice(0,100);
   const prompts=sources.map(s=>s.displayPrompt).filter((p):p is string=>p!==undefined);if(prompts.length)leader.effect.displayPrompt=prompts.join('\n').slice(0,2000);
   leader.effect.requiredOutcome=requiredOutcome;
+  if(incoming.effect.delivery.mergeFrames){leader.effect.frameRef=structuredClone(incoming.effect.frameRef);delete leader.effect.anchorId;}
   const targets=[leader.targetPlaybackAt,incoming.targetPlaybackAt].filter((t):t is number=>typeof t==='number');
   if(targets.length)leader.targetPlaybackAt=Math.min(...targets);
   return leader;

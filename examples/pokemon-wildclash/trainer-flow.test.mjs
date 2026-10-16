@@ -2,6 +2,7 @@ import {genesisRequiredFrameStatus} from '../../dist/frameLibrary.js';
 import test from 'node:test';import assert from 'node:assert/strict';
 import {GenesisHost}from'../../dist/host.js';import {loadGenesisProject}from'../../dist/projectFiles.js';
 const project=await loadGenesisProject(new URL('.',import.meta.url).pathname);
+project.controllerSource=project.controllerSource.replace('Math.floor(Math.random() * 4294967295) || 1','12345');
 async function fixture(){
  const submitted=[];
  const host=await new GenesisHost('trainer-flow-'+Math.floor(Math.random()*1e9),project,{providers:[{id:'fixtures',paid:false,capabilities:['image.request','live.direction'],start:async({job})=>{submitted.push(structuredClone(job.effect));return{id:job.id}},poll:async(_id,job)=>job.effect.type==='image.request'?{status:'ready',result:{imageUrl:'https://storage.googleapis.com/example/accepted.png'}}:{status:'ready',result:{data:{playbackCompleted:true}}}}]}).initialize();

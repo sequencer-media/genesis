@@ -44,6 +44,8 @@ if (server.suppressAnimation && (jobs || []).every(job => !['queued','running'].
 server.rosterEpoch=server.rosterEpoch||game.rosterKey||'';
 server.redActor=seats.find(s=>s.id==='trainer_red')?.actorId||'';
 server.blueActor=seats.find(s=>s.id==='trainer_blue')?.actorId||'';
+server.deploys=(server.deploys||[]).filter(b=>{const live=(jobs||[]).some(j=>j.id===b.id&&['queued','running'].includes(j.status));if(!live||b.actors.some(a=>!seats.some(s=>s.id===a.side&&s.actorId===a.id)))delete server[b.guard];return live;});
+if(event.data?.mergedEffectIds){const ids=event.data.mergedEffectIds;const id=server.opening?.jobId||game.videoQueue?.id;if(ids.includes(id))event.data.jobId=id;}
 const effects=[];
 const eventLog=[];
 function random() {
@@ -190,14 +192,25 @@ game.videoQueue={id:effect.id,kind,label,status:'queued for video'};
 if(config.settings.visualContext&&(urgent||keyframe)){
 const spawn=['pokemon.selected','battle.start'].includes(kind)&&effect.requiredOutcome.pokemon?effect.requiredOutcome.side:'';
 const before=effect.requiredOutcome.beforeFighters||effect.requiredOutcome.fighters||fighterSnapshots();
-const ref={key:('cut:'+effect.id).slice(-64),fingerprint:'fresh-action-v1:'+effect.id,required:true};
+let ref={key:('cut:'+effect.id).slice(-64),fingerprint:'fresh-action-v1:'+effect.id,required:true};
+let releases=spawn?[{side:spawn,pokemon:effect.requiredOutcome.pokemon}]:[];
+if(spawn&&effect.type==='live.direction'){
+let batch=server.deploys.find(b=>server[b.guard]&&!b.releases.some(r=>r.side===spawn)&&(jobs||[]).some(j=>j.id===b.id&&j.status==='queued'));
+if(!batch){batch={id:effect.id,guard:'deploy:'+effect.id,key:ref.key,releases:[],actors:[]};server.deploys.push(batch);server[batch.guard]=true;}
+batch.releases.push(releases[0]);batch.actors.push({side:spawn,id:seats.find(s=>s.id===spawn).actorId});releases=batch.releases;
+ref={key:batch.key,fingerprint:'deploy-v2:'+batch.id+':'+releases.map(r=>r.side).join(':'),required:true};
+effect.guard={key:batch.guard,value:true};effect.delivery.mergeKey=batch.guard;effect.delivery.mergeFrames=true;
+effect.intent='Show the accepted send-out of '+effect.requiredOutcome.pokemon+' on '+spawn+' once, using the shared clean starting image. Compatible send-outs happen together in this chunk.';
+const brief=f=>({name:f.name,side:f.side,sentOut:f.sentOut,posture:f.posture});
+effect.requiredOutcome={kind,pokemon:effect.requiredOutcome.pokemon,side:spawn,fighters:effect.requiredOutcome.fighters.map(brief),beforeFighters:before.map(brief),trainerDialogue:effect.requiredOutcome.trainerDialogue};
+}
 effects.push({id:'image:'+effect.id,type:'frame.prepare',frame:{key:ref.key,fingerprint:ref.fingerprint,refresh:true,ttlMs:120000,priority:100},
 anchorId:'start',referenceAnchorIds:['start'],modelId:config.settings.imageModel||'p-image-edit',maxCostUsd:.05,
 intent:battleCamera()+' Render a NEW clean before-action starting image for '+effect.id+'. Rebuild the physical arena from the original clean reference, never from a generated video frame. Use only the supplied BEFORE-action cast and posture. No attacks, release flash, damage effects, dialogue or UI. The next video performs the action.',
 requiredOutcome:{kind:'battle.start_frame',pose:spawn?'spawn-'+spawn:'before-action',
-fighters:before.filter(f=>f.sentOut!==false&&f.side!==spawn),
-unreleasedSides:before.filter(f=>f.sentOut===false&&f.side!==spawn).map(f=>f.side),
-...(spawn?{pendingSendOut:{side:spawn,pokemon:effect.requiredOutcome.pokemon}}:{}),emptySides:seats.filter(s=>!s.actorId).map(s=>s.id)},guard:effect.guard});
+fighters:before.filter(f=>f.sentOut!==false&&!releases.some(r=>r.side===f.side)),
+unreleasedSides:before.filter(f=>f.sentOut===false&&!releases.some(r=>r.side===f.side)).map(f=>f.side),
+...(spawn?{pendingSendOuts:releases}:{}),emptySides:seats.filter(s=>!s.actorId).map(s=>s.id)},guard:effect.guard});
 game.videoQueue.status='preparing image';
 effects.push({...effect,frameRef:ref,frameMode:'new-frame',continuity:'reanchor'});
 }else effects.push({...effect,frameMode:'continue',continuity:'linked'});
@@ -278,7 +291,7 @@ fighters:fighterSnapshots(),
 delivery:{showOnce:true,chunkDurationSeconds:config.video.chunkIntervalSeconds,startActionEarly:true},
 emptySides:seats.filter(s=>!s.actorId).map(s=>s.id)},
 ...(config.video.pacing==='continuous'?{}:{maxCostUsd:.5,duration:5}),
-guard:{key:'visualId',value:id}},kind==='pokemon.selected'?'Send out '+outcome.pokemon:kind==='practice.move'?(outcome.pokemon+' · '+outcome.name):kind==='battle.start'?'Battle ready':'Set up the trainers',kind==='pokemon.selected'||kind==='lobby.roster'&&!game.lastResult?.winnerId||kind==='battle.start');
+guard:{key:'visualId',value:id}},kind==='pokemon.selected'?'Send out '+outcome.pokemon:kind==='practice.move'?(outcome.pokemon+' · '+outcome.name):kind==='battle.start'?(outcome.pokemon?'Send out '+outcome.pokemon:'Battle ready'):'Set up the trainers',kind==='pokemon.selected'||kind==='lobby.roster'&&!game.lastResult?.winnerId||kind==='battle.start');
 }
 function startBattle(opening){
 server.ending=null;

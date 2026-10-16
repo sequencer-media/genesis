@@ -42,7 +42,7 @@ export interface GenesisJob {
   sourceRevision: number; sourceEventId: string; maxCostUsd: number; mediaId: string; error: string;
   result?: { imageUrl?: string; videoUrl?: string; anchorId?: string; data?: Record<string, unknown> }; retryCount: number;
   inputContext?: string; submissionUncertain?: boolean;
-  mergedEffects?: GenesisMergedEffect[]; supersededBy?: string;
+  mergedEffects?: GenesisMergedEffect[]; supersededBy?: string; cancelledAt?: number;
   providerCancellation?: 'pending' | 'unavailable' | 'confirmed' | 'failed' | 'completed';
   reservationReleased?: boolean; targetPlaybackAt?: number;
   queuedAt?: number; startedAt?: number; playbackStartedAt?: number; estimatedPlaybackAt?: number; playbackDurationMs?: number; sourceActionId?: string;
@@ -175,7 +175,7 @@ export function applyGenesisTransition(def: ExperienceDefinition, previous: Gene
       if (effect.queue !== undefined && (effect.type !== 'live.direction' || typeof effect.queue !== 'boolean')) throw new GenesisRequestError('Queued delivery is for live directions.');
       if (effect.label !== undefined && (typeof effect.label !== 'string' || effect.label.length > 100)) throw new GenesisRequestError('Use a delivery label under 100 characters.');
       const queuedDirections = effect.type === 'live.direction' && effect.queue === true && activeJobs.every(j => j.effect.type === 'live.direction' && j.effect.queue === true);
-      if ((queuedDirections || scheduledDelivery) && activeJobs.length >= Math.min(8, policy.maxQueuedDirections ?? 8) && effect.delivery?.priority !== 'mergeable') throw new GenesisRequestError('The action queue is full. Wait for a selection to play.');
+      if ((queuedDirections || scheduledDelivery) && activeJobs.length >= Math.min(8, policy.maxQueuedDirections ?? 8) && !effect.delivery?.mergeKey) throw new GenesisRequestError('The action queue is full. Wait for a selection to play.');
       // One scene-only background image may prepare alongside one direction
       // for an already running stream. Paid generation remains serialized.
       const backgroundDirectionPair = activeJobs.length === 1 && (

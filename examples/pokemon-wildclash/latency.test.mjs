@@ -15,18 +15,21 @@ test('send-outs and every attack wait for unique clean starting images, preservi
  await host.players('red',{operation:'claim',seatId:'trainer_red'});await host.players('blue',{operation:'claim',seatId:'trainer_blue'});
  await action('red','ready_battle',{pokemonIndex:0});await action('blue','ready_battle',{pokemonIndex:1});
  for(let n=0;n<3;n++)await host.tick();
- const waiting=state().jobs.filter(j=>j.effect.frameRef?.required&&j.status==='queued');assert.equal(waiting.length,2);
- assert.equal(submitted.filter(x=>['pokemon.selected','battle.start'].includes(x.effect.requiredOutcome?.kind)).length,0,'No send-out video can bypass image generation');
+ const waiting=state().jobs.filter(j=>j.effect.frameRef?.required&&j.status==='queued');assert.equal(waiting.length,1);assert.equal(waiting[0].mergedEffects.length,2);
+ assert.equal(submitted.filter(x=>['pokemon.selected','battle.start'].includes(x.effect.requiredOutcome?.kind)||!!x.effect.requiredOutcome?.mergedOutcomes).length,0,'No send-out video can bypass image generation');
  const frameJob=state().jobs.find(j=>j.effect.frame?.key===waiting[0].effect.frameRef.key&&j.status==='running');assert.ok(frameJob,'The oldest required image runs despite the urgent video queue');
- const view=host.view('red').genesis.queue.items.find(i=>i.jobId===waiting[0].id);assert.equal(view.waitingForFrame,true);assert.equal(view.estimatedStartAt,null);
+ const view=host.view('red').genesis.queue.items.find(i=>i.jobId===waiting[0].id);assert.deepEqual(view.mergedActions.map(x=>x.label),['Send out Charizard','Send out Blastoise']);assert.equal(view.waitingForFrame,true);assert.equal(view.estimatedStartAt,null);
  imagesReady=true;await drain();
- const sends=submitted.filter(x=>['pokemon.selected','battle.start'].includes(x.effect.requiredOutcome?.kind));assert.equal(sends.length,2);
- assert.deepEqual(sends.map(x=>x.effect.requiredOutcome.side),['trainer_red','trainer_blue']);
- for(const {effect,anchor} of sends){assert.equal(effect.frameMode,'new-frame');assert.equal(effect.continuity,'reanchor');assert.match(anchor.imageUrl,/frame-cut/);const image=submitted.find(x=>x.effect.frame?.key===effect.frameRef.key).effect;assert.equal(image.requiredOutcome.fighters.some(f=>f.side===effect.requiredOutcome.side),false);assert.equal(image.requiredOutcome.pendingSendOut.side,effect.requiredOutcome.side);assert.deepEqual(image.referenceAnchorIds,['start']);assert.equal(image.frame.refresh,true);}
+ const sends=submitted.filter(x=>!!x.effect.requiredOutcome?.mergedOutcomes);assert.equal(sends.length,1);
+ const batch=sends[0];assert.deepEqual(batch.effect.requiredOutcome.mergedOutcomes.map(x=>x.requiredOutcome.side),['trainer_red','trainer_blue']);
+ assert.equal(batch.effect.frameMode,'new-frame');assert.equal(batch.effect.continuity,'reanchor');assert.match(batch.anchor.imageUrl,/frame-cut/);
+ const image=submitted.findLast(x=>x.effect.frame?.fingerprint===batch.effect.frameRef.fingerprint).effect;
+ assert.equal(image.requiredOutcome.fighters.length,0);assert.deepEqual(image.requiredOutcome.pendingSendOuts.map(x=>x.side),['trainer_red','trainer_blue']);assert.deepEqual(image.referenceAnchorIds,['start']);assert.equal(image.frame.refresh,true);
+ assert.equal(state().public.battleIntro.status,'complete','The shared completion advances the battle opening');
  for(const who of ['red','blue'])await action(who,'battle_move',{moveIndex:0});await drain();
  const attacks=submitted.filter(x=>x.effect.requiredOutcome?.kind==='battle_move');assert.equal(attacks.length,2);
  for(const {effect,anchor} of attacks){assert.equal(effect.frameMode,'new-frame');assert.equal(effect.continuity,'reanchor');const image=submitted.find(x=>x.effect.frame?.key===effect.frameRef.key).effect;assert.deepEqual(image.referenceAnchorIds,['start']);assert.deepEqual(image.requiredOutcome.fighters,effect.requiredOutcome.beforeFighters);assert.match(anchor.imageUrl,/frame-cut/);}
- assert.equal(new Set([...sends,...attacks].map(x=>x.effect.frameRef.fingerprint)).size,4,'Each action uses a newly generated image, even within one round');
+ assert.equal(new Set([...sends,...attacks].map(x=>x.effect.frameRef.fingerprint)).size,3,'Each chunk uses a newly generated image, including the combined deployment');
 });
 
 test('a failed required image retries once and never submits a continuation video',async()=>{

@@ -57,6 +57,13 @@ export function prepareGenesisFrame(def: ExperienceDefinition, state: GenesisSta
   }
   const request: GenesisEffect = {...effect, type:'image.request', presentation:'background', maxCostUsd:cost, delivery:{priority:'queued',replaceable:true},
     frame:{...spec, ttlMs:spec.ttlMs ?? 600_000, priority:spec.priority ?? 50}};
+  // A revised batch invalidates its old image before the joint frame is admitted.
+  if(previous&&previous.fingerprint!==spec.fingerprint){
+    const old=state.jobs.find(j=>j.id===previous.jobId&&active(j));
+    if(old){old.status='cancelled';old.cancelledAt=now;old.supersededBy=effect.id;
+      if(old.startedAt)old.providerCancellation='pending';
+      else if(!old.reservationReleased){state.reservedCostUsd=Math.max(0,Math.round((state.reservedCostUsd-old.maxCostUsd)*10000)/10000);old.reservationReleased=true;}}
+  }
   library[spec.key] = {key:spec.key, fingerprint:spec.fingerprint, status:'pending', generation:(previous?.generation || 0)+1,
     attempts:previous?.fingerprint === spec.fingerprint && previous.status === 'failed' ? previous.attempts : 0,
     requestedAtMs:now, lastUsedAtMs:previous?.lastUsedAtMs || 0, readyAtMs:0, expiresAtMs:0, jobId:'', anchorId:'', error:'', request};

@@ -1391,6 +1391,12 @@
     .queue-prompt[open] summary {position:absolute;top:0;right:0;width:12px;}
     .queue-prompt[open] summary::after {content:'-';}
     .queue-prompt p {margin:1px 0 2px;overflow-wrap:anywhere;}
+    #nextAction:has(.queue-stack) {max-height:34vh;}
+    .queue-stack {grid-column:2 / -1;list-style:none;margin:0 0 2px;padding:0 0 0 7px;border-left:1px solid #98a090;}
+    .queue-stack li {display:block;font-size:.9em;padding:1px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .queue-stack li::before {content:'↳ ';color:#788070;}
+    .action-queue .queue-cancelled {opacity:.42;}
+    .queue-cancelled .queue-label {text-decoration:line-through;}
     .queue-order {color:#a04840;flex-shrink:0;min-width:10px;}
     .queue-label {min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
     .queue-status {font-size:11px;color:#606858;margin-left:auto;white-space:nowrap;padding-left:4px;}
@@ -1712,25 +1718,28 @@
       var shared=window.Genesis&&Genesis.queue&&Genesis.queue.get?Genesis.queue.get():null;
       var standard=shared&&shared.version===1;
       var queue=standard?shared.items:Array.isArray(currentGame.actionQueue)?currentGame.actionQueue:currentGame.videoQueue?[currentGame.videoQueue]:[];
-      var clock=serverClock();
+      var clock=serverClock(),activeCount=queue.length;
+      if(standard)queue=queue.concat((shared.cancelledItems||[]).filter(function(item){return clock-item.cancelledAt<12000;}));
       var empty=currentGame.phase==='battle'?(Object.keys(currentGame.commandReady||{}).length?(active&&active.id==='trainer_red'?'RED':'BLUE')+' CHOOSES A COMMAND':'BOTH TRAINERS CHOOSE A COMMAND'):currentGame.phase==='setup'?'BOTH TRAINERS READY UP':'CHOOSE A POKÉMON OR PRACTICE';
       var labels=queue.map(function(item){
         var wait=item.estimatedStartAt==null?null:Math.ceil((item.estimatedStartAt-clock)/1000);
-        return item.status==='playing'?'PLAYING':item.waitingForFrame?'NEW FRAME':item.targetStatus==='missed'?'DELAYED':wait>0?'IN ~'+wait+'S':({'preparing image':'SETTING SCENE','queued for video':'QUEUED',queued:'QUEUED',preparing:'PREPARING',waiting:'UP NEXT'})[item.status]||item.status;
+        return item.status==='cancelled'?'REPLACED':item.status==='playing'?'PLAYING':item.waitingForFrame?'NEW FRAME':item.targetStatus==='missed'?'DELAYED':wait>0?'IN ~'+wait+'S':({'preparing image':'SETTING SCENE','queued for video':'QUEUED',queued:'QUEUED',preparing:'PREPARING',waiting:'UP NEXT'})[item.status]||item.status;
       });
       var signature=JSON.stringify([queue,labels,empty]);if(signature===queueSignature)return;queueSignature=signature;
       var list=el('actionQueue'),opened=new Set();
       list.querySelectorAll('details[open]').forEach(function(detail){opened.add(detail.parentNode.dataset.jobId);});list.replaceChildren();
       queue.forEach(function(item,index){
         var row=document.createElement('li'),order=document.createElement('span'),label=document.createElement('span'),status=document.createElement('span');
-        order.className='queue-order';order.textContent=index===0?'▶':String(item.position||index+1);order.setAttribute('aria-hidden','true');
-        label.className='queue-label';label.textContent=item.label;label.title=item.label;
-        status.className='queue-status';status.setAttribute('aria-live','off');status.textContent=labels[index];status.title=item.status==='playing'?'This chunk is playing':item.estimatedStartAt?'Estimated time until this chunk plays':'Waiting for a playback estimate';
+        row.className=item.status==='cancelled'?'queue-cancelled':'';
+        order.className='queue-order';order.textContent=item.status==='cancelled'?'×':index===0?'▶':String(item.position||index+1);order.setAttribute('aria-hidden','true');
+        label.className='queue-label';label.textContent=item.mergedActions&&item.mergedActions.length>1?item.mergedActions.length+' ACTIONS':item.label;label.title=item.label;
+        status.className='queue-status';status.setAttribute('aria-live','off');status.textContent=labels[index];status.title=item.status==='cancelled'?'Replaced by an urgent action':item.status==='playing'?'This chunk is playing':item.estimatedStartAt?'Estimated time until this chunk plays':'Waiting for a playback estimate';
         row.dataset.jobId=item.id;row.append(order,label,status);
+        if(item.mergedActions&&item.mergedActions.length>1){var stack=document.createElement('ol');stack.className='queue-stack';stack.setAttribute('aria-label','Actions sharing this chunk');item.mergedActions.forEach(function(action){var child=document.createElement('li');child.textContent=action.label;child.title=action.prompt||action.label;stack.append(child);});row.append(stack);}
         if(item.prompt){var detail=document.createElement('details'),summary=document.createElement('summary'),prompt=document.createElement('p');detail.className='queue-prompt';detail.open=opened.has(item.id);summary.textContent='PROMPT';summary.setAttribute('aria-label','Show prompt for '+item.label);prompt.textContent=item.prompt;detail.append(summary,prompt);row.append(detail);}
         list.appendChild(row);
       });
-      el('queueCount').textContent=String(queue.length);el('queueEmpty').hidden=queue.length>0;el('queueEmpty').textContent=empty;
+      el('queueCount').textContent=String(activeCount);el('queueEmpty').hidden=queue.length>0;el('queueEmpty').textContent=empty;
     }
     setInterval(function(){if(window.Genesis&&Genesis.state&&Genesis.state.get())renderActionQueue(queueActive);},1000);
     function beforeBattle(){return ['waiting','setup'].includes(currentGame.phase);}
