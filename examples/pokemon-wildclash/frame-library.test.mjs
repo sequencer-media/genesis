@@ -51,9 +51,15 @@ test('idle frames regenerate after 30 seconds and each accepted anchor cuts in o
   const state=()=>host.diagnostics().state.genesis;
   const drain=async()=>{for(let i=0;i<12;i++){for(const j of state().jobs.filter(j=>j.status==='queued'&&j.effect.type==='live.direction'))await host.runJob('red',j.id);await host.tick(now);if(!state().jobs.some(j=>['queued','running'].includes(j.status)))break;}};
   await drain();
-  const images=()=>submitted.filter(e=>e.type==='image.request');
+  assert.equal(submitted.filter(e=>e.requiredOutcome?.kind==='lineup.ready').length,0,'A forecast cannot summon an unsent Pokémon');
+  await host.action('red',crypto.randomUUID(),'ready_battle',{pokemonIndex:0},host.view('red').genesis.revision);await drain();
+  const sendOut=submitted.find(e=>e.requiredOutcome?.kind==='pokemon.selected');assert.equal(sendOut.frameMode,'new-frame','A ready pre-send-out frame is used by the accepted urgent chunk');
+  const allImages=()=>submitted.filter(e=>e.type==='image.request');
+  const images=()=>allImages().filter(e=>e.frame?.key.endsWith(':ready'));
   const cuts=()=>submitted.filter(e=>e.requiredOutcome?.kind==='lineup.ready');
   assert.equal(images().length,1);assert.equal(cuts().length,1);
+  const spawn=allImages().find(e=>e.requiredOutcome?.pose==='spawn-red');assert.ok(spawn);
+  assert.equal(spawn.requiredOutcome.pendingSendOut.side,'trainer_red');assert.equal(spawn.requiredOutcome.fighters.length,0,'The pre-send-out image leaves the releasing battle position empty');
   const first=images()[0];await host.tick(now);await drain();assert.equal(cuts().length,1);
   now+=31000;await host.tick(now);await drain();
   assert.equal(images().length,2);assert.equal(cuts().length,2);

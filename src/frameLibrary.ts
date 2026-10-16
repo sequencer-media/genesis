@@ -53,7 +53,7 @@ export function prepareGenesisFrame(def: ExperienceDefinition, state: GenesisSta
     if (!removable) return;
     delete library[removable.key];
   }
-  const request: GenesisEffect = {...effect, type:'image.request', presentation:'background', maxCostUsd:cost,
+  const request: GenesisEffect = {...effect, type:'image.request', presentation:'background', maxCostUsd:cost, delivery:{priority:'queued',replaceable:true},
     frame:{...spec, ttlMs:spec.ttlMs ?? 600_000, priority:spec.priority ?? 50}};
   library[spec.key] = {key:spec.key, fingerprint:spec.fingerprint, status:'pending', generation:(previous?.generation || 0)+1,
     attempts:previous?.fingerprint === spec.fingerprint && previous.status === 'failed' ? previous.attempts : 0,
@@ -67,12 +67,20 @@ export function invalidateGenesisFrame(state: GenesisState, key: string | undefi
   if (frame) { frame.status='stale'; frame.generation++; frame.anchorId=''; }
 }
 
+/** Retire provider authority and leave a valid wishlist request available for a later safe slot. */
+export function deferGenesisFrame(state:GenesisState,job:GenesisJob){
+  const entry=job.effect.frame&&state.frameLibrary?.[job.effect.frame.key];
+  if(!entry||entry.jobId!==job.id||entry.status!=='preparing')return;
+  entry.status=matchesGuard(state,job.effect)?'pending':'stale';entry.generation++;entry.jobId='';entry.anchorId='';
+}
+
 /** Readiness never changes the displayed stage or applies a speculative game outcome. */
 export function settleGenesisFrame(state: GenesisState, job: GenesisJob, anchorId: string, error: string, now: number, expiresAtMs?: number): boolean {
   if (!job.effect.frame) return true;
   const entry = state.frameLibrary?.[job.effect.frame.key];
   if (!entry || entry.jobId !== job.id || entry.generation !== job.effect.frameGeneration
-    || entry.fingerprint !== job.effect.frame.fingerprint || !matchesGuard(state,job.effect)) return false;
+    || entry.fingerprint !== job.effect.frame.fingerprint) return false;
+  if(!matchesGuard(state,job.effect)){deferGenesisFrame(state,job);return false;}
   entry.status=error ? 'failed' : 'ready'; entry.error=error.slice(0,240); entry.anchorId=error ? '' : anchorId;
   entry.readyAtMs=error ? 0 : now; entry.expiresAtMs=error ? 0 : Math.min(expiresAtMs ?? Infinity,now+(entry.request.frame!.ttlMs || 600_000));
   return true;
@@ -94,7 +102,8 @@ export function resolveGenesisFrame(state: GenesisState, effect: GenesisEffect, 
     if (entry.status === 'ready' || entry.status === 'stale') {entry.status='pending';entry.generation++;entry.anchorId='';}
     entry.request.frame!.priority=100;
   }
-  return {...effect,continuity:'linked'};
+  const {frameRef:unusedRef,anchorId:unusedAnchor,...continuation}=effect;
+  return {...continuation,...(effect.frameMode?{frameMode:'continue' as const}:{}),continuity:'linked'};
 }
 
 export function scheduleGenesisFrame(def: ExperienceDefinition, state: GenesisState, now: number, policy: GenesisHostPolicy): GenesisEffect | undefined {
@@ -106,7 +115,7 @@ export function scheduleGenesisFrame(def: ExperienceDefinition, state: GenesisSt
     }
   }
   const jobs=state.jobs.filter(active);
-  if (jobs.some(j => j.effect.type !== 'live.direction') || jobs.length > 1) return;
+  if (jobs.some(j => j.effect.type !== 'live.direction'||j.effect.delivery?.priority==='urgent') || jobs.length > 1) return;
   const remaining=Math.min(policy.maxSessionCostUsd,def.genesis!.limits.maxSessionCostUsd)-state.reservedCostUsd;
   const next=Object.values(library).filter(f => f.status === 'pending' && matchesGuard(state,f.request)
     && (f.request.maxCostUsd || .05) <= remaining+1e-8).sort((a,b) => (b.request.frame!.priority || 0)-(a.request.frame!.priority || 0) || a.requestedAtMs-b.requestedAtMs)[0];

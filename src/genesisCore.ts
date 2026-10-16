@@ -1,8 +1,9 @@
+import {normalizeGenesisScheduling, preemptGenesisJobs, releaseGenesisReservation, mergeGenesisJob, type GenesisDelivery, type GenesisMergedEffect} from './scheduling.js';
 import {genesisQueueView, validateGenesisQueuePlan, type GenesisQueuePlanItem, type GenesisStreamChunk} from './queue.js';
 export {genesisQueueView, type GenesisQueueView, type GenesisQueuePlanItem, type GenesisStreamChunk} from './queue.js';
 import { defaultGenesisHostPolicy, type GenesisHostPolicy } from './policy.js';
 import type { ExperienceDefinition, GenesisAction } from './experienceDefinition.js';
-import {prepareGenesisFrame, invalidateGenesisFrame, resolveGenesisFrame, scheduleGenesisFrame, genesisFrameLibraryView, type GenesisPreparedFrame, type GenesisFrameSpec} from './frameLibrary.js';
+import {deferGenesisFrame, prepareGenesisFrame, invalidateGenesisFrame, resolveGenesisFrame, scheduleGenesisFrame, genesisFrameLibraryView, type GenesisPreparedFrame, type GenesisFrameSpec} from './frameLibrary.js';
 
 export class GenesisRequestError extends Error {}
 
@@ -25,7 +26,10 @@ export interface GenesisEffect {
   continuity?: 'linked' | 'reanchor';
   /** Standalone text-to-video concepts can omit all frame conditioning. */
   useStartFrame?: boolean;
+  /** Explicit bounded FIFO delivery, supported for continuous live directions. */
   queue?: boolean;
+  delivery?: GenesisDelivery;
+  frameMode?: 'continue' | 'new-frame' | 'text-to-video';
   label?: string;
   /** Explicit public text for queue display. Private generation intents stay server-side. */
   displayPrompt?: string;
@@ -38,6 +42,9 @@ export interface GenesisJob {
   sourceRevision: number; sourceEventId: string; maxCostUsd: number; mediaId: string; error: string;
   result?: { imageUrl?: string; videoUrl?: string; anchorId?: string; data?: Record<string, unknown> }; retryCount: number;
   inputContext?: string; submissionUncertain?: boolean;
+  mergedEffects?: GenesisMergedEffect[]; supersededBy?: string;
+  providerCancellation?: 'pending' | 'unavailable' | 'confirmed' | 'failed' | 'completed';
+  reservationReleased?: boolean; targetPlaybackAt?: number;
   queuedAt?: number; startedAt?: number; playbackStartedAt?: number; estimatedPlaybackAt?: number; playbackDurationMs?: number; sourceActionId?: string;
 }
 export interface GenesisState {
@@ -110,8 +117,8 @@ export function validateGenesisAction(def: ExperienceDefinition, state: GenesisS
 }
 /** Bound operational history while preserving current, authored and controller-referenced anchors. */
 function compactGenesisHistory(def: ExperienceDefinition, state: GenesisState) {
-  const pending = state.jobs.filter(job => ['queued', 'running', 'failed'].includes(job.status));
-  const completed = state.jobs.filter(job => !['queued', 'running', 'failed'].includes(job.status)).slice(-8);
+  const pending = state.jobs.filter(job => ['queued', 'running', 'failed'].includes(job.status)||['pending','unavailable','failed'].includes(job.providerCancellation||''));
+  const completed = state.jobs.filter(job => !pending.includes(job)).slice(-8);
   state.jobs = [...pending, ...completed].sort((a, b) => a.sourceRevision - b.sourceRevision);
   const retained = new Set(['start', state.stage.anchorId, ...def.scenes.map(scene => scene.id)]);
   for (const job of state.jobs) { if (job.effect.anchorId) retained.add(job.effect.anchorId); if (job.result?.anchorId) retained.add(job.result.anchorId); }
@@ -133,7 +140,7 @@ export function applyGenesisTransition(def: ExperienceDefinition, previous: Gene
   }
   // A continuous direction has no separate paid reservation. A newer guarded
   // direction can supersede it while the existing stream renders its next chunk.
-  for (const job of state.jobs) if ((job.status === 'queued' || job.status === 'running' && job.effect.type === 'live.direction') && job.effect.guard && state.server[job.effect.guard.key] !== job.effect.guard.value) { job.status = 'cancelled'; state.reservedCostUsd = Math.max(0, state.reservedCostUsd - job.maxCostUsd); if (state.stage.ownerJobId === job.id) { state.stage.ownerJobId = ''; state.stage.mode = 'holding'; state.stage.overlays = true; } }
+  for (const job of state.jobs) if ((job.status === 'queued' || job.status === 'running' && job.effect.type === 'live.direction') && job.effect.guard && state.server[job.effect.guard.key] !== job.effect.guard.value) { if(job.status==='queued'&&!job.startedAt)releaseGenesisReservation(state,job);else job.providerCancellation='pending';deferGenesisFrame(state,job);job.status = 'cancelled'; if (state.stage.ownerJobId === job.id && state.stage.mode!=='playing') { state.stage.ownerJobId = ''; state.stage.mode = 'holding'; state.stage.overlays = true; } }
   if (result.window !== undefined) {
     const window = result.window;
     if (window !== null && (typeof window !== 'object' || Array.isArray(window) || !validId(window.id) || !['individual', 'collective'].includes(window.mode) || !Array.isArray(window.actionIds) || window.actionIds.length > 32 || window.actionIds.some(id => !genesisActions(def).some(a => a.id === id))
@@ -154,7 +161,7 @@ export function applyGenesisTransition(def: ExperienceDefinition, previous: Gene
       if (!prepared) break;
       effects.push(prepared);
     }
-    const effect=resolveGenesisFrame(state,effects[index],event.now);
+    const effect=resolveGenesisFrame(state,normalizeGenesisScheduling(effects[index],event.now),event.now);
     if (effect.guard && (!validId(effect.guard.key) || !['string', 'number', 'boolean'].includes(typeof effect.guard.value) || typeof effect.guard.value === 'number' && !Number.isFinite(effect.guard.value) || typeof effect.guard.value === 'string' && effect.guard.value.length > 128)) throw new GenesisRequestError('Use a bounded server-state guard.');
     if (!validId(effect.id) || state.effectIds.includes(effect.id)) { if (state.effectIds.includes(effect.id)) continue; throw new GenesisRequestError('Use a valid effect ID.'); }
     if (effect.type === 'frame.prepare') {
@@ -162,18 +169,20 @@ export function applyGenesisTransition(def: ExperienceDefinition, previous: Gene
     } else if (effect.type === 'frame.invalidate') {
       invalidateGenesisFrame(state,effect.frameKey);
     } else if (['scene.request', 'image.request', 'live.direction', 'tool.request'].includes(effect.type)) {
+      preemptGenesisJobs(state,effect,event.now);
       const activeJobs = state.jobs.filter(j => ['queued', 'running'].includes(j.status));
-      if(effect.queue!==undefined&&(effect.type!=='live.direction'||typeof effect.queue!=='boolean'))throw new GenesisRequestError('Queued delivery is for live directions.');
-      if(effect.label!==undefined&&(typeof effect.label!=='string'||effect.label.length>100))throw new GenesisRequestError('Use a delivery label under 100 characters.');
-      const queuedDirections=effect.type==='live.direction'&&effect.queue===true&&activeJobs.every(j=>j.effect.type==='live.direction'&&j.effect.queue===true);
-      if(queuedDirections&&activeJobs.length>=Math.min(8,policy.maxQueuedDirections??8))throw new GenesisRequestError('The action queue is full. Wait for a selection to play.');
+      const scheduledDelivery=!!effect.delivery;
+      if (effect.queue !== undefined && (effect.type !== 'live.direction' || typeof effect.queue !== 'boolean')) throw new GenesisRequestError('Queued delivery is for live directions.');
+      if (effect.label !== undefined && (typeof effect.label !== 'string' || effect.label.length > 100)) throw new GenesisRequestError('Use a delivery label under 100 characters.');
+      const queuedDirections = effect.type === 'live.direction' && effect.queue === true && activeJobs.every(j => j.effect.type === 'live.direction' && j.effect.queue === true);
+      if ((queuedDirections || scheduledDelivery) && activeJobs.length >= Math.min(8, policy.maxQueuedDirections ?? 8) && effect.delivery?.priority !== 'mergeable') throw new GenesisRequestError('The action queue is full. Wait for a selection to play.');
       // One scene-only background image may prepare alongside one direction
       // for an already running stream. Paid generation remains serialized.
       const backgroundDirectionPair = activeJobs.length === 1 && (
         effect.type === 'live.direction' && activeJobs[0].effect.type === 'image.request' && activeJobs[0].effect.presentation === 'background'
         || effect.type === 'image.request' && effect.presentation === 'background' && activeJobs[0].effect.type === 'live.direction'
       );
-      if (activeJobs.length && !backgroundDirectionPair && !queuedDirections) throw new GenesisRequestError('Wait for the active tool before requesting another scene tool.');
+      if (activeJobs.length && !backgroundDirectionPair && !queuedDirections && !scheduledDelivery) throw new GenesisRequestError('Wait for the active tool before requesting another scene tool.');
       if(effect.displayPrompt!==undefined&&(typeof effect.displayPrompt!=='string'||effect.displayPrompt.length>2000))throw new GenesisRequestError('Use a public display prompt under 2,000 characters.');
       const capability = effect.type === 'tool.request' ? effect.toolId : effect.type;
       if (effect.type === 'tool.request' && (!effect.toolId || !/^tool\.[A-Za-z][A-Za-z0-9_.-]{0,79}$/.test(effect.toolId) || !object(effect.data) || JSON.stringify(effect.data).length > 12000)) throw new GenesisRequestError('Use a registered tool ID and bounded argument object.');
@@ -190,11 +199,18 @@ export function applyGenesisTransition(def: ExperienceDefinition, previous: Gene
       // Directions use the already admitted continuous stream's billing meter.
       const cost = effect.type === 'live.direction' ? 0 : effect.maxCostUsd ?? ceiling;
       if (!Number.isFinite(cost) || cost < (effect.type === 'live.direction' ? 0 : 0.01) || cost > ceiling || state.reservedCostUsd + cost > Math.min(policy.maxSessionCostUsd, def.genesis.limits.maxSessionCostUsd)) throw new GenesisRequestError('This request exceeds the session spending limit.');
-      if (state.jobs.length >= 128) state.jobs = state.jobs.filter(j => ['queued', 'running'].includes(j.status) || j.effect.type !== 'live.direction').concat(state.jobs.filter(j => !['queued', 'running'].includes(j.status) && j.effect.type === 'live.direction').slice(-32));
-      if (activeJobs.length >= Math.min(policy.maxJobs, def.genesis.limits.maxJobs) && !backgroundDirectionPair && !queuedDirections || state.jobs.length >= 128) throw new GenesisRequestError('This session has reached its job limit.');
-      state.jobs.push({ id: effect.id, effect: {...clone(effect),...(effect.label||genesisActions(def).find(a=>a.id===event.actionId)?.label?{label:effect.label||genesisActions(def).find(a=>a.id===event.actionId)?.label}:{})}, sourceEventId: event.id, sourceRevision: nextRevision, status: 'queued', maxCostUsd: cost, mediaId: '', error: '', retryCount: 0, queuedAt:event.now, sourceActionId:event.actionId||'' });
+      if (state.jobs.length >= 128) state.jobs = state.jobs.filter(j => ['queued', 'running'].includes(j.status) || ['pending','unavailable','failed'].includes(j.providerCancellation||'') || j.effect.type !== 'live.direction').concat(state.jobs.filter(j => !['queued', 'running'].includes(j.status) && j.effect.type === 'live.direction').slice(-32));
+      const admitted:GenesisJob={ id: effect.id, effect: {...clone(effect),...(effect.label||genesisActions(def).find(a=>a.id===event.actionId)?.label?{label:effect.label||genesisActions(def).find(a=>a.id===event.actionId)?.label}:{})}, sourceEventId: event.id, sourceRevision: nextRevision, status: 'queued', maxCostUsd: cost, mediaId: '', error: '', retryCount: 0, queuedAt: event.now, sourceActionId:event.actionId||'', ...(effect.delivery?.targetLatencyMs?{targetPlaybackAt:(effect.delivery.selectedAtMs??event.now)+effect.delivery.targetLatencyMs}:{}) };
+      const merged=mergeGenesisJob(state,admitted);
+      if(merged){
+        if(state.queuePlan)state.queuePlan=state.queuePlan.map(p=>(p.jobId||p.id)===effect.id?{...p,jobId:merged.id}:p).filter((p,i,all)=>all.findIndex(x=>(x.jobId||x.id)===(p.jobId||p.id))===i);
+        state.effectIds=[...state.effectIds,effect.id].slice(-512);continue;
+      }
+      if ((queuedDirections||scheduledDelivery)&&activeJobs.length>=Math.min(8,policy.maxQueuedDirections??8))throw new GenesisRequestError('The action queue is full. Wait for a selection to play.');
+      if (activeJobs.length >= Math.min(policy.maxJobs, def.genesis.limits.maxJobs) && !backgroundDirectionPair && !queuedDirections && !scheduledDelivery || state.jobs.length >= 128) throw new GenesisRequestError('This session has reached its job limit.');
+      state.jobs.push(admitted);
       state.reservedCostUsd = Math.round((state.reservedCostUsd + cost) * 10000) / 10000;
-      if (!['tool.request', 'live.direction'].includes(effect.type) && effect.presentation !== 'background') { state.stage.visible = true; state.stage.mode = 'generating'; state.stage.overlays = false; state.stage.ownerJobId = effect.id; }
+      if (!activeJobs.length && state.stage.mode!=='playing' && !['tool.request', 'live.direction'].includes(effect.type) && effect.presentation !== 'background') { state.stage.visible = true; state.stage.mode = 'generating'; state.stage.overlays = false; state.stage.ownerJobId = effect.id; }
     } else if (effect.type === 'stage.restore' || effect.type === 'stage.show') {
       if (effect.presentation !== undefined && (effect.type !== 'stage.show' || effect.presentation !== 'preview')) throw new GenesisRequestError('Preview presentation is for showing an accepted image.');
       if (!effect.anchorId || !Object.hasOwn(state.anchors, effect.anchorId)) throw new GenesisRequestError('Restore an existing scene anchor.');

@@ -121,3 +121,15 @@ test('MCP queues labelled public directions in FIFO order and returns the standa
   await assert.rejects(f.host.runJob('agent',q.items[1].jobId),/earlier selection/);
  }finally{await f.close();}
 });
+
+test('MCP discovers delivery policy and frame modes and urgent presentation supersedes explicit filler',async()=>{
+ const f=await fixture();try{
+  const direct=(await f.client.listTools()).tools.find(t=>t.name==='genesis_direct_scene');
+  assert.deepEqual(direct.inputSchema.properties.delivery.properties.priority.enum,['urgent','queued','mergeable']);
+  assert.ok(direct.inputSchema.properties.frameMode.enum.includes('new-frame'));
+  let result=await f.call('genesis_direct_scene',{requestId:'filler',expectedRevision:f.host.operatorView().revision,intent:'Grass moves.',delivery:{priority:'mergeable',mergeKey:'ambient'}});assert.ok(!result.isError,result.content[0].text);
+  result=await f.call('genesis_direct_scene',{requestId:'urgent',expectedRevision:f.host.operatorView().revision,intent:'Show the accepted send-out.',delivery:{priority:'urgent',targetLatencyMs:5000},frameMode:'new-frame',anchorId:'start'});assert.ok(!result.isError,result.content[0].text);
+  const jobs=f.host.diagnostics().state.genesis.jobs;assert.equal(jobs[0].status,'cancelled');assert.equal(jobs[1].effect.continuity,'reanchor');
+  const q=(await f.call('genesis_read_queue')).data;assert.equal(q.items.length,1);assert.equal(q.items[0].priority,'urgent');assert.equal(q.items[0].targetLatencyMs,5000);
+ }finally{await f.close();}
+});

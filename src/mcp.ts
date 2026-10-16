@@ -13,15 +13,17 @@ const reference=z.object({key:frame.shape.key,fingerprint:frame.shape.fingerprin
 const guard=z.object({key:id,value:z.union([z.string().max(128),z.number().finite(),z.boolean()])}).strict();
 const json=z.unknown().refine(v=>JSON.stringify(v??null).length<=12000,'Keep data below 12 KB.');
 const common={id:operatorId,guard:guard.optional()};
+const delivery=z.object({priority:z.enum(['urgent','queued','mergeable']),mergeKey:id.optional(),replaceable:z.boolean().optional(),targetLatencyMs:z.number().int().min(1000).max(120000).optional(),selectedAtMs:z.number().int().positive().max(Number.MAX_SAFE_INTEGER).optional()}).strict();
+const frameMode=z.enum(['continue','new-frame','text-to-video']);
 const display={label:z.string().min(1).max(100).optional(),displayPrompt:z.string().max(2000).optional()};
 const generated={...common,...display,intent:text,anchorId:id.optional(),maxCostUsd:z.number().min(.01).max(5).optional(),modelId:z.string().min(1).max(160).optional(),requiredOutcome:json.optional()};
 const effects=z.discriminatedUnion('type',[
- z.object({...generated,type:z.literal('image.request'),presentation:z.literal('background').optional(),referenceAnchorIds:z.array(id).max(4).optional()}).strict(),
- z.object({...generated,type:z.literal('scene.request'),referenceAnchorIds:z.array(id).max(4).optional(),duration:z.number().int().min(2).max(10).optional(),continuity:z.enum(['linked','reanchor']).optional(),useStartFrame:z.boolean().optional(),frameRef:reference.optional()}).strict(),
- z.object({...common,...display,type:z.literal('live.direction'),queue:z.boolean().optional(),intent:text,requiredOutcome:json.optional(),anchorId:id.optional(),continuity:z.enum(['linked','reanchor']).optional(),frameRef:reference.optional()}).strict(),
+ z.object({...generated,type:z.literal('image.request'),delivery:delivery.optional(),presentation:z.literal('background').optional(),referenceAnchorIds:z.array(id).max(4).optional()}).strict(),
+ z.object({...generated,type:z.literal('scene.request'),delivery:delivery.optional(),frameMode:frameMode.optional(),referenceAnchorIds:z.array(id).max(4).optional(),duration:z.number().int().min(2).max(10).optional(),continuity:z.enum(['linked','reanchor']).optional(),useStartFrame:z.boolean().optional(),frameRef:reference.optional()}).strict(),
+ z.object({...common,...display,type:z.literal('live.direction'),delivery:delivery.optional(),frameMode:frameMode.optional(),queue:z.boolean().optional(),intent:text,requiredOutcome:json.optional(),anchorId:id.optional(),continuity:z.enum(['linked','reanchor']).optional(),frameRef:reference.optional()}).strict(),
  z.object({...generated,type:z.literal('frame.prepare'),frame,referenceAnchorIds:z.array(id).max(4).optional()}).strict(),
  z.object({...common,type:z.literal('frame.invalidate'),frameKey:frame.shape.key}).strict(),
- z.object({...common,type:z.literal('tool.request'),toolId:z.string().regex(/^tool\.[A-Za-z][A-Za-z0-9_.-]{0,79}$/),data:z.record(z.unknown()).refine(v=>JSON.stringify(v).length<=12000),maxCostUsd:z.number().min(.01).max(5).optional()}).strict(),
+ z.object({...common,type:z.literal('tool.request'),delivery:delivery.optional(),toolId:z.string().regex(/^tool\.[A-Za-z][A-Za-z0-9_.-]{0,79}$/),data:z.record(z.unknown()).refine(v=>JSON.stringify(v).length<=12000),maxCostUsd:z.number().min(.01).max(5).optional()}).strict(),
  z.object({...common,type:z.literal('stage.restore'),anchorId:id}).strict(),
  z.object({...common,type:z.literal('stage.show'),anchorId:id,presentation:z.literal('preview').optional()}).strict(),
  z.object({...common,type:z.literal('stage.play'),videoUrl:z.string().min(1).max(4096),anchorId:id.optional()}).strict(),

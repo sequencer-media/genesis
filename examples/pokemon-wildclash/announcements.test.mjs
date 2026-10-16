@@ -21,6 +21,13 @@ test('the first authoritative batch presents both send-outs and battle start in 
  f.dismiss();assert.equal(f.el('battleIntro').hidden,true);assert.equal(f.el('battleAnnouncement').hidden,true);
  f.render();assert.equal(f.el('battleAnnouncement').hidden,true,'Repeated state cannot replay notices');
 });
+test('a received battle-start notice waits while send-out playback is preparing or playing',()=>{
+ const f=fixture();f.context.currentGame.battleIntro={status:'preparing'};
+ f.context.currentGame.announcements=[notice('battle','Battle begins!','battle.start')];
+ f.render();assert.equal(f.el('battleAnnouncement').hidden,true);
+ f.context.currentGame.battleIntro.status='playing';f.render();assert.equal(f.el('battleAnnouncement').hidden,true);
+ f.context.currentGame.battleIntro.status='complete';f.render();assert.equal(f.el('battleAnnouncementText').textContent,'Battle begins!');
+});
 test('slow delivery and trainer switches retain unseen messages while stale reconnect history stays quiet',()=>{
  const f=fixture();f.context.currentGame.announcements=[notice('old','Old battle','battle.start',120000)];f.render();assert.equal(f.el('battleAnnouncement').hidden,true);
  f.context.currentGame.announcements.push(notice('fresh','Sending out Garchomp!','pokemon.selected',30000));f.render();assert.equal(f.el('battleAnnouncementText').textContent,'Sending out Garchomp!');

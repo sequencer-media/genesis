@@ -28,6 +28,28 @@ test('both trainers keep their send-out choreography, including the action that 
  }
  assert.match(blue.visualAction,/battle is starting/);assert.equal(f.state.public.phase,'battle');
 });
+test('battle begins is announced only after observed opening completion, with urgent send-outs kept in order',()=>{
+ const f=fixture({opening:true,turnSeconds:5});
+ const opening=f.state.server.opening.jobId;
+ const sendouts=f.effects.filter(e=>['pokemon.selected','battle.start'].includes(e.requiredOutcome?.kind));
+ assert.equal(sendouts.length,2);
+ assert.ok(sendouts.every(e=>e.delivery.priority==='urgent'&&!e.delivery.replaceable&&e.delivery.targetLatencyMs===5000));
+ assert.equal(sendouts[0].guard.value,sendouts[1].guard.value,'The second send-out cannot invalidate the earlier urgent action');
+ const begins=()=>f.state.public.announcements.filter(n=>n.kind==='battle.start').length;
+ assert.equal(begins(),0);assert.equal(f.state.public.deadline,0);
+ f.send('job.ready',{data:{jobId:opening}});assert.equal(begins(),0,'Generation readiness is not playback completion');
+ f.send('playback.started',{data:{jobId:opening}});assert.equal(begins(),0);
+ f.send('playback.completed',{data:{jobId:sendouts[0].id}});assert.equal(begins(),0);
+ f.send('playback.completed',{data:{jobId:opening}});assert.equal(begins(),1);
+ assert.equal(f.state.public.deadline,1_005_000);
+ f.send('playback.completed',{data:{jobId:opening}});assert.equal(begins(),1);
+});
+test('attack delivery keeps the trainer selection timestamp through simultaneous lock-in',()=>{
+ const f=fixture();f.act('red','battle_move',{moveIndex:3});f.time(2500);
+ const effect=f.act('blue','battle_move',{moveIndex:0}).effects.find(e=>e.type==='live.direction');
+ assert.equal(effect.delivery.priority,'urgent');assert.equal(effect.delivery.selectedAtMs,1_000_000);
+ assert.equal(effect.delivery.replaceable,false);assert.equal(effect.frameMode,'continue','Missing cached frames never delay accepted attacks');
+});
 test('accepted moves carry one command from their acting trainer, while fainting uses the defeated trainer after impact',()=>{
  const f=fixture();f.act('red','battle_move',{moveIndex:0});
  const move=f.act('blue','battle_move',{moveIndex:0}).effects.find(e=>e.type==='live.direction').requiredOutcome;

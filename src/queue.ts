@@ -1,3 +1,4 @@
+import {genesisDispatchOrder} from './scheduling.js';
 import type {GenesisState, GenesisJob} from './genesisCore.js';
 
 /** Public display metadata supplied only after an action is committed. */
@@ -14,7 +15,9 @@ export interface GenesisQueueView {
  version:1; revision:number; serverNow:number; estimated:true;
  items:Array<{id:string; jobId:string|null; actionId:string|null; kind:string; label:string; prompt:string|null; position:number;
   source:'action'|'genesis';chunkSequence:number|null; status:'queued'|'preparing'|'playing'; queuedAt:number|null; durationMs:number;
-  estimatedStartAt:number|null; estimatedEndAt:number|null; estimatedWaitMs:number|null}>;
+  estimatedStartAt:number|null; estimatedEndAt:number|null; estimatedWaitMs:number|null;
+  priority:'urgent'|'queued'|'mergeable';targetStartAt:number|null;targetLatencyMs:number|null;
+  targetStatus:'unknown'|'on-track'|'at-risk'|'missed'|'playing';mergedEffectIds:string[]}>;
 }
 const safe=(v:unknown):v is string=>typeof v==='string'&&/^[A-Za-z0-9_.:-]{1,128}$/.test(v)&&!['__proto__','constructor','prototype'].includes(v);
 export function validateGenesisQueuePlan(input:unknown,previous:GenesisState['queuePlan'],now:number):NonNullable<GenesisState['queuePlan']>{
@@ -35,7 +38,7 @@ export function genesisQueueView(state:GenesisState,timing:{now?:number;duration
  const now=timing.now??Date.now(),duration=Math.max(1000,timing.durationMs||14375);
  const plans=state.queuePlan||[];
  const playing=(j:GenesisJob)=>['queued','running'].includes(j.status)&&(j.id===timing.playingJobId||!!j.playbackStartedAt)||j.effect.type==='scene.request'&&state.stage.mode==='playing'&&j.result?.videoUrl===state.stage.videoUrl;
- const active=state.jobs.filter(j=>!j.effect.frame&&(['queued','running'].includes(j.status)||j.status==='ready'&&playing(j))
+ const active=[...state.jobs.filter(j=>j.status==='ready'&&playing(j)),...genesisDispatchOrder(state)].filter(j=>!j.effect.frame&&(['queued','running'].includes(j.status)||j.status==='ready'&&playing(j))
   &&(j.effect.type==='live.direction'||j.effect.type==='scene.request'||j.effect.type==='image.request'&&j.effect.presentation!=='background'));
  const records:Array<{plan?:GenesisQueuePlanItem&{queuedAt:number};job?:GenesisJob}> = active.map(job=>({job,plan:plans.find(p=>(p.jobId||p.id)===job.id)}));
  for(const plan of plans){const job=state.jobs.find(j=>(plan.jobId||plan.id)===j.id);if(!records.some(r=>r.plan?.id===plan.id)&&(!job||active.includes(job)))records.push({plan,job});}
@@ -51,7 +54,9 @@ export function genesisQueueView(state:GenesisState,timing:{now?:number;duration
   const predictedEnd=start===null?null:start+span;
   const end=predictedEnd!==null&&predictedEnd>now?predictedEnd:null;
   next=end===null?null:end+(timing.gapMs??duration);
-  return {id:plan?.id||job!.id,jobId:job?.id||plan?.jobId||null,actionId:plan?.actionId||job?.sourceActionId||null,kind:job?.effect.type||'action',
+  const target=job?.targetPlaybackAt??null;
+  const targetStatus=isPlaying?'playing' as const:target===null?'unknown' as const:now>target?'missed' as const:start===null?'unknown' as const:start<=target?'on-track' as const:'at-risk' as const;
+  return {priority:job?.effect.delivery?.priority||'queued',targetStartAt:target,targetLatencyMs:job?.effect.delivery?.targetLatencyMs??null,targetStatus,mergedEffectIds:job?.mergedEffects?.map(e=>e.id)||[],id:plan?.id||job!.id,jobId:job?.id||plan?.jobId||null,actionId:plan?.actionId||job?.sourceActionId||null,kind:job?.effect.type||'action',
    label:plan?.label||job?.effect.label||'World action',prompt:plan?.prompt??job?.effect.displayPrompt??null,position:index+1,status,
    source:'action',chunkSequence:null,queuedAt:plan?.queuedAt??job?.queuedAt??null,durationMs:span,estimatedStartAt:start,estimatedEndAt:end,estimatedWaitMs:isPlaying?0:start===null?null:Math.max(0,start-now)};
  });
@@ -64,7 +69,7 @@ export function genesisQueueView(state:GenesisState,timing:{now?:number;duration
   if(linked)items=items.filter(i=>i!==linked);
   const start=chunk.estimatedStartAt!==null&&(chunk.status==='playing'||chunk.estimatedStartAt>now)?chunk.estimatedStartAt:null;
   const end=start!==null&&start+chunk.durationMs>now?start+chunk.durationMs:null;
-  items.push({id:linked?.id||chunk.id,jobId:linked?.jobId||null,actionId:linked?.actionId||null,kind:linked?.kind||'stream.chunk',label:linked?.label||chunk.label,prompt:linked?.prompt??chunk.prompt??null,position:0,source:linked?'action':chunk.source||'genesis',chunkSequence:chunk.sequence,status:chunk.status,queuedAt:linked?.queuedAt||null,durationMs:chunk.durationMs,estimatedStartAt:start,estimatedEndAt:end,estimatedWaitMs:chunk.status==='playing'?0:start===null?null:start-now});
+  items.push({priority:linked?.priority||'queued',targetStartAt:linked?.targetStartAt??null,targetLatencyMs:linked?.targetLatencyMs??null,targetStatus:chunk.status==='playing'?'playing':linked?.targetStatus||'unknown',mergedEffectIds:linked?.mergedEffectIds||[],id:linked?.id||chunk.id,jobId:linked?.jobId||null,actionId:linked?.actionId||null,kind:linked?.kind||'stream.chunk',label:linked?.label||chunk.label,prompt:linked?.prompt??chunk.prompt??null,position:0,source:linked?'action':chunk.source||'genesis',chunkSequence:chunk.sequence,status:chunk.status,queuedAt:linked?.queuedAt||null,durationMs:chunk.durationMs,estimatedStartAt:start,estimatedEndAt:end,estimatedWaitMs:chunk.status==='playing'?0:start===null?null:start-now});
  }
  if(chunks.length){items.sort((a,b)=>(a.status==='playing'?-1:0)-(b.status==='playing'?-1:0)||(a.estimatedStartAt??Infinity)-(b.estimatedStartAt??Infinity)||(a.chunkSequence??Infinity)-(b.chunkSequence??Infinity));items.forEach((item,i)=>item.position=i+1);}
  return {version:1,revision:state.revision,serverNow:now,estimated:true,items};

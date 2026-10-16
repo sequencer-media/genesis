@@ -117,7 +117,7 @@ export async function settleGenesisJob(def: ExperienceDefinition, previous: Expe
   if (!['tool.request', 'live.direction'].includes(job.effect.type) && job.effect.presentation !== 'background' && state.genesis!.stage.ownerJobId !== jobId) { current.status = 'cancelled'; state.genesis!.revision++; state.revision++; return state; }
   if (job.effect.type !== 'tool.request' && job.effect.presentation !== 'background') { state.genesis!.stage.mode = 'holding'; state.genesis!.stage.ownerJobId = ''; }
   if (job.effect.type !== 'tool.request' && anchorId && result.videoUrl) state.genesis!.stage.anchorId = anchorId;
-  return dispatchGenesisEvent(def, state, source, { id: `job:${jobId}:${job.retryCount}`, type: result.error ? 'job.failed' : 'job.ready', data: { jobId, ...current.result, error: current.error, ...(job.effect.frame ? {frameKey:job.effect.frame.key,frameFingerprint:job.effect.frame.fingerprint} : {}) }, now }, policy);
+  return dispatchGenesisEvent(def, state, source, { id: `job:${jobId}:${job.retryCount}`, type: result.error ? 'job.failed' : 'job.ready', data: { jobId, ...(current.mergedEffects?{mergedEffectIds:current.mergedEffects.map(e=>e.id)}:{}), ...current.result, error: current.error, ...(job.effect.frame ? {frameKey:job.effect.frame.key,frameFingerprint:job.effect.frame.fingerprint} : {}) }, now }, policy);
 }
 export async function completeGenesisPlayback(def: ExperienceDefinition, previous: ExperienceSessionState, source: string, actorId: string, playbackId: string, now = Date.now(), policy: GenesisHostPolicy = defaultGenesisHostPolicy) {
   previous = await tickGenesis(def, previous, source, now, policy);

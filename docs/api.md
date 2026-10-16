@@ -1,5 +1,25 @@
 # Genesis 0.1 API
 
+### Delivery policy and latency targets
+
+Controllers choose delivery policy before the host asks an LLM to write the next visual prompt:
+
+```js
+{ id: 'send-out:17', type: 'live.direction', intent: 'Show the committed send-out once.',
+  delivery: { priority: 'urgent', replaceable: false, targetLatencyMs: 5000 },
+  frameMode: 'new-frame', frameRef: { key: 'lineup', fingerprint: 'red:6,blue:9' } }
+```
+
+`delivery.priority` is `urgent`, `queued`, or `mergeable`. Urgent takes the next available dispatch slot in FIFO order among urgent requests. It cancels only work explicitly marked `replaceable:true` that has not begun playback. Earlier urgent jobs, protected running jobs, displayed footage and committed controller outcomes retain their authority. Queued is the default and is protected unless the controller explicitly marks it replaceable. Mergeable requires a bounded `mergeKey` and defaults to replaceable. Existing `queue:true` directions retain their FIFO behavior.
+
+The deterministic scheduler combines compatible, unstarted mergeable live directions before provider submission. The type, model, frame references, continuity, guard, duration and replacement policy must match. A batch contains at most eight original effects and a combined intent under 4,000 characters and complete combined outcomes under 3,600 JSON characters. Oversized outcomes remain separate jobs so prompt compaction cannot drop their facts. Each original ID and required outcome is retained in `job.mergedEffects`; the provider receives `requiredOutcome.mergedOutcomes`. The single completion event includes `mergedEffectIds`. Controllers opt into this contract for compatible visual instructions and keep game outcomes authoritative. Submitted work is never merged retroactively.
+
+`frameMode:'continue'` uses the actual preceding frame (`continuity:'linked'`). `new-frame` uses an accepted `anchorId` or exact prepared `frameRef` (`continuity:'reanchor'`). A missing or stale prepared frame follows the frame library's linked fallback and requests a refresh. `text-to-video` is for standalone `scene.request` effects, omits frame references and compiles to `useStartFrame:false`. Precompute likely start images through `frame.prepare` so urgent delivery can reuse a ready frame rather than wait for image generation.
+
+`targetLatencyMs` is an advisory playback target from 1,000 to 120,000 ms. Optional `selectedAtMs` records the trusted server selection timestamp before a shared lock-in barrier; it must be a positive integer at or before the current event. With no explicit selection time, admission time is used. A value of 5,000 means aim to begin playback five seconds after selection (or admission when no selection time was recorded). It does not guarantee generation or delivery in exactly five seconds. The public queue exposes `priority`, `targetLatencyMs`, `targetStartAt`, `targetStatus` (`unknown`, `on-track`, `at-risk`, `missed`, `playing`) and `mergedEffectIds`, independently of the observed/estimated playback ETA. Never display a target as a confirmed countdown. A reusable saved idle clip can cover waiting time without generating more queued filler or inventing game progress.
+
+`genesisDispatchOrder(state)` is the host-side executable ordering helper. `GenesisHost` automatically dispatches an eligible urgent job after an action and on tick. Hosts cancel superseded provider handles where supported and ignore every late result from a cancelled job. A provider without interruption support may finish discarded work in the background while urgent work starts. An unsubmitted job releases its reservation once. A submitted paid job releases its spend reservation only when `provider.cancel()` explicitly returns `{refunded:true}`. A cancellation request alone establishes no refund.
+
 ## Project
 
 `GenesisProject` has format `genesis-project`, version 1, title, optional description, coverImageUrl and namespaced extensions, definition, interfaceSource, controllerSource and startImageUrl. `validateGenesisProject()` validates the versioned JSON Schema and semantic references, then normalizes the project. Unknown product settings and host policies are rejected. `coverImageUrl` is listing art; `startImageUrl` initializes the scene checkpoint. `createGenesisProject(template)` returns a runnable starter. Local media uses /assets paths; external media uses HTTPS. A hosting adapter may narrow allowed media hosts.
@@ -45,13 +65,19 @@ Providers implement id, paid, capabilities, start, poll and optional cancel. Sta
 
 ## Custom tools
 
+### Grouped shot planning
+
+Keep a generated shot's overview and style concise. Group each subject or team with its appearance, associated trainer or companion, screen position and actual opening state in one paragraph. Describe the shared camera and environment once, then show the accepted action chronologically from onset through development to its final state. An absent subject stays absent until its authorized entrance. Use only supplied dialogue when the controller owns speech. The controller owns game outcomes, identities, sides and action order; an LLM can phrase their presentation within those facts. Validate bounded model output and retain an authoritative fallback when it is missing, invalid or late.
+
+Genesis remains provider-neutral. A host using H3 assembles `integrated_multimodal_description`, `overall_soundscape` and `non_diegetic_music`. Keep dialogue in the shot timeline and physical sound summaries in the soundscape. Add H3's Picture 1 first-frame instruction only when an actual starting image is supplied. Text-to-video begins directly with the three fields. These provider formatting choices belong in the host adapter and do not add manifest keys or controller authority.
+
 `image.request` accepts `presentation:"background"` to keep the current video and controls visible during generation. Use `referenceAnchorIds` (up to four accepted anchors) to retain style or character references alongside `anchorId`. Completion supplies an immutable anchor in `job.ready`; pass it directly to a reanchor direction without changing the displayed stage. Scene start frames contain physical scenery and characters, with no HUD or UI. Use a separate scene-only image prompt instead of inheriting video presentation instructions. Guards discard obsolete images after a roster or scene change.
 
-`live.direction` and `scene.request` accept `continuity:"linked"|"reanchor"`. Linked delivery continues from the previous shot's actual final frame. Reanchor requires an accepted `anchorId` and installs that image once at the next available generation boundary. Ordinary actions should remain linked. A hosted continuous world can request automatic setup images with `genesis.config.visualContext:true`; the host independently authorizes this mode, the payer, model and declared spending limits. Image preparation is asynchronous, and its completion does not mean video playback has completed.
+`live.direction` and `scene.request` accept `continuity:"linked"|"reanchor"`. Linked delivery continues from the previous shot's actual final frame. Reanchor requires an accepted `anchorId` and installs that image once at the next available generation boundary. Choose linked continuity for a coherent continuation, or reanchor from a prepared frame for an intentional cut. A hosted continuous world can request automatic setup images with `genesis.config.visualContext:true`; the host independently authorizes this mode, the payer, model and declared spending limits. Image preparation is asynchronous, and its completion does not mean video playback has completed.
 
 `scene.request` also accepts `useStartFrame:false` for a new standalone text-to-video concept, such as a five-second battle intro. Omit anchorId, referenceAnchorIds and continuity in this mode. Providers receive no starting anchor, and the hosted generator omits sourceImageUrl. Continuous live.direction actions remain linked or explicitly reanchored.
 
-Generate start frames for material composition changes, such as a different character lineup, fainting pose, battle opening or location. Keep ordinary moves and items linked. Plan likely future checkpoints early with the frame library, rather than waiting for their trigger.
+Generate start frames for material composition changes, such as a different character lineup, fainting pose, battle opening or location. Moves and items can continue the preceding shot or cut to a ready scene-only frame when their delivery policy calls for a new composition. Plan likely future checkpoints early with the frame library, rather than waiting for their trigger.
 
 ### Prepared frame library
 

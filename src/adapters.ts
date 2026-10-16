@@ -9,7 +9,8 @@ export interface GenesisProvider {
   start(request: { sessionId: string; job: GenesisJob; anchor?: GenesisAnchor; referenceAnchors?: GenesisAnchor[]; idempotencyKey: string }): Promise<{ id: string }>;
   poll(id: string, job: GenesisJob): Promise<{ status: 'running' | 'ready' | 'failed'; result?: GenesisToolResult }>;
   validate?(job: GenesisJob): Promise<boolean> | boolean;
-  cancel?(id: string): Promise<void>;
+  /** A paid provider explicitly confirms a refund before the spend reservation is released. */
+  cancel?(id: string): Promise<void | { refunded?: boolean }>;
 }
 export interface GenesisSnapshot { version: 1; projectHash: string; state: ExperienceSessionState; providerJobs: Record<string, { providerId: string; id: string }>; timeline: GenesisTrace[]; }
 export interface GenesisTrace { at: number; type: string; eventId: string; revision: number; detail?: string; }
