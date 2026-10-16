@@ -12,18 +12,18 @@ The [`quest` starter](https://github.com/sequencer-media/genesis/tree/main/examp
 
 [Open Pokémon Wildclash on Sequencer](https://sequencer.media/worldstreams/S_R5xijO8Pjv) or [browse the complete project source](https://github.com/sequencer-media/genesis/tree/main/examples/pokemon-wildclash).
 
-This is the current Pokémon Worldstream project, including its actual controller, trainer interface, visual settings and bundled start artwork. Two trainers send out their chosen Pokémon and privately commit a move or item each round. Priority and Speed determine order. A challenger queue lets the next trainer join the action.
+This is the current Pokémon Worldstream project, including its actual controller, trainer interface, visual settings and bundled start artwork. Two trainers send out their chosen Pokémon, then take turns choosing a move or item. The next trainer’s menu and five-second decision cue open after observed attack playback. At zero, the game keeps waiting for their choice. A challenger queue lets the next trainer join the action.
 
 [![Pokémon battle interface showing trainer seats, health and battle controls](assets/pokemon-wildclash-ui.jpg)](https://sequencer.media/worldstreams/S_R5xijO8Pjv)
 
 | Part of the experience | What it demonstrates |
 | --- | --- |
 | Trainer selection and readiness | Player seats, eligible actions and a shared start condition. |
-| Private command rounds | Authoritative priority, Speed, type effects, status, PP and battle outcomes. |
+| Sequential trainer decisions | Playback-gated turns, a fresh decision countdown, type effects, status, PP and authoritative battle outcomes. |
 | Items, health and EXP | World variables that persist between actions. |
 | Challenger queue | Multiplayer participation and room state. |
 | Battle interface and Worldstream | Player controls around generated video. |
-| Background frame library | Prepare lineup and aftermath checkpoints ahead of events, then reanchor after observed playback. |
+| Background frame library | Prepare clean current-state checkpoints while retaining a ready image for the next attack. Required send-out images establish the exact before-state; fainting recall continues the actual video. |
 | PLAY BOTH | One account can control two trainers for testing. |
 
 ### Play the included project
